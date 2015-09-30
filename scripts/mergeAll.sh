@@ -7,7 +7,7 @@ git checkout yota2
 git merge ice-cream-sandwich
 
 git checkout kindle
-git merge yota2
+git merge ice-cream-sandwich
 
 git checkout nook
 git merge master
