@@ -16,6 +16,7 @@ dependencies {
 	compile 'com.google.android.gms:play-services-identity:7.8.0'
 	compile project(':fbreader/api')
 	compile project(':fbreader/md')
+	compile project(':fbreader/zip-amse')
 	compile project(':third-party/drag-sort-listview')
 	compile project(':third-party/android-filechooser')
 	compile project(':third-party/SuperToasts')

@@ -1,6 +1,7 @@
+include 'fbreader/app'
 include 'fbreader/api'
 include 'fbreader/md'
-include 'fbreader/app'
+include 'fbreader/zip-amse'
 include 'third-party/drag-sort-listview'
 include 'third-party/android-filechooser'
 include 'third-party/SuperToasts'
