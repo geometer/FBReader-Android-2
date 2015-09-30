@@ -27,9 +27,10 @@ import android.view.*;
 import android.widget.*;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.fbreader.common.R;
 import org.geometerplus.android.util.UIMessageUtil;
 import org.geometerplus.android.util.PackageUtil;
+
+import org.fbreader.common.R;
 
 public class DictionaryNotInstalledActivity extends ListActivity {
 	static final String DICTIONARY_NAME_KEY = "fbreader.dictionary.name";
