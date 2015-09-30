@@ -35,7 +35,7 @@ android {
 		minSdkVersion 5
 		maxSdkVersion 10
 		targetSdkVersion 9
-		versionCode 2056000
+		versionCode 2056010
 		versionName '2.6 beta 10'
 	}
 
