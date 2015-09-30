@@ -12,6 +12,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
 	compile project(':fbreader/api')
+	compile project(':fbreader/md')
 	compile project(':fbreader/zip-amse')
 	compile project(':third-party/SuperToasts')
 	compile files('libs/LingvoIntegration_2.5.2.12.jar')
@@ -20,8 +21,8 @@ dependencies {
 }
 
 android {
-	compileSdkVersion 19
-	buildToolsVersion '20'
+	compileSdkVersion 23
+	buildToolsVersion '23.0.1'
 
 	lintOptions {
 		abortOnError false
@@ -40,9 +41,8 @@ android {
 	}
 
 	defaultConfig {
-		minSdkVersion 5
-		maxSdkVersion 10
-		targetSdkVersion 9
+		minSdkVersion 14
+		targetSdkVersion 17
 		versionCode 1
 		versionName "1.0"
 	}
