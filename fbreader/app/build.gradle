@@ -14,6 +14,7 @@ dependencies {
 	compile 'com.android.support:appcompat-v7:23.+'
 	compile 'com.android.support:design:23.+'
 	compile 'com.google.android.gms:play-services-identity:7.8.0'
+	compile project(':fbreader/api')
 	compile project(':third-party/drag-sort-listview')
 	compile project(':third-party/android-filechooser')
 	compile project(':third-party/SuperToasts')
