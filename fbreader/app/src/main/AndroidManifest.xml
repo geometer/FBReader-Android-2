@@ -31,7 +31,6 @@
 				<data android:scheme="BookReadingException"/>
 			</intent-filter>
 		</activity>
-		<activity android:name=".error.BugReportActivity" android:label="FBReader crash" android:theme="@style/FBReader.Activity" android:process=":crash" android:configChanges="orientation|keyboardHidden|screenSize" android:exported="false"/>
 		<activity android:name="org.geometerplus.android.fbreader.crash.FixBooksDirectoryActivity" android:theme="@style/FBReader.Dialog" android:process=":crash" android:configChanges="orientation|keyboardHidden|screenSize" android:exported="false">
 			<intent-filter>
 				<action android:name="android.fbreader.action.CRASH"/>
@@ -155,12 +154,6 @@
 				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
-		<activity
-			android:name="org.geometerplus.android.fbreader.dict.DictionaryNotInstalledActivity"
-			android:theme="@style/FBReader.Dialog"
-			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:exported="false"
-		/>
 		<activity android:name="org.geometerplus.android.fbreader.CancelActivity" android:theme="@style/FBReader.Dialog" android:configChanges="orientation|keyboardHidden|screenSize">
 			<intent-filter>
 				<action android:name="android.fbreader.action.CANCEL_MENU"/>
