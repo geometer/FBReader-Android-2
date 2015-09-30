@@ -15,8 +15,8 @@ dependencies {
 	compile 'com.android.support:design:23.+'
 	compile 'com.google.android.gms:play-services-identity:7.8.0'
 	compile project(':fbreader/api')
-	compile project(':fbreader/md')
-	compile project(':fbreader/zip-amse')
+	compile project(':fbreader/common')
+	compile project(':fbreader/formats')
 	compile project(':third-party/drag-sort-listview')
 	compile project(':third-party/android-filechooser')
 	compile project(':third-party/SuperToasts')
@@ -24,9 +24,6 @@ dependencies {
 	compile project(':third-party/patches')
 	compile files('libs/nanohttpd-2.0.5.jar')
 	compile files('libs/httpmime-4.2.5.jar')
-	compile files('libs/LingvoIntegration_2.5.2.12.jar')
-	compile files('libs/open-dictionary-api-1.2.1.jar')
-	compile files('libs/json-simple-1.1.1.jar')
 	compile files('libs/pdfparse.jar')
 }
 
