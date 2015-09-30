@@ -1,0 +1,24 @@
+* android 2.* devices
+
+DONE save latest tab
+DONE save latest bookmark style
+DONE highlight current style
+DONE save old text
+DONE all lang resources
+
+DONE sync bookmark styles
+* hide keyboard on non-text tab (show on text?)
+* show toast even if clicked empty space inside bookmark
+DONE fix text selection
+* bookmarks list
+
+* adding new styles
+* call edit bookmarks activity from format plugins
+
+SERVER SIDE
+* ask before deleting
+* edit bookmark
+* export
+* scrolling for large lists
+* partial loading for large lists
+* edit styles
