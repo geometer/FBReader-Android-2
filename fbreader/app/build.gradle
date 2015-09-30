@@ -35,8 +35,8 @@ android {
 		minSdkVersion 5
 		maxSdkVersion 10
 		targetSdkVersion 9
-		versionCode 2056010
-		versionName '2.6 beta 10 nst'
+		versionCode 0
+		versionName new File('VERSION').text.trim() + '-nst'
 	}
 
 	sourceSets {
@@ -79,7 +79,7 @@ android {
 		fat {
 			dimension 'abi'
 			ndk {
-				abiFilters 'x86', 'armeabi-v7a', 'armeabi', 'mips'
+				abiFilters 'armeabi-v7a', 'armeabi'
 				versionCode 0
 			}
 		}
@@ -95,20 +95,6 @@ android {
 			ndk {
 				abiFilter 'armeabi-v7a'
 				versionCode 2
-			}
-		}
-		x86 {
-			dimension 'abi'
-			ndk {
-				abiFilter 'x86'
-				versionCode 3
-			}
-		}
-		mips {
-			dimension 'abi'
-			ndk {
-				abiFilter 'mips'
-				versionCode 4
 			}
 		}
 	}
@@ -130,5 +116,18 @@ android {
 
 android.applicationVariants.all { variant ->
 	def abiVersion = variant.productFlavors.get(0).versionCode
-	variant.mergedFlavor.versionCode = android.defaultConfig.versionCode + abiVersion
+
+	def baseCode = 0
+	def version = new File('VERSION').text.trim()
+	if (version.matches('\\d*\\.\\d* beta \\d*')) {
+		def parts = version.split('[ .]')
+		baseCode = parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000 - 5000 + parts[3].toInteger() * 100
+	} else if (version.matches('\\d*\\.\\d*\\.\\d*')) {
+		def parts = version.split('\\.')
+		baseCode = parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000 + parts[2].toInteger() * 100
+	} else {
+		throw new IllegalArgumentException('Unsupported version format: ' + version)
+	}
+
+	variant.mergedFlavor.versionCode = baseCode + 10 + abiVersion
 }
