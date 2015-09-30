@@ -12,6 +12,7 @@ apply plugin: 'com.android.application'
 
 dependencies {
 	compile project(':fbreader/api')
+	compile project(':fbreader/zip-amse')
 	compile project(':third-party/drag-sort-listview')
 	compile project(':third-party/android-filechooser')
 	compile project(':third-party/SuperToasts')
