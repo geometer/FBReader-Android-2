@@ -36,7 +36,7 @@ android {
 		maxSdkVersion 10
 		targetSdkVersion 9
 		versionCode 2056010
-		versionName '2.6 beta 10'
+		versionName '2.6 beta 10 nst'
 	}
 
 	sourceSets {
