@@ -24,9 +24,9 @@ android {
 	}
 
 	sourceSets {
-		main.java.srcDirs = ['src']
-		main.res.srcDirs = ['res']
-		main.manifest.srcFile 'AndroidManifest.xml'
+		main.java.srcDirs = ['code/src']
+		main.res.srcDirs = ['code/res']
+		main.manifest.srcFile 'code/AndroidManifest.xml'
 	}
 
 	defaultConfig {

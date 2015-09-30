@@ -12,7 +12,7 @@
     android:versionName="5.0" >
 
     <uses-sdk
-        android:minSdkVersion="4"
-        android:targetSdkVersion="16" />
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
 
 </manifest>

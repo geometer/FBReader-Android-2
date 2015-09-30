@@ -10,6 +10,10 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
+dependencies {
+	compile 'com.android.support:appcompat-v7:23.+'
+}
+
 android {
 	compileSdkVersion 23
 	buildToolsVersion '23.0.1'
@@ -24,9 +28,9 @@ android {
 	}
 
 	sourceSets {
-		main.java.srcDirs = ['src']
-		main.res.srcDirs = ['res']
-		main.manifest.srcFile 'AndroidManifest.xml'
+		main.java.srcDirs = ['library/src']
+		main.res.srcDirs = ['library/res']
+		main.manifest.srcFile 'library/AndroidManifest.xml'
 	}
 
 	defaultConfig {

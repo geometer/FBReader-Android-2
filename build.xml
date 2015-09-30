@@ -29,7 +29,7 @@
 		<echo message="Building native libraries..."/>
 		<exec executable="${ndk.dir}/ndk-build">
 			<arg value="-C"/>
-			<arg value="fbreader/app/src/main/jni"/>
+			<arg value="${main.dir}/jni"/>
 		</exec>
 		<echo message="DONE (Building native libraries)"/>
 	</target>
@@ -39,19 +39,19 @@
 		<condition property="native.libraries.are.uptodate" value="true">
 			<and>
 				<!-- Check if libDeflatingDecompressor exists and is up to date -->
-				<available file="./libs/armeabi/libDeflatingDecompressor-v3.so" />
-				<uptodate targetfile="libs/armeabi/libDeflatingDecompressor-v3.so">
-					<srcfiles dir="jni/DeflatingDecompressor" includes="**/*.cpp"/>
+				<available file="${main.dir}/libs/armeabi/libDeflatingDecompressor-v3.so" />
+				<uptodate targetfile="${main.dir}/libs/armeabi/libDeflatingDecompressor-v3.so">
+					<srcfiles dir="${main.dir}/jni/DeflatingDecompressor" includes="**/*.cpp"/>
 				</uptodate>
 				<!-- Check if libLineBreak exists and is up to date -->
-				<available file="./libs/armeabi/libLineBreak-v2.so" />
-				<uptodate property="libLineBreak-build-is-not-required" targetfile="libs/armeabi/libLineBreak-v2.so">
-					<srcfiles dir="jni/LineBreak" includes="**/*.cpp,**/*.c,**/*.h"/>
+				<available file="${main.dir}/libs/armeabi/libLineBreak-v2.so" />
+				<uptodate property="libLineBreak-build-is-not-required" targetfile="${main.dir}/libs/armeabi/libLineBreak-v2.so">
+					<srcfiles dir="${main.dir}/jni/LineBreak" includes="**/*.cpp,**/*.c,**/*.h"/>
 				</uptodate>
 				<!-- Check if libNativeFormats exists and is up to date -->
-				<available file="./libs/armeabi/libNativeFormats-v4.so" />
-				<uptodate property="libNativeFormats-build-is-not-required" targetfile="libs/armeabi/libNativeFormats-v4.so">
-					<srcfiles dir="jni/NativeFormats" includes="**/*.cpp,**/*.c,**/*.h"/>
+				<available file="${main.dir}/libs/armeabi/libNativeFormats-v4.so" />
+				<uptodate property="libNativeFormats-build-is-not-required" targetfile="${main.dir}/libs/armeabi/libNativeFormats-v4.so">
+					<srcfiles dir="${main.dir}/jni/NativeFormats" includes="**/*.cpp,**/*.c,**/*.h"/>
 				</uptodate>
 			</and>
 		</condition>
@@ -86,16 +86,8 @@
 
 	<target name="distclean" depends="clean">
 		<echo message="Deleting native libraries..." />
-		<delete dir="obj" />
-		<delete dir="libs/armeabi" />
-		<delete dir="libs/armeabi-v7a" />
-		<delete dir="libs/arm64-v8a" />
-		<delete dir="libs/x86_64" />
-		<delete dir="libs/x86" />
-		<delete dir="libs/mips" />
-		<delete dir="libs/mips64" />
-		<delete dir="libs/mips-r2" />
-		<delete dir="libs/mips-r2-sf" />
+		<delete dir="${main.dir}/obj" />
+		<delete dir="${main.dir}/libs" />
 		<echo message="DONE (Deleting native libraries)" />
 	</target>
 

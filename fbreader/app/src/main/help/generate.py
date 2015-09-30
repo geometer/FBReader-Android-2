@@ -54,6 +54,10 @@ if __name__ == '__main__':
     html_dir = sys.argv[2]
     output_dir = sys.argv[3]
 
+    try:
+        shutil.rmtree(output_dir)
+    except:
+        pass
     os.makedirs(output_dir)
     for lang in collect_languages(html_dir):
         epub = os.path.join(output_dir, 'intro-' + lang + '.epub')
