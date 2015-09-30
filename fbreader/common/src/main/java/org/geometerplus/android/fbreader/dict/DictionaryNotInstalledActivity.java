@@ -27,7 +27,7 @@ import android.view.*;
 import android.widget.*;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.ui.android.R;
+import org.fbreader.common.R;
 import org.geometerplus.android.util.UIMessageUtil;
 import org.geometerplus.android.util.PackageUtil;
 
