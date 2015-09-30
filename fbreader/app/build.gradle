@@ -1,0 +1,134 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'com.android.tools.build:gradle:1.3.0'
+	}
+}
+
+apply plugin: 'com.android.application'
+
+dependencies {
+	compile project(':third-party/drag-sort-listview')
+	compile project(':third-party/android-filechooser')
+	compile project(':third-party/SuperToasts')
+	compile project(':third-party/AmbilWarna')
+	compile files('libs/nanohttpd-2.0.5.jar')
+	compile files('libs/httpmime-4.2.5.jar')
+	compile files('libs/LingvoIntegration_2.5.2.12.jar')
+	compile files('libs/open-dictionary-api-1.2.1.jar')
+	compile files('libs/json-simple-1.1.1.jar')
+	compile files('libs/pdfparse.jar')
+}
+
+android {
+	compileSdkVersion 19
+	buildToolsVersion '20'
+
+	lintOptions {
+		abortOnError false
+	}
+
+	defaultConfig {
+		minSdkVersion 5
+		maxSdkVersion 10
+		targetSdkVersion 9
+		versionCode 2056000
+		versionName '2.6 beta 10'
+	}
+
+	sourceSets {
+		main.aidl.srcDirs = ['src/main/java']
+		main.java.srcDirs = ['src/main/java']
+		main.res.srcDirs = ['src/main/res']
+		main.assets.srcDirs = ['src/main/assets']
+		main.jniLibs.srcDirs = ['src/main/libs']
+		main.jni.srcDirs = []
+	}
+
+	signingConfigs {
+		release {
+			storeFile file(RELEASE_STORE_FILE)
+			storePassword RELEASE_STORE_PASSWORD
+			keyAlias RELEASE_KEY_ALIAS
+			keyPassword RELEASE_KEY_PASSWORD
+		}
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+			signingConfig signingConfigs.release
+		}
+	}
+
+	applicationVariants.all { variant ->
+		def generateHelpTask = project.tasks.create "generateHelp${variant.name.capitalize()}", Exec
+		generateHelpTask.commandLine('src/main/help/generate.py', 'src/main/help/proto', 'src/main/help/html', variant.outputs[0].processResources.assetsDir.path + '/data/intro')
+		variant.mergeResources.dependsOn(generateHelpTask)
+	}
+}
+
+android {
+	flavorDimensions 'abi'
+
+	productFlavors {
+		fat {
+			dimension 'abi'
+			ndk {
+				abiFilters 'x86', 'armeabi-v7a', 'armeabi', 'mips'
+				versionCode 0
+			}
+		}
+		arm {
+			dimension 'abi'
+			ndk {
+				abiFilter 'armeabi'
+				versionCode 1
+			}
+		}
+		armv7a {
+			dimension 'abi'
+			ndk {
+				abiFilter 'armeabi-v7a'
+				versionCode 2
+			}
+		}
+		x86 {
+			dimension 'abi'
+			ndk {
+				abiFilter 'x86'
+				versionCode 3
+			}
+		}
+		mips {
+			dimension 'abi'
+			ndk {
+				abiFilter 'mips'
+				versionCode 4
+			}
+		}
+	}
+
+	task ndkBuild(type: Exec) {
+		def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
+		commandLine "$ndkDir/ndk-build", '-C', file('src/main/jni').absolutePath
+	}
+
+	tasks.withType(JavaCompile) {
+		compileTask -> compileTask.dependsOn ndkBuild
+	}
+
+	clean {
+		delete 'src/main/obj'
+		delete 'src/main/libs'
+	}
+}
+
+android.applicationVariants.all { variant ->
+	def abiVersion = variant.productFlavors.get(0).versionCode
+	variant.mergedFlavor.versionCode = android.defaultConfig.versionCode + abiVersion
+}
