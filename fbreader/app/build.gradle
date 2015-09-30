@@ -18,6 +18,7 @@ dependencies {
 	compile project(':third-party/android-filechooser')
 	compile project(':third-party/SuperToasts')
 	compile project(':third-party/AmbilWarna')
+	compile project(':third-party/yotaphone_sdk')
 	compile files('libs/nanohttpd-2.0.5.jar')
 	compile files('libs/httpmime-4.2.5.jar')
 	compile files('libs/LingvoIntegration_2.5.2.12.jar')
@@ -62,7 +63,7 @@ android {
 
 	buildTypes {
 		release {
-			minifyEnabled false
+			minifyEnabled true
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
 			signingConfig signingConfigs.release
 		}
