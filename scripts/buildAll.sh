@@ -4,7 +4,7 @@ rm -f READY/*
 mkdir -p READY
 
 outdir="fbreader/app/build/outputs"
-version=`cat VERSION | sed "s/ /_"`
+version=`cat VERSION | sed "s/ /_/g"`
 
 build=master
 git checkout master
