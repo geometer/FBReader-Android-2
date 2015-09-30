@@ -3,29 +3,39 @@
 rm -f READY/*
 mkdir -p READY
 
+outdir="fbreader/app/build/outputs"
+version=`cat VERSION | sed "s/ /_"`
+
+build=master
 git checkout master
-./scripts/packageTool.sh --updateVersion
-ant distclean
-fbuild
-mv bin/FBReaderJ.apk READY
-#cp bin/proguard/mapping.txt mappings/mapping-`cat VERSION`.master.txt
+./gradlew clean
+./gradlew zipAlignFatRelease
+mv $outdir/apk/fbreader/app-fat-release.apk READY/FBReaderJ.apk
+mv $outdir/mapping/fat/release/mapping.txt mapping/mapping-$version.$build.txt
 
-#git checkout ice-cream-sandwich
+build=ice-cream-sandwich
 git checkout yota2
-./scripts/packageTool.sh --updateVersion
-ant clean
-fbuild
-mv bin/FBReaderJ.apk READY/FBReaderJ_ice-cream-sandwich.apk
-#cp bin/proguard/mapping.txt mappings/mapping-`cat VERSION`.ice-cream-sandwich.txt
+./gradlew clean
+for arch in Arm Armv7a X86 Mips; do
+  ./gradlew zipAlign${arch}Release
+  lower=`echo $arch | tr '[:upper:]' '[:lower:]'`
+  mv $outdir/apk/fbreader/app-$lower-release.apk READY/FBReaderJ_$build-$lower.apk
+	mv $outdir/mapping/$lower/release/mapping.txt mapping/mapping-$version.$build-$lower.txt
+done
+./gradlew zipAlignFatRelease
+mv $outdir/apk/fbreader/app-fat-release.apk READY/FBReaderJ_$build.apk
+mv $outdir/mapping/fat/release/mapping.txt mapping/mapping-$version.$build.txt
 
+build=nst
 git checkout nook
-./scripts/packageTool.sh --updateVersion
-ant clean
-fbuild
-mv bin/FBReaderJ.apk READY/FBReaderJ_nst.apk
+./gradlew clean
+./gradlew zipAlignFatRelease
+mv fbreader/app/build/outputs/apk/fbreader/app-fat-release.apk READY/FBReaderJ_$build.apk
+mv $outdir/mapping/fat/release/mapping.txt mapping/mapping-$version.$build.txt
 
+build=kindlehd
 git checkout kindle
-./scripts/packageTool.sh --updateVersion
-ant clean
-fbuild
-mv bin/FBReaderJ.apk READY/FBReaderJ_kindlehd.apk
+./gradlew clean
+./gradlew zipAlignFatRelease
+mv fbreader/app/build/outputs/apk/fbreader/app-fat-release.apk READY/FBReaderJ_$build.apk
+mv $outdir/mapping/fat/release/mapping.txt mapping/mapping-$version.$build.txt
