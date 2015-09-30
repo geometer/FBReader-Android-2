@@ -10,8 +10,12 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
+dependencies {
+	compile 'com.android.support:support-v4:21.0.0'
+}
+
 android {
-	compileSdkVersion 19
+	compileSdkVersion 10
 	buildToolsVersion '20'
 
 	lintOptions {
@@ -24,9 +28,9 @@ android {
 	}
 
 	sourceSets {
-		main.java.srcDirs = ['src']
-		main.res.srcDirs = ['res']
-		main.manifest.srcFile 'AndroidManifest.xml'
+		main.java.srcDirs = ['library/src']
+		main.res.srcDirs = ['library/res']
+		main.manifest.srcFile 'library/AndroidManifest.xml'
 	}
 
 	defaultConfig {

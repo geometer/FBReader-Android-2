@@ -1,0 +1,5 @@
+include 'fbreader/app'
+include 'third-party/drag-sort-listview'
+include 'third-party/android-filechooser'
+include 'third-party/SuperToasts'
+include 'third-party/AmbilWarna'
