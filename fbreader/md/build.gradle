@@ -10,6 +10,11 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
+dependencies {
+	compile 'com.android.support:appcompat-v7:23.+'
+	compile project(':third-party/materialloadingprogressbar')
+}
+
 android {
 	compileSdkVersion 23
 	buildToolsVersion '23.0.1'
@@ -25,13 +30,12 @@ android {
 
 	sourceSets {
 		main.java.srcDirs = ['src/main/java']
-		main.aidl.srcDirs = ['src/main/java']
 		main.res.srcDirs = ['src/main/res']
 		main.manifest.srcFile 'src/main/AndroidManifest.xml'
 	}
 
 	defaultConfig {
-		minSdkVersion 11
+		minSdkVersion 14
 		targetSdkVersion 17
 		versionCode 1
 		versionName "1.0"

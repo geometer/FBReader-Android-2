@@ -1,0 +1,13 @@
+<com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/md_progress_indicator"
+	android:layout_width="60dp"
+	android:layout_height="60dp"
+	app:mlpb_background_color="?attr/colorPrimary"
+	app:mlpb_progress_color="?android:attr/textColorPrimary"
+	android:layout_alignParentTop="true"
+	android:layout_marginTop="10dp"
+	android:layout_centerHorizontal="true"
+	android:visibility="gone"
+/>

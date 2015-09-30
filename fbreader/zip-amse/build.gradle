@@ -10,6 +10,10 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
+dependencies {
+	compile project(':fbreader/api')
+}
+
 android {
 	compileSdkVersion 23
 	buildToolsVersion '23.0.1'
@@ -25,9 +29,8 @@ android {
 
 	sourceSets {
 		main.java.srcDirs = ['src/main/java']
-		main.aidl.srcDirs = ['src/main/java']
-		main.res.srcDirs = ['src/main/res']
-		main.manifest.srcFile 'src/main/AndroidManifest.xml'
+		main.jniLibs.srcDirs = ['src/main/libs']
+		main.jni.srcDirs = []
 	}
 
 	defaultConfig {
@@ -35,5 +38,19 @@ android {
 		targetSdkVersion 17
 		versionCode 1
 		versionName "1.0"
+	}
+
+	task ndkBuild(type: Exec) {
+		def ndkDir = plugins.getPlugin('com.android.library').sdkHandler.getNdkFolder()
+		commandLine "$ndkDir/ndk-build", '-C', file('src/main/jni').absolutePath
+	}
+
+	tasks.withType(JavaCompile) {
+		compileTask -> compileTask.dependsOn ndkBuild
+	}
+
+	clean {
+		delete 'src/main/obj'
+		delete 'src/main/libs'
 	}
 }
