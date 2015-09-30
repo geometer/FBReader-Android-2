@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:minHeight="54dip"
+	android:orientation="vertical">
+	<LinearLayout
+		style="?android:attr/buttonBarStyle"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:gravity="right"
+		android:paddingTop="4dp"
+		android:paddingStart="2dp"
+		android:paddingEnd="2dp"
+		android:measureWithLargestChild="true"
+	>
+		<Button
+			android:id="@+id/md_single_button"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:singleLine="true"
+			style="?android:attr/buttonBarButtonStyle"
+		/>
+	</LinearLayout>
+</LinearLayout>
