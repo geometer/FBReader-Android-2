@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
-import org.geometerplus.zlibrary.ui.android.R;
+import org.fbreader.common.R;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 
