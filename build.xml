@@ -27,7 +27,10 @@
 			</condition>
 		</fail>
 		<echo message="Building native libraries..."/>
-		<exec executable="${ndk.dir}/ndk-build" />
+		<exec executable="${ndk.dir}/ndk-build">
+			<arg value="-C"/>
+			<arg value="fbreader/app/src/main/jni"/>
+		</exec>
 		<echo message="DONE (Building native libraries)"/>
 	</target>
 
