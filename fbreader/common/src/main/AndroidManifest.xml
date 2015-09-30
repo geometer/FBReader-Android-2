@@ -7,5 +7,19 @@
 		android:targetSdkVersion="17"
 	/>
 	<application>
+		<activity
+			android:name="org.geometerplus.zlibrary.ui.android.error.BugReportActivity"
+			android:label="FBReader crash"
+			android:theme="@style/FBReader.Activity"
+			android:process=":crash"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:exported="false"
+		/>
+		<activity
+			android:name="org.geometerplus.android.fbreader.dict.DictionaryNotInstalledActivity"
+			android:theme="@style/FBReader.Dialog"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:exported="false"
+		/>
 	</application>
 </manifest>
