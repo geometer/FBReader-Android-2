@@ -4,8 +4,11 @@ import android.app.*;
 import android.content.*;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.*;
+import android.support.v7.app.AlertDialog;
 import android.view.*;
 import android.widget.*;
+
+import org.fbreader.md.MDAlertDialogBuilder;
 
 public class AmbilWarnaDialog {
 	public interface OnAmbilWarnaListener {
@@ -24,9 +27,6 @@ public class AmbilWarnaDialog {
 	final ViewGroup viewContainer;
 	final float[] currentColorHsv = new float[3];
 
-	private final CharSequence positiveButtonText;
-	private final CharSequence negativeButtonText;
-
 	/**
 	 * create an AmbilWarnaDialog. call this only from OnCreateDialog() or from a background thread.
 	 * 
@@ -37,12 +37,9 @@ public class AmbilWarnaDialog {
 	 * @param listener
 	 *            an OnAmbilWarnaListener, allowing you to get back error or
 	 */
-	public AmbilWarnaDialog(final Context context, int color, OnAmbilWarnaListener listener, String positiveButtonText, String negativeButtonText) {
+	public AmbilWarnaDialog(final Context context, int color, OnAmbilWarnaListener listener, CharSequence title, CharSequence positiveButtonText) {
 		this.listener = listener;
 		Color.colorToHSV(color, currentColorHsv);
-
-		this.positiveButtonText = positiveButtonText;
-		this.negativeButtonText = negativeButtonText;
 
 		final View view = LayoutInflater.from(context).inflate(R.layout.ambilwarna_dialog, null);
 		viewHue = view.findViewById(R.id.ambilwarna_viewHue);
@@ -107,18 +104,20 @@ public class AmbilWarnaDialog {
 			}
 		});
 
-		dialog = new AlertDialog.Builder(context)
+		dialog = new MDAlertDialogBuilder(context)
+			.setTitle(title)
+			.setNavigationOnClickListener(new View.OnClickListener() {
+				@Override public void onClick(View view) {
+					if (AmbilWarnaDialog.this.listener != null) {
+						AmbilWarnaDialog.this.listener.onCancel(AmbilWarnaDialog.this);
+					}
+					dialog.dismiss();
+				}
+			})
 			.setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
 				@Override public void onClick(DialogInterface dialog, int which) {
 					if (AmbilWarnaDialog.this.listener != null) {
 						AmbilWarnaDialog.this.listener.onOk(AmbilWarnaDialog.this, getColor());
-					}
-				}
-			})
-			.setNegativeButton(negativeButtonText, new DialogInterface.OnClickListener() {
-				@Override public void onClick(DialogInterface dialog, int which) {
-					if (AmbilWarnaDialog.this.listener != null) {
-						AmbilWarnaDialog.this.listener.onCancel(AmbilWarnaDialog.this);
 					}
 				}
 			})
