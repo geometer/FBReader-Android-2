@@ -241,7 +241,7 @@
 		</activity>
 		<activity
 			android:name="org.geometerplus.android.fbreader.TOCActivity"
-			android:theme="@style/FBReader.Activity"
+			android:theme="@style/FBReaderMD.Activity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 		/>
 		<activity android:name="org.geometerplus.android.fbreader.preferences.PreferenceActivity" android:theme="@style/FBReader.Activity" android:configChanges="orientation|keyboardHidden|screenSize" android:process=":preferences">

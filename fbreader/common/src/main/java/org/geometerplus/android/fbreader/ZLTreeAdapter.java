@@ -25,10 +25,9 @@ import android.view.*;
 import android.widget.*;
 
 import org.geometerplus.zlibrary.core.tree.ZLTree;
+import org.fbreader.common.R;
 
-import org.geometerplus.zlibrary.ui.android.R;
-
-public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
+public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 	private final ListView myParent;
 	private final ZLTree<?> Root;
 	private ZLTree<?>[] myItems;
@@ -42,7 +41,7 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 
 		parent.setAdapter(this);
 		parent.setOnItemClickListener(this);
-		parent.setOnCreateContextMenuListener(this);
+		parent.setOnItemLongClickListener(this);
 	}
 
 	protected final void openTree(ZLTree<?> tree) {
@@ -164,11 +163,6 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 	public final void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		runTreeItem(getItem(position));
 	}
-
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-	}
-
-	public abstract View getView(int position, View convertView, ViewGroup parent);
 
 	protected final void setIcon(ImageView imageView, ZLTree<?> tree) {
 		if (tree.hasChildren()) {

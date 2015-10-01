@@ -19,8 +19,6 @@
 
 package org.geometerplus.android.fbreader;
 
-import android.app.ActionBar;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
@@ -30,18 +28,23 @@ import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.tree.ZLTree;
 
-import org.geometerplus.zlibrary.ui.android.R;
-
 import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
 import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import org.geometerplus.android.util.OrientationUtil;
-import org.geometerplus.android.util.ViewUtil;
+import org.geometerplus.android.util.*;
 
-public class TOCActivity extends ListActivity {
+import org.fbreader.md.MDActivity;
+import org.geometerplus.zlibrary.ui.android.R;
+
+public class TOCActivity extends MDActivity {
 	private TOCAdapter myAdapter;
 	private ZLTree<?> mySelectedItem;
+
+	@Override
+	protected int layoutId() {
+		return R.layout.toc;
+	}
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -51,19 +54,10 @@ public class TOCActivity extends ListActivity {
 
 		final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
 
-		final ActionBar bar = getActionBar();
-		if (bar != null) {
-			bar.setDisplayOptions(
-				ActionBar.DISPLAY_SHOW_CUSTOM,
-				ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE
-			);
-			final TextView titleView = (TextView)getLayoutInflater().inflate(DeviceUtil.titleViewId(), null);
-			titleView.setText(fbreader.getTitle());
-			bar.setCustomView(titleView);
-		}
+		FBReaderUtil.setBookTitle(this, fbreader.Model.Book);
 
 		final TOCTree root = fbreader.Model.TOCTree;
-		myAdapter = new TOCAdapter(root);
+		myAdapter = new TOCAdapter((ListView)findViewById(R.id.toc_list), root);
 		TOCTree treeToSelect = fbreader.getCurrentTOCElement();
 		myAdapter.selectItem(treeToSelect);
 		mySelectedItem = treeToSelect;
@@ -83,36 +77,42 @@ public class TOCActivity extends ListActivity {
 	private static final int PROCESS_TREE_ITEM_ID = 0;
 	private static final int READ_BOOK_ITEM_ID = 1;
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		final int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
-		final TOCTree tree = (TOCTree)myAdapter.getItem(position);
-		switch (item.getItemId()) {
-			case PROCESS_TREE_ITEM_ID:
-				myAdapter.runTreeItem(tree);
-				return true;
-			case READ_BOOK_ITEM_ID:
-				myAdapter.openBookText(tree);
-				return true;
-		}
-		return super.onContextItemSelected(item);
-	}
-
 	private final class TOCAdapter extends ZLTreeAdapter {
-		TOCAdapter(TOCTree root) {
-			super(getListView(), root);
+		TOCAdapter(ListView view, TOCTree root) {
+			super(view, root);
 		}
 
 		@Override
-		public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-			final int position = ((AdapterView.AdapterContextMenuInfo)menuInfo).position;
+		public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
 			final TOCTree tree = (TOCTree)getItem(position);
-			if (tree.hasChildren()) {
-				menu.setHeaderTitle(tree.getText());
-				final ZLResource resource = ZLResource.resource("tocView");
-				menu.add(0, PROCESS_TREE_ITEM_ID, 0, resource.getResource(isOpen(tree) ? "collapseTree" : "expandTree").getValue());
-				menu.add(0, READ_BOOK_ITEM_ID, 0, resource.getResource("readText").getValue());
+			if (!tree.hasChildren()) {
+				return false;
 			}
+
+			final ContextMenuDialog dialog = new ContextMenuDialog() {
+				@Override
+				protected String getTitle() {
+					return tree.getText();
+				}
+
+				@Override
+				protected void onItemClick(long itemId) {
+					switch ((int)itemId) {
+						case PROCESS_TREE_ITEM_ID:
+							myAdapter.runTreeItem(tree);
+							break;
+						case READ_BOOK_ITEM_ID:
+							myAdapter.openBookText(tree);
+							break;
+					}
+				}
+			};
+
+			final ZLResource resource = ZLResource.resource("tocView");
+			dialog.addItem(PROCESS_TREE_ITEM_ID, resource, isOpen(tree) ? "collapseTree" : "expandTree");
+			dialog.addItem(READ_BOOK_ITEM_ID, resource, "readText");
+			dialog.show(TOCActivity.this);
+			return true;
 		}
 
 		@Override
