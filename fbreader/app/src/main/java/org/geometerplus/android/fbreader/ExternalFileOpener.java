@@ -22,8 +22,8 @@ package org.geometerplus.android.fbreader;
 import java.math.BigInteger;
 import java.util.Random;
 
-import android.app.AlertDialog;
 import android.content.*;
+import android.support.v7.app.AlertDialog;
 
 import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
@@ -37,6 +37,8 @@ import org.geometerplus.fbreader.formats.ExternalFormatPlugin;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.formatPlugin.PluginUtil;
 import org.geometerplus.android.util.PackageUtil;
+
+import org.fbreader.md.MDAlertDialogBuilder;
 
 class ExternalFileOpener implements FBReaderApp.ExternalFileOpener {
 	private final String myPluginCode = new BigInteger(80, new Random()).toString();
@@ -79,7 +81,7 @@ class ExternalFileOpener implements FBReaderApp.ExternalFileOpener {
 		final String title =
 			dialogResource.getResource("missingPlugin").getResource("title").getValue()
 				.replace("%s", plugin.supportedFileType());
-		final AlertDialog.Builder builder = new AlertDialog.Builder(myReader)
+		final AlertDialog.Builder builder = new MDAlertDialogBuilder(myReader)
 			.setTitle(title)
 			.setIcon(0)
 			.setPositiveButton(buttonResource.getResource("yes").getValue(), new DialogInterface.OnClickListener() {
