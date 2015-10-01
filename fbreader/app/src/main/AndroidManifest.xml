@@ -65,7 +65,10 @@
 				<data android:scheme="UnsatisfiedLinkError"/>
 			</intent-filter>
 		</activity>
-		<service android:name="org.geometerplus.android.fbreader.api.ApiService" android:launchMode="singleTask">
+		<service
+			android:name="org.geometerplus.android.fbreader.api.ApiService"
+			android:launchMode="singleTask"
+		>
 			<intent-filter>
 				<action android:name="android.fbreader.action.API"/>
 				<category android:name="android.intent.category.DEFAULT"/>
@@ -244,12 +247,20 @@
 				<action android:name="android.fbreader.action.LIBRARY_SERVICE"/>
 			</intent-filter>
 		</service>
-		<service android:name="org.geometerplus.android.fbreader.config.ConfigService" android:launchMode="singleTask" android:process=":configService">
+		<service
+			android:name="org.geometerplus.android.fbreader.config.ConfigService"
+			android:launchMode="singleTask"
+			android:process=":configService"
+		>
 			<intent-filter>
 				<action android:name="android.fbreader.action.CONFIG_SERVICE"/>
 			</intent-filter>
 		</service>
-		<service android:name="org.geometerplus.android.fbreader.sync.SyncService" android:launchMode="singleTask" android:process=":synchroniser">
+		<service
+			android:name="org.geometerplus.android.fbreader.sync.SyncService"
+			android:launchMode="singleTask"
+			android:process=":synchroniser"
+		>
 			<intent-filter>
 				<action android:name="android.fbreader.action.sync.START"/>
 			</intent-filter>
@@ -394,7 +405,12 @@
 				<data android:host="*" android:scheme="epub"/>
 			</intent-filter>
 		</activity>
-		<service android:name="org.geometerplus.android.fbreader.network.BookDownloaderService" android:launchMode="singleTask" android:process=":networkLibrary" android:exported="false"/>
+		<service
+			android:name="org.geometerplus.android.fbreader.network.BookDownloaderService"
+			android:launchMode="singleTask"
+			android:process=":networkLibrary"
+			android:exported="false"
+		/>
 		<activity
 			android:name="org.geometerplus.android.fbreader.network.NetworkSearchActivity"
 			android:process=":networkLibrary"
