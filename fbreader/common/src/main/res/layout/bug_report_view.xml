@@ -5,6 +5,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 >
+	<include layout="@layout/md_toolbar"/>
 	<TextView
 		android:id="@+id/report_text"
 		android:layout_width="fill_parent"

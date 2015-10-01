@@ -10,14 +10,14 @@
 		<activity
 			android:name="org.geometerplus.zlibrary.ui.android.error.BugReportActivity"
 			android:label="FBReader crash"
-			android:theme="@style/FBReader.Activity"
+			android:theme="@style/FBReaderMD.Activity"
 			android:process=":crash"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:exported="false"
 		/>
 		<activity
 			android:name="org.geometerplus.android.fbreader.dict.DictionaryNotInstalledActivity"
-			android:theme="@style/FBReader.Dialog"
+			android:theme="@style/FBReaderMD.Dialog"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:exported="false"
 		/>
