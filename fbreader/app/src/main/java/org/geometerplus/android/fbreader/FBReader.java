@@ -27,6 +27,7 @@ import android.content.*;
 import android.net.Uri;
 import android.text.Html;
 import android.os.*;
+import android.support.v7.app.AlertDialog;
 import android.view.*;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -70,6 +71,8 @@ import org.geometerplus.android.fbreader.sync.SyncOperations;
 import org.geometerplus.android.fbreader.tips.TipsActivity;
 
 import org.geometerplus.android.util.*;
+
+import org.fbreader.md.MDAlertDialogBuilder;
 
 public final class FBReader extends FBReaderMainActivity implements ZLApplicationWindow {
 	public static final int RESULT_DO_NOTHING = RESULT_FIRST_USER;
@@ -1158,7 +1161,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		}
 
 		final ZLResource resource = ZLResource.resource("premium");
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this)
+		final AlertDialog.Builder builder = new MDAlertDialogBuilder(this)
 			.setMessage(resource.getResource("conflict").getValue())
 			.setIcon(0)
 			.setPositiveButton(
@@ -1233,7 +1236,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 			}
 		}
 		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this)
+		final AlertDialog.Builder builder = new MDAlertDialogBuilder(this)
 			.setTitle(ZLResource.resource("premium").getValue())
 			.setMessage(Html.fromHtml(buffer.toString()))
 			.setIcon(0)
