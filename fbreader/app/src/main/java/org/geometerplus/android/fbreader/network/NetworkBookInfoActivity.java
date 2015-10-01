@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader.network;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -38,6 +37,7 @@ import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
+import org.fbreader.md.MDActivity;
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
@@ -56,7 +56,7 @@ import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 import org.geometerplus.android.util.*;
 
-public class NetworkBookInfoActivity extends Activity implements NetworkLibrary.ChangeListener {
+public class NetworkBookInfoActivity extends MDActivity implements NetworkLibrary.ChangeListener {
 	private NetworkBookTree myTree;
 	private NetworkBookItem myBook;
 
@@ -69,14 +69,17 @@ public class NetworkBookInfoActivity extends Activity implements NetworkLibrary.
 	private final ActivityNetworkContext myNetworkContext = new ActivityNetworkContext(this);
 
 	@Override
+	protected int layoutId() {
+		return R.layout.network_book;
+	}
+
+	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
 		myBookCollection.bindToService(this, null);
 
 		SQLiteCookieDatabase.init(this);
-
-		setContentView(R.layout.network_book);
 	}
 
 	@Override
