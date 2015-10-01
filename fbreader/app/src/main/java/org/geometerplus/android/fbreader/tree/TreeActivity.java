@@ -21,24 +21,22 @@ package org.geometerplus.android.fbreader.tree;
 
 import java.util.*;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.widget.SearchView;
 import android.view.*;
-
-import org.geometerplus.zlibrary.ui.android.R;
-
-import org.geometerplus.android.util.UIMessageUtil;
-import org.geometerplus.android.util.UIUtil;
+import android.widget.ListView;
 
 import org.geometerplus.fbreader.tree.FBTree;
 
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
-import org.geometerplus.android.util.OrientationUtil;
+import org.geometerplus.android.util.*;
 
-public abstract class TreeActivity<T extends FBTree> extends ListActivity {
+import org.fbreader.md.MDListActivity;
+import org.geometerplus.zlibrary.ui.android.R;
+
+public abstract class TreeActivity<T extends FBTree> extends MDListActivity implements ListView.OnItemClickListener, ListView.OnItemLongClickListener {
 	private static final String OPEN_TREE_ACTION = "android.fbreader.action.OPEN_TREE";
 
 	public static final String TREE_KEY_KEY = "TreeKey";
@@ -54,19 +52,20 @@ public abstract class TreeActivity<T extends FBTree> extends ListActivity {
 	private final List<FBTree.Key> myHistory =
 		Collections.synchronizedList(new ArrayList<FBTree.Key>());
 
-	private ContentLoadingProgressBar myProgressBar;
+	private volatile MenuItem mySearchItem;
+
+	@Override
+	protected int layoutId() {
+		return R.layout.tree_activity;
+	}
 
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
 
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		} else {
-			setContentView(R.layout.tree_activity);
-			myProgressBar = (ContentLoadingProgressBar)findViewById(R.id.tree_activity_progress);
-		}
+		getListView().setOnItemClickListener(this);
+		getListView().setOnItemLongClickListener(this);
 	}
 
 	@Override
@@ -80,10 +79,6 @@ public abstract class TreeActivity<T extends FBTree> extends ListActivity {
 		ImageSynchronizer.clear();
 
 		super.onDestroy();
-	}
-
-	public TreeAdapter getTreeAdapter() {
-		return (TreeAdapter)super.getListAdapter();
 	}
 
 	protected T getCurrentTree() {
@@ -112,24 +107,32 @@ public abstract class TreeActivity<T extends FBTree> extends ListActivity {
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			FBTree parent = null;
-			synchronized (myHistory) {
-				while (parent == null && !myHistory.isEmpty()) {
-					parent = getTreeByKey(myHistory.remove(myHistory.size() - 1));
-				}
-			}
-			if (parent == null && myCurrentTree != null) {
-				parent = myCurrentTree.Parent;
-			}
-			if (parent != null && !isTreeInvisible(parent)) {
-				openTree(parent, myCurrentTree, false);
-				return true;
+	public void onBackPressed() {
+		final MenuItem searchItem = mySearchItem;
+		if (searchItem != null && searchItem.isVisible() && searchItem.isEnabled()) {
+			final SearchView searchView = (SearchView)mySearchItem.getActionView();
+			if (!searchView.isIconified()) {
+				searchView.setIconified(true);
+				searchView.setIconified(true);
+				searchView.setQuery(defaultSearchQuery(), false);
+				return;
 			}
 		}
 
-		return super.onKeyDown(keyCode, event);
+		FBTree parent = null;
+		synchronized (myHistory) {
+			while (parent == null && !myHistory.isEmpty()) {
+				parent = getTreeByKey(myHistory.remove(myHistory.size() - 1));
+			}
+		}
+		if (parent == null && myCurrentTree != null) {
+			parent = myCurrentTree.Parent;
+		}
+		if (parent != null && !isTreeInvisible(parent)) {
+			openTree(parent, myCurrentTree, false);
+		} else {
+			super.onBackPressed();
+		}
 	}
 
 	// TODO: change to protected
@@ -191,10 +194,9 @@ public abstract class TreeActivity<T extends FBTree> extends ListActivity {
 			selectedKey != null ? getTreeByKey(selectedKey) : adapter.getFirstSelectedItem();
 		final int index = adapter.getIndex(selectedTree);
 		if (index != -1) {
-			setSelection(index);
 			getListView().post(new Runnable() {
 				public void run() {
-					setSelection(index);
+					getListView().setSelection(index);
 				}
 			});
 		}
@@ -231,16 +233,46 @@ public abstract class TreeActivity<T extends FBTree> extends ListActivity {
 		}
 	}
 
-	protected final void showProgressIndicator(boolean show) {
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			setProgressBarIndeterminateVisibility(show);
-		} else if (myProgressBar != null) {
-			if (show) {
-				myProgressBar.setVisibility(View.VISIBLE);
-				myProgressBar.show();
-			} else {
-				myProgressBar.hide();
+	protected final TreeAdapter getTreeAdapter() {
+		return (TreeAdapter)getListAdapter();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.search_only, menu);
+
+		mySearchItem = menu.findItem(R.id.menu_search_item);
+		final SearchView searchView = (SearchView)mySearchItem.getActionView();
+		searchView.setQuery(defaultSearchQuery(), false);
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextChange(String query) {
+				return true;
 			}
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				query = query.trim();
+				if (!"".equals(query)) {
+					doSearch(query);
+					invalidateOptionsMenu();
+				}
+				return false;
+			}
+		});
+
+		return true;
+	}
+
+	public final void openSearchItem() {
+		final MenuItem searchItem = mySearchItem;
+		if (searchItem != null && searchItem.isVisible() && searchItem.isEnabled()) {
+			final SearchView searchView = (SearchView)mySearchItem.getActionView();
+			searchView.setIconified(false);
+			searchView.requestFocus();
 		}
 	}
+
+	protected abstract String defaultSearchQuery();
+	protected abstract void doSearch(String query);
 }

@@ -21,12 +21,13 @@ package org.geometerplus.android.fbreader.network;
 
 import java.util.*;
 
-import android.app.AlertDialog;
 import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
+
+import org.fbreader.md.MDAlertDialogBuilder;
 
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.network.ZLNetworkManager;
@@ -42,13 +43,13 @@ import org.geometerplus.fbreader.network.tree.*;
 import org.geometerplus.fbreader.network.urlInfo.*;
 import org.geometerplus.fbreader.tree.FBTree;
 
+import org.geometerplus.android.util.ContextMenuDialog;
+import org.geometerplus.android.util.UIMessageUtil;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.fbreader.network.action.*;
 import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 import org.geometerplus.android.fbreader.tree.TreeActivity;
-
-import org.geometerplus.android.util.UIMessageUtil;
 
 public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> implements ListView.OnScrollListener, NetworkLibrary.ChangeListener {
 	public static final int REQUEST_MANAGE_CATALOGS = 1;
@@ -72,9 +73,10 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+		final NetworkLibrary library = Util.networkLibrary(this);
 		BookCollection.bindToService(this, new Runnable() {
 			public void run() {
-				Util.networkLibrary(NetworkLibraryActivity.this).clearExpiredCache(25);
+				library.clearExpiredCache(25);
 			}
 		});
 
@@ -89,7 +91,6 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 		BookCollection.bindToService(this, new Runnable() {
 			public void run() {
 				init(intent);
-				final NetworkLibrary library = Util.networkLibrary(NetworkLibraryActivity.this);
 				library.addChangeListener(NetworkLibraryActivity.this);
 
 				if (getCurrentTree() instanceof RootTree) {
@@ -133,7 +134,6 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 	public void onResume() {
 		super.onResume();
 		myNetworkContext.onResume();
-		getListView().setOnCreateContextMenuListener(this);
 		Util.networkLibrary(this).fireModelChangedEvent(NetworkLibrary.ChangeListener.Code.SomeCode);
 	}
 
@@ -296,40 +296,44 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+	public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
 		if (myContextMenuActions.isEmpty()) {
 			fillContextMenuList();
 		}
 
-		final int position = ((AdapterView.AdapterContextMenuInfo)menuInfo).position;
 		final NetworkTree tree = (NetworkTree)getTreeAdapter().getItem(position);
-		if (tree != null) {
-			menu.setHeaderTitle(tree.getName());
-			for (Action a : getContextMenuActions(tree)) {
-				if (a.isVisible(tree) && a.isEnabled(tree)) {
-					menu.add(0, a.Code, 0, a.getContextLabel(tree));
+		if (tree == null) {
+			return false;
+		}
+
+		final ContextMenuDialog dialog = new ContextMenuDialog() {
+			@Override
+			protected String getTitle() {
+				return tree.getName();
+			}
+
+			@Override
+			protected void onItemClick(long itemId) {
+				for (Action a : getContextMenuActions(tree)) {
+					if (a.Code == itemId) {
+						checkAndRun(a, tree);
+						break;
+					}
 				}
 			}
+		};
+
+		for (Action a : getContextMenuActions(tree)) {
+			if (a.isVisible(tree) && a.isEnabled(tree)) {
+				dialog.addItem(a.Code, a.getContextLabel(tree));
+			}
 		}
+		dialog.show(this);
+		return true;
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		final int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
-		final NetworkTree tree = (NetworkTree)getTreeAdapter().getItem(position);
-		if (tree != null) {
-			for (Action a : getContextMenuActions(tree)) {
-				if (a.Code == item.getItemId()) {
-					checkAndRun(a, tree);
-					return true;
-				}
-			}
-		}
-		return super.onContextItemSelected(item);
-	}
-
-	@Override
-	public void onListItemClick(ListView listView, View view, int position, long rowId) {
+	public void onItemClick(AdapterView listView, View view, int position, long rowId) {
 		if (myListClickActions.isEmpty()) {
 			fillListClickList();
 		}
@@ -346,6 +350,24 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 	}
 
 	@Override
+	protected String defaultSearchQuery() {
+		return Util.networkLibrary(this).NetworkSearchPatternOption.getValue();
+	}
+
+	@Override
+	protected void doSearch(String query) {
+		final SearchCatalogTree searchTree = RunSearchAction.getSearchTree(getCurrentTree());
+		if (searchTree != null) {
+			final MimeType mime = searchTree.getMimeType();
+			if (MimeType.APP_ATOM_XML.weakEquals(mime)) {
+				searchTree.startItemsLoader(myNetworkContext, query);
+			} else if (MimeType.TEXT_HTML.weakEquals(mime)) {
+				Util.openInBrowser(NetworkLibraryActivity.this, searchTree.getUrl(query));
+			}
+		}
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
@@ -354,10 +376,11 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 		}
 
 		for (Action a : myOptionsMenuActions) {
+			if (menu.findItem(a.Code) != null) {
+				continue;
+			}
 			final MenuItem item = menu.add(0, a.Code, Menu.NONE, "");
-			item.setShowAsAction(
-				a.ShowAsAction ? MenuItem.SHOW_AS_ACTION_IF_ROOM : MenuItem.SHOW_AS_ACTION_NEVER
-			);
+			item.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		}
 		return true;
 	}
@@ -471,12 +494,16 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 		final ZLResource dialogResource = ZLResource.resource("dialog");
 		final ZLResource boxResource = dialogResource.getResource("networkError");
 		final ZLResource buttonResource = dialogResource.getResource("button");
-		new AlertDialog.Builder(this)
+		new MDAlertDialogBuilder(this)
 			.setTitle(boxResource.getResource("title").getValue())
+			.setNavigationOnClickListener(new View.OnClickListener() {
+				public void onClick(View view) {
+					finish();
+				}
+			})
 			.setMessage(error)
 			.setIcon(0)
 			.setPositiveButton(buttonResource.getResource("tryAgain").getValue(), listener)
-			.setNegativeButton(buttonResource.getResource("cancel").getValue(), listener)
 			.setOnCancelListener(new DialogInterface.OnCancelListener() {
 				public void onCancel(DialogInterface dialog) {
 					listener.onClick(dialog, DialogInterface.BUTTON_NEGATIVE);

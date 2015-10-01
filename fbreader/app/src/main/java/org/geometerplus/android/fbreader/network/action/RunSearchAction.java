@@ -19,7 +19,6 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import org.geometerplus.fbreader.tree.FBTree;
@@ -47,7 +46,7 @@ public class RunSearchAction extends Action {
 
 	private final boolean myFromContextMenu;
 
-	public RunSearchAction(Activity activity, boolean fromContextMenu) {
+	public RunSearchAction(NetworkLibraryActivity activity, boolean fromContextMenu) {
 		super(activity, ActionCode.SEARCH, "networkSearch", true);
 		myFromContextMenu = fromContextMenu;
 	}
@@ -68,16 +67,6 @@ public class RunSearchAction extends Action {
 
 	@Override
 	public void run(NetworkTree tree) {
-		final Bundle bundle = new Bundle();
-		bundle.putSerializable(
-			NetworkLibraryActivity.TREE_KEY_KEY,
-			getSearchTree(tree).getUniqueKey()
-		);
-		final NetworkLibrary library = myLibrary;
-		if (DeviceType.Instance().hasStandardSearchDialog()) {
-			myActivity.startSearch(library.NetworkSearchPatternOption.getValue(), true, bundle, false);
-		} else {
-			SearchDialogUtil.showDialog(myActivity, NetworkSearchActivity.class, library.NetworkSearchPatternOption.getValue(), null, bundle);
-		}
+		((NetworkLibraryActivity)myActivity).openSearchItem();
 	}
 }
