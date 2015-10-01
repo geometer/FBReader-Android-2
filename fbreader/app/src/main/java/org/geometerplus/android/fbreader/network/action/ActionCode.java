@@ -19,13 +19,14 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
+import org.geometerplus.zlibrary.ui.android.R;
+
 public interface ActionCode {
 	int TREE_SHOW_CONTEXT_MENU = -2;
 	int TREE_NO_ACTION = -1;
 
-	int SEARCH = 1;
+	int SEARCH = R.id.menu_search_item;
 	int REFRESH = 2;
-	int LANGUAGE_FILTER = 3;
 
 	int RELOAD_CATALOG = 11;
 	int OPEN_CATALOG = 12;

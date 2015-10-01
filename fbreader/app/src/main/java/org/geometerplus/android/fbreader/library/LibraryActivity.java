@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader.library;
 
 import java.util.*;
 
-import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.*;
 import android.os.Build;
@@ -47,7 +46,9 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.fbreader.tree.TreeActivity;
 
-public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuItem.OnMenuItemClickListener, View.OnCreateContextMenuListener, IBookCollection.Listener<Book> {
+import org.fbreader.md.MDAlertDialogBuilder;
+
+public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuItem.OnMenuItemClickListener, IBookCollection.Listener<Book> {
 	static final String START_SEARCH_ACTION = "action.fbreader.library.start-search";
 
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
@@ -68,7 +69,6 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 		new LibraryTreeAdapter(this);
 
 		getListView().setTextFilterEnabled(true);
-		getListView().setOnCreateContextMenuListener(this);
 
 		deleteRootTree();
 
@@ -87,7 +87,7 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 		if (START_SEARCH_ACTION.equals(intent.getAction())) {
 			final String pattern = intent.getStringExtra(SearchManager.QUERY);
 			if (pattern != null && pattern.length() > 0) {
-				startBookSearch(pattern);
+				doSearch(pattern);
 			}
 		} else {
 			super.onNewIntent(intent);
@@ -121,7 +121,7 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 	}
 
 	@Override
-	protected void onListItemClick(ListView listView, View view, int position, long rowId) {
+	public void onItemClick(AdapterView listView, View view, int position, long rowId) {
 		final LibraryTree tree = (LibraryTree)getTreeAdapter().getItem(position);
 		if (tree instanceof ExternalViewTree) {
 			runOrInstallExternalView(true);
@@ -159,11 +159,7 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 
 	@Override
 	public boolean onSearchRequested() {
-		if (DeviceType.Instance().hasStandardSearchDialog()) {
-			startSearch(BookSearchPatternOption.getValue(), true, null, false);
-		} else {
-			SearchDialogUtil.showDialog(this, LibrarySearchActivity.class, BookSearchPatternOption.getValue(), null);
-		}
+		startSearch(BookSearchPatternOption.getValue(), true, null, false);
 		return true;
 	}
 
@@ -180,7 +176,6 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 		int TryAgain              = 9;
 	}
 	private interface OptionsItemId {
-		int Search                = 0;
 		int Rescan                = 1;
 		int UploadAgain           = 2;
 		int TryAgain              = 3;
@@ -189,51 +184,60 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		final int position = ((AdapterView.AdapterContextMenuInfo)menuInfo).position;
+	public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
 		final Book book = ((LibraryTree)getTreeAdapter().getItem(position)).getBook();
-		if (book != null) {
-			createBookContextMenu(menu, book);
+		if (book == null) {
+			return false;
 		}
+		createBookContextMenuDialog(book).show(this);
+		return true;
 	}
 
-	private void createBookContextMenu(ContextMenu menu, Book book) {
+	private ContextMenuDialog createBookContextMenuDialog(final Book book) {
+		final ContextMenuDialog dialog = new ContextMenuDialog() {
+			@Override
+			protected String getTitle() {
+				return book.getTitle();
+			}
+
+			@Override
+			protected void onItemClick(long itemId) {
+				onContextItemSelected(book, itemId);
+			}
+		};
 		final ZLResource resource = LibraryTree.resource();
-		menu.setHeaderTitle(book.getTitle());
-		menu.add(0, ContextItemId.OpenBook, 0, resource.getResource("openBook").getValue());
-		menu.add(0, ContextItemId.ShowBookInfo, 0, resource.getResource("showBookInfo").getValue());
+
+		dialog.addItem(ContextItemId.OpenBook, resource, "openBook");
+		dialog.addItem(ContextItemId.ShowBookInfo, resource, "showBookInfo");
 		if (BookUtil.fileByBook(book).getPhysicalFile() != null) {
-			menu.add(0, ContextItemId.ShareBook, 0, resource.getResource("shareBook").getValue());
+			dialog.addItem(ContextItemId.ShareBook, resource, "shareBook");
 		}
 		if (book.hasLabel(Book.FAVORITE_LABEL)) {
-			menu.add(0, ContextItemId.RemoveFromFavorites, 0, resource.getResource("removeFromFavorites").getValue());
+			dialog.addItem(ContextItemId.RemoveFromFavorites, resource, "removeFromFavorites");
 		} else {
-			menu.add(0, ContextItemId.AddToFavorites, 0, resource.getResource("addToFavorites").getValue());
+			dialog.addItem(ContextItemId.AddToFavorites, resource, "addToFavorites");
 		}
 		if (book.hasLabel(Book.READ_LABEL)) {
-			menu.add(0, ContextItemId.MarkAsUnread, 0, resource.getResource("markAsUnread").getValue());
+			dialog.addItem(ContextItemId.MarkAsUnread, resource, "markAsUnread");
 		} else {
-			menu.add(0, ContextItemId.MarkAsRead, 0, resource.getResource("markAsRead").getValue());
+			dialog.addItem(ContextItemId.MarkAsRead, resource, "markAsRead");
 		}
 		if (myCollection.canRemoveBook(book, true)) {
-			menu.add(0, ContextItemId.DeleteBook, 0, resource.getResource("deleteBook").getValue());
+			dialog.addItem(ContextItemId.DeleteBook, resource, "deleteBook");
 		}
-		if (book.hasLabel(Book.SYNC_DELETED_LABEL)) {
-			menu.add(0, ContextItemId.UploadAgain, 0, resource.getResource("uploadAgain").getValue());
+		final LibraryTree tree = getCurrentTree();
+		if (tree instanceof SyncLabelTree) {
+			final String label = ((SyncLabelTree)tree).Label;
+			if (book.hasLabel(label)) {
+				if (Book.SYNC_DELETED_LABEL.equals(label)) {
+					dialog.addItem(ContextItemId.UploadAgain, resource, "uploadAgain");
+				} else if (Book.SYNC_FAILURE_LABEL.equals(label)) {
+					dialog.addItem(ContextItemId.TryAgain, resource, "tryAgain");
+				}
+			}
 		}
-		if (book.hasLabel(Book.SYNC_FAILURE_LABEL)) {
-			menu.add(0, ContextItemId.TryAgain, 0, resource.getResource("tryAgain").getValue());
-		}
-	}
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		final int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
-		final Book book = ((LibraryTree)getTreeAdapter().getItem(position)).getBook();
-		if (book != null) {
-			return onContextItemSelected(item.getItemId(), book);
-		}
-		return super.onContextItemSelected(item);
+		return dialog;
 	}
 
 	private void syncAgain(Book book) {
@@ -243,8 +247,8 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 		myCollection.saveBook(book);
 	}
 
-	private boolean onContextItemSelected(int itemId, Book book) {
-		switch (itemId) {
+	private boolean onContextItemSelected(Book book, long itemId) {
+		switch ((int)itemId) {
 			case ContextItemId.OpenBook:
 				FBReader.openBookActivity(this, book, null);
 				return true;
@@ -294,14 +298,18 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 	//
 
 	@Override
+	protected String defaultSearchQuery() {
+		return BookSearchPatternOption.getValue();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		addMenuItem(menu, OptionsItemId.Search, "localSearch", R.drawable.ic_menu_search, true);
-		addMenuItem(menu, OptionsItemId.Rescan, "rescan", R.drawable.ic_menu_refresh, true);
-		addMenuItem(menu, OptionsItemId.UploadAgain, "uploadAgain", -1, true);
-		addMenuItem(menu, OptionsItemId.TryAgain, "tryAgain", -1, true);
-		addMenuItem(menu, OptionsItemId.DeleteAll, "deleteAll", -1, true);
-		addMenuItem(menu, OptionsItemId.ExternalView, "bookshelfView", -1, false);
+		addMenuItem(menu, OptionsItemId.Rescan, "rescan");
+		addMenuItem(menu, OptionsItemId.UploadAgain, "uploadAgain");
+		addMenuItem(menu, OptionsItemId.TryAgain, "tryAgain");
+		addMenuItem(menu, OptionsItemId.DeleteAll, "deleteAll");
+		addMenuItem(menu, OptionsItemId.ExternalView, "bookshelfView");
 		return true;
 	}
 
@@ -337,21 +345,16 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 		return true;
 	}
 
-	private MenuItem addMenuItem(Menu menu, int id, String resourceKey, int iconId, boolean showAsAction) {
+	private MenuItem addMenuItem(Menu menu, int id, String resourceKey) {
 		final String label = LibraryTree.resource().getResource(resourceKey).getValue();
 		final MenuItem item = menu.add(0, id, Menu.NONE, label);
 		item.setOnMenuItemClickListener(this);
-		if (iconId != -1) {
-			//item.setIcon(iconId);
-		}
-		item.setShowAsAction(showAsAction ? MenuItem.SHOW_AS_ACTION_IF_ROOM : MenuItem.SHOW_AS_ACTION_NEVER);
+		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		return item;
 	}
 
 	public boolean onMenuItemClick(MenuItem item) {
 		switch (item.getItemId()) {
-			case OptionsItemId.Search:
-				return onSearchRequested();
 			case OptionsItemId.Rescan:
 				if (myCollection.status().IsComplete) {
 					myCollection.reset(true);
@@ -445,7 +448,7 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 			: boxResource.getResource("title").getValue();
 		final String message =
 			boxResource.getResource("message").getValue(size).replaceAll("%s", String.valueOf(size));
-		new AlertDialog.Builder(this)
+		new MDAlertDialogBuilder(this)
 			.setTitle(title)
 			.setMessage(message)
 			.setIcon(0)
@@ -458,7 +461,8 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 		tryToDeleteBooks(Collections.singletonList(book));
 	}
 
-	private void startBookSearch(final String pattern) {
+	@Override
+	protected void doSearch(final String pattern) {
 		BookSearchPatternOption.setValue(pattern);
 
 		final Thread searcher = new Thread("Library.searchBooks") {
