@@ -75,7 +75,7 @@ public abstract class ZLApplication {
 	protected void setTitle(String title) {
 		myTitle = title;
 		if (myWindow != null) {
-			myWindow.setWindowTitle(title);
+			myWindow.updateWindowTitle();
 		}
 	}
 

@@ -19,10 +19,12 @@
 
 package org.geometerplus.android.fbreader;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 
@@ -33,7 +35,10 @@ import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 
-public abstract class FBReaderMainActivity extends Activity {
+import org.fbreader.md.MDActivity;
+import org.fbreader.common.R;
+
+public abstract class FBReaderMainActivity extends MDActivity {
 	public static final int REQUEST_PREFERENCES = 1;
 	public static final int REQUEST_CANCEL_MENU = 2;
 	public static final int REQUEST_DICTIONARY = 3;
@@ -122,6 +127,22 @@ public abstract class FBReaderMainActivity extends Activity {
 		});
 	}
 	/* ------ SUPER TOAST ------ */
+
+	/* ++++++ TOOLBAR ++++++ */
+	protected final void setupToolbar(View mainView, boolean visibleAlways, View.OnClickListener onClick) {
+		final Toolbar toolbar = getToolbar();
+		toolbar.setNavigationIcon(R.drawable.logo);
+		toolbar.setNavigationOnClickListener(onClick);
+
+		if (visibleAlways) {
+			final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
+			);
+			params.addRule(RelativeLayout.BELOW, toolbar.getId());
+			mainView.setLayoutParams(params);
+		}
+	}
+	/* ------ TOOLBAR ------ */
 
 	public abstract void hideDictionarySelection();
 }

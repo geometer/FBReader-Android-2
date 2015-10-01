@@ -218,6 +218,11 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	}
 
 	@Override
+	protected int layoutId() {
+		return R.layout.main;
+	}
+
+	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
@@ -249,12 +254,20 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 			WindowManager.LayoutParams.FLAG_FULLSCREEN,
 			myShowStatusBarFlag ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN
 		);
-		if (!myShowActionBarFlag) {
-			requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-		}
-		setContentView(R.layout.main);
+
 		myRootView = (RelativeLayout)findViewById(R.id.root_view);
 		myMainView = (ZLAndroidWidget)findViewById(R.id.main_view);
+
+		setupToolbar(
+			findViewById(R.id.main_drawer_layout),
+			myShowActionBarFlag,
+			new View.OnClickListener() {
+				public void onClick(View view) {
+					myFBReaderApp.runAction(ActionCode.SHOW_BOOK_INFO);
+				}
+			}
+		);
+
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
 		myFBReaderApp = (FBReaderApp)FBReaderApp.Instance();
@@ -269,23 +282,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 
 		myFBReaderApp.setExternalFileOpener(new ExternalFileOpener(this));
 
-		final ActionBar bar = getActionBar();
-		bar.setDisplayOptions(
-			ActionBar.DISPLAY_SHOW_CUSTOM,
-			ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_TITLE
-		);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			bar.setDisplayUseLogoEnabled(false);
-		}
-		final View titleView = getLayoutInflater().inflate(DeviceUtil.titleViewId(), null);
-		titleView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				myFBReaderApp.runAction(ActionCode.SHOW_BOOK_INFO);
-			}
-		});
-		bar.setCustomView(titleView);
-
-		setTitle(myFBReaderApp.getTitle());
+		updateWindowTitle();
 
 		if (myFBReaderApp.getPopupById(TextSearchPopup.ID) == null) {
 			new TextSearchPopup(myFBReaderApp);
@@ -886,7 +883,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		}
 
 		if (!myShowActionBarFlag) {
-			getActionBar().hide();
+			setTitleVisibility(false);
 			myActionBarIsVisible = false;
 			invalidateOptionsMenu();
 		}
@@ -899,7 +896,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	void showBars() {
 		setStatusBarVisibility(true);
 
-		getActionBar().show();
+		setTitleVisibility(true);
 		myActionBarIsVisible = true;
 		invalidateOptionsMenu();
 
@@ -909,16 +906,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 			myFBReaderApp.hideActivePopup();
 			myNavigationPopup = new NavigationPopup(myFBReaderApp);
 			myNavigationPopup.runNavigation(this, myRootView);
-		}
-	}
-
-	@Override
-	public void setTitle(CharSequence title) {
-		super.setTitle(title);
-		final TextView view = (TextView)getActionBar().getCustomView();
-		if (view != null) {
-			view.setText(title);
-			view.postInvalidate();
 		}
 	}
 
@@ -1098,10 +1085,17 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	}
 
 	@Override
-	public void setWindowTitle(final String title) {
+	public void updateWindowTitle() {
+		if (myFBReaderApp == null) {
+			return;
+		}
+		final BookModel model = myFBReaderApp.Model;
+		if (model == null) {
+			return;
+		}
 		runOnUiThread(new Runnable() {
 			public void run() {
-				setTitle(title);
+				FBReaderUtil.setBookTitle(FBReader.this, model.Book);
 			}
 		});
 	}

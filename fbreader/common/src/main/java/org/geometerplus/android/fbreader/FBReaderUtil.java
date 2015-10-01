@@ -26,6 +26,10 @@ import android.view.View;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 
+import org.geometerplus.fbreader.book.Book;
+
+import org.fbreader.md.MDActivity;
+
 public abstract class FBReaderUtil {
 	public static ZLAndroidLibrary getZLibrary(Activity activity) {
 		return ((ZLAndroidApplication)activity.getApplication()).library();
@@ -50,6 +54,12 @@ public abstract class FBReaderUtil {
 			view.setSystemUiVisibility(
 				View.SYSTEM_UI_FLAG_LOW_PROFILE
 			);
+		}
+	}
+
+	public static void setBookTitle(MDActivity activity, Book book) {
+		if (book != null) {
+			activity.setTitleAndSubtitle(book.getTitle(), book.authorsString(", "));
 		}
 	}
 }
