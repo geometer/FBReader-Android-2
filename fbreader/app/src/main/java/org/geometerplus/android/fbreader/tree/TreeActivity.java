@@ -231,7 +231,7 @@ public abstract class TreeActivity<T extends FBTree> extends ListActivity {
 		}
 	}
 
-	protected final void showProgress(boolean show) {
+	protected final void showProgressIndicator(boolean show) {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
 			setProgressBarIndeterminateVisibility(show);
 		} else if (myProgressBar != null) {
