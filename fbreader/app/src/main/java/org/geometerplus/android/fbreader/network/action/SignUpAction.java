@@ -19,7 +19,6 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
 
@@ -32,8 +31,10 @@ import org.geometerplus.fbreader.network.urlInfo.UrlInfo;
 import org.geometerplus.android.fbreader.network.Util;
 import org.geometerplus.android.fbreader.network.litres.UserRegistrationActivity;
 
+import org.fbreader.md.MDActivity;
+
 public class SignUpAction extends Action {
-	public SignUpAction(Activity activity) {
+	public SignUpAction(MDActivity activity) {
 		super(activity, ActionCode.SIGNUP, "signUp", false);
 	}
 

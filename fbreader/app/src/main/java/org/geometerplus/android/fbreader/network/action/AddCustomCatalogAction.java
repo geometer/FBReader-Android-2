@@ -19,7 +19,6 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -29,8 +28,10 @@ import org.geometerplus.fbreader.network.tree.AddCustomCatalogItemTree;
 
 import org.geometerplus.android.fbreader.network.AddCatalogMenuActivity;
 
+import org.fbreader.md.MDActivity;
+
 public class AddCustomCatalogAction extends Action {
-	public AddCustomCatalogAction(Activity activity) {
+	public AddCustomCatalogAction(MDActivity activity) {
 		super(activity, ActionCode.CUSTOM_CATALOG_ADD, "addCustomCatalog", true);
 	}
 

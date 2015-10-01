@@ -19,8 +19,6 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
-
 import org.geometerplus.zlibrary.core.money.Money;
 
 import org.geometerplus.fbreader.network.INetworkLink;
@@ -31,8 +29,10 @@ import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationMan
 
 import org.geometerplus.android.fbreader.network.TopupMenuActivity;
 
+import org.fbreader.md.MDActivity;
+
 public class TopupAction extends Action {
-	public TopupAction(Activity activity) {
+	public TopupAction(MDActivity activity) {
 		super(activity, ActionCode.TOPUP, "topup", false);
 	}
 

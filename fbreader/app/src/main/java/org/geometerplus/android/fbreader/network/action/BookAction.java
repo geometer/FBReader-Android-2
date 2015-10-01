@@ -19,14 +19,14 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
-
 import org.geometerplus.fbreader.network.NetworkBookItem;
 import org.geometerplus.fbreader.network.NetworkTree;
 import org.geometerplus.fbreader.network.tree.NetworkBookTree;
 
+import org.fbreader.md.MDActivity;
+
 abstract class BookAction extends Action {
-	protected BookAction(Activity activity, int code, String resourceKey, boolean showAsIcon) {
+	protected BookAction(MDActivity activity, int code, String resourceKey, boolean showAsIcon) {
 		super(activity, code, resourceKey, showAsIcon);
 	}
 
