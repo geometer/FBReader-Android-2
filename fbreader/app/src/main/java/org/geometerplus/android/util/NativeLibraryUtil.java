@@ -32,7 +32,7 @@ public class NativeLibraryUtil {
 		try {
 			System.loadLibrary(name);
 		} catch (UnsatisfiedLinkError e) {
-        	final ApplicationInfo appInfo = context.getApplicationInfo();
+			final ApplicationInfo appInfo = context.getApplicationInfo();
 			final String fileName = "lib" + name + ".so";
 			try {
 				final ZipFile zipFile = new ZipFile(appInfo.sourceDir);
