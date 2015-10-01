@@ -23,8 +23,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.*;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -42,6 +40,8 @@ import org.geometerplus.zlibrary.core.language.Language;
 import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
+import org.fbreader.md.MDActivity;
+
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
@@ -52,15 +52,14 @@ import org.geometerplus.fbreader.formats.PluginCollection;
 import org.geometerplus.fbreader.network.NetworkLibrary;
 import org.geometerplus.fbreader.network.HtmlUtil;
 
-import org.geometerplus.android.fbreader.FBReader;
-import org.geometerplus.android.fbreader.FBUtil;
+import org.geometerplus.android.fbreader.*;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.fbreader.preferences.EditBookInfoActivity;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 import org.geometerplus.android.util.OrientationUtil;
 
-public class BookInfoActivity extends Activity implements MenuItem.OnMenuItemClickListener, IBookCollection.Listener<Book> {
+public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemClickListener, IBookCollection.Listener<Book> {
 	private static final boolean ENABLE_EXTENDED_FILE_INFO = false;
 
 	public static final String FROM_READING_MODE_KEY = "fbreader.from.reading.mode";
@@ -74,6 +73,11 @@ public class BookInfoActivity extends Activity implements MenuItem.OnMenuItemCli
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 
 	@Override
+	protected int layoutId() {
+		return R.layout.book_info;
+	}
+
+	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		Thread.setDefaultUncaughtExceptionHandler(
@@ -84,11 +88,7 @@ public class BookInfoActivity extends Activity implements MenuItem.OnMenuItemCli
 		myDontReloadBook = intent.getBooleanExtra(FROM_READING_MODE_KEY, false);
 		myBook = FBReaderIntents.getBookExtra(intent, myCollection);
 
-		final ActionBar bar = getActionBar();
-		if (bar != null) {
-			bar.setDisplayShowTitleEnabled(false);
-		}
-		setContentView(R.layout.book_info);
+		FBReaderUtil.setBookTitle(this, myBook);
 	}
 
 	@Override
@@ -215,6 +215,7 @@ public class BookInfoActivity extends Activity implements MenuItem.OnMenuItemCli
 			seriesIndexString = series.Index.toPlainString();
 		}
 		setupInfoPair(R.id.book_series_index, "indexInSeries", seriesIndexString);
+
 		setupInfoPair(R.id.book_tags, "tags", book.tagsString(", "), book.tags().size());
 		String language = book.getLanguage();
 		if (!ZLLanguageUtil.languageCodes().contains(language)) {
