@@ -19,13 +19,13 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
-
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.tree.NetworkCatalogRootTree;
 
+import org.fbreader.md.MDActivity;
+
 public class DisableCatalogAction extends Action {
-	public DisableCatalogAction(Activity activity) {
+	public DisableCatalogAction(MDActivity activity) {
 		super(activity, ActionCode.DISABLE_CATALOG, "disableCatalog", false);
 	}
 

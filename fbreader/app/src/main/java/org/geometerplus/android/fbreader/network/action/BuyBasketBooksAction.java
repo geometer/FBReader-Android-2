@@ -21,16 +21,16 @@ package org.geometerplus.android.fbreader.network.action;
 
 import java.util.*;
 
-import android.app.Activity;
-
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.tree.*;
 import org.geometerplus.fbreader.tree.FBTree;
 
 import org.geometerplus.android.fbreader.network.BuyBooksActivity;
 
+import org.fbreader.md.MDActivity;
+
 public class BuyBasketBooksAction extends CatalogAction {
-	public BuyBasketBooksAction(Activity activity) {
+	public BuyBasketBooksAction(MDActivity activity) {
 		super(activity, ActionCode.BASKET_BUY_ALL_BOOKS, "buyAllBooks");
 	}
 

@@ -19,22 +19,22 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
-
 import org.geometerplus.fbreader.network.NetworkTree;
 import org.geometerplus.fbreader.network.NetworkLibrary;
 
 import org.geometerplus.android.fbreader.network.Util;
 
+import org.fbreader.md.MDActivity;
+
 public abstract class Action {
 	public final int Code;
 	public final boolean ShowAsAction;
 
-	protected final Activity myActivity;
+	protected final MDActivity myActivity;
 	protected final NetworkLibrary myLibrary;
 	private final String myResourceKey;
 
-	protected Action(Activity activity, int code, String resourceKey, boolean showAsAction) {
+	protected Action(MDActivity activity, int code, String resourceKey, boolean showAsAction) {
 		myActivity = activity;
 		myLibrary = Util.networkLibrary(activity);
 		Code = code;

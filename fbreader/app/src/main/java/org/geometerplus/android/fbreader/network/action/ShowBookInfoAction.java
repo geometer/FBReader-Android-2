@@ -19,7 +19,6 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
 import android.content.Intent;
 
 import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
@@ -33,10 +32,12 @@ import org.geometerplus.android.fbreader.network.NetworkLibraryActivity;
 import org.geometerplus.android.util.OrientationUtil;
 import org.geometerplus.android.util.UIUtil;
 
+import org.fbreader.md.MDActivity;
+
 public class ShowBookInfoAction extends BookAction {
 	private final ZLNetworkContext myNetworkContext;
 
-	public ShowBookInfoAction(Activity activity, ZLNetworkContext nc) {
+	public ShowBookInfoAction(MDActivity activity, ZLNetworkContext nc) {
 		super(activity, ActionCode.SHOW_BOOK_ACTIVITY, "bookInfo", false);
 		myNetworkContext = nc;
 	}

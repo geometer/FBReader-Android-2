@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader.network.action;
 
 import java.util.Map;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -34,10 +33,12 @@ import org.geometerplus.android.fbreader.network.*;
 import org.geometerplus.android.util.OrientationUtil;
 import org.geometerplus.android.util.PackageUtil;
 
+import org.fbreader.md.MDActivity;
+
 public class OpenCatalogAction extends Action {
 	private final ZLNetworkContext myNetworkContext;
 
-	public OpenCatalogAction(Activity activity, ZLNetworkContext nc) {
+	public OpenCatalogAction(MDActivity activity, ZLNetworkContext nc) {
 		super(activity, ActionCode.OPEN_CATALOG, "openCatalog", false);
 		myNetworkContext = nc;
 	}

@@ -22,8 +22,6 @@ package org.geometerplus.android.fbreader.network.action;
 import java.util.*;
 import java.io.File;
 
-import android.app.AlertDialog;
-import android.app.Activity;
 import android.net.Uri;
 import android.content.Intent;
 import android.content.DialogInterface;
@@ -43,6 +41,9 @@ import org.geometerplus.fbreader.network.urlInfo.*;
 import org.geometerplus.android.fbreader.network.*;
 import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 
+import org.fbreader.md.MDActivity;
+import org.fbreader.md.MDAlertDialogBuilder;
+
 public abstract class NetworkBookActions {
 	private static boolean useFullReferences(NetworkBookItem book) {
 		return book.reference(UrlInfo.Type.Book) != null ||
@@ -60,11 +61,11 @@ public abstract class NetworkBookActions {
 		private final int myId;
 		private final String myArg;
 
-		public NBAction(Activity activity, IBookCollection collection, int id, String key, boolean showAsAction) {
+		public NBAction(MDActivity activity, IBookCollection collection, int id, String key, boolean showAsAction) {
 			this(activity, collection, id, key, null, showAsAction);
 		}
 
-		public NBAction(Activity activity, IBookCollection collection, int id, String key, String arg, boolean showAsAction) {
+		public NBAction(MDActivity activity, IBookCollection collection, int id, String key, String arg, boolean showAsAction) {
 			super(activity, id, key, showAsAction);
 			myCollection = collection;
 			myId = id;
@@ -106,7 +107,7 @@ public abstract class NetworkBookActions {
 		return 0;
 	}
 
-	public static List<NBAction> getContextMenuActions(Activity activity, NetworkBookTree tree, IBookCollection collection, BookDownloaderServiceConnection connection) {
+	public static List<NBAction> getContextMenuActions(MDActivity activity, NetworkBookTree tree, IBookCollection collection, BookDownloaderServiceConnection connection) {
 		if (tree == null) {
 			throw new IllegalArgumentException("tree == null");
 		}
@@ -161,7 +162,7 @@ public abstract class NetworkBookActions {
 		return actions;
 	}
 
-	private static boolean runActionStatic(Activity activity, NetworkBookTree tree, int actionCode, IBookCollection collection) {
+	private static boolean runActionStatic(MDActivity activity, NetworkBookTree tree, int actionCode, IBookCollection collection) {
 		final NetworkBookItem book = tree.Book;
 		switch (actionCode) {
 			case ActionCode.DOWNLOAD_BOOK:
@@ -202,7 +203,7 @@ public abstract class NetworkBookActions {
 		return false;
 	}
 
-	private static void doReadBook(Activity activity, final NetworkBookItem book, IBookCollection collection, boolean demo) {
+	private static void doReadBook(MDActivity activity, final NetworkBookItem book, IBookCollection collection, boolean demo) {
 		String local = null;
 		if (!demo) {
 			local = book.localCopyFileName(collection);
@@ -223,11 +224,11 @@ public abstract class NetworkBookActions {
 		}
 	}
 
-	private static void tryToDeleteBook(final Activity activity, final NetworkBookItem book, final boolean demo) {
+	private static void tryToDeleteBook(final MDActivity activity, final NetworkBookItem book, final boolean demo) {
 		final ZLResource dialogResource = ZLResource.resource("dialog");
 		final ZLResource buttonResource = dialogResource.getResource("button");
 		final ZLResource boxResource = dialogResource.getResource("deleteBookBox");
-		new AlertDialog.Builder(activity)
+		new MDAlertDialogBuilder(activity)
 			.setTitle(book.Title)
 			.setMessage(boxResource.getResource("message").getValue())
 			.setIcon(0)
@@ -252,11 +253,11 @@ public abstract class NetworkBookActions {
 			.create().show();
 	}
 
-	private static void doBuyDirectly(Activity activity, NetworkBookTree tree) {
+	private static void doBuyDirectly(MDActivity activity, NetworkBookTree tree) {
 		BuyBooksActivity.run(activity, tree);
 	}
 
-	private static void doBuyInBrowser(Activity activity, final NetworkBookItem book) {
+	private static void doBuyInBrowser(MDActivity activity, final NetworkBookItem book) {
 		BookUrlInfo reference = book.reference(UrlInfo.Type.BookBuyInBrowser);
 		if (reference != null) {
 			Util.openInBrowser(activity, reference.Url);

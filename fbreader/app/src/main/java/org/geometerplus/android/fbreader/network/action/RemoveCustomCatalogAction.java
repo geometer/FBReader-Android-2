@@ -19,15 +19,15 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
-
 import org.geometerplus.fbreader.network.NetworkLibrary;
 import org.geometerplus.fbreader.network.NetworkTree;
 import org.geometerplus.fbreader.network.ICustomNetworkLink;
 import org.geometerplus.fbreader.network.tree.NetworkCatalogRootTree;
 
+import org.fbreader.md.MDActivity;
+
 public class RemoveCustomCatalogAction extends CatalogAction {
-	public RemoveCustomCatalogAction(Activity activity) {
+	public RemoveCustomCatalogAction(MDActivity activity) {
 		super(activity, ActionCode.CUSTOM_CATALOG_REMOVE, "removeCustomCatalog");
 	}
 

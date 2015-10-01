@@ -19,16 +19,16 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
-
 import org.geometerplus.fbreader.network.NetworkLibrary;
 import org.geometerplus.fbreader.network.NetworkTree;
 import org.geometerplus.fbreader.network.tree.RootTree;
 
 import org.geometerplus.android.fbreader.network.NetworkLibraryActivity;
 
+import org.fbreader.md.MDActivity;
+
 public class OpenRootAction extends Action {
-	public OpenRootAction(Activity activity) {
+	public OpenRootAction(MDActivity activity) {
 		super(activity, ActionCode.OPEN_ROOT, "openRoot", false);
 	}
 

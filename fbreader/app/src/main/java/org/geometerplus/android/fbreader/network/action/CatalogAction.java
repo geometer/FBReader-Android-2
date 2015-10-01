@@ -19,17 +19,17 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
-
 import org.geometerplus.fbreader.network.NetworkTree;
 import org.geometerplus.fbreader.network.tree.NetworkCatalogTree;
 
+import org.fbreader.md.MDActivity;
+
 abstract class CatalogAction extends Action {
-	protected CatalogAction(Activity activity, int code, String resourceKey, boolean showAsAction) {
+	protected CatalogAction(MDActivity activity, int code, String resourceKey, boolean showAsAction) {
 		super(activity, code, resourceKey, showAsAction);
 	}
 
-	protected CatalogAction(Activity activity, int code, String resourceKey) {
+	protected CatalogAction(MDActivity activity, int code, String resourceKey) {
 		this(activity, code, resourceKey, false);
 	}
 

@@ -19,8 +19,6 @@
 
 package org.geometerplus.android.fbreader.network.action;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
@@ -31,8 +29,11 @@ import org.geometerplus.fbreader.network.urlInfo.UrlInfo;
 
 import org.geometerplus.android.fbreader.network.Util;
 
+import org.fbreader.md.MDActivity;
+import org.fbreader.md.MDAlertDialogBuilder;
+
 public class OpenInBrowserAction extends CatalogAction {
-	public OpenInBrowserAction(Activity activity) {
+	public OpenInBrowserAction(MDActivity activity) {
 		super(activity, ActionCode.OPEN_IN_BROWSER, "openInBrowser");
 	}
 
@@ -60,7 +61,7 @@ public class OpenInBrowserAction extends CatalogAction {
 		} else {
 			final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
 			final String message = NetworkLibrary.resource().getResource("confirmQuestions").getResource("openInBrowser").getValue();
-			new AlertDialog.Builder(myActivity)
+			new MDAlertDialogBuilder(myActivity)
 				.setTitle(tree.getName())
 				.setMessage(message)
 				.setIcon(0)
