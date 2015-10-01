@@ -168,7 +168,7 @@ public abstract class DictionaryUtil {
 		}
 	}
 
-	private static class BitKnightsInfoReader extends DefaultHandler {
+	private static final class BitKnightsInfoReader extends DefaultHandler {
 		private final Context myContext;
 		private int myCounter;
 
@@ -183,8 +183,7 @@ public abstract class DictionaryUtil {
 			}
 
 			final PackageInfo info = new PlainPackageInfo(
-				"BK" + myCounter ++,
-				attributes.getValue("title")
+				"BK" + myCounter ++, attributes.getValue("title")
 			);
 			for (int i = attributes.getLength() - 1; i >= 0; --i) {
 				info.put(attributes.getLocalName(i), attributes.getValue(i));

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:minHeight="?android:attr/listPreferredItemHeight"
+	android:minHeight="?android:attr/listPreferredItemHeightSmall"
 	android:orientation="horizontal"
 >
 	<LinearLayout
 		android:gravity="center_vertical"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:paddingLeft="8dp"
+		android:paddingLeft="18dp"
 		android:paddingRight="8dp"
 		android:orientation="vertical"
 	>

@@ -19,7 +19,6 @@
 
 package org.geometerplus.zlibrary.ui.android.error;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,12 +26,19 @@ import android.view.View;
 import android.widget.TextView;
 import android.text.method.ScrollingMovementMethod;
 
+import org.fbreader.md.MDActivity;
 import org.fbreader.common.R;
 
-public class BugReportActivity extends Activity implements ErrorKeys {
-	public void onCreate(Bundle icicle) {
+public class BugReportActivity extends MDActivity implements ErrorKeys {
+	@Override
+	protected int layoutId() {
+		return R.layout.bug_report_view;
+	}
+
+	@Override
+	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		setContentView(R.layout.bug_report_view);
+
 		final StringBuilder reportText = new StringBuilder();
 
 		reportText.append("Package:").append(getPackageName()).append("\n");
