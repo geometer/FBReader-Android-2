@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		package="org.geometerplus.zlibrary.ui.android"
-		android:versionCode="2051010"
-		android:versionName="2.5.10-nst"
-		android:installLocation="auto"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	package="org.geometerplus.zlibrary.ui.android"
+	android:installLocation="auto"
 >
 	<uses-sdk
-			android:minSdkVersion="5"
-			android:maxSdkVersion="10"
-			android:targetSdkVersion="9"
+		android:minSdkVersion="5"
+		android:maxSdkVersion="10"
+		android:targetSdkVersion="9"
 	/>
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:xlargeScreens="true" android:anyDensity="true"/>
 	<uses-permission android:name="android.permission.INTERNET"/>
