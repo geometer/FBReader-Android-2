@@ -11,6 +11,7 @@
     android:layout_height="wrap_content" >
 
     <TableLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -31,6 +32,7 @@
 
             <Button
                 android:id="@+id/afc_settings_sort_view_button_sort_by_name_asc"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -38,6 +40,7 @@
 
             <Button
                 android:id="@+id/afc_settings_sort_view_button_sort_by_name_desc"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -59,6 +62,7 @@
 
             <Button
                 android:id="@+id/afc_settings_sort_view_button_sort_by_size_asc"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -66,6 +70,7 @@
 
             <Button
                 android:id="@+id/afc_settings_sort_view_button_sort_by_size_desc"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -87,6 +92,7 @@
 
             <Button
                 android:id="@+id/afc_settings_sort_view_button_sort_by_date_asc"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -94,6 +100,7 @@
 
             <Button
                 android:id="@+id/afc_settings_sort_view_button_sort_by_date_desc"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -8,10 +8,12 @@
 package group.pals.android.lib.ui.filechooser.utils.ui;
 
 import group.pals.android.lib.ui.filechooser.R;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
+
+import org.fbreader.md.MDAlertDialogBuilder;
 
 /**
  * Utilities for message boxes.
@@ -201,6 +203,6 @@ public class Dlg {
      * @since v4.3 beta
      */
     public static AlertDialog.Builder newDlgBuilder(Context context) {
-        return new AlertDialog.Builder(context);
+        return new MDAlertDialogBuilder(context);
     }// newDlgBuilder()
 }

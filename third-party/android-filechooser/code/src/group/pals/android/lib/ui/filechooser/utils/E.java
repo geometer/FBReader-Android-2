@@ -8,9 +8,9 @@
 package group.pals.android.lib.ui.filechooser.utils;
 
 import group.pals.android.lib.ui.filechooser.utils.ui.Dlg;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 
 /**
  * Something funny :-)

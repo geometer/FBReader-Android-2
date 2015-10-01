@@ -38,8 +38,6 @@ import java.util.List;
 import java.util.HashMap;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -50,6 +48,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -75,6 +74,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.fbreader.md.MDActivity;
+
 /**
  * Main activity for this library.<br>
  * <br>
@@ -93,7 +95,7 @@ import android.widget.Toast;
  * @author Hai Bison
  * 
  */
-public class FileChooserActivity extends Activity {
+public class FileChooserActivity extends MDActivity {
 
     /**
      * The full name of this class. Generally used for debugging.
@@ -291,7 +293,7 @@ public class FileChooserActivity extends Activity {
     private TextView mFooterView;
     private Button mBtnSave;
     private Button mBtnOk;
-    private Button mBtnCancel;
+    //private Button mBtnCancel;
     private EditText mTxtSaveas;
     private ImageView mViewGoBack;
     private ImageView mViewGoForward;
@@ -301,6 +303,11 @@ public class FileChooserActivity extends Activity {
 
     private HashMap<String, String> mTextResources; 
     private String mFilenameRegexp; 
+
+	@Override
+	protected int layoutId() {
+        return R.layout.afc_file_chooser;
+	}
 
     /** Called when the activity is first created. */
     @Override
@@ -323,7 +330,6 @@ public class FileChooserActivity extends Activity {
         */
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.afc_file_chooser);
 
         initGestureDetector();
 
@@ -364,8 +370,8 @@ public class FileChooserActivity extends Activity {
         mFooterView = (TextView) findViewById(R.id.afc_filechooser_activity_view_files_footer_view);
         mTxtSaveas = (EditText) findViewById(R.id.afc_filechooser_activity_textview_saveas_filename);
         mBtnSave = (Button) findViewById(R.id.afc_filechooser_activity_button_save);
-        mBtnOk = (Button) findViewById(R.id.afc_filechooser_activity_button_ok);
-        mBtnCancel = (Button) findViewById(R.id.afc_filechooser_activity_button_cancel);
+        mBtnOk = (Button) findViewById(R.id.md_single_button);
+        //mBtnCancel = (Button) findViewById(R.id.afc_filechooser_activity_button_cancel);
 
         // history
         if (savedInstanceState != null && savedInstanceState.get(_History) instanceof HistoryStore<?>)
@@ -809,10 +815,10 @@ public class FileChooserActivity extends Activity {
             } else {
                 mBtnOk.setVisibility(View.GONE);
             }
-            mBtnCancel.setVisibility(View.VISIBLE);
-            mBtnCancel.setOnClickListener(mBtnCancel_ActionBar_OnClickListener);
+            //mBtnCancel.setVisibility(View.VISIBLE);
+            //mBtnCancel.setOnClickListener(mBtnCancel_ActionBar_OnClickListener);
             mBtnOk.setText(mTextResources.get("ok"));
-            mBtnCancel.setText(mTextResources.get("cancel"));
+            //mBtnCancel.setText(mTextResources.get("cancel"));
         }    
         
         if (mIsMultiSelection) {
