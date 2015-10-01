@@ -80,7 +80,7 @@ public final class ZLKeyBindings {
 		final TreeMap<Integer,ZLStringOption> map = longPress ? myLongPressActionMap : myActionMap;
 		ZLStringOption option = map.get(key);
 		if (option == null) {
-			option = createOption(key, longPress, ZLApplication.NoAction);
+			option = createOption(key, longPress, "none");
 			map.put(key, option);
 		}
 		return option;
@@ -111,7 +111,7 @@ public final class ZLKeyBindings {
 			return true;
 		}
 
-		return !ZLApplication.NoAction.equals(getBinding(key, longPress));
+		return !"none".equals(getBinding(key, longPress));
 	}
 
 	private class Reader extends DefaultHandler {
