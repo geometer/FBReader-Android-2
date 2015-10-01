@@ -397,7 +397,7 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 		final NetworkTree tree = getCurrentTree();
 		final NetworkTree lTree = getLoadableNetworkTree(tree);
 		final NetworkTree sTree = RunSearchAction.getSearchTree(tree);
-		showProgress(
+		showProgressIndicator(
 			library.isUpdateInProgress() ||
 			library.isLoadingInProgress(lTree) ||
 			library.isLoadingInProgress(sTree)
