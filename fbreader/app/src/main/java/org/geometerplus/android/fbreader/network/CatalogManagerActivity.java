@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader.network;
 
 import java.util.*;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
@@ -34,19 +33,20 @@ import org.geometerplus.fbreader.network.*;
 import org.geometerplus.android.fbreader.FBReader;
 import org.geometerplus.android.fbreader.covers.CoverManager;
 
-import org.geometerplus.android.util.ViewUtil;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
+import org.geometerplus.android.util.ViewUtil;
 
-public class CatalogManagerActivity extends ListActivity {
+import org.fbreader.md.MDListActivity;
+
+public class CatalogManagerActivity extends MDListActivity {
 	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
 
 	private final List<Item> myAllItems = new ArrayList<Item>();
 	private final List<Item> mySelectedItems = new ArrayList<Item>();
 
 	@Override
-	protected void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
-		setContentView(R.layout.catalog_manager_view);
+	protected int layoutId() {
+		return R.layout.catalog_manager_view;
 	}
 
 	@Override
@@ -56,6 +56,7 @@ public class CatalogManagerActivity extends ListActivity {
 		myAllItems.clear();
 
 		final Intent intent = getIntent();
+		final NetworkLibrary library = Util.networkLibrary(this);
 
 		myAllItems.add(new SectionItem("enabled"));
 		final List<String> enabledIds =
@@ -63,7 +64,7 @@ public class CatalogManagerActivity extends ListActivity {
 		if (enabledIds.size() > 0) {
 			final List<CatalogItem> cItems = new ArrayList<CatalogItem>();
 			for (String id : enabledIds) {
-				final NetworkTree tree = Util.networkLibrary(this).getCatalogTreeByUrlAll(id);
+				final NetworkTree tree = library.getCatalogTreeByUrlAll(id);
 				if (tree != null && tree.getLink() != null) {
 					cItems.add(new CatalogItem(id, true, tree));
 				}
@@ -78,7 +79,7 @@ public class CatalogManagerActivity extends ListActivity {
 		if (disabledIds.size() > 0) {
 			final TreeSet<CatalogItem> cItems = new TreeSet<CatalogItem>();
 			for (String id : disabledIds) {
-				final NetworkTree tree = Util.networkLibrary(this).getCatalogTreeByUrlAll(id);
+				final NetworkTree tree = library.getCatalogTreeByUrlAll(id);
 				if (tree != null && tree.getLink() != null) {
 					cItems.add(new CatalogItem(id, false, tree));
 				}
@@ -96,9 +97,8 @@ public class CatalogManagerActivity extends ListActivity {
 		super.onDestroy();
 	}
 
-	@Override
-	public DragSortListView getListView() {
-		return (DragSortListView)super.getListView();
+	private DragSortListView getDSListView() {
+		return (DragSortListView)getListView();
 	}
 
 	private static interface Item {
@@ -231,7 +231,7 @@ public class CatalogManagerActivity extends ListActivity {
 				remove(item);
 				insert(item, to);
 				((CatalogItem)item).IsChecked = to < indexOfDisabledSectionItem();
-				getListView().moveCheckState(from, to);
+				getDSListView().moveCheckState(from, to);
 				setResultIds();
 			}
 		}
@@ -241,7 +241,7 @@ public class CatalogManagerActivity extends ListActivity {
 			final Item item = getItem(which);
 			if (item instanceof CatalogItem) {
 				remove(item);
-				getListView().removeCheckState(which);
+				getDSListView().removeCheckState(which);
 			}
 		}
 	}

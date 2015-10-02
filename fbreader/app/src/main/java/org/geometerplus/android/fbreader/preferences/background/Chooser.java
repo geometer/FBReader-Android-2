@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader.preferences.background;
 
 import java.util.List;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,14 +29,16 @@ import android.widget.ArrayAdapter;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
 import org.geometerplus.fbreader.Paths;
 
-import org.geometerplus.android.util.FileChooserUtil;
+import org.fbreader.md.SimpleMDListActivity;
 
-public class Chooser extends ListActivity implements AdapterView.OnItemClickListener {
+import org.geometerplus.android.util.FileChooserUtil;
+import org.geometerplus.zlibrary.ui.android.R;
+
+public class Chooser extends SimpleMDListActivity implements AdapterView.OnItemClickListener {
 	private final ZLResource myResource = ZLResource.resource("Preferences").getResource("colors").getResource("background");
 
 	@Override
@@ -81,8 +82,8 @@ public class Chooser extends ListActivity implements AdapterView.OnItemClickList
 					this,
 					getIntent().getIntExtra(BackgroundPreference.COLOR_KEY, 0),
 					myColorChooserListener,
-					buttonResource.getResource("ok").getValue(),
-					buttonResource.getResource("cancel").getValue()
+					getTitle(),
+					buttonResource.getResource("ok").getValue()
 				).show();
 				break;
 			}

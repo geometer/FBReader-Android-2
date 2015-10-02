@@ -21,11 +21,15 @@ package org.geometerplus.android.fbreader.bookmark;
 
 import java.util.*;
 
-import android.app.*;
-import android.os.*;
+import android.app.SearchManager;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.*;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.*;
 import android.widget.*;
-import android.content.*;
 
 import yuku.ambilwarna.widget.AmbilWarnaPrefWidgetView;
 
@@ -33,6 +37,7 @@ import org.geometerplus.zlibrary.core.util.MiscUtil;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
 
+import org.fbreader.md.MDActivity;
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.fbreader.book.*;
@@ -42,12 +47,13 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.util.*;
 
-public class BookmarksActivity extends Activity implements IBookCollection.Listener<Book> {
+public class BookmarksActivity extends MDActivity implements IBookCollection.Listener<Book> {
 	private static final int OPEN_ITEM_ID = 0;
 	private static final int EDIT_ITEM_ID = 1;
 	private static final int DELETE_ITEM_ID = 2;
 
-	private TabHost myTabHost;
+	private TabLayout myTabLayout;
+	private ViewPager myViewPager;
 
 	private final Map<Integer,HighlightingStyle> myStyles =
 		Collections.synchronizedMap(new HashMap<Integer,HighlightingStyle>());
@@ -58,6 +64,9 @@ public class BookmarksActivity extends Activity implements IBookCollection.Liste
 
 	private final Comparator<Bookmark> myComparator = new Bookmark.ByTimeComparator();
 
+	private volatile BookmarksFragment myThisBookFragment = new BookmarksFragment();
+	private volatile BookmarksFragment myAllBooksFragment = new BookmarksFragment();
+	private volatile BookmarksFragment mySearchResultsFragment = new BookmarksFragment();
 	private volatile BookmarksAdapter myThisBookAdapter;
 	private volatile BookmarksAdapter myAllBooksAdapter;
 	private volatile BookmarksAdapter mySearchResultsAdapter;
@@ -66,34 +75,86 @@ public class BookmarksActivity extends Activity implements IBookCollection.Liste
 	private final ZLStringOption myBookmarkSearchPatternOption =
 		new ZLStringOption("BookmarkSearch", "Pattern", "");
 
-	private void createTab(String tag, int id) {
-		final String label = myResource.getResource(tag).getValue();
-		myTabHost.addTab(myTabHost.newTabSpec(tag).setIndicator(label).setContent(id));
+	@Override
+	protected int layoutId() {
+		return R.layout.bookmarks;
 	}
 
 	@Override
-	public void onCreate(Bundle bundle) {
+	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
 		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
-		setContentView(R.layout.bookmarks);
+
+		setTitle("");
 
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
 		final SearchManager manager = (SearchManager)getSystemService(SEARCH_SERVICE);
 		manager.setOnCancelListener(null);
 
-        myTabHost = (TabHost)findViewById(R.id.bookmarks_tabhost);
-		myTabHost.setup();
+        myTabLayout = (TabLayout)findViewById(R.id.bookmarks_tab_layout);
+        myViewPager = (ViewPager)findViewById(R.id.bookmarks_view_pager);
+		final PagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+			@Override
+			public int getCount() {
+				return 3;
+			}
 
-		createTab("thisBook", R.id.bookmarks_this_book);
-		createTab("allBooks", R.id.bookmarks_all_books);
-		createTab("search", R.id.bookmarks_search);
+			@Override
+			public Fragment getItem(int position) {
+				switch (position) {
+					default:
+					case 0:
+						return myThisBookFragment;
+					case 1:
+						return myAllBooksFragment;
+					case 2:
+						return mySearchResultsFragment;
+				}
+			}
 
-		myTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-			public void onTabChanged(String tabId) {
-				if ("search".equals(tabId)) {
-					findViewById(R.id.bookmarks_search_results).setVisibility(View.GONE);
+			@Override
+			public CharSequence getPageTitle(int position) {
+				final String key;
+				switch (position) {
+					default:
+					case 0:
+						key = "thisBook";
+						break;
+					case 1:
+						key = "allBooks";
+						break;
+					case 2:
+						key = "search";
+						break;
+				}
+				return myResource.getResource(key).getValue();
+			}
+		};
+		myViewPager.setAdapter(adapter);
+		myTabLayout.setupWithViewPager(myViewPager);
+
+		myTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab tab) {
+				myViewPager.setCurrentItem(tab.getPosition(), false);
+				setupSearchFragment(tab);
+			}
+
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) {
+				setupSearchFragment(tab);
+			}
+
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
+			}
+
+			private void setupSearchFragment(TabLayout.Tab tab) {
+				final FragmentPagerAdapter adapter =
+					(FragmentPagerAdapter)myViewPager.getAdapter();
+				if (adapter.getItem(tab.getPosition()) == mySearchResultsFragment) {
 					onSearchRequested();
 				}
 			}
@@ -116,10 +177,8 @@ public class BookmarksActivity extends Activity implements IBookCollection.Liste
 					return;
 				}
 
-				myThisBookAdapter =
-					new BookmarksAdapter((ListView)findViewById(R.id.bookmarks_this_book), myBookmark != null);
-				myAllBooksAdapter =
-					new BookmarksAdapter((ListView)findViewById(R.id.bookmarks_all_books), false);
+				myThisBookAdapter = new BookmarksAdapter(myThisBookFragment, myBookmark != null);
+				myAllBooksAdapter = new BookmarksAdapter(myAllBooksFragment, false);
 				myCollection.addListener(BookmarksActivity.this);
 
 				updateStyles();
@@ -225,17 +284,17 @@ public class BookmarksActivity extends Activity implements IBookCollection.Liste
 		myBookmarkSearchPatternOption.setValue(pattern);
 
 		final LinkedList<Bookmark> bookmarks = new LinkedList<Bookmark>();
-		pattern = pattern.toLowerCase();
+		pattern = pattern.trim().toLowerCase();
 		for (Bookmark b : myAllBooksAdapter.bookmarks()) {
 			if (MiscUtil.matchesIgnoreCase(b.getText(), pattern)) {
 				bookmarks.add(b);
 			}
 		}
 		if (!bookmarks.isEmpty()) {
-			final ListView resultsView = (ListView)findViewById(R.id.bookmarks_search_results);
-			resultsView.setVisibility(View.VISIBLE);
+			final ListView resultsView = mySearchResultsFragment.getListView();
 			if (mySearchResultsAdapter == null) {
-				mySearchResultsAdapter = new BookmarksAdapter(resultsView, false);
+				mySearchResultsAdapter = new BookmarksAdapter(mySearchResultsFragment, false);
+				resultsView.setOnItemLongClickListener(mySearchResultsAdapter);
 			} else {
 				mySearchResultsAdapter.clear();
 			}
@@ -261,38 +320,6 @@ public class BookmarksActivity extends Activity implements IBookCollection.Liste
 		return true;
 	}
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		final int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
-		final String tag = myTabHost.getCurrentTabTag();
-		final BookmarksAdapter adapter;
-		if ("thisBook".equals(tag)) {
-			adapter = myThisBookAdapter;
-		} else if ("allBooks".equals(tag)) {
-			adapter = myAllBooksAdapter;
-		} else if ("search".equals(tag)) {
-			adapter = mySearchResultsAdapter;
-		} else {
-			throw new RuntimeException("Unknown tab tag: " + tag);
-		}
-
-		final Bookmark bookmark = adapter.getItem(position);
-		switch (item.getItemId()) {
-			case OPEN_ITEM_ID:
-				gotoBookmark(bookmark);
-				return true;
-			case EDIT_ITEM_ID:
-				final Intent intent = new Intent(this, EditBookmarkActivity.class);
-				FBReaderIntents.putBookmarkExtra(intent, bookmark);
-				OrientationUtil.startActivity(this, intent);
-				return true;
-			case DELETE_ITEM_ID:
-				myCollection.deleteBookmark(bookmark);
-				return true;
-		}
-		return super.onContextItemSelected(item);
-	}
-
 	private void gotoBookmark(Bookmark bookmark) {
 		bookmark.markAsAccessed();
 		myCollection.saveBookmark(bookmark);
@@ -304,16 +331,14 @@ public class BookmarksActivity extends Activity implements IBookCollection.Liste
 		}
 	}
 
-	private final class BookmarksAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
+	private final class BookmarksAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 		private final List<Bookmark> myBookmarksList =
 			Collections.synchronizedList(new LinkedList<Bookmark>());
 		private volatile boolean myShowAddBookmarkItem;
 
-		BookmarksAdapter(ListView listView, boolean showAddBookmarkItem) {
+		BookmarksAdapter(ListFragment listFragment, boolean showAddBookmarkItem) {
 			myShowAddBookmarkItem = showAddBookmarkItem;
-			listView.setAdapter(this);
-			listView.setOnItemClickListener(this);
-			listView.setOnCreateContextMenuListener(this);
+			listFragment.setListAdapter(this);
 		}
 
 		public List<Bookmark> bookmarks() {
@@ -384,13 +409,36 @@ public class BookmarksActivity extends Activity implements IBookCollection.Liste
 			});
 		}
 
-		public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-			final int position = ((AdapterView.AdapterContextMenuInfo)menuInfo).position;
-			if (getItem(position) != null) {
-				menu.add(0, OPEN_ITEM_ID, 0, myResource.getResource("openBook").getValue());
-				menu.add(0, EDIT_ITEM_ID, 0, myResource.getResource("editBookmark").getValue());
-				menu.add(0, DELETE_ITEM_ID, 0, myResource.getResource("deleteBookmark").getValue());
+		@Override
+		public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
+			final Bookmark bookmark = getItem(position);
+			if (bookmark == null) {
+				return false;
 			}
+
+			final ContextMenuDialog dialog = new ContextMenuDialog() {
+				@Override
+				protected void onItemClick(long itemId) {
+					switch ((int)itemId) {
+						case OPEN_ITEM_ID:
+							gotoBookmark(bookmark);
+							break;
+						case EDIT_ITEM_ID:
+							final Intent intent = new Intent(BookmarksActivity.this, EditBookmarkActivity.class);
+							FBReaderIntents.putBookmarkExtra(intent, bookmark);
+							OrientationUtil.startActivity(BookmarksActivity.this, intent);
+							break;
+						case DELETE_ITEM_ID:
+							myCollection.deleteBookmark(bookmark);
+							break;
+					}
+				}
+			};
+			dialog.addItem(OPEN_ITEM_ID, myResource, "openBook");
+			dialog.addItem(EDIT_ITEM_ID, myResource, "editBookmark");
+			dialog.addItem(DELETE_ITEM_ID, myResource, "deleteBookmark");
+			dialog.show(BookmarksActivity.this);
+			return true;
 		}
 
 		@Override
@@ -463,6 +511,23 @@ public class BookmarksActivity extends Activity implements IBookCollection.Liste
 				myShowAddBookmarkItem = false;
 				myCollection.saveBookmark(myBookmark);
 			}
+		}
+	}
+
+	private static class BookmarksFragment extends ListFragment {
+		@Override
+		public void onViewCreated(View view, Bundle saved) {
+			super.onViewCreated(view, saved);
+
+			final ListView listView = (ListView)view.findViewById(android.R.id.list);
+			final BookmarksAdapter adapter = (BookmarksAdapter)getListAdapter();
+			listView.setOnItemLongClickListener(adapter);
+		}
+
+		@Override
+		public void onListItemClick(ListView listView, View view, int position, long id) {
+			final BookmarksAdapter adapter = (BookmarksAdapter)getListAdapter();
+			adapter.onItemClick(listView, view, position, id);
 		}
 	}
 

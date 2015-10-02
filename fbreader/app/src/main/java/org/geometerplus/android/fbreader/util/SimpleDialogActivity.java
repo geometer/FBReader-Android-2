@@ -19,7 +19,6 @@
 
 package org.geometerplus.android.fbreader.util;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +27,9 @@ import android.widget.TextView;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
 
-public abstract class SimpleDialogActivity extends Activity {
+import org.fbreader.md.MDActivity;
+
+public abstract class SimpleDialogActivity extends MDActivity {
 	private TextView myTextView;
 	private View myButtonsView;
 	private Button myOkButton;
@@ -37,13 +38,17 @@ public abstract class SimpleDialogActivity extends Activity {
 	private View.OnClickListener myFinishListener;
 
 	@Override
+	protected int layoutId() {
+		return R.layout.simple_dialog;
+	}
+
+	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		myTextView = null;
 		myButtonsView = null;
 		myOkButton = null;
 		myCancelButton = null;
-		setContentView(R.layout.simple_dialog);
 	}
 
 	protected final TextView textView() {

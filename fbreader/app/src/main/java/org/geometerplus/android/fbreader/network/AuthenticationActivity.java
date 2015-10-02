@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader.network;
 
 import java.util.*;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,7 +40,9 @@ import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.android.util.UIUtil;
 
-public class AuthenticationActivity extends Activity {
+import org.fbreader.md.MDActivity;
+
+public class AuthenticationActivity extends MDActivity {
 	private static final Map<Long,Runnable> ourOnSuccessRunnableMap =
 		Collections.synchronizedMap(new HashMap<Long,Runnable>());
 	private static volatile long ourNextCode;
@@ -66,7 +67,7 @@ public class AuthenticationActivity extends Activity {
 	static final String ERROR_KEY = "error";
 	static final String CUSTOM_AUTH_KEY = "customAuth";
 
-	static void initCredentialsCreator(Activity activity) {
+	static void initCredentialsCreator(MDActivity activity) {
 		final ZLNetworkManager manager = ZLNetworkManager.Instance();
 		if (manager.getCredentialsCreator() == null) {
 			manager.setCredentialsCreator(new CredentialsCreator(activity));
@@ -76,7 +77,7 @@ public class AuthenticationActivity extends Activity {
 	static class CredentialsCreator extends ZLNetworkManager.CredentialsCreator {
 		private final Context myContext;
 
-		CredentialsCreator(Activity activity) {
+		CredentialsCreator(MDActivity activity) {
 			myContext = activity.getApplicationContext();
 		}
 
@@ -102,10 +103,14 @@ public class AuthenticationActivity extends Activity {
 	private Runnable myOnSuccessRunnable;
 
 	@Override
-	public void onCreate(Bundle icicle) {
+	protected int layoutId() {
+		return R.layout.authentication;
+	}
+
+	@Override
+	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
-		setContentView(R.layout.authentication);
 
 		final Intent intent = getIntent();
 

@@ -36,10 +36,8 @@ public abstract class ZLApplication {
 	public static final String NoAction = "none";
 
 	public final SystemInfo SystemInfo;
-
 	private volatile ZLApplicationWindow myWindow;
 	private volatile ZLView myView;
-	private volatile String myTitle;
 
 	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
 
@@ -72,15 +70,10 @@ public abstract class ZLApplication {
 		setView(myView);
 	}
 
-	protected void setTitle(String title) {
-		myTitle = title;
+	protected void updateTitle() {
 		if (myWindow != null) {
 			myWindow.updateWindowTitle();
 		}
-	}
-
-	public String getTitle() {
-		return myTitle;
 	}
 
 	protected void showErrorMessage(String resourceKey) {

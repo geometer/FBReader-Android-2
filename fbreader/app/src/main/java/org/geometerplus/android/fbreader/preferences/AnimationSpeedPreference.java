@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.*;
 import android.graphics.drawable.*;
-import android.preference.DialogPreference;
 import android.view.View;
 import android.widget.SeekBar;
 
@@ -32,24 +31,29 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.zlibrary.ui.android.R;
 
-class AnimationSpeedPreference extends DialogPreference {
+import org.fbreader.md.MDDialogPreference;
+
+class AnimationSpeedPreference extends MDDialogPreference {
 	private final ZLIntegerRangeOption myOption;
 	private final ZLResource myResource;
 
 	private SeekBar mySlider;
 
 	AnimationSpeedPreference(Context context, ZLResource resource, String resourceKey, ZLIntegerRangeOption option) {
-		super(context, null);
+		super(context);
 		myOption = option;
 		myResource = resource.getResource(resourceKey);
-		final String title = myResource.getValue();
-		setTitle(title);
-		setDialogTitle(title);
-		setDialogLayoutResource(R.layout.animation_speed_dialog);
+		setTitle(myResource.getValue());
+	}
 
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		setPositiveButtonText(buttonResource.getResource("ok").getValue());
-		setNegativeButtonText(buttonResource.getResource("cancel").getValue());
+	@Override
+	protected String positiveButtonText() {
+		return ZLResource.resource("dialog").getResource("button").getResource("ok").getValue();
+	}
+
+	@Override
+	protected int dialogLayoutId() {
+		return R.layout.animation_speed_dialog;
 	}
 
 	@Override
@@ -63,10 +67,8 @@ class AnimationSpeedPreference extends DialogPreference {
 	}
 
 	@Override
-	public void onClick(DialogInterface dialog, int which) {
-		if (which == DialogInterface.BUTTON_POSITIVE) {
-			myOption.setValue(myOption.MinValue + mySlider.getProgress());
-		}
+	protected void onPositiveDialogResult() {
+		myOption.setValue(myOption.MinValue + mySlider.getProgress());
 	}
 
 	private class SeekBarDrawable extends Drawable {

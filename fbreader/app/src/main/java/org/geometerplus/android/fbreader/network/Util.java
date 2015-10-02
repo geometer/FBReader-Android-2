@@ -62,11 +62,11 @@ public abstract class Util implements UserRegistrationConstants {
 	}
 
 	static void initLibrary(final Activity activity, final ZLNetworkContext nc, final Runnable action) {
+		final NetworkLibrary library = networkLibrary(activity);
 		Config.Instance().runOnConnect(new Runnable() {
 			public void run() {
 				UIUtil.wait("loadingNetworkLibrary", new Runnable() {
 					public void run() {
-						final NetworkLibrary library = networkLibrary(activity);
 						if (SQLiteNetworkDatabase.Instance() == null) {
 							new SQLiteNetworkDatabase(activity.getApplication(), library);
 						}

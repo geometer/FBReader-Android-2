@@ -19,62 +19,27 @@
 
 package org.geometerplus.android.fbreader.preferences;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
-
-class FontPreference extends SingleChoicePreference implements ReloadablePreference {
+class SingleChoiceStringPreference extends SingleChoicePreference {
 	private final ZLStringOption myOption;
-	private final boolean myIncludeDummyValue;
 
-	private static String UNCHANGED = "inherit";
-
-	FontPreference(Context context, ZLResource resource, ZLStringOption option, boolean includeDummyValue) {
+	SingleChoiceStringPreference(Context context, ZLResource resource, ZLStringOption option, String[] values) {
 		super(context, resource);
-
+		setList(values);
 		myOption = option;
-		myIncludeDummyValue = includeDummyValue;
-
-		reload();
-	}
-
-	public void reload() {
-		final ArrayList<String> fonts = new ArrayList<String>();
-		AndroidFontUtil.fillFamiliesList(fonts);
-		if (myIncludeDummyValue) {
-			fonts.add(0, UNCHANGED);
-		}
-		setList((String[])fonts.toArray(new String[fonts.size()]));
 	}
 
 	@Override
 	protected String currentValue() {
-		final String[] fonts = values();
-
-		final String optionValue = myOption.getValue();
-		final String fntValue = optionValue.length() > 0 ?
-			AndroidFontUtil.realFontFamilyName(optionValue) : UNCHANGED;
-
-		for (String fontName : fonts) {
-			if (fntValue.equals(fontName)) {
-				return fontName;
-			}
-		}
-		for (String fontName : fonts) {
-			if (fntValue.equals(AndroidFontUtil.realFontFamilyName(fontName))) {
-				return fontName;
-			}
-		}
-		return fntValue;
+		return myOption.getValue();
 	}
 
 	@Override
 	protected void onValueSelected(int index, String value) {
-		myOption.setValue(UNCHANGED.equals(value) ? "" : value);
+		myOption.setValue(value);
 	}
 }

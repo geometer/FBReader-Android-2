@@ -21,8 +21,6 @@ package org.geometerplus.android.fbreader.network.litres;
 
 import java.util.List;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,7 +38,10 @@ import org.geometerplus.fbreader.network.authentication.litres.*;
 import org.geometerplus.android.fbreader.network.Util;
 import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 
-abstract class RegistrationActivity extends Activity implements UserRegistrationConstants {
+import org.fbreader.md.MDActivity;
+import org.fbreader.md.MDAlertDialogBuilder;
+
+abstract class RegistrationActivity extends MDActivity implements UserRegistrationConstants {
 	protected final ActivityNetworkContext myNetworkContext = new ActivityNetworkContext(this);
 
 	protected ZLResource myResource;
@@ -173,13 +174,11 @@ abstract class RegistrationActivity extends Activity implements UserRegistration
 					final String selectedEmail = emailTextView.getText().toString().trim();
 					final int selected = emails.indexOf(selectedEmail);
 					final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-					final AlertDialog dialog = new AlertDialog.Builder(RegistrationActivity.this)
+					new MDAlertDialogBuilder(RegistrationActivity.this)
 						.setSingleChoiceItems(emails.toArray(new String[emails.size()]), selected, listener)
 						.setTitle(myResource.getResource("email").getValue())
 						.setNegativeButton(buttonResource.getResource("cancel").getValue(), null)
-						.create();
-
-					dialog.show();
+						.create().show();
 				}
 			});
 		}

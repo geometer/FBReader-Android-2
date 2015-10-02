@@ -19,7 +19,6 @@
 
 package org.geometerplus.android.fbreader.preferences.background;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
@@ -32,7 +31,9 @@ import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.fbreader.fbreader.WallpapersUtil;
 
-public class PredefinedImages extends ListActivity implements AdapterView.OnItemClickListener {
+import org.fbreader.md.SimpleMDListActivity;
+
+public class PredefinedImages extends SimpleMDListActivity implements AdapterView.OnItemClickListener {
 	private final ZLResource myResource = ZLResource.resource("Preferences").getResource("colors").getResource("background");
 
 	@Override

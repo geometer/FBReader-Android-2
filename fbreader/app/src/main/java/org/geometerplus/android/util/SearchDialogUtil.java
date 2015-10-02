@@ -19,13 +19,17 @@
 
 package org.geometerplus.android.util;
 
-import android.app.*;
+import android.app.Activity;
+import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.WindowManager;
 import android.widget.EditText;
+
+import org.fbreader.md.MDAlertDialogBuilder;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
@@ -35,7 +39,7 @@ public abstract class SearchDialogUtil {
 	}
 
 	public static void showDialog(final Activity activity, final Class<? extends Activity> clazz, final String initialPattern, DialogInterface.OnCancelListener listener, final Bundle bundle) {
-		final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		final MDAlertDialogBuilder builder = new MDAlertDialogBuilder(activity);
 
 		builder.setTitle(ZLResource.resource("menu").getResource("search").getValue());
 

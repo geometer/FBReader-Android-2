@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader.bookmark;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.Window;
 
@@ -32,9 +32,12 @@ import org.geometerplus.fbreader.book.BookmarkUtil;
 import org.geometerplus.fbreader.book.HighlightingStyle;
 
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
+import org.fbreader.md.MDEditTextPreference;
+import org.fbreader.md.MDSettingsActivity;
 import org.geometerplus.android.fbreader.preferences.*;
+import org.geometerplus.zlibrary.ui.android.R;
 
-public class EditStyleActivity extends PreferenceActivity {
+public class EditStyleActivity extends MDSettingsActivity {
 	static final String STYLE_ID_KEY = "style.id";
 
 	private final ZLResource myRootResource = ZLResource.resource("editStyle");
@@ -43,48 +46,70 @@ public class EditStyleActivity extends PreferenceActivity {
 	private BgColorPreference myBgColorPreference;
 
 	@Override
-	protected void onCreate(Bundle bundle) {
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-		super.onCreate(bundle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
-
-		final PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(this);
-		setPreferenceScreen(screen);
-
-		myCollection.bindToService(this, new Runnable() {
-			public void run() {
-				myStyle = myCollection.getHighlightingStyle(getIntent().getIntExtra(STYLE_ID_KEY, -1));
-				if (myStyle == null) {
-					finish();
-					return;
-				}
-				screen.addPreference(new NamePreference());
-				screen.addPreference(new InvisiblePreference());
-				myBgColorPreference = new BgColorPreference();
-				screen.addPreference(myBgColorPreference);
-			}
-		});
+	protected PreferenceFragment preferenceFragment() {
+		return new EditStyleFragment();
 	}
 
 	@Override
-	protected void onDestroy() {
-		myCollection.unbind();
-
-		super.onDestroy();
+	protected void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
+		setTitleVisibility(false);
 	}
 
-	private class NamePreference extends ZLStringPreference {
+	private class EditStyleFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle bundle) {
+			super.onCreate(bundle);
+
+			final PreferenceScreen screen =
+				getPreferenceManager().createPreferenceScreen(EditStyleActivity.this);
+			setPreferenceScreen(screen);
+
+			myCollection.bindToService(EditStyleActivity.this, new Runnable() {
+				public void run() {
+					myStyle = myCollection.getHighlightingStyle(getIntent().getIntExtra(STYLE_ID_KEY, -1));
+					if (myStyle == null) {
+						finish();
+						return;
+					}
+					screen.addPreference(new NamePreference());
+					screen.addPreference(new InvisiblePreference());
+					myBgColorPreference = new BgColorPreference();
+					screen.addPreference(myBgColorPreference);
+				}
+			});
+		}
+
+		@Override
+		public void onDestroy() {
+			myCollection.unbind();
+			super.onDestroy();
+		}
+	}
+
+	private class NamePreference extends MDEditTextPreference {
 		NamePreference() {
-			super(EditStyleActivity.this, myRootResource, "name");
-			super.setValue(BookmarkUtil.getStyleName(myStyle));
+			super(EditStyleActivity.this);
+			setTitle(myRootResource.getResource("name").getValue());
+		}
+
+		@Override
+		protected String positiveButtonText() {
+			return ZLResource.resource("dialog").getResource("button").getResource("ok").getValue();
+		}
+
+		@Override
+		protected final String getValue() {
+			return BookmarkUtil.getStyleName(myStyle);
 		}
 
 		@Override
 		protected void setValue(String value) {
-			super.setValue(value);
-			BookmarkUtil.setStyleName(myStyle, value);
-			myCollection.saveHighlightingStyle(myStyle);
+			if (!value.equals(getValue())) {
+				BookmarkUtil.setStyleName(myStyle, value);
+				myCollection.saveHighlightingStyle(myStyle);
+			}
 		}
 	}
 

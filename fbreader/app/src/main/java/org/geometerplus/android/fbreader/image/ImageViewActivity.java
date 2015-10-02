@@ -19,22 +19,22 @@
 
 package org.geometerplus.android.fbreader.image;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.*;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.*;
 
 import org.geometerplus.zlibrary.core.image.*;
 import org.geometerplus.zlibrary.core.util.ZLColor;
 
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
+import org.geometerplus.android.fbreader.FBReaderUtil;
 import org.geometerplus.android.util.OrientationUtil;
 
-public class ImageViewActivity extends Activity {
+public class ImageViewActivity extends ActionBarActivity {
 	public static final String URL_KEY = "fbreader.imageview.url";
 	public static final String BACKGROUND_COLOR_KEY = "fbreader.imageview.background";
 
@@ -45,8 +45,7 @@ public class ImageViewActivity extends Activity {
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		final ZLAndroidLibrary library = (ZLAndroidLibrary)ZLAndroidLibrary.Instance();
-		final boolean showStatusBar = library.ShowStatusBarOption.getValue();
+		final boolean showStatusBar = FBReaderUtil.getZLibrary(this).ShowStatusBarOption.getValue();
 		getWindow().setFlags(
 			WindowManager.LayoutParams.FLAG_FULLSCREEN,
 			showStatusBar ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN

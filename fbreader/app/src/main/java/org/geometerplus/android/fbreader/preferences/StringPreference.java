@@ -19,117 +19,50 @@
 
 package org.geometerplus.android.fbreader.preferences;
 
-import java.util.regex.Pattern;
-
-import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Bundle;
-import android.preference.DialogPreference;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.*;
+
+import org.fbreader.md.MDEditTextPreference;
 
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.ui.android.R;
 
-public class StringPreference extends DialogPreference {
-	public static class Constraint {
-		public static final Constraint LENGTH = new Constraint(
-			"-{0,1}([0-9]*\\.){0,1}[0-9]+(%|em|ex|px|pt)|",
-			"length"
-		);
-		public static final Constraint POSITIVE_LENGTH = new Constraint(
-			"([0-9]*\\.){0,1}[0-9]+(%|em|ex|px|pt)|",
-			"positiveLength"
-		);
-		public static final Constraint PERCENT = new Constraint(
-			"([1-9][0-9]{1,2}%)|",
-			"percent"
-		);
-
-		private final Pattern myPattern;
-		public final String HintKey;
-
-		public Constraint(String pattern, String hintKey) {
-			myPattern = Pattern.compile(pattern);
-			HintKey = hintKey;
-		}
-
-		public boolean matches(String text) {
-			return myPattern.matcher(text).matches();
-		}
-	}
+public final class StringPreference extends MDEditTextPreference {
+	public static final Constraint CONSTRAINT_LENGTH = new Constraint(
+		"-{0,1}([0-9]*\\.){0,1}[0-9]+(%|em|ex|px|pt)|",
+		ZLResource.resource("hint").getResource("length").getValue()
+	);
+	public static final Constraint CONSTRAINT_POSITIVE_LENGTH = new Constraint(
+		"([0-9]*\\.){0,1}[0-9]+(%|em|ex|px|pt)|",
+		ZLResource.resource("hint").getResource("positiveLength").getValue()
+	);
+	public static final Constraint CONSTRAINT_PERCENT = new Constraint(
+		"([1-9][0-9]{1,2}%)|",
+		ZLResource.resource("hint").getResource("percent").getValue()
+	);
 
 	private final ZLStringOption myOption;
-	private final Constraint myConstraint;
-	private EditText myEditor;
 
 	protected StringPreference(Context context, ZLStringOption option, Constraint constraint, ZLResource rootResource, String resourceKey) {
-		super(context, null);
+		super(context);
 
 		myOption = option;
-		myConstraint = constraint;
+		setConstraint(constraint);
 
-		final String title = rootResource.getResource(resourceKey).getValue();
-		setTitle(title);
-		setDialogTitle(title);
-		setDialogLayoutResource(R.layout.string_preference_dialog);
-		setSummary(option.getValue());
-
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		setPositiveButtonText(buttonResource.getResource("ok").getValue());
-		setNegativeButtonText(buttonResource.getResource("cancel").getValue());
+		setTitle(rootResource.getResource(resourceKey).getValue());
 	}
 
+	@Override
+	protected String positiveButtonText() {
+		return ZLResource.resource("dialog").getResource("button").getResource("ok").getValue();
+	}
+
+	@Override
+	protected String getValue() {
+		return myOption.getValue();
+	}
+
+	@Override
 	protected void setValue(String value) {
-		setSummary(value);
 		myOption.setValue(value);
-	}
-
-	@Override
-	protected void onBindDialogView(View view) {
-		myEditor = (EditText)view.findViewById(R.id.string_preference_editor);
-		myEditor.setText(myOption.getValue());
-		((TextView)view.findViewById(R.id.string_preference_hint)).setText(
-			ZLResource.resource("hint").getResource(myConstraint.HintKey).getValue()
-		);
-
-		super.onBindDialogView(view);
-	}
-
-	private final TextWatcher myWatcher = new TextWatcher() {
-		@Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-		}
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int before, int count) {
-		}
-
-        @Override
-        public void afterTextChanged(Editable s) {
-			final AlertDialog dialog = (AlertDialog)getDialog();
-			final Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-			okButton.setEnabled(myConstraint.matches(myEditor.getText().toString()));
-        }
-	};
-
-	@Override
-    protected void showDialog(Bundle state) {
-        super.showDialog(state);
-
-        myEditor.removeTextChangedListener(myWatcher);
-        myEditor.addTextChangedListener(myWatcher);
-        myWatcher.afterTextChanged(null);
-    }
-
-	@Override
-	protected void onDialogClosed(boolean result) {
-		if (result) {
-			setValue(myEditor.getText().toString());
-		}
-		super.onDialogClosed(result);
 	}
 }

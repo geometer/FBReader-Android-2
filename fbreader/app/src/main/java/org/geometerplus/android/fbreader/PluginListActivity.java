@@ -26,13 +26,12 @@ import java.util.List;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.*;
 import android.view.*;
+import android.widget.*;
 
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
@@ -42,16 +41,16 @@ import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.android.util.PackageUtil;
 import org.geometerplus.android.util.ViewUtil;
 
-public class PluginListActivity extends ListActivity {
+import org.fbreader.md.SimpleMDListActivity;
+
+public class PluginListActivity extends SimpleMDListActivity {
 	private final ZLResource myResource = ZLResource.resource("plugins");
 
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setTitle(myResource.getValue());
-		final PluginListAdapter adapter = new PluginListAdapter();
-		setListAdapter(adapter);
-		getListView().setOnItemClickListener(adapter);
+		setListAdapter(new PluginListAdapter());
 	}
 
 	private static class Plugin {
