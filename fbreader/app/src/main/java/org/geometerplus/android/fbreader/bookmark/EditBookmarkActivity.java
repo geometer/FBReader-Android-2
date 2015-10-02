@@ -22,7 +22,6 @@ package org.geometerplus.android.fbreader.bookmark;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.*;
@@ -48,7 +47,9 @@ import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.util.OrientationUtil;
 import org.geometerplus.android.util.ViewUtil;
 
-public class EditBookmarkActivity extends Activity implements IBookCollection.Listener<Book> {
+import org.fbreader.md.MDActivity;
+
+public class EditBookmarkActivity extends MDActivity implements IBookCollection.Listener<Book> {
 	private final ZLResource myResource = ZLResource.resource("editBookmark");
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 	private Bookmark myBookmark;
@@ -62,10 +63,14 @@ public class EditBookmarkActivity extends Activity implements IBookCollection.Li
 	}
 
 	@Override
+	protected int layoutId() {
+		return R.layout.edit_bookmark;
+	}
+
+	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.edit_bookmark);
+		setTitleVisibility(false);
 
 		myBookmark = FBReaderIntents.getBookmarkExtra(getIntent());
 		if (myBookmark == null) {

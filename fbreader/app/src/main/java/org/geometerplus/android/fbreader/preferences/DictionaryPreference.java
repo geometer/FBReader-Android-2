@@ -28,7 +28,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 
-class DictionaryPreference extends ZLStringListPreference {
+class DictionaryPreference extends SingleChoicePreference {
 	private final ZLStringOption myOption;
 
 	DictionaryPreference(Context context, ZLResource resource, ZLStringOption dictionaryOption, List<DictionaryUtil.PackageInfo> infos) {
@@ -39,19 +39,28 @@ class DictionaryPreference extends ZLStringListPreference {
 		final String[] values = new String[infos.size()];
 		final String[] texts = new String[infos.size()];
 		int index = 0;
+		final ZLResource titlesResource = ZLResource.resource("dictionary");
 		for (DictionaryUtil.PackageInfo i : infos) {
 			values[index] = i.getId();
-			texts[index] = i.getTitle();
+			final String title = i.getTitle();
+			final ZLResource tr = titlesResource.getResource(title);
+			if (tr.hasValue()) {
+				texts[index] = tr.getValue();
+			} else {
+				texts[index] = title;
+			}
 			++index;
 		}
 		setLists(values, texts);
-
-		setInitialValue(myOption.getValue());
 	}
 
 	@Override
-	protected void onDialogClosed(boolean result) {
-		super.onDialogClosed(result);
-		myOption.setValue(getValue());
+	protected String currentValue() {
+		return myOption.getValue();
+	}
+
+	@Override
+	protected void onValueSelected(int index, String value) {
+		myOption.setValue(value);
 	}
 }

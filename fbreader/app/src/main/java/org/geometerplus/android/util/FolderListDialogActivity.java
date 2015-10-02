@@ -21,8 +21,6 @@ package org.geometerplus.android.util;
 
 import java.util.ArrayList;
 
-import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.*;
 import android.os.Bundle;
 import android.view.*;
@@ -30,8 +28,10 @@ import android.widget.*;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
+import org.fbreader.md.MDAlertDialogBuilder;
+import org.fbreader.md.MDListActivity;
 
-public class FolderListDialogActivity extends ListActivity {
+public class FolderListDialogActivity extends MDListActivity {
 	interface Key {
 		String FOLDER_LIST            = "folder_list.folder_list";
 		String ACTIVITY_TITLE         = "folder_list.title";
@@ -45,9 +45,13 @@ public class FolderListDialogActivity extends ListActivity {
 	private ZLResource myResource;
 
 	@Override
+	protected int layoutId() {
+		return R.layout.folder_list_dialog;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.folder_list_dialog);
 
 		final Intent intent = getIntent();
 		myFolderList = intent.getStringArrayListExtra(Key.FOLDER_LIST);
@@ -57,19 +61,11 @@ public class FolderListDialogActivity extends ListActivity {
 		myResource = ZLResource.resource("dialog").getResource("folderList");
 
 		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		final Button okButton = (Button)findViewById(R.id.folder_list_dialog_button_ok);
+		final Button okButton = (Button)findViewById(R.id.md_single_button);
 		okButton.setText(buttonResource.getResource("ok").getValue());
 		okButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				setResult(RESULT_OK, new Intent().putExtra(Key.FOLDER_LIST, myFolderList));
-				finish();
-			}
-		});
-		final Button cancelButton = (Button)findViewById(R.id.folder_list_dialog_button_cancel);
-		cancelButton.setText(buttonResource.getResource("cancel").getValue());
-		cancelButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				setResult(RESULT_CANCELED);
 				finish();
 			}
 		});
@@ -104,7 +100,7 @@ public class FolderListDialogActivity extends ListActivity {
 	private void showItemRemoveDialog(final int index) {
 		final ZLResource resource = myResource.getResource("removeDialog");
 		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		new AlertDialog.Builder(FolderListDialogActivity.this)
+		new MDAlertDialogBuilder(FolderListDialogActivity.this)
 			.setCancelable(false)
 			.setTitle(resource.getValue())
 			.setMessage(resource.getResource("message").getValue().replace("%s", myFolderList.get(index)))

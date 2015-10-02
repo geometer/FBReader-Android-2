@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader;
 
 import java.util.List;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.*;
@@ -29,6 +28,7 @@ import android.view.*;
 
 import org.geometerplus.zlibrary.core.options.Config;
 
+import org.fbreader.md.SimpleMDListActivity;
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.fbreader.fbreader.options.CancelMenuHelper;
@@ -38,13 +38,13 @@ import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
 import org.geometerplus.android.util.ViewUtil;
 
-public class CancelActivity extends ListActivity {
+public class CancelActivity extends SimpleMDListActivity {
 	private BookCollectionShadow myCollection;
 
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setTitleVisibility(false);
 		FBReaderUtil.ensureFullscreen(this, getListView());
 	}
 
@@ -60,7 +60,6 @@ public class CancelActivity extends ListActivity {
 					new CancelMenuHelper().getActionsList(collection)
 				);
 				setListAdapter(adapter);
-				getListView().setOnItemClickListener(adapter);
 			}
 		});
 	}

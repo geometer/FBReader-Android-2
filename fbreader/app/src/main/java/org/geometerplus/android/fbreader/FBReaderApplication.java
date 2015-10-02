@@ -19,13 +19,23 @@
 
 package org.geometerplus.android.fbreader;
 
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
+
+import org.geometerplus.fbreader.Paths;
+import org.geometerplus.fbreader.formats.*;
 
 import org.geometerplus.android.util.NativeLibraryUtil;
 
-public class FBReaderApplication extends ZLAndroidApplication {
+public class FBReaderApplication extends ZLAndroidApplication implements IFormatPluginCollection {
+	@Override
 	public void onCreate() {
 		super.onCreate();
 		NativeLibraryUtil.init(this, "NativeFormats-v4");
+	}
+
+	public FormatPlugin getPlugin(ZLFile file) {
+		return PluginCollection.Instance(Paths.systemInfo(this)).getPlugin(file);
 	}
 }

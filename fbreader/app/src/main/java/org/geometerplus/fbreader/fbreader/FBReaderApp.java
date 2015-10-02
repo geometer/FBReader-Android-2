@@ -72,7 +72,7 @@ public final class FBReaderApp extends ZLApplication {
 
 	public final IBookCollection<Book> Collection;
 
-	private SyncData mySyncData = new SyncData();
+	private final SyncData mySyncData = new SyncData();
 
 	public FBReaderApp(SystemInfo systemInfo, final IBookCollection<Book> collection) {
 		super(systemInfo);
@@ -370,17 +370,7 @@ public final class FBReaderApp extends ZLApplication {
 				gotoBookmark(bookmark, false);
 			}
 			Collection.addToRecentlyOpened(book);
-			final StringBuilder title = new StringBuilder(book.getTitle());
-			if (!book.authors().isEmpty()) {
-				boolean first = true;
-				for (Author a : book.authors()) {
-					title.append(first ? " (" : ", ");
-					title.append(a.DisplayName);
-					first = false;
-				}
-				title.append(")");
-			}
-			setTitle(title.toString());
+			updateTitle();
 		} catch (BookReadingException e) {
 			processException(e);
 		}

@@ -23,7 +23,8 @@ import java.util.*;
 
 import android.content.Context;
 import android.content.Intent;
-import android.preference.Preference;
+import android.os.Bundle;
+import android.preference.*;
 
 import org.geometerplus.zlibrary.core.encodings.Encoding;
 import org.geometerplus.zlibrary.core.language.Language;
@@ -35,24 +36,41 @@ import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.formats.*;
 
+import org.geometerplus.android.fbreader.FBReaderUtil;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.android.util.*;
+import org.geometerplus.android.util.OrientationUtil;
 
-class BookTitlePreference extends ZLStringPreference {
+import org.fbreader.md.MDEditTextPreference;
+import org.fbreader.md.MDSettingsActivity;
+import org.geometerplus.zlibrary.ui.android.R;
+
+class BookTitlePreference extends MDEditTextPreference {
 	private final Book myBook;
 
 	BookTitlePreference(Context context, ZLResource rootResource, String resourceKey, Book book) {
-		super(context, rootResource, resourceKey);
+		super(context);
+
+		setTitle(rootResource.getResource(resourceKey).getValue());
 		myBook = book;
-		super.setValue(book.getTitle());
+	}
+
+	@Override
+	protected String positiveButtonText() {
+		return ZLResource.resource("dialog").getResource("button").getResource("ok").getValue();
 	}
 
 	@Override
 	protected void setValue(String value) {
-		super.setValue(value);
-		myBook.setTitle(value);
-		((EditBookInfoActivity)getContext()).saveBook();
+		if (!value.equals(getValue())) {
+			myBook.setTitle(value);
+			((EditBookInfoActivity)getContext()).saveBook();
+		}
+	}
+
+	@Override
+	protected final String getValue() {
+		return myBook.getTitle();
 	}
 }
 
@@ -71,31 +89,36 @@ class BookLanguagePreference extends LanguagePreference {
 	BookLanguagePreference(Context context, ZLResource resource, Book book) {
 		super(context, resource, languages());
 		myBook = book;
+	}
+
+	@Override
+	protected String currentValue() {
 		final String language = myBook.getLanguage();
-		if (language == null || !setInitialValue(language)) {
-			setInitialValue(Language.OTHER_CODE);
+		if (language != null) {
+			for (String l : values()) {
+				if (language.equals(l)) {
+					return language;
+				}
+			}
 		}
+		return Language.OTHER_CODE;
 	}
 
 	@Override
-	protected void init() {
-	}
-
-	@Override
-	protected void setLanguage(String code) {
+	protected void onValueSelected(int index, String code) {
 		myBook.setLanguage(code.length() > 0 ? code : null);
 		((EditBookInfoActivity)getContext()).saveBook();
 	}
 }
 
-class EncodingPreference extends ZLStringListPreference {
+class EncodingPreference extends SingleChoicePreference {
 	private final PluginCollection myPluginCollection;
 	private final Book myBook;
 
 	EncodingPreference(Context context, ZLResource resource, Book book) {
 		super(context, resource);
-		myBook = book;
 		myPluginCollection = PluginCollection.Instance(Paths.systemInfo(context));
+		myBook = book;
 
 		final FormatPlugin plugin;
 		try {
@@ -121,26 +144,29 @@ class EncodingPreference extends ZLStringListPreference {
 			++index;
 		}
 		setLists(codes, names);
+
 		if (encodings.size() == 1) {
-			setInitialValue(codes[0]);
 			setEnabled(false);
-		} else {
-			final String bookEncoding = BookUtil.getEncoding(book, myPluginCollection);
-			if (bookEncoding != null) {
-				setInitialValue(bookEncoding.toLowerCase());
-			}
 		}
 	}
 
 	@Override
-	protected void onDialogClosed(boolean result) {
-		super.onDialogClosed(result);
-		if (result) {
-			final String value = getValue();
-			if (!value.equalsIgnoreCase(BookUtil.getEncoding(myBook, myPluginCollection))) {
-				myBook.setEncoding(value);
-				((EditBookInfoActivity)getContext()).saveBook();
+	protected String currentValue() {
+		final String[] codes = values();
+		if (codes.length > 1) {
+			final String bookEncoding = BookUtil.getEncoding(myBook, myPluginCollection);
+			if (bookEncoding != null) {
+				return bookEncoding.toLowerCase();
 			}
+		}
+		return codes[0];
+	}
+
+	@Override
+	protected void onValueSelected(int index, String value) {
+		if (!value.equalsIgnoreCase(BookUtil.getEncoding(myBook, myPluginCollection))) {
+			myBook.setEncoding(value);
+			((EditBookInfoActivity)getContext()).saveBook();
 		}
 	}
 }
@@ -154,6 +180,7 @@ class EditTagsPreference extends Preference {
 		myBook = book;
 		myResource = rootResource.getResource(resourceKey);
 		setTitle(myResource.getValue());
+		setSummary(book.tagsString(", "));
 	}
 
 	void saveTags(final ArrayList<String> tags) {
@@ -194,6 +221,7 @@ class EditAuthorsPreference extends Preference {
 		myBook = book;
 		myResource = rootResource.getResource(resourceKey);
 		setTitle(myResource.getValue());
+		setSummary(book.authorsString(", "));
 	}
 
 	void saveAuthors(final ArrayList<String> authors) {
@@ -227,7 +255,50 @@ class EditAuthorsPreference extends Preference {
 	}
 }
 
-public class EditBookInfoActivity extends ZLPreferenceActivity {
+public class EditBookInfoActivity extends MDSettingsActivity {
+	private class EditBookInfoFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle bundle) {
+			super.onCreate(bundle);
+
+			myScreen = getPreferenceManager().createPreferenceScreen(EditBookInfoActivity.this);
+			setPreferenceScreen(myScreen);
+
+			myBook = FBReaderIntents.getBookExtra(getIntent(), myCollection);
+
+			if (myBook == null) {
+				finish();
+				return;
+			}
+
+			FBReaderUtil.setBookTitle(EditBookInfoActivity.this, myBook);
+
+			myCollection.bindToService(EditBookInfoActivity.this, new Runnable() {
+				public void run() {
+					if (myInitialized) {
+						return;
+					}
+					myInitialized = true;
+
+					addPreference(new BookTitlePreference(EditBookInfoActivity.this, Resource, "title", myBook));
+					myEditAuthorsPreference = (EditAuthorsPreference)addPreference(new EditAuthorsPreference(EditBookInfoActivity.this, Resource, "authors", myBook));
+					myEditTagsPreference = (EditTagsPreference)addPreference(new EditTagsPreference(EditBookInfoActivity.this, Resource, "tags", myBook));
+					addPreference(new BookLanguagePreference(EditBookInfoActivity.this, Resource.getResource("language"), myBook));
+					addPreference(new EncodingPreference(EditBookInfoActivity.this, Resource.getResource("encoding"), myBook));
+				}
+			});
+		}
+
+		@Override
+		public void onDestroy() {
+			myCollection.unbind();
+			super.onDestroy();
+		}
+	}
+
+	private PreferenceScreen myScreen;
+	final ZLResource Resource = ZLResource.resource("BookInfo");
+
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 	private volatile boolean myInitialized;
 
@@ -235,8 +306,45 @@ public class EditBookInfoActivity extends ZLPreferenceActivity {
 	private EditAuthorsPreference myEditAuthorsPreference;
 	private Book myBook;
 
-	public EditBookInfoActivity() {
-		super("BookInfo");
+	public Preference addPreference(Preference preference) {
+		myScreen.addPreference(preference);
+		return preference;
+	}
+
+	@Override
+	protected PreferenceFragment preferenceFragment() {
+		return new EditBookInfoFragment();
+	}
+
+	@Override
+	protected void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		OrientationUtil.setOrientation(this, getIntent());
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		OrientationUtil.setOrientation(this, intent);
+	}
+
+	@Override
+	protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			switch (reqCode) {
+				case EditTagsDialogActivity.REQ_CODE:
+					myEditTagsPreference.saveTags(data.getStringArrayListExtra(EditListDialogActivity.Key.LIST));
+					break;
+				case EditAuthorsDialogActivity.REQ_CODE:
+					myEditAuthorsPreference.saveAuthors(data.getStringArrayListExtra(EditListDialogActivity.Key.LIST));
+					break;
+			}
+		}
 	}
 
 	void saveBook() {
@@ -253,56 +361,5 @@ public class EditBookInfoActivity extends ZLPreferenceActivity {
 
 	List<Tag> tags() {
 		return myCollection.tags();
-	}
-
-	@Override
-	protected void init(Intent intent) {
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-
-		myBook = FBReaderIntents.getBookExtra(getIntent(), myCollection);
-
-		if (myBook == null) {
-			finish();
-			return;
-		}
-
-		myCollection.bindToService(this, new Runnable() {
-			public void run() {
-				if (myInitialized) {
-					return;
-				}
-				myInitialized = true;
-
-				addPreference(new BookTitlePreference(EditBookInfoActivity.this, Resource, "title", myBook));
-				myEditAuthorsPreference = (EditAuthorsPreference)addPreference(new EditAuthorsPreference(EditBookInfoActivity.this, Resource, "authors", myBook));
-				myEditTagsPreference = (EditTagsPreference)addPreference(new EditTagsPreference(EditBookInfoActivity.this, Resource, "tags", myBook));
-				addPreference(new BookLanguagePreference(EditBookInfoActivity.this, Resource.getResource("language"), myBook));
-				addPreference(new EncodingPreference(EditBookInfoActivity.this, Resource.getResource("encoding"), myBook));
-			}
-		});
-	}
-
-	@Override
-	protected void onStop() {
-		myCollection.unbind();
-		super.onStop();
-	}
-
-	@Override
-	protected void onActivityResult(int reqCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_OK) {
-			switch (reqCode) {
-				case EditTagsDialogActivity.REQ_CODE:
-					myEditTagsPreference.saveTags(data.getStringArrayListExtra(EditListDialogActivity.Key.LIST));
-					break;
-				case EditAuthorsDialogActivity.REQ_CODE:
-					myEditAuthorsPreference.saveAuthors(data.getStringArrayListExtra(EditListDialogActivity.Key.LIST));
-					break;
-			}
-		}
 	}
 }

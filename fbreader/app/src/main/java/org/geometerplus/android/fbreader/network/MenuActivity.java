@@ -21,18 +21,19 @@ package org.geometerplus.android.fbreader.network;
 
 import java.util.*;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.md.SimpleMDListActivity;
+
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.android.fbreader.api.PluginApi;
 
-abstract class MenuActivity extends ListActivity implements AdapterView.OnItemClickListener {
+abstract class MenuActivity extends SimpleMDListActivity implements AdapterView.OnItemClickListener {
 	protected List<PluginApi.MenuActionInfo> myInfos;
 
 	@Override

@@ -20,24 +20,29 @@
 package org.geometerplus.android.fbreader.preferences;
 
 import android.content.Context;
-import android.preference.DialogPreference;
 import android.view.View;
 import android.widget.NumberPicker;
 
 import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
+
+import org.fbreader.md.MDDialogPreference;
 import org.geometerplus.zlibrary.ui.android.R;
 
-class ZLIntegerRangePreference extends DialogPreference {
+class ZLIntegerRangePreference extends MDDialogPreference {
 	private final ZLIntegerRangeOption myOption;
 	private NumberPicker myPicker;
 
 	public ZLIntegerRangePreference(Context context, ZLResource resource, ZLIntegerRangeOption option) {
-		super(context, null);
+		super(context);
 		myOption = option;
 		setTitle(resource.getValue());
 		updateSummary();
-		setDialogLayoutResource(R.layout.picker_preference);
+	}
+
+	@Override
+	protected int dialogLayoutId() {
+		return R.layout.picker_preference;
 	}
 
 	@Override
@@ -52,11 +57,14 @@ class ZLIntegerRangePreference extends DialogPreference {
 	}
 
 	@Override
-	protected void onDialogClosed(boolean positiveResult) {
-		if (positiveResult) {
-			myOption.setValue(myPicker.getValue());
-			updateSummary();
-		}
+	protected String positiveButtonText() {
+		return ZLResource.resource("dialog").getResource("button").getResource("ok").getValue();
+	}
+
+	@Override
+	protected void onPositiveDialogResult() {
+		myOption.setValue(myPicker.getValue());
+		updateSummary();
 	}
 
 	private void updateSummary() {

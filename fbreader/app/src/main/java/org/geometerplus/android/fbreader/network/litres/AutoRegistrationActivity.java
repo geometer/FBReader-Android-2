@@ -63,18 +63,21 @@ public class AutoRegistrationActivity extends RegistrationActivity {
 	private final RegistrationUtils myUtil = new RegistrationUtils(this);
 
 	@Override
-	public void onCreate(Bundle icicle) {
+	protected int layoutId() {
+		return R.layout.lr_auto_registration;
+	}
+
+	@Override
+	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
 		final ZLResource dialogResource = ZLResource.resource("dialog");
 		final ZLResource buttonResource = dialogResource.getResource("button");
 
 		myResource = dialogResource.getResource("litresAutoSignIn");
-		setContentView(R.layout.lr_auto_registration);
 		setTitle(myResource.getResource("title").getValue());
 
 		getOkButton().setText(buttonResource.getResource("ok").getValue());
-		getCancelButton().setText(buttonResource.getResource("cancel").getValue());
 		getTextArea().setVisibility(View.GONE);
 		getActionSignIn().setVisibility(View.GONE);
 		getActionAnotherEmail().setVisibility(View.GONE);
@@ -187,8 +190,6 @@ public class AutoRegistrationActivity extends RegistrationActivity {
 				}
 			}
 		});
-		getCancelButton().setVisibility(View.VISIBLE);
-		getCancelButton().setOnClickListener(myFinishListener);
 	}
 
 	// step 4
@@ -207,8 +208,6 @@ public class AutoRegistrationActivity extends RegistrationActivity {
 				runAutoLogin(getEmailTextView().getText().toString().trim());
 			}
 		});
-		getCancelButton().setVisibility(View.VISIBLE);
-		getCancelButton().setOnClickListener(myFinishListener);
 	}
 
 	// step 5
@@ -272,11 +271,7 @@ public class AutoRegistrationActivity extends RegistrationActivity {
 	}
 
 	private Button getOkButton() {
-		return (Button)getButtons().findViewById(R.id.ok_button);
-	}
-
-	private Button getCancelButton() {
-		return (Button)getButtons().findViewById(R.id.cancel_button);
+		return (Button)findViewById(R.id.md_single_button);
 	}
 
 	private final View.OnClickListener myFinishListener = new View.OnClickListener() {
@@ -295,7 +290,6 @@ public class AutoRegistrationActivity extends RegistrationActivity {
 		getButtons().setVisibility(View.VISIBLE);
 		getOkButton().setVisibility(View.VISIBLE);
 		getOkButton().setOnClickListener(myFinishListener);
-		getCancelButton().setVisibility(View.GONE);
 	}
 
 	private void showErrorMessage(ZLNetworkException exception) {

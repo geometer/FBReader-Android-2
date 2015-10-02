@@ -26,7 +26,7 @@ import android.content.Context;
 import org.geometerplus.zlibrary.core.language.Language;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-abstract class LanguagePreference extends ZLStringListPreference {
+abstract class LanguagePreference extends SingleChoicePreference {
 	LanguagePreference(
 		Context context, ZLResource resource, List<Language> languages
 	) {
@@ -42,17 +42,5 @@ abstract class LanguagePreference extends ZLStringListPreference {
 			++index;
 		}
 		setLists(codes, names);
-		init();
 	}
-
-	@Override
-	protected void onDialogClosed(boolean result) {
-		super.onDialogClosed(result);
-		if (result) {
-			setLanguage(getValue());
-		}
-	}
-
-	protected abstract void init();
-	protected abstract void setLanguage(String code);
 }

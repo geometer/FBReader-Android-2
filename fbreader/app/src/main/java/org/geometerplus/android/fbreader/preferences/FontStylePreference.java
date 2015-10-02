@@ -24,29 +24,30 @@ import android.content.Context;
 import org.geometerplus.zlibrary.core.options.ZLBooleanOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-class FontStylePreference extends ZLStringListPreference {
+class FontStylePreference extends SingleChoicePreference {
+	private static final String[] ourKeys = { "regular", "bold", "italic", "boldItalic" };
+
 	private final ZLBooleanOption myBoldOption;
 	private final ZLBooleanOption myItalicOption;
-	private final String[] myValues = { "regular", "bold", "italic", "boldItalic" };
 
 	FontStylePreference(Context context, ZLResource resource, ZLBooleanOption boldOption, ZLBooleanOption italicOption) {
 		super(context, resource);
-
 		myBoldOption = boldOption;
 		myItalicOption = italicOption;
-		setList(myValues);
-
-		final int intValue =
-			(boldOption.getValue() ? 1 : 0) |
-			(italicOption.getValue() ? 2 : 0);
-		setInitialValue(myValues[intValue]);
+		setList(ourKeys);
 	}
 
 	@Override
-	protected void onDialogClosed(boolean result) {
-		super.onDialogClosed(result);
-		final int intValue = findIndexOfValue(getValue());
-		myBoldOption.setValue((intValue & 0x1) == 0x1);
-		myItalicOption.setValue((intValue & 0x2) == 0x2);
+	protected String currentValue() {
+		final int intValue =
+			(myBoldOption.getValue() ? 1 : 0) |
+			(myItalicOption.getValue() ? 2 : 0);
+		return ourKeys[intValue];
+	}
+
+	@Override
+	protected void onValueSelected(int index, String value) {
+		myBoldOption.setValue((index & 0x1) == 0x1);
+		myItalicOption.setValue((index & 0x2) == 0x2);
 	}
 }

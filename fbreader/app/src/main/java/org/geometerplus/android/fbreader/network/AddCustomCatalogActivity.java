@@ -19,10 +19,10 @@
 
 package org.geometerplus.android.fbreader.network;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -32,6 +32,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
+import org.fbreader.md.MDActivity;
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.network.SQLiteCookieDatabase;
 
@@ -43,7 +44,8 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 import org.geometerplus.android.util.UIUtil;
 
-public class AddCustomCatalogActivity extends Activity {
+
+public class AddCustomCatalogActivity extends MDActivity {
 	static final String TYPE = "type";
 
 	private ZLResource myResource;
@@ -54,14 +56,17 @@ public class AddCustomCatalogActivity extends Activity {
 	private final ActivityNetworkContext myNetworkContext = new ActivityNetworkContext(this);
 
 	@Override
+	protected int layoutId() {
+		return R.layout.add_custom_catalog;
+	}
+
+	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
 
 		SQLiteCookieDatabase.init(this);
 		AuthenticationActivity.initCredentialsCreator(this);
-
-		setContentView(R.layout.add_custom_catalog);
 
 		myResource = ZLResource.resource("dialog").getResource("CustomCatalogDialog");
 
@@ -74,25 +79,20 @@ public class AddCustomCatalogActivity extends Activity {
 		setTextFromResource(R.id.add_custom_catalog_url_example, "catalogUrlExample");
 		setTextFromResource(R.id.add_custom_catalog_summary_example, "catalogSummaryExample");
 
-		setupButton(
-			R.id.ok_button, "ok", new View.OnClickListener() {
-				public void onClick(View view) {
-					final InputMethodManager imm =
-						(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(findViewById(R.id.add_custom_catalog_url).getWindowToken(), 0);
-					imm.hideSoftInputFromWindow(findViewById(R.id.add_custom_catalog_title).getWindowToken(), 0);
-					imm.hideSoftInputFromWindow(findViewById(R.id.add_custom_catalog_summary).getWindowToken(), 0);
-					onOkButton();
-				}
-			}
+		final Button okButton = (Button)findViewById(R.id.md_single_button);
+		okButton.setText(
+			ZLResource.resource("dialog").getResource("button").getResource("ok").getValue()
 		);
-		setupButton(
-			R.id.cancel_button, "cancel", new View.OnClickListener() {
-				public void onClick(View view) {
-					finish();
-				}
+		okButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				final InputMethodManager imm =
+					(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(findViewById(R.id.add_custom_catalog_url).getWindowToken(), 0);
+				imm.hideSoftInputFromWindow(findViewById(R.id.add_custom_catalog_title).getWindowToken(), 0);
+				imm.hideSoftInputFromWindow(findViewById(R.id.add_custom_catalog_summary).getWindowToken(), 0);
+				onOkButton();
 			}
-		);
+		});
 
 		final Intent intent = getIntent();
 		myEditNotAdd = Util.EDIT_CATALOG_ACTION.equals(intent.getAction());
@@ -231,15 +231,6 @@ public class AddCustomCatalogActivity extends Activity {
 	private String getTextById(int id) {
 		final String text = ((TextView)findViewById(id)).getText().toString();
 		return text != null ? text.trim() : null;
-	}
-
-	private void setupButton(int id, String resourceKey, View.OnClickListener listener) {
-		final Button button =
-			(Button)findViewById(R.id.add_custom_catalog_buttons).findViewById(id);
-		button.setText(
-			ZLResource.resource("dialog").getResource("button").getResource(resourceKey).getValue()
-		);
-		button.setOnClickListener(listener);
 	}
 
 	private void setTextFromResource(int id, String resourceKey) {

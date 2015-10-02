@@ -64,14 +64,17 @@ public class UserRegistrationActivity extends RegistrationActivity {
 	}
 
 	@Override
-	public void onCreate(Bundle icicle) {
+	protected int layoutId() {
+		return R.layout.lr_user_registration;
+	}
+
+	@Override
+	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
 		myResource = ZLResource.resource("dialog").getResource("litresUserRegistration");
 
 		//Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
-
-		setContentView(R.layout.lr_user_registration);
 
 		setTitle(myResource.getResource("title").getValue());
 		setViewTextFromResource(R.id.lr_user_registration_login_text, "login");
@@ -84,9 +87,7 @@ public class UserRegistrationActivity extends RegistrationActivity {
 		errorLabel.setText("");
 
 		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		final View buttonsView = findViewById(R.id.lr_user_registration_buttons);
-		final Button okButton = (Button)buttonsView.findViewById(R.id.ok_button);
-		final Button cancelButton = (Button)buttonsView.findViewById(R.id.cancel_button);
+		final Button okButton = (Button)findViewById(R.id.md_single_button);
 		final View emailControl = findViewById(R.id.lr_user_registration_email_control);
 		final TextView emailTextView = (TextView)emailControl.findViewById(R.id.lr_email_edit);
 
@@ -133,12 +134,6 @@ public class UserRegistrationActivity extends RegistrationActivity {
 					}
 				};
 				runWithMessage("registerUser", runnable, postRunnable);
-			}
-		});
-		cancelButton.setText(buttonResource.getResource("cancel").getValue());
-		cancelButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				finish();
 			}
 		});
 

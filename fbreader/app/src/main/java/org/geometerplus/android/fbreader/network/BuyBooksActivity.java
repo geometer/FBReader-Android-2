@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader.network;
 
 import java.util.*;
 
-import android.app.AlertDialog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +39,8 @@ import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationMan
 
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.fbreader.util.SimpleDialogActivity;
+
+import org.fbreader.md.MDAlertDialogBuilder;
 
 public class BuyBooksActivity extends SimpleDialogActivity implements NetworkLibrary.ChangeListener {
 	private final BookCollectionShadow myBookCollection = new BookCollectionShadow();
@@ -327,7 +328,7 @@ public class BuyBooksActivity extends SimpleDialogActivity implements NetworkLib
 					final ZLResource boxResource = dialogResource.getResource("networkError");
 					runOnUiThread(new Runnable() {
 						public void run() {
-							new AlertDialog.Builder(BuyBooksActivity.this)
+							new MDAlertDialogBuilder(BuyBooksActivity.this)
 								.setTitle(boxResource.getResource("title").getValue())
 								.setMessage(e.getMessage())
 								.setIcon(0)

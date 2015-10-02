@@ -1,47 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TabHost
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/bookmarks_tabhost"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:orientation="vertical"
 >
 	<LinearLayout
-		android:orientation="vertical"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:theme="@style/FBReaderMD.ActionBar"
+		android:orientation="horizontal"
+		android:background="@drawable/primary_color"
+	>
+		<include
+			layout="@layout/md_toolbar"
+			android:layout_height="match_parent"
+			android:layout_width="wrap_content"
+		/>
+		<android.support.design.widget.TabLayout
+			android:id="@+id/bookmarks_tab_layout"
+			android:layout_height="match_parent"
+			android:layout_width="wrap_content"
+			android:background="@drawable/primary_color"
+		/>
+	</LinearLayout>
+	<android.support.v4.view.ViewPager
+		android:id="@+id/bookmarks_view_pager"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-	>
-		<TabWidget
-			android:id="@android:id/tabs"
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-		/>
-		<FrameLayout
-			android:id="@android:id/tabcontent"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-		>
-			<ListView
-				android:id="@+id/bookmarks_this_book"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-			/>
-			<ListView
-				android:id="@+id/bookmarks_all_books"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-			/>
-			<FrameLayout
-				android:id="@+id/bookmarks_search"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-			>
-				<ListView
-					android:id="@+id/bookmarks_search_results"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-				/>
-			</FrameLayout>
-		</FrameLayout>
-	</LinearLayout>
-</TabHost>
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+	/>
+</LinearLayout>

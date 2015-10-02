@@ -66,34 +66,36 @@ public class DataServer extends NanoHTTPD {
 			if (image instanceof ZLFileImageProxy) {
 				final ZLFileImageProxy proxy = (ZLFileImageProxy)image;
 				proxy.synchronize();
-				final ZLStreamImage realImage = proxy.getRealImage();
-				if (realImage == null) {
+				final ZLImage realImage = proxy.getRealImage();
+				if (realImage instanceof ZLStreamImage) {
+					final ZLStreamImage streamImage = (ZLStreamImage)realImage;
+					InputStream stream = streamImage.inputStream();
+					if (stream == null) {
+						return notFound(uri);
+					}
+					final BitmapFactory.Options options = new BitmapFactory.Options();
+					options.inJustDecodeBounds = true;
+					try {
+						BitmapFactory.decodeStream(stream, null, options);
+					} catch (Exception e) {
+						return notFound(uri);
+					}
+					if (options.outWidth <= 0 || options.outHeight <= 0) {
+						return notFound(uri);
+					}
+					stream.close();
+					stream = streamImage.inputStream();
+					if (stream == null) {
+						return notFound(uri);
+					}
+					final Response res =
+						new Response(Response.Status.OK, MimeType.IMAGE_PNG.toString(), stream);
+					res.addHeader("X-Width", String.valueOf(options.outWidth));
+					res.addHeader("X-Height", String.valueOf(options.outHeight));
+					return res;
+				} else {
 					return notFound(uri);
 				}
-				InputStream stream = realImage.inputStream();
-				if (stream == null) {
-					return notFound(uri);
-				}
-				final BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inJustDecodeBounds = true;
-				try {
-					BitmapFactory.decodeStream(stream, null, options);
-				} catch (Exception e) {
-					return notFound(uri);
-				}
-				if (options.outWidth <= 0 || options.outHeight <= 0) {
-					return notFound(uri);
-				}
-				stream.close();
-				stream = realImage.inputStream();
-				if (stream == null) {
-					return notFound(uri);
-				}
-				final Response res =
-					new Response(Response.Status.OK, MimeType.IMAGE_PNG.toString(), stream);
-				res.addHeader("X-Width", String.valueOf(options.outWidth));
-				res.addHeader("X-Height", String.valueOf(options.outHeight));
-				return res;
 			} else if (image instanceof PluginImage) {
 				final PluginImage pluginImage = (PluginImage)image;
 				if (pluginImage.isSynchronized()) {

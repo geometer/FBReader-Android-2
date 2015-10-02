@@ -24,7 +24,7 @@ import android.content.Context;
 import org.geometerplus.zlibrary.core.options.ZLEnumOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-class ZLEnumPreference<T extends Enum<T>> extends ZLStringListPreference {
+class ZLEnumPreference<T extends Enum<T>> extends SingleChoicePreference {
 	private final ZLEnumOption<T> myOption;
 
 	ZLEnumPreference(Context context, ZLEnumOption<T> option, ZLResource resource) {
@@ -35,19 +35,21 @@ class ZLEnumPreference<T extends Enum<T>> extends ZLStringListPreference {
 		super(context, resource, valuesResource);
 		myOption = option;
 
-		final T initialValue = option.getValue();
-		final T[] allValues = initialValue.getDeclaringClass().getEnumConstants();
+		final T[] allValues = option.getValue().getDeclaringClass().getEnumConstants();
 		final String[] stringValues = new String[allValues.length];
 		for (int i = 0; i < stringValues.length; ++i) {
 			stringValues[i] = allValues[i].toString();
 		}
 		setList(stringValues);
-		setInitialValue(initialValue.toString());
 	}
 
 	@Override
-	protected void onDialogClosed(boolean result) {
-		super.onDialogClosed(result);
-		myOption.setValue(Enum.valueOf(myOption.getValue().getDeclaringClass(), getValue()));
+	protected String currentValue() {
+		return myOption.getValue().toString();
+	}
+
+	@Override
+	protected void onValueSelected(int index, String value) {
+		myOption.setValue(Enum.valueOf(myOption.getValue().getDeclaringClass(), value));
 	}
 }

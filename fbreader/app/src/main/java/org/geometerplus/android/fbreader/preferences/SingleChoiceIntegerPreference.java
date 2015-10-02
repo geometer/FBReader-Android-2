@@ -20,31 +20,26 @@
 package org.geometerplus.android.fbreader.preferences;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.preference.Preference;
 
+import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-class UrlPreference extends Preference implements Preference.OnPreferenceClickListener {
-	private final String myUrl;
+class SingleChoiceIntegerPreference extends SingleChoicePreference {
+	private final ZLIntegerRangeOption myOption;
 
-	UrlPreference(Context context, ZLResource resource, String resourceKey) {
-		super(context);
-		resource = resource.getResource(resourceKey);
-		myUrl = resource.getResource("url").getValue();
-		setTitle(resource.getValue());
-		setSummary(myUrl);
-		setOnPreferenceClickListener(this);
+	SingleChoiceIntegerPreference(Context context, ZLResource resource, ZLIntegerRangeOption option, String[] valueResourceKeys) {
+		super(context, resource);
+		myOption = option;
+		setList(valueResourceKeys);
 	}
 
 	@Override
-	public boolean onPreferenceClick(Preference preference) {
-		try {
-			getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(myUrl)));
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-		return true;
+	protected String currentValue() {
+		return values()[myOption.getValue() - myOption.MinValue];
+	}
+
+	@Override
+	protected void onValueSelected(int index, String value) {
+		myOption.setValue(myOption.MinValue + index);
 	}
 }

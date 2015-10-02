@@ -22,7 +22,6 @@ package org.geometerplus.android.fbreader.preferences.menu;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
@@ -32,19 +31,29 @@ import com.mobeta.android.dslv.DragSortListView;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
+
 import org.geometerplus.android.fbreader.MenuData;
 import org.geometerplus.android.util.ViewUtil;
 
-public class ConfigurationActivity extends ListActivity {
+import org.fbreader.md.MDListActivity;
+
+public class ConfigurationActivity extends MDListActivity {
 	static final String ENABLED_MENU_IDS_KEY = "enabledMenuIds";
 	static final String DISABLED_MENU_IDS_KEY = "disabledMenuIds";
+
+	private static final ZLResource Resource = ZLResource.resource("Preferences").getResource("menu");
 
 	private final List<Item> myAllItems = new ArrayList<Item>();
 
 	@Override
-	protected void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
-		setContentView(R.layout.menu_configure_view);
+	protected int layoutId() {
+		return R.layout.menu_configure_view;
+	}
+
+	@Override
+	protected void onCreate(Bundle state) {
+		super.onCreate(state);
+		setTitle(Resource.getValue());
 	}
 
 	@Override
@@ -76,11 +85,6 @@ public class ConfigurationActivity extends ListActivity {
 		setListAdapter(new MenuListAdapter());
 	}
 
-	@Override
-	public DragSortListView getListView() {
-		return (DragSortListView)super.getListView();
-	}
-
 	private static interface Item {
 	}
 
@@ -88,7 +92,7 @@ public class ConfigurationActivity extends ListActivity {
 		private final String Title;
 
 		public SectionItem(String key) {
-			Title = ZLResource.resource("Preferences").getResource("menu").getResource(key).getValue();
+			Title = Resource.getResource(key).getValue();
 		}
 	}
 
@@ -210,7 +214,7 @@ public class ConfigurationActivity extends ListActivity {
 				if (((MenuNodeItem)item).IsEnabled) {
 					((MenuNodeItem)item).IsChecked = to < indexOfDisabledSectionItem();
 				}
-				getListView().moveCheckState(from, to);
+				((DragSortListView)getListView()).moveCheckState(from, to);
 				setResultIds();
 			}
 		}
@@ -220,7 +224,7 @@ public class ConfigurationActivity extends ListActivity {
 			final Item item = getItem(which);
 			if (item instanceof MenuNodeItem) {
 				remove(item);
-				getListView().removeCheckState(which);
+				((DragSortListView)getListView()).removeCheckState(which);
 			}
 		}
 	}

@@ -22,27 +22,35 @@ package org.geometerplus.android.fbreader.preferences;
 import java.io.*;
 
 import android.content.Context;
-import android.preference.DialogPreference;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
+import org.fbreader.md.MDDialogPreference;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.ui.android.R;
 
-class ThirdPartyLibrariesPreference extends DialogPreference {
+class ThirdPartyLibrariesPreference extends MDDialogPreference {
 	ThirdPartyLibrariesPreference(Context context, ZLResource resource, String key) {
-		super(context, null);
-
+		super(context);
 		setTitle(resource.getResource(key).getValue());
-		setNegativeButtonText(null);
-		setPositiveButtonText(ZLResource.resource("dialog").getResource("button").getResource("ok").getValue());
 	}
 
 	@Override
-	protected View onCreateDialogView() {
-		final TextView textView = new TextView(getContext());
+	protected String positiveButtonText() {
+		return ZLResource.resource("dialog").getResource("button").getResource("ok").getValue();
+	}
+
+	@Override
+	protected int dialogLayoutId() {
+		return R.layout.third_party_libraries;
+	}
+
+	@Override
+	protected void onBindDialogView(View view) {
+		final TextView textView = (TextView)view.findViewById(R.id.third_party_libraries);
 		final StringBuilder html = new StringBuilder();
 		try {
 			final BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -56,8 +64,6 @@ class ThirdPartyLibrariesPreference extends DialogPreference {
 		} catch (IOException e) {
 		}
 		textView.setText(Html.fromHtml(html.toString()));
-		textView.setPadding(10, 10, 10, 10);
 		textView.setMovementMethod(new LinkMovementMethod());
-		return textView;
 	}
 }

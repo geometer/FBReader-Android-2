@@ -24,32 +24,33 @@ import android.content.Context;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
 
-class BatteryLevelToTurnScreenOffPreference extends ZLStringListPreference {
+class BatteryLevelToTurnScreenOffPreference extends SingleChoicePreference {
 	private final ZLIntegerRangeOption myOption;
 
 	BatteryLevelToTurnScreenOffPreference(Context context, ZLIntegerRangeOption option, ZLResource resource) {
 		super(context, resource);
 		myOption = option;
-		String[] entries = { "0", "25", "50", "100" };
-		setList(entries);
+		setList(new String[] { "0", "25", "50", "100" });
+	}
 
-		int value = option.getValue();
+	@Override
+	protected String currentValue() {
+		final int value = myOption.getValue();
 		if (value <= 0) {
-			setInitialValue("0");
+			return "0";
 		} else if (value <= 25) {
-			setInitialValue("25");
+			return "25";
 		} else if (value <= 50) {
-			setInitialValue("50");
+			return "50";
 		} else {
-			setInitialValue("100");
+			return "100";
 		}
 	}
 
 	@Override
-	protected void onDialogClosed(boolean result) {
-		super.onDialogClosed(result);
+	protected void onValueSelected(int index, String value) {
 		try {
-			myOption.setValue(Integer.parseInt(getValue()));
+			myOption.setValue(Integer.parseInt(value));
 		} catch (NumberFormatException e) {
 		}
 	}

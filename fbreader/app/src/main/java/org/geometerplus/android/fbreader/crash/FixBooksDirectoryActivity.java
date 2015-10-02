@@ -19,7 +19,6 @@
 
 package org.geometerplus.android.fbreader.crash;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,18 +30,24 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.fbreader.Paths;
 
+import org.fbreader.md.MDActivity;
+
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.android.fbreader.FBReader;
 import org.geometerplus.android.util.FileChooserUtil;
 
-public class FixBooksDirectoryActivity extends Activity {
+public class FixBooksDirectoryActivity extends MDActivity {
 	private TextView myDirectoryView;
+
+	@Override
+	protected int layoutId() {
+		return R.layout.books_directory_fix;
+	}
 
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setContentView(R.layout.books_directory_fix);
 
 		final ZLResource resource = ZLResource.resource("crash").getResource("fixBooksDirectory");
 		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
