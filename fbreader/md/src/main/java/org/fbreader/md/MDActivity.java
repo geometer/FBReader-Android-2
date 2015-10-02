@@ -44,6 +44,7 @@ public abstract class MDActivity extends ActionBarActivity {
 				onBackPressed();
 			}
 		});
+		setupToolbarAppearance(myToolbar, true);
 
 		myProgressIndicator = findViewById(R.id.md_progress_indicator);
 	}
@@ -62,12 +63,7 @@ public abstract class MDActivity extends ActionBarActivity {
 		setTitle(title);
 
 		if (myToolbar != null) {
-			final TypedValue typedValue = new TypedValue();
-			getTheme().resolveAttribute(R.attr.titleTextAppearance, typedValue, true);
-			myToolbar.setTitleTextAppearance(this, typedValue.resourceId);
-			getTheme().resolveAttribute(R.attr.subtitleTextAppearance, typedValue, true);
-			myToolbar.setSubtitleTextAppearance(this, typedValue.resourceId);
-
+			setupToolbarAppearance(myToolbar, subtitle == null);
 			myToolbar.setSubtitle(subtitle);
 		}
 	}
@@ -76,5 +72,18 @@ public abstract class MDActivity extends ActionBarActivity {
 		if (myProgressIndicator != null) {
 			myProgressIndicator.setVisibility(show ? View.VISIBLE : View.GONE);
 		} 
+	}
+
+	protected final void setupToolbarAppearance(Toolbar toolbar, boolean single) {
+		final TypedValue typedValue = new TypedValue();
+		if (single) {
+			getTheme().resolveAttribute(R.attr.titleOnlyTextAppearance, typedValue, true);
+			myToolbar.setTitleTextAppearance(this, typedValue.resourceId);
+		} else {
+			getTheme().resolveAttribute(R.attr.titleTextAppearance, typedValue, true);
+			myToolbar.setTitleTextAppearance(this, typedValue.resourceId);
+			getTheme().resolveAttribute(R.attr.subtitleTextAppearance, typedValue, true);
+			myToolbar.setSubtitleTextAppearance(this, typedValue.resourceId);
+		}
 	}
 }

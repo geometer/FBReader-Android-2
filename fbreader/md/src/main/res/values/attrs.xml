@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<declare-styleable name="FBReaderMDTheme">
-		<attr name="colorPrimaryDrawable" format="integer"/>
+		<attr name="titleOnlyTextAppearance" format="reference"/>
+		<attr name="colorPrimaryDrawable" format="reference"/>
 	</declare-styleable>
 </resources>
