@@ -151,6 +151,7 @@ public class PreferenceActivity extends MDSettingsActivity {
 							dialog.dismiss();
 						}
 					});
+					setupToolbarAppearance(toolbar, true);
 					toolbar.setTitle(preference.getTitle());
 					ll.addView(toolbar, 0);
 				}

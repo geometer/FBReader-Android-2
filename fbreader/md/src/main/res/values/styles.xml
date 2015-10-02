@@ -6,6 +6,7 @@
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
 		<item name="colorPrimaryDrawable">@drawable/primary_color</item>
+		<item name="titleOnlyTextAppearance">@style/FBReaderMD.TextAppearance.TitleOnly</item>
 		<item name="titleTextAppearance">@style/FBReaderMD.TextAppearance.Title</item>
 		<item name="subtitleTextAppearance">@style/FBReaderMD.TextAppearance.Subtitle</item>
 		<item name="actionBarTheme">@style/FBReaderMD.ActionBar</item>
@@ -16,6 +17,9 @@
 		<item name="android:colorPrimary">@color/primary</item>
 		<item name="android:colorPrimaryDark">@color/primary_dark</item>
 		<item name="colorPrimaryDrawable">@drawable/primary_color</item>
+		<item name="titleOnlyTextAppearance">@style/FBReaderMD.TextAppearance.TitleOnly</item>
+		<item name="titleTextAppearance">@style/FBReaderMD.TextAppearance.Title</item>
+		<item name="subtitleTextAppearance">@style/FBReaderMD.TextAppearance.Subtitle</item>
 		<item name="android:windowBackground">@color/background_material_dark</item>
 		<item name="android:listDivider">@drawable/horizontal_divider</item>
 		<item name="windowActionBar">false</item>
@@ -43,6 +47,10 @@
 		<item name="android:background">@android:color/transparent</item>
 	</style>
 
+	<style name="FBReaderMD.TextAppearance.TitleOnly" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+		<item name="android:textSize">19sp</item>
+		<item name="android:textColor">?android:attr/textColorPrimary</item>
+	</style>
 	<style name="FBReaderMD.TextAppearance.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
 		<item name="android:textSize">14sp</item>
 		<item name="android:textColor">?android:attr/textColorPrimary</item>
