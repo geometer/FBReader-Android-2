@@ -189,7 +189,7 @@ public abstract class TreeActivity<T extends FBTree> extends MDListActivity impl
 		myCurrentKey = myCurrentTree.getUniqueKey();
 		final TreeAdapter adapter = getTreeAdapter();
 		adapter.replaceAll(myCurrentTree.subtrees(), false);
-		setTitle(myCurrentTree.getTreeTitle());
+		setTitleAndSubtitle(myCurrentTree.getTreeTitle());
 		final FBTree selectedTree =
 			selectedKey != null ? getTreeByKey(selectedKey) : adapter.getFirstSelectedItem();
 		final int index = adapter.getIndex(selectedTree);
