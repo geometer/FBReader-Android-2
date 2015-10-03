@@ -12,6 +12,7 @@ apply plugin: 'com.android.application'
 
 dependencies {
 	compile project(':fbreader/api')
+	compile project(':fbreader/util')
 	compile project(':fbreader/common')
 	compile project(':fbreader/formats')
 	compile project(':fbreader/zip-amse')

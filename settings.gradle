@@ -1,5 +1,6 @@
 include 'fbreader/app'
 include 'fbreader/api'
+include 'fbreader/util'
 include 'fbreader/common'
 include 'fbreader/formats'
 include 'fbreader/zip-amse'
