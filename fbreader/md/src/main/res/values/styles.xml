@@ -52,7 +52,7 @@
 		<item name="android:textColor">?android:attr/textColorPrimary</item>
 	</style>
 	<style name="FBReaderMD.TextAppearance.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-		<item name="android:textSize">14sp</item>
+		<item name="android:textSize">15sp</item>
 		<item name="android:textColor">?android:attr/textColorPrimary</item>
 	</style>
 	<style name="FBReaderMD.TextAppearance.Subtitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
