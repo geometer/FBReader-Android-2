@@ -25,6 +25,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 
+import org.fbreader.util.Pair;
+
 public abstract class MDActivity extends ActionBarActivity {
 	private Toolbar myToolbar;
 	private View myProgressIndicator;
@@ -57,6 +59,10 @@ public abstract class MDActivity extends ActionBarActivity {
 
 	protected final Toolbar getToolbar() {
 		return myToolbar;
+	}
+
+	public final void setTitleAndSubtitle(Pair<String,String> pair) {
+		setTitleAndSubtitle(pair.First, pair.Second);
 	}
 
 	public final void setTitleAndSubtitle(String title, String subtitle) {
