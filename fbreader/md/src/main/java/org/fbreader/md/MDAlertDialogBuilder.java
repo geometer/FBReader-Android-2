@@ -72,6 +72,7 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 			final LayoutInflater inflater = LayoutInflater.from(getContext());
 			myToolbar = (Toolbar)inflater.inflate(R.layout.md_toolbar, null);
 			setCustomTitle(myToolbar);
+			myToolbar.setTitleTextAppearance(getContext(), R.style.FBReaderMD_TextAppearance_TitleOnly);
 		}
 	}
 }

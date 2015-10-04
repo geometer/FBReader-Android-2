@@ -114,8 +114,7 @@ abstract class MenuActivity extends SimpleMDListActivity implements AdapterView.
 			final View view = convertView != null
 				? convertView
 				: LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item, parent, false);
-			final TextView titleView = (TextView)view.findViewById(R.id.menu_item_title);
-			titleView.setText(getItem(position).MenuItemName);
+			((TextView)view).setText(getItem(position).MenuItemName);
 			return view;
 		}
 	}

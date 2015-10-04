@@ -30,7 +30,6 @@ import android.os.*;
 import android.support.v7.app.AlertDialog;
 import android.view.*;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.yotadevices.fbreader.FBReaderYotaService;
 
