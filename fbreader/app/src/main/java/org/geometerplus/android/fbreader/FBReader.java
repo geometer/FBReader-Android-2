@@ -1101,12 +1101,14 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 			return;
 		}
 		final BookModel model = myFBReaderApp.Model;
-		if (model == null) {
+		final Book book = model != null ? model.Book : null;
+		if (book == null) {
 			return;
 		}
+
 		runOnUiThread(new Runnable() {
 			public void run() {
-				FBReaderUtil.setBookTitle(FBReader.this, model.Book);
+				FBReaderUtil.setBookTitle(FBReader.this, book);
 			}
 		});
 	}
