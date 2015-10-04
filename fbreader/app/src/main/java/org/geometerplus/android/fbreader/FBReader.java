@@ -858,7 +858,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		});
 	}
 
-	private void setStatusBarVisibility(boolean visible) {
+	private void setStatusBarVisible(boolean visible) {
 		final ZLAndroidLibrary zlibrary = getZLibrary();
 		if (DeviceType.Instance() != DeviceType.KINDLE_FIRE_1ST_GENERATION && !myShowStatusBarFlag) {
 			myMainView.setPreserveSize(visible);
@@ -892,11 +892,11 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 
 		FBReaderUtil.ensureFullscreen(this, myRootView);
 
-		setStatusBarVisibility(false);
+		setStatusBarVisible(false);
 	}
 
 	void showBars() {
-		setStatusBarVisibility(true);
+		setStatusBarVisible(true);
 
 		setTitleVisibility(true);
 		myActionBarIsVisible = true;
