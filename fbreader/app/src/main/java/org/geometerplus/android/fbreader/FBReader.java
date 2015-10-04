@@ -323,7 +323,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		setStatusBarVisibility(true);
+		setStatusBarVisible(true);
 		setupMenu(menu);
 
 		return super.onPrepareOptionsMenu(menu);
@@ -332,12 +332,12 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	@Override
 	public void onOptionsMenuClosed(Menu menu) {
 		super.onOptionsMenuClosed(menu);
-		setStatusBarVisibility(false);
+		setStatusBarVisible(false);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		setStatusBarVisibility(false);
+		setStatusBarVisible(false);
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -831,7 +831,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		});
 	}
 
-	private void setStatusBarVisibility(boolean visible) {
+	private void setStatusBarVisible(boolean visible) {
 		final ZLAndroidLibrary zlibrary = getZLibrary();
 		if (DeviceType.Instance() != DeviceType.KINDLE_FIRE_1ST_GENERATION && !myShowStatusBarFlag) {
 			if (visible) {
