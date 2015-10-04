@@ -87,8 +87,7 @@ public abstract class ContextMenuDialog extends BaseAdapter implements DialogInt
 		final View view = convertView != null
 			? convertView
 			: LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item, parent, false);
-		final TextView titleView = (TextView)view.findViewById(R.id.menu_item_title);
-		titleView.setText(getItem(position).Title);
+		((TextView)view).setText(getItem(position).Title);
 		return view;
 	}
 
