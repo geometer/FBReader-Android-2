@@ -885,7 +885,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		}
 
 		if (!myShowActionBarFlag) {
-			setTitleVisibility(false);
+			setTitleVisible(false);
 			myActionBarIsVisible = false;
 			invalidateOptionsMenu();
 		}
@@ -898,7 +898,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	void showBars() {
 		setStatusBarVisible(true);
 
-		setTitleVisibility(true);
+		setTitleVisible(true);
 		myActionBarIsVisible = true;
 		invalidateOptionsMenu();
 

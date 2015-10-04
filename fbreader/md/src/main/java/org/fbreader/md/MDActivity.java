@@ -51,7 +51,7 @@ public abstract class MDActivity extends ActionBarActivity {
 		myProgressIndicator = findViewById(R.id.md_progress_indicator);
 	}
 
-	protected final void setTitleVisibility(boolean visible) {
+	protected void setTitleVisible(boolean visible) {
 		if (myToolbar != null) {
 			myToolbar.setVisibility(visible ? View.VISIBLE : View.GONE);
 		}

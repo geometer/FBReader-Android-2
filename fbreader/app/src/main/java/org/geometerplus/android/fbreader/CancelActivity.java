@@ -44,7 +44,7 @@ public class CancelActivity extends SimpleMDListActivity {
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		setTitleVisibility(false);
+		setTitleVisible(false);
 		FBReaderUtil.ensureFullscreen(this, getListView());
 	}
 

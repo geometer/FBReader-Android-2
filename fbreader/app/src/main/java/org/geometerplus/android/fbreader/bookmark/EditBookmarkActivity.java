@@ -70,7 +70,7 @@ public class EditBookmarkActivity extends MDActivity implements IBookCollection.
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setTitleVisibility(false);
+		setTitleVisible(false);
 
 		myBookmark = FBReaderIntents.getBookmarkExtra(getIntent());
 		if (myBookmark == null) {
