@@ -1295,4 +1295,9 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 			});
 		}
 	}
+
+	protected void setTitleVisible(boolean visible) {
+		super.setTitleVisible(visible);
+		findViewById(R.id.main_shadow).setVisibility(visible ? View.VISIBLE : View.GONE);
+	}
 }

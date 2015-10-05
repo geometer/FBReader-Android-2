@@ -3,5 +3,6 @@
 	<declare-styleable name="FBReaderMDTheme">
 		<attr name="titleOnlyTextAppearance" format="reference"/>
 		<attr name="colorPrimaryDrawable" format="reference"/>
+		<attr name="listProgressIndicatorStyle" format="reference"/>
 	</declare-styleable>
 </resources>
