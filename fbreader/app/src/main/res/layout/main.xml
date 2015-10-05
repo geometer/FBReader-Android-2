@@ -76,5 +76,15 @@
 			</LinearLayout>
 		</RelativeLayout>
 	</android.support.v4.widget.DrawerLayout>
-	<include layout="@layout/md_toolbar"/>
+	<include
+		layout="@layout/md_toolbar"
+		android:id="@+id/md_toolbar"
+	/>
+	<View
+		android:id="@+id/main_shadow"
+		android:layout_height="5dp"
+		android:layout_width="match_parent"
+		android:background="@drawable/light_shadow_bottom"
+		android:layout_below="@id/md_toolbar"
+	/>
 </RelativeLayout>
