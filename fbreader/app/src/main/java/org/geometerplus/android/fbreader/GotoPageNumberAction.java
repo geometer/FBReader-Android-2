@@ -40,7 +40,11 @@ public class GotoPageNumberAction extends FBAndroidAction {
 			new GotoPageDialogUtil.PageSelector() {
 				@Override
 				public void gotoPage(int page) {
-					textView.gotoPage(page);
+					if (page == 1) {
+						textView.gotoHome();
+					} else {
+						textView.gotoPage(page);
+					}
 					Reader.getViewWidget().reset();
 					Reader.getViewWidget().repaint();
 					BaseActivity.hideBars();
