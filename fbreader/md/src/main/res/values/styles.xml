@@ -11,6 +11,7 @@
 		<item name="subtitleTextAppearance">@style/FBReaderMD.TextAppearance.Subtitle</item>
 		<item name="actionBarTheme">@style/FBReaderMD.ActionBar</item>
 		<item name="popupTheme">@style/FBReaderMD.MainMenu</item>
+		<item name="listProgressIndicatorStyle">@style/FBReaderMD.ListProgressIndicator</item>
 	</style>
 	<style name="FBReaderMD.Dialog" parent="@style/Theme.AppCompat.Dialog">
 		<item name="android:textColorPrimary">@color/text_primary</item>
@@ -26,6 +27,7 @@
 		<item name="windowNoTitle">true</item>
 		<item name="actionBarTheme">@style/FBReaderMD.ActionBar</item>
 		<item name="popupTheme">@style/FBReaderMD.MainMenu</item>
+		<item name="listProgressIndicatorStyle">@style/FBReaderMD.ListProgressIndicator</item>
 	</style>
 	<style name="FBReaderMD.Dialog.Translucent" parent="@style/FBReaderMD.Dialog">
 		<item name="android:background">@null</item>
@@ -58,5 +60,10 @@
 	<style name="FBReaderMD.TextAppearance.Subtitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
 		<item name="android:textSize">12sp</item>
 		<item name="android:textColor">?android:attr/textColorPrimary</item>
+	</style>
+	<style name="FBReaderMD.ListProgressIndicator" parent="">
+		<item name="mlpb_background_color">?attr/colorPrimary</item>
+		<item name="mlpb_progress_color">?android:attr/textColorPrimary</item>
+		<item name="android:visibility">gone</item>
 	</style>
 </resources>
