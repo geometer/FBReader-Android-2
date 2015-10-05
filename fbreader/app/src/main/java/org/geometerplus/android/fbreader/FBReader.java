@@ -260,15 +260,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		myRootView = (RelativeLayout)findViewById(R.id.root_view);
 		myMainView = (ZLAndroidWidget)findViewById(R.id.main_view);
 
-		setupToolbar(
-			findViewById(R.id.main_drawer_layout),
-			myShowActionBarFlag,
-			new View.OnClickListener() {
-				public void onClick(View view) {
-					myFBReaderApp.runAction(ActionCode.SHOW_BOOK_INFO);
-				}
-			}
-		);
+		setupToolbar(findViewById(R.id.main_drawer_layout), myShowActionBarFlag);
 
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
@@ -362,6 +354,12 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 				});
 			}
 		}
+
+		setupDrawer(
+			R.id.main_drawer_menu,
+			R.id.main_drawer_layout,
+			R.id.main_drawer_toolbar
+		);
 	}
 
 	@Override
@@ -1092,16 +1090,9 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 			return;
 		}
 		final BookModel model = myFBReaderApp.Model;
-		final Book book = model != null ? model.Book : null;
-		if (book == null) {
-			return;
+		if (model != null) {
+			updateBookInfo(model.Book);
 		}
-
-		runOnUiThread(new Runnable() {
-			public void run() {
-				FBReaderUtil.setBookTitle(FBReader.this, book);
-			}
-		});
 	}
 
 	public void refreshYotaScreen() {
