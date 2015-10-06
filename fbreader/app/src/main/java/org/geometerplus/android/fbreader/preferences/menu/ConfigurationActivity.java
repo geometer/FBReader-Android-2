@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.*;
 import android.widget.*;
 
@@ -176,7 +178,11 @@ public class ConfigurationActivity extends MDListActivity {
 
 				final ImageView iconView =
 					ViewUtil.findImageView(view, R.id.menu_configure_item_icon);
-				iconView.setImageResource(MenuData.configIconId(menuItem.Id));
+				final Drawable icon = DrawableCompat.wrap(
+					getResources().getDrawable(MenuData.iconId(menuItem.Id))
+				);
+				DrawableCompat.setTint(icon, getResources().getColor(R.color.text_primary));
+				iconView.setImageDrawable(icon);
 
 				final CheckBox checkBox =
 					(CheckBox)ViewUtil.findView(view, R.id.menu_configure_item_checkbox);

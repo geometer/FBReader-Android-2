@@ -5,7 +5,6 @@
 	android:layout_height="match_parent"
 	android:layout_gravity="start"
 	android:background="?attr/colorPrimaryDrawable"
-	android:dividerHeight="1dp"
 	android:orientation="vertical"
 >
 	<include
@@ -29,6 +28,8 @@
 			android:id="@+id/main_drawer_menu"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
+			android:divider="@null"
+			android:dividerHeight="0dp"
 			android:background="@android:color/transparent"
 		/>
 	</RelativeLayout>

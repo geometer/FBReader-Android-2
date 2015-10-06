@@ -2,6 +2,7 @@
 <resources>
 	<color name="semi_transparent">#A0000000</color>
 	<color name="text_primary">#BDBDBD</color>
+	<color name="divider">#22FFFFFF</color>
 	<color name="primary">#424242</color>
 	<color name="primary_dark">#212121</color>
 </resources>

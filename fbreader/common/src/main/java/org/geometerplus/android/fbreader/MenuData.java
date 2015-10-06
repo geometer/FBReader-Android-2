@@ -83,15 +83,15 @@ public abstract class MenuData {
 				CONFIG_CODE_DAY_NIGHT,
 				Status.EnabledByDefault
 			);
-			addToplevelNode(new MenuNode.Item(ActionCode.SEARCH, R.drawable.ic_menu_search));
-			addToplevelNode(new MenuNode.Item(ActionCode.SHARE_BOOK));
+			addToplevelNode(new MenuNode.Item(ActionCode.SEARCH, R.drawable.abc_ic_search_api_mtrl_alpha));
+			addToplevelNode(new MenuNode.Item(ActionCode.SHARE_BOOK, R.drawable.ic_menu_share));
 			addToplevelNode(
-				new MenuNode.Item(ActionCode.SHOW_PREFERENCES),
+				new MenuNode.Item(ActionCode.SHOW_PREFERENCES, R.drawable.ic_menu_settings),
 				ActionCode.SHOW_PREFERENCES,
 				Status.AlwaysEnabled
 			);
-			addToplevelNode(new MenuNode.Item(ActionCode.SHOW_BOOK_INFO));
-			final MenuNode.Submenu orientations = new MenuNode.Submenu("screenOrientation");
+			addToplevelNode(new MenuNode.Item(ActionCode.SHOW_BOOK_INFO, R.drawable.ic_menu_info));
+			final MenuNode.Submenu orientations = new MenuNode.Submenu("screenOrientation", R.drawable.ic_menu_orientation);
 			orientations.Children.add(new MenuNode.Item(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM));
 			orientations.Children.add(new MenuNode.Item(ActionCode.SET_SCREEN_ORIENTATION_SENSOR));
 			orientations.Children.add(new MenuNode.Item(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT));
@@ -102,20 +102,20 @@ public abstract class MenuData {
 			}
 			addToplevelNode(orientations);
 			addToplevelNode(
-				new MenuNode.Item(ActionCode.INCREASE_FONT),
+				new MenuNode.Item(ActionCode.INCREASE_FONT, R.drawable.ic_menu_zoom_in),
 				CONFIG_CODE_CHANGE_FONT_SIZE,
 				Status.EnabledByDefault
 			);
 			addToplevelNode(
-				new MenuNode.Item(ActionCode.DECREASE_FONT),
+				new MenuNode.Item(ActionCode.DECREASE_FONT, R.drawable.ic_menu_zoom_out),
 				CONFIG_CODE_CHANGE_FONT_SIZE,
 				Status.EnabledByDefault
 			);
-			addToplevelNode(new MenuNode.Item(ActionCode.INSTALL_PLUGINS));
-			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_WEB_HELP));
-			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_START_SCREEN));
+			addToplevelNode(new MenuNode.Item(ActionCode.INSTALL_PLUGINS, R.drawable.ic_menu_plugins));
+			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_WEB_HELP, R.drawable.ic_menu_help));
+			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_START_SCREEN, R.drawable.ic_menu_home));
 			addToplevelNode(
-				new MenuNode.Item(ActionCode.GOTO_PAGE_NUMBER),
+				new MenuNode.Item(ActionCode.GOTO_PAGE_NUMBER, R.drawable.ic_menu_goto),
 				ActionCode.GOTO_PAGE_NUMBER,
 				Status.DisabledByDefault
 			);
@@ -165,16 +165,14 @@ public abstract class MenuData {
 		return codes;
 	}
 
-	public static int configIconId(String itemCode) {
+	public static int iconId(String itemCode) {
 		final List<MenuNode> allNodes = allTopLevelNodes();
-		Integer iconId = null;
 		for (MenuNode node : allNodes) {
-			if (node instanceof MenuNode.Item && itemCode.equals(code(node))) {
-				iconId = ((MenuNode.Item)node).IconId;
-				break;
+			if (itemCode.equals(code(node))) {
+				return node.IconId != null ? node.IconId : R.drawable.ic_menu_none;
 			}
 		}
-		return iconId != null ? iconId : R.drawable.ic_menu_none;
+		return R.drawable.ic_menu_none;
 	}
 
 	public static synchronized List<MenuNode> topLevelNodes() {
