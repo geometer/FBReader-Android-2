@@ -21,7 +21,7 @@
 		<item name="titleOnlyTextAppearance">@style/FBReaderMD.TextAppearance.TitleOnly</item>
 		<item name="titleTextAppearance">@style/FBReaderMD.TextAppearance.Title</item>
 		<item name="subtitleTextAppearance">@style/FBReaderMD.TextAppearance.Subtitle</item>
-		<item name="android:windowBackground">@color/background_material_dark</item>
+		<item name="android:background">@color/background_material_dark</item>
 		<item name="android:listDivider">@drawable/horizontal_divider</item>
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
@@ -42,6 +42,7 @@
 	</style>
 
 	<style name="FBReaderMD.ActionBar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+		<item name="android:background">?attr/colorPrimaryDrawable</item>
 		<item name="actionMenuTextColor">?android:attr/textColorPrimary</item>
 	</style>
 	<style name="FBReaderMD.MainMenu" parent="@style/ThemeOverlay.AppCompat.Dark">
