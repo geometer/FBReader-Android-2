@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="9dp"
+	android:paddingBottom="3dp"
+	android:paddingTop="3dp"
+	android:background="@drawable/horizontal_divider"
+	android:enabled="false"
+/>
