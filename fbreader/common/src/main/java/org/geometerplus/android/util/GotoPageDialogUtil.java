@@ -42,6 +42,7 @@ public abstract class GotoPageDialogUtil {
 		picker.setMinValue(1);
 		picker.setMaxValue(total);
 		picker.setValue(current);
+		picker.setWrapSelectorWheel(false);
 		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
 
 		final AlertDialog dialog = new MDAlertDialogBuilder(activity)
