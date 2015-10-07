@@ -31,6 +31,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.*;
 import android.widget.RelativeLayout;
 
+import org.fbreader.util.Boolean3;
+
 import com.yotadevices.fbreader.FBReaderYotaService;
 
 import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
@@ -39,7 +41,6 @@ import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.util.ZLBoolean3;
 import org.geometerplus.zlibrary.core.view.ZLViewWidget;
 
 import org.geometerplus.zlibrary.text.view.ZLTextRegion;
@@ -1226,7 +1227,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	}
 
 	@Override
-	protected ZLBoolean3 isMenuActionChecked(String code) {
+	protected Boolean3 isMenuActionChecked(String code) {
 		return myFBReaderApp.isActionChecked(code);
 	}
 

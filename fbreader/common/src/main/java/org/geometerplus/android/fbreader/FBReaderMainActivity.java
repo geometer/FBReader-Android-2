@@ -34,13 +34,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.util.Boolean3;
+import org.fbreader.util.Pair;
+
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 
 import org.geometerplus.zlibrary.core.image.ZLImageProxy;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.core.options.*;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.util.ZLBoolean3;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
 import org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler;
@@ -54,7 +56,6 @@ import org.geometerplus.android.util.ViewUtil;
 
 import org.fbreader.md.MDActivity;
 import org.fbreader.md.MDAlertDialogBuilder;
-import org.fbreader.util.Pair;
 import org.fbreader.common.R;
 
 import org.geometerplus.fbreader.book.Book;
@@ -195,15 +196,15 @@ public abstract class FBReaderMainActivity extends MDActivity {
 			final String actionId = pair.Second;
 			menuItem.setVisible(isMenuActionVisible(actionId) && isMenuActionEnabled(actionId));
 			switch (isMenuActionChecked(actionId)) {
-				case B3_TRUE:
+				case TRUE:
 					menuItem.setCheckable(true);
 					menuItem.setChecked(true);
 					break;
-				case B3_FALSE:
+				case FALSE:
 					menuItem.setCheckable(true);
 					menuItem.setChecked(false);
 					break;
-				case B3_UNDEFINED:
+				case UNDEFINED:
 					menuItem.setCheckable(false);
 					break;
 			}
@@ -225,7 +226,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	protected abstract void runMenuAction(String code);
 	protected abstract boolean isMenuActionVisible(String code);
 	protected abstract boolean isMenuActionEnabled(String code);
-	protected abstract ZLBoolean3 isMenuActionChecked(String code);
+	protected abstract Boolean3 isMenuActionChecked(String code);
 	protected abstract boolean isActionBarVisible();
 	/* ---- MENU ---- */
 
