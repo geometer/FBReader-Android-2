@@ -22,10 +22,9 @@ package org.fbreader.md;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.View;
-
-import org.fbreader.util.Pair;
 
 public abstract class MDActivity extends ActionBarActivity {
 	private Toolbar myToolbar;
@@ -62,7 +61,7 @@ public abstract class MDActivity extends ActionBarActivity {
 	}
 
 	public final void setTitleAndSubtitle(Pair<String,String> pair) {
-		setTitleAndSubtitle(pair.First, pair.Second);
+		setTitleAndSubtitle(pair.first, pair.second);
 	}
 
 	public final void setTitleAndSubtitle(String title, String subtitle) {
