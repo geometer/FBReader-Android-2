@@ -54,7 +54,7 @@ public class EditStyleActivity extends MDSettingsActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
-		setTitleVisible(false);
+		setTitle(myRootResource.getValue());
 	}
 
 	private class EditStyleFragment extends PreferenceFragment {
