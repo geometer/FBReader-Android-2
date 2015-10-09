@@ -33,12 +33,12 @@ import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
 import org.geometerplus.fbreader.Paths;
 
-import org.fbreader.md.SimpleMDListActivity;
+import org.fbreader.md.MDListActivity;
 
 import org.geometerplus.android.util.FileChooserUtil;
 import org.geometerplus.zlibrary.ui.android.R;
 
-public class Chooser extends SimpleMDListActivity implements AdapterView.OnItemClickListener {
+public class Chooser extends MDListActivity implements AdapterView.OnItemClickListener {
 	private final ZLResource myResource = ZLResource.resource("Preferences").getResource("colors").getResource("background");
 
 	@Override

@@ -27,6 +27,11 @@ public abstract class MDListActivity extends MDActivity {
 	private ListView myListView;
 
 	@Override
+	protected int layoutId() {
+		return R.layout.md_list_activity;
+	}
+
+	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		myListView = (ListView)findViewById(android.R.id.list);
