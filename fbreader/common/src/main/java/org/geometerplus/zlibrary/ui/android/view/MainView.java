@@ -151,4 +151,6 @@ public abstract class MainView extends View {
 		myBatteryLevel = percent;
 	}
 	/* ---- BATTERY ---- */
+
+	public abstract void setPreserveSize(boolean preserve);
 }

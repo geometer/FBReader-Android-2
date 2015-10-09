@@ -50,8 +50,6 @@ import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.error.ErrorKeys;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
-import org.geometerplus.zlibrary.ui.android.view.MainView;
-import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
 
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
@@ -96,7 +94,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	private volatile Book myBook;
 
 	private RelativeLayout myRootView;
-	private MainView myMainView;
 
 	private volatile boolean myShowStatusBarFlag;
 	private volatile boolean myShowActionBarFlag;
@@ -255,8 +252,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		);
 
 		myRootView = (RelativeLayout)findViewById(R.id.root_view);
-		myMainView = (MainView)findViewById(R.id.main_view);
-		myMainView.setVisibility(View.VISIBLE);
+		selectMainView(R.id.main_view);
 
 		setupToolbar(findViewById(R.id.main_drawer_layout), myShowActionBarFlag);
 
@@ -476,15 +472,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		((PopupPanel)myFBReaderApp.getPopupById(SelectionPopup.ID)).setPanelInfo(this, myRootView);
 	}
 
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		switchWakeLock(hasFocus &&
-			getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() <
-			myMainView.getBatteryLevel()
-		);
-	}
-
 	private void initPluginActions() {
 		synchronized (myPluginActions) {
 			if (!myPluginActions.isEmpty()) {
@@ -567,7 +554,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 			}
 		});
 
-		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		IsPaused = false;
 		myResumeTimestamp = System.currentTimeMillis();
 		if (OnResumeAction != null) {
@@ -631,12 +617,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		try {
 			unregisterReceiver(mySyncUpdateReceiver);
 		} catch (IllegalArgumentException e) {
-		}
-
-		try {
-			unregisterReceiver(myBatteryInfoReceiver);
-		} catch (IllegalArgumentException e) {
-			// do nothing, this exception means that myBatteryInfoReceiver was not registered
 		}
 
 		myFBReaderApp.stopTimer();
@@ -801,7 +781,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	private void setStatusBarVisible(boolean visible) {
 		final ZLAndroidLibrary zlibrary = getZLibrary();
 		if (DeviceType.Instance() != DeviceType.KINDLE_FIRE_1ST_GENERATION && !myShowStatusBarFlag) {
-			((ZLAndroidWidget)myMainView).setPreserveSize(visible);
+			getMainView().setPreserveSize(visible);
 			if (visible) {
 				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -853,12 +833,14 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		return (myMainView != null && myMainView.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
+		final View view = getMainView();
+		return (view != null && view.onKeyDown(keyCode, event)) || super.onKeyDown(keyCode, event);
 	}
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		return (myMainView != null && myMainView.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
+		final View view = getMainView();
+		return (view != null && view.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
 	}
 
 	private void setButtonLight(boolean enabled) {
@@ -867,55 +849,17 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		getWindow().setAttributes(attrs);
 	}
 
-	private PowerManager.WakeLock myWakeLock;
-	private boolean myWakeLockToCreate;
 	private boolean myStartTimer;
 
-	public final void createWakeLock() {
-		if (myWakeLockToCreate) {
-			synchronized (this) {
-				if (myWakeLockToCreate) {
-					myWakeLockToCreate = false;
-					myWakeLock =
-						((PowerManager)getSystemService(POWER_SERVICE))
-							.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "FBReader");
-					myWakeLock.acquire();
-				}
-			}
-		}
+	@Override
+	public void createWakeLock() {
+		super.createWakeLock();
+
 		if (myStartTimer) {
 			myFBReaderApp.startTimer();
 			myStartTimer = false;
 		}
 	}
-
-	private final void switchWakeLock(boolean on) {
-		if (on) {
-			if (myWakeLock == null) {
-				myWakeLockToCreate = true;
-			}
-		} else {
-			if (myWakeLock != null) {
-				synchronized (this) {
-					if (myWakeLock != null) {
-						myWakeLock.release();
-						myWakeLock = null;
-					}
-				}
-			}
-		}
-	}
-
-	private BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
-		public void onReceive(Context context, Intent intent) {
-			final int level = intent.getIntExtra("level", 100);
-			myMainView.setBatteryLevel(level);
-			switchWakeLock(
-				hasWindowFocus() &&
-				getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() < level
-			);
-		}
-	};
 
 	private BookCollectionShadow getCollection() {
 		return (BookCollectionShadow)myFBReaderApp.Collection;
@@ -949,7 +893,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 				return com.yotadevices.fbreader.FBReaderYotaService.Widget;
 			}
 		}
-		return (ZLViewWidget)myMainView;
+		return (ZLViewWidget)getMainView();
 	}
 
 	@Override
@@ -1186,11 +1130,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 				}
 			});
 		}
-	}
-
-	protected void setTitleVisible(boolean visible) {
-		super.setTitleVisible(visible);
-		findViewById(R.id.main_shadow).setVisibility(visible ? View.VISIBLE : View.GONE);
 	}
 
 	@Override
