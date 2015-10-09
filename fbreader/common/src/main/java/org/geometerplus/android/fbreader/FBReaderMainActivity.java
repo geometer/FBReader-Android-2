@@ -80,6 +80,11 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	private volatile Book myCurrentBook;
 
 	@Override
+	protected int layoutId() {
+		return R.layout.main;
+	}
+
+	@Override
 	protected void onCreate(Bundle saved) {
 		super.onCreate(saved);
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
@@ -230,14 +235,14 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	protected abstract boolean isActionBarVisible();
 	/* ---- MENU ---- */
 
-	protected final void setupDrawer(int menuId, int layoutId, int toolbarId) {
-		final ListView drawerMenu = (ListView)findViewById(menuId);
+	protected final void setupDrawer() {
+		final ListView drawerMenu = (ListView)findViewById(R.id.main_drawer_menu);
 		final HamburgerMenuAdapter adapter = new HamburgerMenuAdapter();
 		drawerMenu.setAdapter(adapter);
 		drawerMenu.setOnItemClickListener(adapter);
 
-		myDrawerLayout = (DrawerLayout)findViewById(layoutId);
-		myDrawerToolbar = (Toolbar)findViewById(toolbarId);
+		myDrawerLayout = (DrawerLayout)findViewById(R.id.main_drawer_layout);
+		myDrawerToolbar = (Toolbar)findViewById(R.id.main_drawer_toolbar);
 		myDrawerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				myDrawerLayout.closeDrawer(GravityCompat.START);

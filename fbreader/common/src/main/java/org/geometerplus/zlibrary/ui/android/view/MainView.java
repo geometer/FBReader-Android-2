@@ -30,6 +30,8 @@ import android.widget.TextView;
 
 import org.geometerplus.android.fbreader.FBReaderMainActivity;
 
+import org.fbreader.common.R;
+
 public abstract class MainView extends View {
 	protected Integer myColorLevel;
 	private TextView myInfoView;
@@ -48,11 +50,10 @@ public abstract class MainView extends View {
 		super(context);
 	}
 
-	abstract protected int infoViewId();
-
+	/* ++++ INFO ++++ */
 	protected final void showInfo(final String text) {
 		if (myInfoView == null) {
-			myInfoView = (TextView)((FBReaderMainActivity)getContext()).findViewById(infoViewId());
+			myInfoView = (TextView)((FBReaderMainActivity)getContext()).findViewById(R.id.main_view_info);
 		}
 		if (myInfoView == null) {
 			return;
@@ -84,7 +85,9 @@ public abstract class MainView extends View {
 			}
 		});
 	}
+	/* ---- INFO ---- */
 
+	/* ++++ BRIGHTNESS ++++ */
 	public final void setScreenBrightness(int percent, boolean showPercent) {
 		if (percent < 1) {
 			percent = 1;
@@ -135,4 +138,17 @@ public abstract class MainView extends View {
 	}
 
 	protected abstract void updateColorLevel();
+	/* ---- BRIGHTNESS ---- */
+
+	/* ++++ BATTERY ++++ */
+	private int myBatteryLevel;
+
+	public int getBatteryLevel() {
+		return myBatteryLevel;
+	}
+
+	public void setBatteryLevel(int percent) {
+		myBatteryLevel = percent;
+	}
+	/* ---- BATTERY ---- */
 }

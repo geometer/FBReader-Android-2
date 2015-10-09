@@ -257,10 +257,6 @@ public abstract class ZLApplication {
 		return myPopups.get(id);
 	}
 
-	public int getBatteryLevel() {
-		return (myWindow != null) ? myWindow.getBatteryLevel() : 0;
-	}
-
 	private volatile Timer myTimer;
 	private final HashMap<Runnable,Long> myTimerTaskPeriods = new HashMap<Runnable,Long>();
 	private final HashMap<Runnable,TimerTask> myTimerTasks = new HashMap<Runnable,TimerTask>();
