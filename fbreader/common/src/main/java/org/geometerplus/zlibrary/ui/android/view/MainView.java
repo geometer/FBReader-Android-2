@@ -40,6 +40,7 @@ public abstract class MainView extends View {
 		super(context);
 	}
 
+	/* ++++ BRIGHTNESS ++++ */
 	public final void setScreenBrightness(int percent) {
 		if (percent < 1) {
 			percent = 1;
@@ -87,4 +88,17 @@ public abstract class MainView extends View {
 	}
 
 	protected abstract void updateColorLevel();
+	/* ---- BRIGHTNESS ---- */
+
+	/* ++++ BATTERY ++++ */
+	private int myBatteryLevel;
+
+	public int getBatteryLevel() {
+		return myBatteryLevel;
+	}
+
+	public void setBatteryLevel(int percent) {
+		myBatteryLevel = percent;
+	}
+	/* ---- BATTERY ---- */
 }

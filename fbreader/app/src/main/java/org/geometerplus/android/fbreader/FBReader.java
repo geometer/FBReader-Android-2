@@ -48,7 +48,7 @@ import org.geometerplus.zlibrary.ui.android.error.ErrorKeys;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
-import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
+import org.geometerplus.zlibrary.ui.android.view.MainView;
 
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
@@ -91,7 +91,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	private volatile Book myBook;
 
 	private RelativeLayout myRootView;
-	private ZLAndroidWidget myMainView;
+	private MainView myMainView;
 
 	private volatile boolean myShowStatusBarFlag;
 	private String myMenuLanguage;
@@ -230,7 +230,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 		myRootView = (RelativeLayout)findViewById(R.id.root_view);
-		myMainView = (ZLAndroidWidget)findViewById(R.id.main_view);
+		myMainView = (MainView)findViewById(R.id.main_view);
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
 		myFBReaderApp = (FBReaderApp)FBReaderApp.Instance();
@@ -460,7 +460,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		super.onWindowFocusChanged(hasFocus);
 		switchWakeLock(hasFocus &&
 			getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() <
-			myFBReaderApp.getBatteryLevel()
+			myMainView.getBatteryLevel()
 		);
 	}
 
@@ -907,8 +907,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	private BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			final int level = intent.getIntExtra("level", 100);
-			final ZLAndroidApplication application = (ZLAndroidApplication)getApplication();
-			setBatteryLevel(level);
+			myMainView.setBatteryLevel(level);
 			switchWakeLock(
 				hasWindowFocus() &&
 				getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() < level
@@ -936,15 +935,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		return UIUtil.createExecutor(this, key);
 	}
 
-	private int myBatteryLevel;
-	@Override
-	public int getBatteryLevel() {
-		return myBatteryLevel;
-	}
-	private void setBatteryLevel(int percent) {
-		myBatteryLevel = percent;
-	}
-
 	@Override
 	public void close() {
 		finish();
@@ -952,7 +942,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 
 	@Override
 	public ZLViewWidget getViewWidget() {
-		return myMainView;
+		return (ZLViewWidget)myMainView;
 	}
 
 	private final HashMap<MenuItem,String> myMenuItemMap = new HashMap<MenuItem,String>();
