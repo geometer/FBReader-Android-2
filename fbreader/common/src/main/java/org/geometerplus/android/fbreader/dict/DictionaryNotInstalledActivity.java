@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
-import org.fbreader.md.SimpleMDListActivity;
+import org.fbreader.md.MDListActivity;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.android.util.UIMessageUtil;
@@ -33,7 +33,7 @@ import org.geometerplus.android.util.PackageUtil;
 
 import org.fbreader.common.R;
 
-public class DictionaryNotInstalledActivity extends SimpleMDListActivity {
+public class DictionaryNotInstalledActivity extends MDListActivity {
 	static final String DICTIONARY_NAME_KEY = "fbreader.dictionary.name";
 	static final String PACKAGE_NAME_KEY = "fbreader.package.name";
 
