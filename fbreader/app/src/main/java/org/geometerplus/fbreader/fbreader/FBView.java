@@ -524,7 +524,7 @@ public final class FBView extends ZLTextView {
 			}
 			if (footerOptions.ShowBattery.getValue()) {
 				maybeAddSeparator(info, separator);
-				info.append(myReader.getBatteryLevel());
+				info.append(myReader.getViewWidget().getBatteryLevel());
 				info.append("%");
 			}
 			return info.toString();

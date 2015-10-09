@@ -50,6 +50,7 @@ import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.error.ErrorKeys;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
+import org.geometerplus.zlibrary.ui.android.view.MainView;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
 
 import org.geometerplus.fbreader.Paths;
@@ -95,7 +96,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	private volatile Book myBook;
 
 	private RelativeLayout myRootView;
-	private ZLAndroidWidget myMainView;
+	private MainView myMainView;
 
 	private volatile boolean myShowStatusBarFlag;
 	private volatile boolean myShowActionBarFlag;
@@ -254,7 +255,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		);
 
 		myRootView = (RelativeLayout)findViewById(R.id.root_view);
-		myMainView = (ZLAndroidWidget)findViewById(R.id.main_view);
+		myMainView = (MainView)findViewById(R.id.main_view);
 		myMainView.setVisibility(View.VISIBLE);
 
 		setupToolbar(findViewById(R.id.main_drawer_layout), myShowActionBarFlag);
@@ -476,7 +477,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		super.onWindowFocusChanged(hasFocus);
 		switchWakeLock(hasFocus &&
 			getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() <
-			myFBReaderApp.getBatteryLevel()
+			myMainView.getBatteryLevel()
 		);
 	}
 
@@ -796,7 +797,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	private void setStatusBarVisible(boolean visible) {
 		final ZLAndroidLibrary zlibrary = getZLibrary();
 		if (DeviceType.Instance() != DeviceType.KINDLE_FIRE_1ST_GENERATION && !myShowStatusBarFlag) {
-			myMainView.setPreserveSize(visible);
+			((ZLAndroidWidget)myMainView).setPreserveSize(visible);
 			if (visible) {
 				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -904,7 +905,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	private BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			final int level = intent.getIntExtra("level", 100);
-			setBatteryLevel(level);
+			myMainView.setBatteryLevel(level);
 			switchWakeLock(
 				hasWindowFocus() &&
 				getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() < level
@@ -932,15 +933,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		return UIUtil.createExecutor(this, key);
 	}
 
-	private int myBatteryLevel;
-	@Override
-	public int getBatteryLevel() {
-		return myBatteryLevel;
-	}
-	private void setBatteryLevel(int percent) {
-		myBatteryLevel = percent;
-	}
-
 	@Override
 	public void close() {
 		finish();
@@ -948,7 +940,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 
 	@Override
 	public ZLViewWidget getViewWidget() {
-		return myMainView;
+		return (ZLViewWidget)myMainView;
 	}
 
 	@Override
