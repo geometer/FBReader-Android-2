@@ -86,6 +86,7 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 	private volatile int myHDiff = 0;
 	private volatile int myHShift = 0;
 
+	@Override
 	public void setPreserveSize(boolean preserve) {
 		myAmendSize = preserve;
 		if (!preserve) {

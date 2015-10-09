@@ -21,11 +21,12 @@ package org.geometerplus.android.fbreader;
 
 import java.util.*;
 
-import android.content.Intent;
+import android.content.*;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -48,6 +49,7 @@ import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
 import org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
+import org.geometerplus.zlibrary.ui.android.view.MainView;
 
 import org.geometerplus.android.fbreader.api.MenuNode;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
@@ -70,6 +72,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 
 	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
 
+	private volatile MainView myMainView;
 	private volatile SuperActivityToast myToast;
 
 	private volatile DrawerLayout myDrawerLayout;
@@ -79,9 +82,31 @@ public abstract class FBReaderMainActivity extends MDActivity {
 
 	private volatile Book myCurrentBook;
 
+	private PowerManager.WakeLock myWakeLock;
+	private boolean myWakeLockToCreate;
+
+	private final BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
+		public void onReceive(Context context, Intent intent) {
+			final int level = intent.getIntExtra("level", 100);
+			myMainView.setBatteryLevel(level);
+			switchWakeLock(
+				getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() < level
+			);
+		}
+	};
+
 	@Override
 	protected int layoutId() {
 		return R.layout.main;
+	}
+
+	protected final void selectMainView(int id) {
+		myMainView = (MainView)findViewById(id);
+		myMainView.setVisibility(View.VISIBLE);
+	}
+
+	protected final MainView getMainView() {
+		return myMainView;
 	}
 
 	@Override
@@ -268,8 +293,31 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+
+		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		switchWakeLock(hasFocus &&
+			getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() <
+			getMainView().getBatteryLevel()
+		);
+	}
+
+	@Override
 	protected void onPause() {
 		myDrawerLayout.closeDrawer(GravityCompat.START);
+
+		try {
+			unregisterReceiver(myBatteryInfoReceiver);
+		} catch (IllegalArgumentException e) {
+			// myBatteryInfoReceiver was not registered
+		}
+
 		super.onPause();
 	}
 
@@ -431,5 +479,41 @@ public abstract class FBReaderMainActivity extends MDActivity {
 				}
 			}
 		});
+	}
+
+	public void createWakeLock() {
+		if (myWakeLockToCreate) {
+			synchronized (this) {
+				if (myWakeLockToCreate) {
+					myWakeLockToCreate = false;
+					myWakeLock = ((PowerManager)getSystemService(POWER_SERVICE))
+						.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "FBReader");
+					myWakeLock.acquire();
+				}
+			}
+		}
+	}
+
+	private final void switchWakeLock(boolean on) {
+		if (on) {
+			if (myWakeLock == null) {
+				myWakeLockToCreate = true;
+			}
+		} else {
+			if (myWakeLock != null) {
+				synchronized (this) {
+					if (myWakeLock != null) {
+						myWakeLock.release();
+						myWakeLock = null;
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	protected void setTitleVisible(boolean visible) {
+		super.setTitleVisible(visible);
+		findViewById(R.id.main_shadow).setVisibility(visible ? View.VISIBLE : View.GONE);
 	}
 }
