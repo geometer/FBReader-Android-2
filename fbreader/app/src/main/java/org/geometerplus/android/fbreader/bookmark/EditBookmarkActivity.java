@@ -23,8 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.*;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -34,33 +38,31 @@ import android.widget.*;
 
 import yuku.ambilwarna.widget.AmbilWarnaPrefWidgetView;
 
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
+import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.util.ZLColor;
 import org.geometerplus.zlibrary.ui.android.R;
-import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
 import org.geometerplus.fbreader.book.*;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.android.util.OrientationUtil;
 import org.geometerplus.android.util.ViewUtil;
 
 import org.fbreader.md.MDActivity;
 
 public class EditBookmarkActivity extends MDActivity implements IBookCollection.Listener<Book> {
+	private TabLayout myTabLayout;
+	private ViewPager myViewPager;
+
 	private final ZLResource myResource = ZLResource.resource("editBookmark");
+
+	private Fragment myTextFragment = new TextFragment();
+	private Fragment myStylesFragment = new StylesFragment();
+	private Fragment myDeleteFragment = new DeleteFragment();
+
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 	private Bookmark myBookmark;
 	private StyleListAdapter myStylesAdapter;
-
-	private void addTab(TabHost host, String id, int content) {
-		final TabHost.TabSpec spec = host.newTabSpec(id);
-		spec.setIndicator(myResource.getResource(id).getValue());
-		spec.setContent(content);
-        host.addTab(spec);
-	}
 
 	@Override
 	protected int layoutId() {
@@ -70,7 +72,52 @@ public class EditBookmarkActivity extends MDActivity implements IBookCollection.
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setTitleVisible(false);
+		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
+
+		setTitle("");
+
+        myTabLayout = (TabLayout)findViewById(R.id.edit_bookmark_tab_layout);
+        myViewPager = (ViewPager)findViewById(R.id.edit_bookmark_view_pager);
+
+		final PagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+			@Override
+			public int getCount() {
+				return 3;
+			}
+
+			@Override
+			public Fragment getItem(int position) {
+				switch (position) {
+					default:
+					case 0:
+						return myTextFragment;
+					case 1:
+						return myStylesFragment;
+					case 2:
+						return myDeleteFragment;
+				}
+			}
+
+			@Override
+			public CharSequence getPageTitle(int position) {
+				final String key;
+				switch (position) {
+					default:
+					case 0:
+						key = "text";
+						break;
+					case 1:
+						key = "style";
+						break;
+					case 2:
+						key = "delete";
+						break;
+				}
+				return myResource.getResource(key).getValue();
+			}
+		};
+		myViewPager.setAdapter(adapter);
+		myTabLayout.setupWithViewPager(myViewPager);
 
 		myBookmark = FBReaderIntents.getBookmarkExtra(getIntent());
 		if (myBookmark == null) {
@@ -78,6 +125,37 @@ public class EditBookmarkActivity extends MDActivity implements IBookCollection.
 			return;
 		}
 
+		setWindowSize();
+
+		final ZLIntegerOption currentTabOption =
+			new ZLIntegerOption("LookNFeel", "EditBookmarkTab", 0);
+		myViewPager.setCurrentItem(currentTabOption.getValue());
+		myTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab tab) {
+				myViewPager.setCurrentItem(tab.getPosition(), false);
+				if (tab.getPosition() != 2 /* delete tab */) {
+					currentTabOption.setValue(tab.getPosition());
+				}
+			}
+
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) {
+			}
+
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
+			}
+		});
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		setWindowSize();
+	}
+
+	private void setWindowSize() {
 		final DisplayMetrics dm = getResources().getDisplayMetrics();
 		final int width = Math.min(
 			(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 500, dm),
@@ -88,97 +166,10 @@ public class EditBookmarkActivity extends MDActivity implements IBookCollection.
 			dm.heightPixels * 9 / 10
 		);
 
-        final TabHost tabHost = (TabHost)findViewById(R.id.edit_bookmark_tabhost);
-		tabHost.setLayoutParams(new FrameLayout.LayoutParams(
+        final LinearLayout root = (LinearLayout)findViewById(R.id.edit_bookmark);
+		root.setLayoutParams(new FrameLayout.LayoutParams(
 			new ViewGroup.LayoutParams(width, height)
 		));
-		tabHost.setup();
-
-		addTab(tabHost, "text", R.id.edit_bookmark_content_text);
-		addTab(tabHost, "style", R.id.edit_bookmark_content_style);
-		addTab(tabHost, "delete", R.id.edit_bookmark_content_delete);
-
-		final ZLStringOption currentTabOption =
-			new ZLStringOption("LookNFeel", "EditBookmark", "text");
-		tabHost.setCurrentTabByTag(currentTabOption.getValue());
-		tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-			public void onTabChanged(String tag) {
-				if (!"delete".equals(tag)) {
-					currentTabOption.setValue(tag);
-				}
-			}
-		});
-
-		final EditText editor = (EditText)findViewById(R.id.edit_bookmark_text);
-		editor.setText(myBookmark.getText());
-		final int len = editor.getText().length();
-		editor.setSelection(len, len);
-
-		final Button saveTextButton = (Button)findViewById(R.id.edit_bookmark_save_text_button);
-		saveTextButton.setEnabled(false);
-		saveTextButton.setText(myResource.getResource("saveText").getValue());
-		saveTextButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				myCollection.bindToService(EditBookmarkActivity.this, new Runnable() {
-					public void run() {
-						myBookmark.setText(editor.getText().toString());
-						myCollection.saveBookmark(myBookmark);
-						saveTextButton.setEnabled(false);
-					}
-				});
-			}
-		});
-		editor.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence sequence, int start, int before, int count) {
-				final String originalText = myBookmark.getText();
-				saveTextButton.setEnabled(!originalText.equals(editor.getText().toString()));
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
-
-		final Button deleteButton = (Button)findViewById(R.id.edit_bookmark_delete_button);
-		deleteButton.setText(myResource.getResource("deleteBookmark").getValue());
-		deleteButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				myCollection.bindToService(EditBookmarkActivity.this, new Runnable() {
-					public void run() {
-						myCollection.deleteBookmark(myBookmark);
-						finish();
-					}
-				});
-			}
-		});
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-
-		myCollection.bindToService(this, new Runnable() {
-			public void run() {
-				final List<HighlightingStyle> styles = myCollection.highlightingStyles();
-				if (styles.isEmpty()) {
-					finish();
-					return;
-				}
-				myStylesAdapter = new StyleListAdapter(styles);
-				final ListView stylesList =
-					(ListView)findViewById(R.id.edit_bookmark_content_style);
-				stylesList.setAdapter(myStylesAdapter);
-				stylesList.setOnItemClickListener(myStylesAdapter);
-				myCollection.addListener(EditBookmarkActivity.this);
-			}
-		});
 	}
 
 	@Override
@@ -267,6 +258,105 @@ public class EditBookmarkActivity extends MDActivity implements IBookCollection.
 				}
 			});
 			notifyDataSetChanged();
+		}
+	}
+
+	private class TextFragment extends Fragment {
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
+			if (container == null) {
+				return null;
+			}
+
+			final View view = inflater.inflate(R.layout.edit_bookmark_text, container, false);
+
+			final EditText editor = (EditText)view.findViewById(R.id.edit_bookmark_text);
+			editor.setText(myBookmark.getText());
+			final int len = editor.getText().length();
+			editor.setSelection(len, len);
+
+			final Button saveTextButton = (Button)view.findViewById(R.id.edit_bookmark_save_text_button);
+			saveTextButton.setEnabled(false);
+			saveTextButton.setText(myResource.getResource("saveText").getValue());
+			saveTextButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					myCollection.bindToService(EditBookmarkActivity.this, new Runnable() {
+						public void run() {
+							myBookmark.setText(editor.getText().toString());
+							myCollection.saveBookmark(myBookmark);
+							saveTextButton.setEnabled(false);
+						}
+					});
+				}
+			});
+			editor.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void onTextChanged(CharSequence sequence, int start, int before, int count) {
+					final String originalText = myBookmark.getText();
+					saveTextButton.setEnabled(!originalText.equals(editor.getText().toString()));
+				}
+
+				@Override
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+				}
+			});
+
+			return view;
+		}
+	}
+
+	private class StylesFragment extends ListFragment {
+		@Override
+		public void onViewCreated(View view, Bundle saved) {
+			super.onViewCreated(view, saved);
+
+			myCollection.bindToService(EditBookmarkActivity.this, new Runnable() {
+				public void run() {
+					final List<HighlightingStyle> styles = myCollection.highlightingStyles();
+					if (styles.isEmpty()) {
+						finish();
+						return;
+					}
+					myStylesAdapter = new StyleListAdapter(styles);
+					setListAdapter(myStylesAdapter);
+					myCollection.addListener(EditBookmarkActivity.this);
+				}
+			});
+		}
+
+		@Override
+		public void onListItemClick(ListView listView, View view, int position, long id) {
+			final StyleListAdapter adapter = (StyleListAdapter)getListAdapter();
+			adapter.onItemClick(listView, view, position, id);
+		}
+	}
+
+	private class DeleteFragment extends Fragment {
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
+			if (container == null) {
+				return null;
+			}
+			final View view = inflater.inflate(R.layout.edit_bookmark_delete, container, false);
+			final Button deleteButton = (Button)view.findViewById(R.id.edit_bookmark_delete_button);
+			deleteButton.setText(myResource.getResource("deleteBookmark").getValue());
+			deleteButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					myCollection.bindToService(EditBookmarkActivity.this, new Runnable() {
+						public void run() {
+							myCollection.deleteBookmark(myBookmark);
+							finish();
+						}
+					});
+				}
+			});
+			return view;
 		}
 	}
 }

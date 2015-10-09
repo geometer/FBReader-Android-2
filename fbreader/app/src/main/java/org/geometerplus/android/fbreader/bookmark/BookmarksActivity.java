@@ -519,9 +519,8 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 		public void onViewCreated(View view, Bundle saved) {
 			super.onViewCreated(view, saved);
 
-			final ListView listView = (ListView)view.findViewById(android.R.id.list);
 			final BookmarksAdapter adapter = (BookmarksAdapter)getListAdapter();
-			listView.setOnItemLongClickListener(adapter);
+			getListView().setOnItemLongClickListener(adapter);
 		}
 
 		@Override
