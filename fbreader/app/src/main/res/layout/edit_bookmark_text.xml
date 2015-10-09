@@ -1,0 +1,25 @@
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+>
+	<EditText
+		android:id="@+id/edit_bookmark_text"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="5dip"
+		android:layout_marginRight="5dip"
+		android:layout_marginTop="5dip"
+		android:layout_marginBottom="5dip"
+		android:singleLine="false"
+		android:gravity="left|top"
+	/>
+	<Button
+		android:id="@+id/edit_bookmark_save_text_button"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:singleLine="true"
+	/>
+</LinearLayout>
