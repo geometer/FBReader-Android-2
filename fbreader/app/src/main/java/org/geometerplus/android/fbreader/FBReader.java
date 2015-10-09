@@ -222,11 +222,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	}
 
 	@Override
-	protected int layoutId() {
-		return R.layout.main;
-	}
-
-	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
@@ -261,6 +256,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 
 		myRootView = (RelativeLayout)findViewById(R.id.root_view);
 		myMainView = (ZLAndroidWidget)findViewById(R.id.main_view);
+		myMainView.setVisibility(View.VISIBLE);
 
 		setupToolbar(findViewById(R.id.main_drawer_layout), myShowActionBarFlag);
 
@@ -357,11 +353,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 			}
 		}
 
-		setupDrawer(
-			R.id.main_drawer_menu,
-			R.id.main_drawer_layout,
-			R.id.main_drawer_toolbar
-		);
+		setupDrawer();
 	}
 
 	@Override

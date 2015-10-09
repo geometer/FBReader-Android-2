@@ -30,6 +30,8 @@ import android.widget.TextView;
 
 import org.geometerplus.android.fbreader.FBReaderMainActivity;
 
+import org.fbreader.common.R;
+
 public abstract class MainView extends View {
 	protected Integer myColorLevel;
 	private TextView myInfoView;
@@ -48,11 +50,9 @@ public abstract class MainView extends View {
 		super(context);
 	}
 
-	abstract protected int infoViewId();
-
 	protected final void showInfo(final String text) {
 		if (myInfoView == null) {
-			myInfoView = (TextView)((FBReaderMainActivity)getContext()).findViewById(infoViewId());
+			myInfoView = (TextView)((FBReaderMainActivity)getContext()).findViewById(R.id.main_view_info);
 		}
 		if (myInfoView == null) {
 			return;

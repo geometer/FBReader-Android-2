@@ -675,9 +675,4 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 	protected void updateColorLevel() {
 		ViewUtil.setColorLevel(myPaint, myColorLevel);
 	}
-
-	@Override
-	protected int infoViewId() {
-		return R.id.main_view_info;
-	}
 }
