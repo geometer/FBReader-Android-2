@@ -31,4 +31,6 @@ public interface ZLViewWidget {
 
 	void setScreenBrightness(int percent);
 	int getScreenBrightness();
+
+	int getBatteryLevel();
 }
