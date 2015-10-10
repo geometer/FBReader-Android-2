@@ -39,9 +39,9 @@ import org.geometerplus.zlibrary.core.util.XmlUtil;
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.android.util.PackageUtil;
-import org.geometerplus.android.util.ViewUtil;
 
 import org.fbreader.md.MDListActivity;
+import org.fbreader.util.android.ViewUtil;
 
 public class PluginListActivity extends MDListActivity {
 	private final ZLResource myResource = ZLResource.resource("plugins");

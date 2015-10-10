@@ -35,9 +35,9 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.android.fbreader.MenuData;
-import org.geometerplus.android.util.ViewUtil;
 
 import org.fbreader.md.MDListActivity;
+import org.fbreader.util.android.ViewUtil;
 
 public class ConfigurationActivity extends MDListActivity {
 	static final String ENABLED_MENU_IDS_KEY = "enabledMenuIds";

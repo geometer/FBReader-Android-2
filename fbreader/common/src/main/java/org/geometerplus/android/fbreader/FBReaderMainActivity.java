@@ -54,10 +54,10 @@ import org.geometerplus.zlibrary.ui.android.view.MainView;
 import org.geometerplus.android.fbreader.api.MenuNode;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
-import org.geometerplus.android.util.ViewUtil;
 
 import org.fbreader.md.MDActivity;
 import org.fbreader.md.MDAlertDialogBuilder;
+import org.fbreader.util.android.ViewUtil;
 import org.fbreader.common.R;
 
 import org.geometerplus.fbreader.book.Book;

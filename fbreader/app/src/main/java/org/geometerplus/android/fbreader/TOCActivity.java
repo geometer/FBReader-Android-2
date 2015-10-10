@@ -35,6 +35,7 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.android.util.*;
 
 import org.fbreader.md.MDActivity;
+import org.fbreader.util.android.ViewUtil;
 import org.geometerplus.zlibrary.ui.android.R;
 
 public class TOCActivity extends MDActivity {

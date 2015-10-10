@@ -34,9 +34,9 @@ import org.geometerplus.android.fbreader.FBReader;
 import org.geometerplus.android.fbreader.covers.CoverManager;
 
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
-import org.geometerplus.android.util.ViewUtil;
 
 import org.fbreader.md.MDListActivity;
+import org.fbreader.util.android.ViewUtil;
 
 public class CatalogManagerActivity extends MDListActivity {
 	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
