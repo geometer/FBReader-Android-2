@@ -6,6 +6,7 @@
 
 ===== 2.6 (??? ??, 2015) =====
 * Material design
+* Fixed missing book notification behaviour
 * Customisable main menu
 * Simple widgets
 * Goto page number dialog (in menu, disabled by default)
