@@ -10,7 +10,7 @@
 	<LinearLayout
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-		android:theme="@style/FBReaderMD.ActionBar.Dialog"
+		android:theme="@style/FBReaderMD.ActionBar"
 		android:orientation="horizontal"
 		android:background="@drawable/primary_color"
 	>
