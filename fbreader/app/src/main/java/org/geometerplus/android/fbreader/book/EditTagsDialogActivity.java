@@ -51,6 +51,7 @@ public class EditTagsDialogActivity extends MDListActivity {
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 	private volatile Book myBook;
 	private final List<Tag> myTags = new ArrayList<Tag>();
+	private final List<Tag> myAllTags = Collections.synchronizedList(new ArrayList<Tag>());
 
 	@Override
 	protected int layoutId() {
@@ -72,7 +73,8 @@ public class EditTagsDialogActivity extends MDListActivity {
 
 		myCollection.bindToService(this, new Runnable() {
 			public void run() {
-				// TODO: collect all tags (?)
+				myAllTags.clear();
+				myAllTags.addAll(myCollection.tags());
 			}
 		});
 
@@ -80,7 +82,12 @@ public class EditTagsDialogActivity extends MDListActivity {
 		okButton.setText(myButtonResource.getResource("ok").getValue());
 		okButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// TODO: save data
+				myBook.removeAllTags();
+				for (Tag t : myTags) {
+					myBook.addTag(t);
+				}
+				myCollection.saveBook(myBook);
+				finish();
 			}
 		});
 
@@ -91,10 +98,6 @@ public class EditTagsDialogActivity extends MDListActivity {
 	public void onDestroy() {
 		myCollection.unbind();
 		super.onDestroy();
-	}
-
-	private void updateTag(String text, Tag oldTag) {
-		// TODO: implement
 	}
 
 	private Drawable myDeleteIcon;
@@ -211,10 +214,11 @@ public class EditTagsDialogActivity extends MDListActivity {
 							return true;
 						}
 					});
-					final List<Tag> allTags = myCollection.tags();
 					final TreeSet<String> names = new TreeSet<String>();
-					for (Tag a : allTags) {
-						names.add(a.Name);
+					synchronized (myAllTags) {
+						for (Tag t : myAllTags) {
+							names.add(t.Name);
+						}
 					}
 					edit.setAdapter(new ArrayAdapter<String>(
 						EditTagsDialogActivity.this,
@@ -225,6 +229,48 @@ public class EditTagsDialogActivity extends MDListActivity {
 				}
 			});
 			dialog.show();
+		}
+
+		private void updateTag(String text, Tag oldTag) {
+			if (text == null) {
+				return;
+			}
+			text = text.trim();
+			if (text.length() == 0) {
+				return;
+			}
+			text.replaceAll("\\s+", " ");
+
+			Tag newTag = null;
+			synchronized (myAllTags) {
+				for (Tag t : myAllTags) {
+					if (text.equals(t.Name)) {
+						newTag = t;
+					}
+				}
+			}
+			if (newTag == null) {
+				newTag = Tag.getTag(text.split("/"));
+			}
+			if (newTag == null || newTag.equals(oldTag)) {
+				return;
+			}
+			if (oldTag != null) {
+				final int position = myTags.indexOf(oldTag);
+				if (position == -1) {
+					return;
+				}
+				if (myTags.contains(newTag)) {
+					myTags.remove(position);
+				} else {
+					myTags.set(position, newTag);
+				}
+			} else {
+				if (!myTags.contains(newTag)) {
+					myTags.add(newTag);
+				}
+			}
+			notifyDataSetChanged();
 		}
 	}
 }

@@ -44,6 +44,6 @@ class EditTagsPreference extends Preference {
 	protected void onClick() {
 		final Intent intent = new Intent(getContext(), EditTagsDialogActivity.class);
 		FBReaderIntents.putBookExtra(intent, myActivity.Book);
-		myActivity.startActivityForResult(intent, EditBookInfoActivity.EDIT_TAGS_REQUEST_CODE);
+		myActivity.startActivity(intent);
 	}
 }

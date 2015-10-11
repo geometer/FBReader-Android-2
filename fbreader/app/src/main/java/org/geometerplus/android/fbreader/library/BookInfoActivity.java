@@ -203,6 +203,8 @@ public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemC
 	}
 
 	private void setupBookInfo(Book book) {
+		FBReaderUtil.setBookTitle(this, book);
+
 		((TextView)findViewById(R.id.book_info_title)).setText(myResource.getResource("bookInfo").getValue());
 
 		setupInfoPair(R.id.book_title, "title", book.getTitle());
