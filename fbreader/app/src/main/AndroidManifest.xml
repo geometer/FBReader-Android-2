@@ -335,20 +335,20 @@
 			android:exported="false"
 		/>
 		<activity
-			android:name="org.geometerplus.android.fbreader.preferences.EditBookInfoActivity"
+			android:name="org.geometerplus.android.fbreader.book.EditBookInfoActivity"
 			android:process=":library"
 			android:theme="@style/FBReaderMD.Activity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 		/>
 		<activity
-			android:name="org.geometerplus.android.fbreader.preferences.EditTagsDialogActivity"
+			android:name="org.geometerplus.android.fbreader.book.EditTagsDialogActivity"
 			android:process=":library"
 			android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
 			android:theme="@style/FBReaderMD.Dialog"
 			android:exported="false"
 		/>
 		<activity
-			android:name="org.geometerplus.android.fbreader.preferences.EditAuthorsDialogActivity"
+			android:name="org.geometerplus.android.fbreader.book.EditAuthorsDialogActivity"
 			android:process=":library"
 			android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
 			android:theme="@style/FBReaderMD.Dialog"

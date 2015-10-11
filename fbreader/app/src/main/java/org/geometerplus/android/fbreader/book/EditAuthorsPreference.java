@@ -17,30 +17,33 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader.preferences;
+package org.geometerplus.android.fbreader.book;
 
-import java.util.*;
+import android.content.Intent;
+import android.preference.Preference;
 
-import android.content.Context;
-
-import org.geometerplus.zlibrary.core.language.Language;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-public abstract class LanguagePreference extends SingleChoicePreference {
-	protected LanguagePreference(
-		Context context, ZLResource resource, List<Language> languages
-	) {
-		super(context, resource);
+import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
-		final int size = languages.size();
-		String[] codes = new String[size];
-		String[] names = new String[size];
-		int index = 0;
-		for (Language l : languages) {
-			codes[index] = l.Code;
-			names[index] = l.Name;
-			++index;
-		}
-		setLists(codes, names);
+class EditAuthorsPreference extends Preference {
+	private final EditBookInfoActivity myActivity;
+
+	EditAuthorsPreference(EditBookInfoActivity activity, ZLResource rootResource, String resourceKey) {
+		super(activity);
+		myActivity = activity;
+		setTitle(rootResource.getResource(resourceKey).getValue());
+		updateSummary();
+	}
+
+	void updateSummary() {
+		setSummary(myActivity.Book.authorsString(", "));
+	}
+
+	@Override
+	protected void onClick() {
+		final Intent intent = new Intent(getContext(), EditAuthorsDialogActivity.class);
+		FBReaderIntents.putBookExtra(intent, myActivity.Book);
+		myActivity.startActivityForResult(intent, EditBookInfoActivity.EDIT_AUTHORS_REQUEST_CODE);
 	}
 }

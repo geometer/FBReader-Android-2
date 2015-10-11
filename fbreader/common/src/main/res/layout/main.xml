@@ -75,7 +75,40 @@
 				/>
 			</LinearLayout>
 		</RelativeLayout>
-		<include layout="@layout/main_drawer"/>
+		<LinearLayout
+			android:layout_width="240dp"
+			android:layout_height="match_parent"
+			android:layout_gravity="start"
+			android:background="?attr/colorPrimaryDrawable"
+			android:orientation="vertical"
+		>
+			<include
+				layout="@layout/md_toolbar"
+				android:id="@+id/main_drawer_toolbar"
+			/>
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+			>
+				<ImageView
+					android:id="@+id/main_drawer_cover"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:adjustViewBounds="true"
+					android:scaleType="centerCrop"
+					android:layout_alignParentTop="true"
+					android:alpha="0.25"
+				/>
+				<ListView
+					android:id="@+id/main_drawer_menu"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:divider="@null"
+					android:dividerHeight="0dp"
+					android:background="@android:color/transparent"
+				/>
+			</RelativeLayout>
+		</LinearLayout>
 	</android.support.v4.widget.DrawerLayout>
 	<include
 		layout="@layout/md_toolbar"

@@ -46,9 +46,9 @@ import org.geometerplus.fbreader.book.*;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.android.util.ViewUtil;
 
 import org.fbreader.md.MDActivity;
+import org.fbreader.util.android.ViewUtil;
 
 public class EditBookmarkActivity extends MDActivity implements IBookCollection.Listener<Book> {
 	private TabLayout myTabLayout;

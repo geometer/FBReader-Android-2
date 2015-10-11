@@ -29,14 +29,13 @@ import android.view.*;
 import org.geometerplus.zlibrary.core.options.Config;
 
 import org.fbreader.md.MDListActivity;
+import org.fbreader.util.android.ViewUtil;
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.fbreader.fbreader.options.CancelMenuHelper;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-
-import org.geometerplus.android.util.ViewUtil;
 
 public class CancelActivity extends MDListActivity {
 	private BookCollectionShadow myCollection;

@@ -24,10 +24,8 @@ import java.util.*;
 import android.content.*;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -36,7 +34,11 @@ import android.util.Pair;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.md.MDActivity;
+import org.fbreader.md.MDAlertDialogBuilder;
 import org.fbreader.util.Boolean3;
+import org.fbreader.util.android.DrawableUtil;
+import org.fbreader.util.android.ViewUtil;
 
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 
@@ -54,10 +56,7 @@ import org.geometerplus.zlibrary.ui.android.view.MainView;
 import org.geometerplus.android.fbreader.api.MenuNode;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
-import org.geometerplus.android.util.ViewUtil;
 
-import org.fbreader.md.MDActivity;
-import org.fbreader.md.MDAlertDialogBuilder;
 import org.fbreader.common.R;
 
 import org.geometerplus.fbreader.book.Book;
@@ -113,6 +112,8 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	protected void onCreate(Bundle saved) {
 		super.onCreate(saved);
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
+
+		setupDrawer();
 	}
 
 	private String[] ACTION_IDS = {
@@ -165,11 +166,11 @@ public abstract class FBReaderMainActivity extends MDActivity {
 				ViewUtil.findTextView(view, R.id.menu_item_text).setText(
 					myMenuResource.getResource(code).getValue()
 				);
-				final Drawable icon = DrawableCompat.wrap(
-					getResources().getDrawable(MenuData.iconId(code))
+				ViewUtil.findImageView(view, R.id.menu_item_icon).setImageDrawable(
+					DrawableUtil.tintedDrawable(
+						FBReaderMainActivity.this, MenuData.iconId(code), R.color.text_primary
+					)
 				);
-				DrawableCompat.setTint(icon, getResources().getColor(R.color.text_primary));
-				ViewUtil.findImageView(view, R.id.menu_item_icon).setImageDrawable(icon);
 			}
 			return view;
 		}
@@ -202,9 +203,9 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	protected final void addMenuItem(Menu menu, final String actionId, String name, Integer iconId) {
 		final MenuItem menuItem = menu.add(name);
 		if (iconId != null) {
-			final Drawable icon = DrawableCompat.wrap(getResources().getDrawable(iconId));
-			DrawableCompat.setTint(icon, getResources().getColor(R.color.text_primary));
-			menuItem.setIcon(icon);
+			menuItem.setIcon(DrawableUtil.tintedDrawable(
+				FBReaderMainActivity.this, iconId, R.color.text_primary
+			));
 		}
 		menuItem.setShowAsAction(
 			iconId != null && isActionBarVisible()
@@ -260,7 +261,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	protected abstract boolean isActionBarVisible();
 	/* ---- MENU ---- */
 
-	protected final void setupDrawer() {
+	private final void setupDrawer() {
 		final ListView drawerMenu = (ListView)findViewById(R.id.main_drawer_menu);
 		final HamburgerMenuAdapter adapter = new HamburgerMenuAdapter();
 		drawerMenu.setAdapter(adapter);
