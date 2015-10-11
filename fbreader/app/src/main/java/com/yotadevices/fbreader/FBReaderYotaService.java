@@ -20,10 +20,11 @@ import android.widget.FrameLayout;
 import com.yotadevices.sdk.*;
 import com.yotadevices.sdk.utils.EinkUtils;
 
+import org.fbreader.util.ComparisonUtil;
+
 import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.core.image.ZLImageProxy;
-import org.geometerplus.zlibrary.core.util.MiscUtil;
 
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
@@ -118,7 +119,7 @@ public class FBReaderYotaService extends BSActivity {
 			} else {
 				if (myLastPaintWasActive == null ||
 					myLastPaintWasActive ||
-					!MiscUtil.equals(myCurrentBook, myLastBook)) {
+					!ComparisonUtil.equal(myCurrentBook, myLastBook)) {
 					drawCover(canvas, myCurrentBook);
 				}
 			}
