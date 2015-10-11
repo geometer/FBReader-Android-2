@@ -38,6 +38,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
 
 import org.fbreader.md.MDActivity;
+import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 import org.geometerplus.zlibrary.ui.android.R;
 
@@ -429,7 +430,7 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			final View view = (convertView != null) ? convertView :
+			final View view = convertView != null ? convertView :
 				LayoutInflater.from(parent.getContext()).inflate(R.layout.bookmark_item, parent, false);
 			final ImageView imageView = ViewUtil.findImageView(view, R.id.bookmark_item_icon);
 			final View colorContainer = ViewUtil.findView(view, R.id.bookmark_item_color_container);
@@ -441,7 +442,11 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 			final Bookmark bookmark = getItem(position);
 			if (bookmark == null) {
 				imageView.setVisibility(View.VISIBLE);
-				imageView.setImageResource(R.drawable.ic_list_plus);
+				imageView.setImageDrawable(DrawableUtil.tintedDrawable(
+					BookmarksActivity.this,
+					R.drawable.ic_button_add_large,
+					R.color.text_primary
+				));
 				colorContainer.setVisibility(View.GONE);
 				textView.setText(myResource.getResource("new").getValue());
 				bookTitleView.setVisibility(View.GONE);

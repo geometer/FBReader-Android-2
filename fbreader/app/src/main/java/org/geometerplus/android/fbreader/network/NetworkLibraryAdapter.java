@@ -23,6 +23,9 @@ import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.fbreader.util.android.DrawableUtil;
+import org.fbreader.util.android.ViewUtil;
+
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.fbreader.network.*;
@@ -33,8 +36,6 @@ import org.geometerplus.android.fbreader.tree.TreeAdapter;
 import org.geometerplus.android.fbreader.covers.CoverManager;
 
 import org.geometerplus.android.fbreader.network.action.NetworkBookActions;
-
-import org.fbreader.util.android.ViewUtil;
 
 class NetworkLibraryAdapter extends TreeAdapter {
 	NetworkLibraryAdapter(NetworkLibraryActivity activity) {
@@ -96,9 +97,17 @@ class NetworkLibraryAdapter extends TreeAdapter {
 		} else if (tree instanceof BasketCatalogTree) {
 			coverView.setImageResource(R.drawable.ic_list_library_basket);
 		} else if (tree instanceof AddCustomCatalogItemTree) {
-			coverView.setImageResource(R.drawable.ic_list_plus);
+			coverView.setImageDrawable(DrawableUtil.tintedDrawable(
+				coverView.getContext(),
+				R.drawable.ic_button_add_large,
+				R.color.text_primary
+			));
 		} else if (tree instanceof ManageCatalogsItemTree) {
-			coverView.setImageResource(R.drawable.ic_menu_filter);
+			coverView.setImageDrawable(DrawableUtil.tintedDrawable(
+				coverView.getContext(),
+				R.drawable.ic_menu_filter,
+				R.color.text_primary
+			));
 		} else {
 			coverView.setImageResource(R.drawable.ic_list_library_books);
 		}
