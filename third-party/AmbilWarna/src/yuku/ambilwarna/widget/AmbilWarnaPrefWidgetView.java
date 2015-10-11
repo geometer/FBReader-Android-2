@@ -7,6 +7,8 @@ import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.View;
 
+import yuku.ambilwarna.R;
+
 public class AmbilWarnaPrefWidgetView extends View {
 	Paint paint;
 	float rectSize;
@@ -22,7 +24,7 @@ public class AmbilWarnaPrefWidgetView extends View {
 		strokeWidth = (int)(1.f * density + 0.5f);
 
 		paint = new Paint();
-		paint.setColor(0xffffffff);
+		paint.setColor(context.getResources().getColor(R.color.text_primary));
 		paint.setStyle(Style.STROKE);
 		paint.setStrokeWidth(strokeWidth);
 	}
