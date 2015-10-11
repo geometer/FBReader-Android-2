@@ -27,7 +27,7 @@ import android.preference.*;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.geometerplus.fbreader.book.Book;
+import org.geometerplus.fbreader.book.*;
 
 import org.geometerplus.android.fbreader.FBReaderUtil;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
@@ -36,10 +36,7 @@ import org.geometerplus.android.util.OrientationUtil;
 
 import org.fbreader.md.MDSettingsActivity;
 
-public class EditBookInfoActivity extends MDSettingsActivity {
-	final static int EDIT_TAGS_REQUEST_CODE = 1;
-	final static int EDIT_AUTHORS_REQUEST_CODE = 2;
-
+public class EditBookInfoActivity extends MDSettingsActivity implements IBookCollection.Listener<Book> {
 	private class EditBookInfoFragment extends PreferenceFragment {
 		@Override
 		public void onCreate(Bundle bundle) {
@@ -48,7 +45,7 @@ public class EditBookInfoActivity extends MDSettingsActivity {
 			myScreen = getPreferenceManager().createPreferenceScreen(EditBookInfoActivity.this);
 			setPreferenceScreen(myScreen);
 
-			Book = FBReaderIntents.getBookExtra(getIntent(), Collection);
+			Book = FBReaderIntents.getBookExtra(getIntent(), myCollection);
 
 			if (Book == null) {
 				finish();
@@ -56,39 +53,22 @@ public class EditBookInfoActivity extends MDSettingsActivity {
 			}
 
 			FBReaderUtil.setBookTitle(EditBookInfoActivity.this, Book);
-
-			Collection.bindToService(EditBookInfoActivity.this, new Runnable() {
-				public void run() {
-					if (myInitialized) {
-						return;
-					}
-					myInitialized = true;
-
-					addPreference(new BookTitlePreference(EditBookInfoActivity.this, Resource, "title", Book));
-					myEditAuthorsPreference =
-						new EditAuthorsPreference(EditBookInfoActivity.this, Resource, "authors");
-					addPreference(myEditAuthorsPreference);
-					myEditTagsPreference =
-						new EditTagsPreference(EditBookInfoActivity.this, Resource, "tags");
-					addPreference(myEditTagsPreference);
-					addPreference(new BookLanguagePreference(EditBookInfoActivity.this, Resource.getResource("language"), Book));
-					addPreference(new EncodingPreference(EditBookInfoActivity.this, Resource.getResource("encoding"), Book));
-				}
-			});
-		}
-
-		@Override
-		public void onDestroy() {
-			Collection.unbind();
-			super.onDestroy();
+			addPreference(new BookTitlePreference(EditBookInfoActivity.this, Resource, "title", Book));
+			myEditAuthorsPreference =
+				new EditAuthorsPreference(EditBookInfoActivity.this, Resource, "authors");
+			addPreference(myEditAuthorsPreference);
+			myEditTagsPreference =
+				new EditTagsPreference(EditBookInfoActivity.this, Resource, "tags");
+			addPreference(myEditTagsPreference);
+			addPreference(new BookLanguagePreference(EditBookInfoActivity.this, Resource.getResource("language"), Book));
+			addPreference(new EncodingPreference(EditBookInfoActivity.this, Resource.getResource("encoding"), Book));
 		}
 	}
 
 	private PreferenceScreen myScreen;
 	final ZLResource Resource = ZLResource.resource("BookInfo");
 
-	final BookCollectionShadow Collection = new BookCollectionShadow();
-	private volatile boolean myInitialized;
+	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 
 	private EditTagsPreference myEditTagsPreference;
 	private EditAuthorsPreference myEditAuthorsPreference;
@@ -113,6 +93,20 @@ public class EditBookInfoActivity extends MDSettingsActivity {
 	protected void onStart() {
 		super.onStart();
 		OrientationUtil.setOrientation(this, getIntent());
+
+		myCollection.bindToService(this, new Runnable() {
+			public void run() {
+				updateBookInfo(myCollection.getBookById(Book.getId()));
+			}
+		});
+		myCollection.addListener(this);
+	}
+
+	@Override
+	public void onStop() {
+		myCollection.removeListener(this);
+		myCollection.unbind();
+		super.onStop();
 	}
 
 	@Override
@@ -120,23 +114,31 @@ public class EditBookInfoActivity extends MDSettingsActivity {
 		OrientationUtil.setOrientation(this, intent);
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (requestCode) {
-			case EDIT_TAGS_REQUEST_CODE:
-				myEditTagsPreference.updateSummary();
-				break;
-			case EDIT_AUTHORS_REQUEST_CODE:
-				myEditAuthorsPreference.updateSummary();
-				break;
+	void saveBook() {
+		myCollection.bindToService(this, new Runnable() {
+			public void run() {
+				myCollection.saveBook(Book);
+			}
+		});
+	}
+
+	private void updateBookInfo(Book book) {
+		if (book == null || !myCollection.sameBook(book, Book)) {
+			return;
+		}
+
+		Book.updateFrom(book);
+		FBReaderUtil.setBookTitle(EditBookInfoActivity.this, Book);
+		myEditAuthorsPreference.updateSummary();
+		myEditTagsPreference.updateSummary();
+	}
+
+	public void onBookEvent(BookEvent event, Book book) {
+		if (event == BookEvent.Updated && myCollection.sameBook(book, Book)) {
+			updateBookInfo(book);
 		}
 	}
 
-	void saveBook() {
-		Collection.bindToService(this, new Runnable() {
-			public void run() {
-				Collection.saveBook(Book);
-			}
-		});
+	public void onBuildEvent(IBookCollection.Status status) {
 	}
 }

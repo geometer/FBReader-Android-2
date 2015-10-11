@@ -44,6 +44,6 @@ class EditAuthorsPreference extends Preference {
 	protected void onClick() {
 		final Intent intent = new Intent(getContext(), EditAuthorsDialogActivity.class);
 		FBReaderIntents.putBookExtra(intent, myActivity.Book);
-		myActivity.startActivityForResult(intent, EditBookInfoActivity.EDIT_AUTHORS_REQUEST_CODE);
+		myActivity.startActivity(intent);
 	}
 }

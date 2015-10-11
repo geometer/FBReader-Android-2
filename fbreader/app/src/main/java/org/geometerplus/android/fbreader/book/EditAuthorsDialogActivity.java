@@ -51,6 +51,7 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 	private volatile Book myBook;
 	private final List<Author> myAuthors = new ArrayList<Author>();
+	private final List<Author> myAllAuthors = Collections.synchronizedList(new ArrayList<Author>());
 
 	@Override
 	protected int layoutId() {
@@ -72,7 +73,8 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 
 		myCollection.bindToService(this, new Runnable() {
 			public void run() {
-				// TODO: collect all authors list (?)
+				myAllAuthors.clear();
+				myAllAuthors.addAll(myCollection.authors());
 			}
 		});
 
@@ -80,7 +82,12 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 		okButton.setText(myButtonResource.getResource("ok").getValue());
 		okButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// TODO: save data
+				myBook.removeAllAuthors();
+				for (Author a : myAuthors) {
+					myBook.addAuthor(a);
+				}
+				myCollection.saveBook(myBook);
+				finish();
 			}
 		});
 
@@ -91,10 +98,6 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 	public void onDestroy() {
 		myCollection.unbind();
 		super.onDestroy();
-	}
-
-	private void updateAuthor(String text, Author oldAuthor) {
-		// TODO: implement
 	}
 
 	private Drawable myDeleteIcon;
@@ -212,10 +215,11 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 							return true;
 						}
 					});
-					final List<Author> allAuthors = myCollection.authors();
 					final TreeSet<String> names = new TreeSet<String>();
-					for (Author a : allAuthors) {
-						names.add(a.DisplayName);
+					synchronized (myAllAuthors) {
+						for (Author a : myAllAuthors) {
+							names.add(a.DisplayName);
+						}
 					}
 					edit.setAdapter(new ArrayAdapter<String>(
 						EditAuthorsDialogActivity.this,
@@ -226,6 +230,48 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 				}
 			});
 			dialog.show();
+		}
+
+		private void updateAuthor(String text, Author oldAuthor) {
+			if (text == null) {
+				return;
+			}
+			text = text.trim();
+			if (text.length() == 0) {
+				return;
+			}
+			text.replaceAll("\\s+", " ");
+
+			Author newAuthor = null;
+			synchronized (myAllAuthors) {
+				for (Author a : myAllAuthors) {
+					if (text.equals(a.DisplayName)) {
+						newAuthor = a;
+					}
+				}
+			}
+			if (newAuthor == null) {
+				newAuthor = Author.create(text, null);
+			}
+			if (newAuthor == null || newAuthor.equals(oldAuthor)) {
+				return;
+			}
+			if (oldAuthor != null) {
+				final int position = myAuthors.indexOf(oldAuthor);
+				if (position == -1) {
+					return;
+				}
+				if (myAuthors.contains(newAuthor)) {
+					myAuthors.remove(position);
+				} else {
+					myAuthors.set(position, newAuthor);
+				}
+			} else {
+				if (!myAuthors.contains(newAuthor)) {
+					myAuthors.add(newAuthor);
+				}
+			}
+			notifyDataSetChanged();
 		}
 	}
 }

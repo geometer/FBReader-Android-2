@@ -705,6 +705,7 @@ public final class FBReaderApp extends ZLApplication {
 			ZLTextHyphenator.Instance().load(Model.Book.getLanguage());
 			clearTextCaches();
 			getViewWidget().repaint();
+			updateTitle();
 		}
 	}
 }
