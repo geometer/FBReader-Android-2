@@ -17,30 +17,41 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader.preferences;
-
-import java.util.*;
+package org.geometerplus.android.fbreader.book;
 
 import android.content.Context;
 
-import org.geometerplus.zlibrary.core.language.Language;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-public abstract class LanguagePreference extends SingleChoicePreference {
-	protected LanguagePreference(
-		Context context, ZLResource resource, List<Language> languages
-	) {
-		super(context, resource);
+import org.geometerplus.fbreader.book.Book;
 
-		final int size = languages.size();
-		String[] codes = new String[size];
-		String[] names = new String[size];
-		int index = 0;
-		for (Language l : languages) {
-			codes[index] = l.Code;
-			names[index] = l.Name;
-			++index;
+import org.fbreader.md.MDEditTextPreference;
+
+class BookTitlePreference extends MDEditTextPreference {
+	private final Book myBook;
+
+	BookTitlePreference(Context context, ZLResource rootResource, String resourceKey, Book book) {
+		super(context);
+
+		setTitle(rootResource.getResource(resourceKey).getValue());
+		myBook = book;
+	}
+
+	@Override
+	protected String positiveButtonText() {
+		return ZLResource.resource("dialog").getResource("button").getResource("ok").getValue();
+	}
+
+	@Override
+	protected void setValue(String value) {
+		if (!value.equals(getValue())) {
+			myBook.setTitle(value);
+			((EditBookInfoActivity)getContext()).saveBook();
 		}
-		setLists(codes, names);
+	}
+
+	@Override
+	protected final String getValue() {
+		return myBook.getTitle();
 	}
 }

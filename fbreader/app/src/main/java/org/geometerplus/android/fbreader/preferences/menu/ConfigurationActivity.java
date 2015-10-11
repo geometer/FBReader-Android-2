@@ -23,21 +23,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.*;
 import android.widget.*;
 
 import com.mobeta.android.dslv.DragSortListView;
 
+import org.fbreader.md.MDListActivity;
+import org.fbreader.util.android.DrawableUtil;
+import org.fbreader.util.android.ViewUtil;
+
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.android.fbreader.MenuData;
-
-import org.fbreader.md.MDListActivity;
-import org.fbreader.util.android.ViewUtil;
 
 public class ConfigurationActivity extends MDListActivity {
 	static final String ENABLED_MENU_IDS_KEY = "enabledMenuIds";
@@ -178,11 +177,9 @@ public class ConfigurationActivity extends MDListActivity {
 
 				final ImageView iconView =
 					ViewUtil.findImageView(view, R.id.menu_configure_item_icon);
-				final Drawable icon = DrawableCompat.wrap(
-					getResources().getDrawable(MenuData.iconId(menuItem.Id))
-				);
-				DrawableCompat.setTint(icon, getResources().getColor(R.color.text_primary));
-				iconView.setImageDrawable(icon);
+				iconView.setImageDrawable(DrawableUtil.tintedDrawable(
+					ConfigurationActivity.this, MenuData.iconId(menuItem.Id), R.color.text_primary
+				));
 
 				final CheckBox checkBox =
 					(CheckBox)ViewUtil.findView(view, R.id.menu_configure_item_checkbox);

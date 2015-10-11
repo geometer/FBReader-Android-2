@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2015 FBReader.ORG Limited <contact@fbreader.org>
+ * Copyright (C) 2007-2015 FBReader.ORG Limited <contact@fbreader.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,18 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader.preferences;
-
-import java.util.*;
+package org.fbreader.util.android;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 
-import org.geometerplus.zlibrary.core.language.Language;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-
-public abstract class LanguagePreference extends SingleChoicePreference {
-	protected LanguagePreference(
-		Context context, ZLResource resource, List<Language> languages
-	) {
-		super(context, resource);
-
-		final int size = languages.size();
-		String[] codes = new String[size];
-		String[] names = new String[size];
-		int index = 0;
-		for (Language l : languages) {
-			codes[index] = l.Code;
-			names[index] = l.Name;
-			++index;
-		}
-		setLists(codes, names);
+public class DrawableUtil {
+	public static Drawable tintedDrawable(Context context, int drawableId, int colorId) {
+		final Resources res = context.getResources();
+		final Drawable drawable = DrawableCompat.wrap(res.getDrawable(drawableId));
+		DrawableCompat.setTint(drawable, res.getColor(colorId));
+		return drawable;
 	}
 }

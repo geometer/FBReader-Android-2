@@ -348,8 +348,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 				});
 			}
 		}
-
-		setupDrawer();
 	}
 
 	@Override

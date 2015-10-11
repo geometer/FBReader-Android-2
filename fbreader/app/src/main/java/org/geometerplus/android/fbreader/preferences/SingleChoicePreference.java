@@ -24,16 +24,16 @@ import android.content.Context;
 import org.fbreader.md.MDListPreference;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-abstract class SingleChoicePreference extends MDListPreference {
+public abstract class SingleChoicePreference extends MDListPreference {
 	private String[] myValues;
 	private String[] myNames;
 	protected final ZLResource myValuesResource;
 
-	SingleChoicePreference(Context context, ZLResource resource) {
+	protected SingleChoicePreference(Context context, ZLResource resource) {
 		this(context, resource, resource);
 	}
 
-	SingleChoicePreference(Context context, ZLResource resource, ZLResource valuesResource) {
+	protected SingleChoicePreference(Context context, ZLResource resource, ZLResource valuesResource) {
 		super(context);
 		setTitle(resource.getValue());
 		myValuesResource = valuesResource;
