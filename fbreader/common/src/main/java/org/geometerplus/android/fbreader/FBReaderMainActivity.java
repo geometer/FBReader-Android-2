@@ -30,13 +30,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Pair;
 import android.view.*;
 import android.widget.*;
 
 import org.fbreader.md.MDActivity;
 import org.fbreader.md.MDAlertDialogBuilder;
 import org.fbreader.util.Boolean3;
+import org.fbreader.util.Pair;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 
@@ -223,8 +223,8 @@ public abstract class FBReaderMainActivity extends MDActivity {
 
 	protected final void refreshMenu() {
 		for (Pair<MenuItem,String> pair : myMenuItems) {
-			final MenuItem menuItem = pair.first;
-			final String actionId = pair.second;
+			final MenuItem menuItem = pair.First;
+			final String actionId = pair.Second;
 			menuItem.setVisible(isMenuActionVisible(actionId) && isMenuActionEnabled(actionId));
 			switch (isMenuActionChecked(actionId)) {
 				case TRUE:
