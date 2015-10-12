@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="grid_padding">15dp</dimen>
+	<dimen name="grid_padding_bottom_ad">80dp</dimen>
+	<dimen name="grid_spacing">10dp</dimen>
+
+	<integer name="file_view_column_number_portrait">3</integer>
+	<integer name="file_view_column_number_landscape">4</integer>
+
+	<integer name="wide_card_column_number_portrait">2</integer>
+	<integer name="wide_card_column_number_landscape">3</integer>
+	<dimen name="wide_card_height">180dp</dimen>
+	<dimen name="wide_card_padding">15dp</dimen>
+	<dimen name="wide_card_image_margin_bottom">15dp</dimen>
+	<dimen name="wide_card_cover_height">160dp</dimen>
+	<dimen name="wide_card_cover_width">105dp</dimen>
+	<dimen name="wide_card_text_padding_left">25dp</dimen>
+	<dimen name="wide_card_text_padding_right">25dp</dimen>
+	<dimen name="wide_card_fav_size">35dp</dimen>
+	<dimen name="wide_card_fav_container_size">49dp</dimen>
+	<dimen name="wide_card_normal_text_size">14sp</dimen>
+	<dimen name="wide_card_title_text_size">16sp</dimen>
+	<dimen name="wide_card_action_text_size">14sp</dimen>
+
+	<dimen name="popup_item_padding">15dp</dimen>
+	<dimen name="popup_text_padding">25dp</dimen>
+	<dimen name="popup_action_text_size">14sp</dimen>
+</resources>

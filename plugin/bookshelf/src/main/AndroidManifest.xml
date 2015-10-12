@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	package="org.fbreader.plugin.library"
+>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="com.android.vending.BILLING" />
+	<uses-permission android:name="fbreader.permission.LIBRARY" />
+	<application
+		android:name=".LibraryApplication"
+		android:allowBackup="true"
+		android:icon="@drawable/library"
+		android:label="@string/app_title"
+		android:theme="@style/Theme.Library.Dark"
+	>
+		<activity
+			android:name=".LibraryActivity"
+			android:configChanges="keyboardHidden|screenSize"
+			android:label="@string/bookshelf_title"
+		>
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+				<category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
+				<category android:name="android.intent.category.PENWINDOW_LAUNCHER"/>
+				<category android:name="com.samsung.android.intent.category.PENWINDOW_LAUNCHER"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.fbreader.action.EXTERNAL_LIBRARY" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".report.BugReportActivity"
+			android:process=":crash"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:exported="false"
+		/>
+		<activity
+			android:name=".CreateShelfActivity"
+			android:theme="@style/Theme.Library.Dark.Dialog"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:exported="false"
+			android:windowSoftInputMode="stateVisible"
+		/>
+		<activity
+			android:name=".prefs.SettingsActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:exported="false"
+			android:label="@string/settings_title"
+		/>
+		<activity
+			android:name="com.google.android.gms.ads.AdActivity"
+			android:theme="@android:style/Theme.Translucent"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+		/>
+		<meta-data
+			android:name="com.google.android.gms.version"
+			android:value="@integer/google_play_services_version"
+		/>
+		<uses-library android:required="false" android:name="com.sec.android.app.multiwindow"/>
+		<meta-data android:name="com.sec.android.support.multiwindow" android:value="true"/>
+		<meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W" android:resource="@dimen/app_defaultsize_w"/>
+		<meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H" android:resource="@dimen/app_defaultsize_h"/>
+		<meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W" android:resource="@dimen/app_minimumsize_w"/>
+		<meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H" android:resource="@dimen/app_minimumsize_h"/>
+		<meta-data android:name="com.samsung.android.sdk.multiwindow.penwindow.enable" android:value="true"/>
+	</application>
+</manifest>

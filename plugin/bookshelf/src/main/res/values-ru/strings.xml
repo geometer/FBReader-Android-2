@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_title">Книжная полка FBReader</string>
+	<string name="bookshelf_title">Книжная полка</string>
+	<string name="settings_title">Настройки книжной полки</string>
+
+	<string name="menu_continue_reading">Продолжить чтение</string>
+	<string name="menu_choose_view">Выбор внешнего вида</string>
+	<string name="menu_small_cards_view">Маленькие карточки</string>
+	<string name="menu_tiny_cards_view">Совсем маленькие карточки</string>
+	<string name="menu_wide_cards_view">Широкие карточки</string>
+	<string name="menu_covers_only_view">Только обложки</string>
+	<string name="menu_old_view">Классика</string>
+	<string name="menu_search">Поиск</string>
+	<string name="menu_rescan">Пересканировать</string>
+	<string name="menu_level_up">Уровень выше</string>
+	<string name="menu_all_authors">Все авторы</string>
+	<string name="menu_all_series">Все серии</string>
+	<string name="menu_settings">Настройки</string>
+	<string name="menu_buy_premium">Купить FBReader Premium</string>
+	<string name="menu_about">О программе</string>
+	<string name="menu_whatsnew">Что нового</string>
+
+	<string name="shared_from_fbreader">Отправлено из &lt;a href=&quot;https://ru.fbreader.org/&quot;&gt;FBReader&lt;/a&gt;"</string>
+
+	<string name="category_favorites">Избранные</string>
+	<string name="category_recently_added">Новые</string>
+	<string name="category_recently_opened">Недавние</string>
+	<string name="category_titles">Все книги</string>
+	<string name="category_authors">Авторы</string>
+	<string name="category_series">Серии</string>
+	<string name="category_tags">Категории</string>
+	<string name="category_file_tree">Файловая система</string>
+	<string name="category_found">Найдено для: %s</string>
+
+	<string name="book_action_read">Читать</string>
+	<string name="book_action_more">Ещё…</string>
+	<string name="book_action_share">Поделиться книгой…</string>
+	<string name="book_action_delete">Удалить</string>
+	<string name="book_action_remove_from_recent">Убрать из недавних</string>
+	<string name="book_action_add_to_favorites">Добавить в избранное</string>
+	<string name="book_action_remove_from_favorites">Убрать из избранного</string>
+	<string name="book_action_add_to_custom_shelf">Добавить на полку…</string>
+	<string name="book_action_remove_from_current_shelf">Убрать из «%s»</string>
+	<string name="book_action_create_new_shelf">Создать новую полку…</string>
+	<string name="book_action_edit">Изменить информацию</string>
+	<string name="book_added_to_shelf">«%1$s» добавлена в «%2$s»</string>
+	<string name="shelf_creator_title">Создание новой полки</string>
+	<string name="new_shelf_name_hint">Название новой полки</string>
+	<string name="read_progress">Прочтено: %s%%</string>
+	<string name="no_books_found">Не нашлось ни одной книги</string>
+	<string name="button_send">Отправить</string>
+	<string name="button_install">Установить</string>
+	<string name="button_yes">Да</string>
+	<string name="button_no">Нет</string>
+	<string name="button_ok">ОК</string>
+	<string name="button_cancel">Отменить</string>
+	<string name="button_buy">Купить</string>
+	<string name="button_no_thanks">Нет, спасибо</string>
+	<string name="fbreader_not_found">Кажется, FBReader не установлен. Установить из Google Play?</string>
+	<string name="delete_book_confirmation">Удалить книгу с устройства?</string>
+	<string name="send_report">В Книжной полке %s произошла ошибка. Вы можете отправить описание ошибки разработчикам.</string>
+
+	<string name="settings_category_shelves">Полки</string>
+	<string name="settings_visible_shelves">Показывать стандартные полки</string>
+	<string name="settings_visible_shelves_summary_all">Все</string>
+	<string name="settings_visible_shelves_summary_none">Ни одной</string>
+	<string name="settings_max_books_count_recently_added">Максимальное число книг в «Новых»</string>
+	<string name="settings_max_books_count_recently_opened">Максимальное число книг в «Недавних»</string>
+	<string name="settings_author_group_by_series">Группировать книги по сериям на полках авторов</string>
+	<string name="settings_author_group_by_series_summary_on">Показывать вперемешку книги и серии</string>
+	<string name="settings_author_group_by_series_summary_off">Показывать просто список книг</string>
+	<string name="settings_show_intro">Показывать «Краткое руководство»</string>
+	<string name="settings_show_intro_always">Всегда</string>
+	<string name="settings_show_intro_if_empty">Если в библиотеке нет других книг</string>
+	<string name="settings_show_intro_never">Никогда</string>
+	<string name="settings_series_show">Показывать серии</string>
+	<string name="settings_series_show_all">Все</string>
+	<string name="settings_series_show_two_or_more">Содержащие две или больше книг</string>
+	<string name="settings_series_group">Группировка серий</string>
+	<string name="settings_authors_group">Группировка авторов</string>
+	<string name="settings_titles_group">Группировка книг</string>
+	<string name="settings_group_by_first_letter">По первой букве</string>
+	<string name="settings_group_none">Не группировать</string>
+	<string name="settings_group_auto">Решать автоматически</string>
+
+	<string name="settings_category_ui">Внешний вид</string>
+	<string name="settings_color_scheme">Тема оформления</string>
+	<string name="color_scheme_indigo_default">Индиго (тема по умолчанию)</string>
+	<string name="color_scheme_pink">Розовая</string>
+	<string name="color_scheme_teal">Бирюзовая</string>
+	<string name="color_scheme_green">Зелёная</string>
+	<string name="color_scheme_grey_light">Серая (светлая)</string>
+	<string name="color_scheme_grey_dark">Серая (тёмная)</string>
+	<string name="settings_view_mode">Способ отображения</string>
+	<string name="view_mode_small_cards">Маленькие карточки</string>
+	<string name="view_mode_tiny_cards">Совсем маленькие карточки</string>
+	<string name="view_mode_wide_cards">Широкие карточки</string>
+
+	<string name="settings_category_wide_cards">Режим широких карточек</string>
+	<string name="settings_category_file_view">Режим просмотра файловой системы</string>
+	<string name="settings_column_number_portrait">Число столбцов на вертикальном экране</string>
+	<string name="settings_column_number_landscape">Число столбцов на горизонтальном экране</string>
+
+	<string name="settings_category_library">Библиотека</string>
+	<string name="settings_supported_file_formats">Форматы файлов</string>
+	<string name="settings_supported_file_formats_summary_all">Все</string>
+	<string name="settings_supported_file_formats_summary_none">Ни одного (странный выбор)</string>
+
+	<string name="desc_book_cover">Обложка книги</string>
+	<string name="desc_book_stack_covers">Обложки книг</string>
+	<string name="desc_file_icon">Иконка файла</string>
+	<string name="desc_open_drawer">Показать список полок</string>
+	<string name="desc_close_drawer">Скрыть список полок</string>
+
+	<string name="conflict_question">У вас установлены и Книжная Полка, и FBReader Premium. Что вы хотите запустить?</string>
+	<string name="conflict_bookshelf">Книжную полку</string>
+	<string name="conflict_premium">FBReader Premium</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.fbreader.plugin.library.view.AuthorView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	style="?attr/compactCardViewStyle"
+>
+	<TextView
+		android:id="@+id/bks_author_title"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingLeft="@dimen/tiny_card_text_padding"
+		android:paddingRight="@dimen/tiny_card_text_padding"
+		android:paddingTop="@dimen/tiny_card_text_padding"
+		android:paddingBottom="@dimen/tiny_card_text_padding"
+		android:textSize="@dimen/tiny_card_text_size_large"
+		android:lines="3"
+		android:ellipsize="end"
+	/>
+</org.fbreader.plugin.library.view.AuthorView>
