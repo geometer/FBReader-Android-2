@@ -47,8 +47,7 @@ import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.error.ErrorKeys;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
-import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
-import org.geometerplus.zlibrary.ui.android.view.MainView;
+import org.geometerplus.zlibrary.ui.android.view.*;
 
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
@@ -692,7 +691,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		myMainView.prepareFullRefresh();
+		((ZLAndroidWidget)myMainView).prepareFullRefresh();
 		switch (requestCode) {
 			default:
 				super.onActivityResult(requestCode, resultCode, data);
