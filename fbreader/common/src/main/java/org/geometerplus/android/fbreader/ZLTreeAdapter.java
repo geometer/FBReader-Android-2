@@ -21,10 +21,16 @@ package org.geometerplus.android.fbreader;
 
 import java.util.HashSet;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.util.android.DrawableUtil;
+
 import org.geometerplus.zlibrary.core.tree.ZLTree;
+
 import org.fbreader.common.R;
 
 public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
@@ -165,15 +171,25 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 	}
 
 	protected final void setIcon(ImageView imageView, ZLTree<?> tree) {
+		final Context context = myParent.getContext();
 		if (tree.hasChildren()) {
-			if (isOpen(tree)) {
-				imageView.setImageResource(R.drawable.ic_list_group_open);
-			} else {
-				imageView.setImageResource(R.drawable.ic_list_group_closed);
-			}
+			imageView.setImageDrawable(DrawableUtil.tintedDrawable(
+				context,
+				isOpen(tree) ? R.drawable.ic_button_minus_small : R.drawable.ic_button_plus_small,
+				R.color.text_primary
+			));
 		} else {
-			imageView.setImageResource(R.drawable.ic_list_group_empty);
+			imageView.setImageDrawable(null);
 		}
-		imageView.setPadding(25 * (tree.Level - 1), imageView.getPaddingTop(), 0, imageView.getPaddingBottom());
+		final DisplayMetrics dm = context.getResources().getDisplayMetrics();
+		final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+			(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, dm),
+			LinearLayout.LayoutParams.MATCH_PARENT
+		);
+		params.setMargins(
+			(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15 * (tree.Level - 1), dm),
+			0, 0, 0
+		);
+		imageView.setLayoutParams(params);
 	}
 }
