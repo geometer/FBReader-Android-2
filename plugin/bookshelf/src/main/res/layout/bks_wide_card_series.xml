@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.fbreader.plugin.library.view.SeriesView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	style="?attr/cardViewStyle"
+>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+	>
+		<ImageView
+			android:id="@+id/bks_series_covers"
+			android:layout_width="@dimen/wide_card_cover_width"
+			android:layout_height="@dimen/wide_card_cover_height"
+			android:scaleType="fitCenter"
+			android:layout_marginLeft="@dimen/wide_card_padding"
+			android:layout_marginTop="@dimen/wide_card_padding"
+			android:layout_marginBottom="@dimen/wide_card_image_margin_bottom"
+			android:contentDescription="@string/desc_book_stack_covers"
+		/>
+		<TextView
+			android:id="@+id/bks_series_title"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:paddingLeft="@dimen/wide_card_text_padding_left"
+			android:paddingRight="@dimen/wide_card_text_padding_right"
+			android:paddingTop="@dimen/wide_card_padding"
+			android:paddingBottom="@dimen/wide_card_padding"
+			android:lines="2"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+		/>
+	</LinearLayout>
+</org.fbreader.plugin.library.view.SeriesView>

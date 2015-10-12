@@ -1,0 +1,15 @@
+<resources>
+	<style name="Library.CardView.Light" parent="CardView.Light">
+		<item name="android:foreground">?android:attr/selectableItemBackground</item>
+		<item name="cardCornerRadius">4dp</item>
+		<item name="cardElevation">3dp</item>
+	</style>
+	<style name="Library.CardView.Dark" parent="CardView.Dark">
+		<item name="android:foreground">?android:attr/selectableItemBackground</item>
+		<item name="cardCornerRadius">4dp</item>
+		<item name="cardElevation">3dp</item>
+	</style>
+	<style name="Library.FlatButton.Selectable" parent="@style/Library.FlatButton.Base">
+		<item name="android:background">?android:attr/selectableItemBackground</item>
+	</style>
+</resources>

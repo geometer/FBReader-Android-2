@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.fbreader.plugin.library.view.DrawerItem
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:gravity="center_vertical"
+	android:paddingLeft="10dp"
+	android:minHeight="?android:attr/listPreferredItemHeight"
+>
+	<TextView
+		android:id="@+id/bks_drawer_item_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:gravity="center_vertical"
+		android:singleLine="true"
+	/>
+	<TextView
+		android:id="@+id/bks_drawer_item_summary"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:gravity="center_vertical"
+		android:singleLine="true"
+		android:ellipsize="start"
+	/>
+</org.fbreader.plugin.library.view.DrawerItem>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+	xmlns:tools="http://schemas.android.com/tools"
+>
+  <string name="view_mode_default_code" tools:ignore="MissingTranslation">tiny_cards</string>
+
+	<dimen name="grid_padding">5dp</dimen>
+	<dimen name="grid_padding_bottom_ad">45dp</dimen>
+	<dimen name="grid_spacing">5dp</dimen>
+	<dimen name="compact_grid_padding">2dp</dimen>
+	<dimen name="compact_grid_spacing">1dp</dimen>
+
+	<integer name="file_view_column_number_portrait">1</integer>
+	<integer name="file_view_column_number_landscape">2</integer>
+	<integer name="file_view_stretch_mode">2</integer>
+
+	<dimen name="flat_button_padding_vertical">10sp</dimen>
+	<dimen name="flat_button_padding_horizontal">15sp</dimen>
+	<dimen name="flat_button_more_padding_horizontal">7sp</dimen>
+
+	<dimen name="compact_card_image_widht">45sp</dimen>
+	<dimen name="compact_card_image_height">60sp</dimen>
+	<dimen name="compact_card_image_margin_left">5sp</dimen>
+	<dimen name="compact_card_image_margin_vertical">3sp</dimen>
+	<dimen name="compact_card_text_padding_horizontal">12sp</dimen>
+	<dimen name="compact_card_text_padding_vertical">8sp</dimen>
+	<dimen name="compact_card_text_size">16sp</dimen>
+
+	<dimen name="small_card_width">160dp</dimen>
+	<dimen name="small_card_height">290dp</dimen>
+	<dimen name="small_card_padding">3dp</dimen>
+	<dimen name="small_card_cover_top_padding">8dp</dimen>
+	<dimen name="small_card_cover_bottom_padding">6dp</dimen>
+	<dimen name="small_card_text_padding">15dp</dimen>
+	<dimen name="small_card_cover_height">200dp</dimen>
+	<dimen name="small_card_text_height">80sp</dimen>
+	<dimen name="small_card_text_size">14sp</dimen>
+	<dimen name="small_card_text_size_large">18sp</dimen>
+	<dimen name="small_card_more_height">39dp</dimen>
+	<dimen name="small_card_more_padding">6dp</dimen>
+	<integer name="small_card_stretch_mode">0</integer>
+
+	<dimen name="tiny_card_width">120dp</dimen>
+	<dimen name="tiny_card_height">220dp</dimen>
+	<dimen name="tiny_card_padding">2dp</dimen>
+	<dimen name="tiny_card_cover_top_padding">6dp</dimen>
+	<dimen name="tiny_card_cover_bottom_padding">4dp</dimen>
+	<dimen name="tiny_card_text_padding">12dp</dimen>
+	<dimen name="tiny_card_more_height">39dp</dimen>
+	<dimen name="tiny_card_more_padding">4dp</dimen>
+	<dimen name="tiny_card_cover_height">135dp</dimen>
+	<dimen name="tiny_card_text_height">80sp</dimen>
+	<dimen name="tiny_card_text_size">14sp</dimen>
+	<dimen name="tiny_card_text_size_large">18sp</dimen>
+	<integer name="tiny_card_stretch_mode">2</integer>
+
+	<integer name="wide_card_column_number_portrait">1</integer>
+	<integer name="wide_card_column_number_landscape">1</integer>
+	<dimen name="wide_card_height">150dp</dimen>
+	<dimen name="wide_card_padding">5dp</dimen>
+	<dimen name="wide_card_image_margin_bottom">5dp</dimen>
+	<dimen name="wide_card_cover_height">130dp</dimen>
+	<dimen name="wide_card_cover_width">90dp</dimen>
+	<dimen name="wide_card_text_padding_left">10dp</dimen>
+	<dimen name="wide_card_text_padding_right">30dp</dimen>
+	<dimen name="wide_card_fav_size">28dp</dimen>
+	<dimen name="wide_card_fav_container_size">38dp</dimen>
+	<dimen name="wide_card_normal_text_size">13sp</dimen>
+	<dimen name="wide_card_title_text_size">14sp</dimen>
+	<dimen name="wide_card_action_text_size">13sp</dimen>
+	<integer name="wide_card_stretch_mode">2</integer>
+
+	<dimen name="popup_max_cover_width">240dp</dimen>
+	<dimen name="popup_item_padding">15dp</dimen>
+	<dimen name="popup_text_padding">15dp</dimen>
+	<dimen name="popup_action_text_size">13sp</dimen>
+	<dimen name="popup_action_more_height">38sp</dimen>
+</resources>

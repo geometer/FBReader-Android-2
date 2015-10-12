@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="read_progress_small">%s%%</string>
+	<string-array name="view_modes_codes">
+		<item>small_cards</item>
+		<item>tiny_cards</item>
+		<item>wide_cards</item>
+	</string-array>
+	<string-array name="view_modes_readable">
+		<item>@string/view_mode_small_cards</item>
+		<item>@string/view_mode_tiny_cards</item>
+		<item>@string/view_mode_wide_cards</item>
+	</string-array>
+  <string name="color_scheme_default_code">indigo</string>
+	<string-array name="color_schemes_codes">
+		<item>indigo</item>
+		<item>pink</item>
+		<item>teal</item>
+		<item>green</item>
+		<item>grey_light</item>
+		<item>grey_dark</item>
+	</string-array>
+	<string-array name="color_schemes_readable">
+		<item>@string/color_scheme_indigo_default</item>
+		<item>@string/color_scheme_pink</item>
+		<item>@string/color_scheme_teal</item>
+		<item>@string/color_scheme_green</item>
+		<item>@string/color_scheme_grey_light</item>
+		<item>@string/color_scheme_grey_dark</item>
+	</string-array>
+	<string-array name="shelves_codes">
+		<item>RecentlyOpened</item>
+		<item>RecentlyAdded</item>
+		<item>Favorites</item>
+		<item>AllTitles</item>
+		<item>AllAuthors</item>
+		<item>AllSeries</item>
+	</string-array>
+	<string-array name="shelves_readable">
+		<item>@string/category_recently_opened</item>
+		<item>@string/category_recently_added</item>
+		<item>@string/category_favorites</item>
+		<item>@string/category_titles</item>
+		<item>@string/category_authors</item>
+		<item>@string/category_series</item>
+	</string-array>
+</resources>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+	>
+		<include layout="@layout/md_toolbar"/>
+		<android.support.v4.widget.DrawerLayout
+			android:id="@+id/bks_library_drawer_layout"
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"
+		>
+			<RelativeLayout
+				android:layout_height="match_parent"
+				android:layout_width="match_parent"
+			>
+				<GridView
+					android:id="@+id/bks_library_grid"
+					android:layout_height="match_parent"
+					android:layout_width="match_parent"
+					android:gravity="center"
+					android:layout_gravity="center"
+					android:stretchMode="@integer/wide_card_stretch_mode"
+					android:paddingLeft="@dimen/grid_padding"
+					android:paddingRight="@dimen/grid_padding"
+					android:paddingTop="@dimen/grid_padding"
+					android:paddingBottom="@dimen/grid_padding_bottom_ad"
+					android:clipToPadding="false"
+					android:horizontalSpacing="@dimen/grid_spacing"
+					android:verticalSpacing="@dimen/grid_spacing"
+					android:background="?attr/gridBackgroundColor"
+				/>
+				<View
+					android:layout_height="5dp"
+					android:layout_width="match_parent"
+					android:layout_alignParentTop="true"
+					android:background="?attr/bottomShadowDrawable"
+				/>
+				<include layout="@layout/md_progress_indicator"/>
+				<include
+					layout="@layout/bks_banner"
+					android:id="@+id/bks_library_ad"
+				/>
+			</RelativeLayout>
+			<ListView
+				android:id="@+id/bks_library_drawer"
+				android:layout_width="240dp"
+				android:layout_height="match_parent"
+				android:layout_gravity="start"
+				android:background="?attr/mainBackgroundColor"
+				android:dividerHeight="1dp"
+			/>
+		</android.support.v4.widget.DrawerLayout>
+	</LinearLayout>
+	<RelativeLayout
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_gravity="center"
+		android:id="@+id/bks_library_popup_shadow"
+		android:visibility="gone"
+	>
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/bks_library_anchor"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			style="?android:attr/buttonBarButtonStyle"
+			android:textSize="@dimen/popup_action_text_size"
+		/>
+	</RelativeLayout>
+</merge>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_title">Estantería FBReader</string>
+	<string name="bookshelf_title">Estantería</string>
+	<string name="settings_title">Ajustes de Estantería</string>
+
+	<string name="menu_continue_reading">Seguir leyendo</string>
+	<string name="menu_choose_view">Escoger vista</string>
+	<string name="menu_small_cards_view">Tarjetas pequeñas</string>
+	<string name="menu_tiny_cards_view">Tarjetas diminutas</string>
+	<string name="menu_wide_cards_view">Tarjetas grandes</string>
+	<string name="menu_covers_only_view">Portadas</string>
+	<string name="menu_old_view">Clásica</string>
+	<string name="menu_search">Buscar</string>
+	<string name="menu_rescan">Volver a explorar</string>
+	<string name="menu_level_up">Nivel superior</string>
+	<string name="menu_all_authors">Todos los autores</string>
+	<string name="menu_all_series">Todas las series</string>
+	<string name="menu_settings">Ajustes</string>
+	<string name="menu_buy_premium">Comprar FBReader Premium</string>
+	<string name="menu_about">Acerca del programa</string>
+	<string name="menu_whatsnew">Qué hay de nuevo</string>
+
+	<string name="shared_from_fbreader">Compartido desde &lt;a href=&quot;https://fbreader.org/&quot;&gt;FBReader&lt;/a&gt;</string>
+
+	<string name="category_favorites">Favoritos</string>
+	<string name="category_recently_added">Añadidos Recientemente</string>
+	<string name="category_recently_opened">Abiertos Recientemente</string>
+	<string name="category_titles">Títulos</string>
+	<string name="category_authors">Autores</string>
+	<string name="category_series">Series</string>
+	<string name="category_tags">Etiquetas</string>
+	<string name="category_file_tree">Árbol de Archivos</string>
+	<string name="category_found">Encontrados por: %s</string>
+
+	<string name="book_action_read">Leer</string>
+	<string name="book_action_more">Más…</string>
+	<string name="book_action_share">Compartir…</string>
+	<string name="book_action_delete">Eliminar</string>
+	<string name="book_action_remove_from_recent">Eliminar de recientes</string>
+	<string name="book_action_add_to_favorites">Añadir a favoritos</string>
+	<string name="book_action_remove_from_favorites">Eliminar de favoritos</string>
+	<string name="book_action_add_to_custom_shelf">Añadir a estante personalizado…</string>
+	<string name="book_action_remove_from_current_shelf">Eliminar de “%s”</string>
+	<string name="book_action_create_new_shelf">Crear nuevo estante…</string>
+	<string name="book_action_edit">Editar metainfo</string>
+	<string name="book_added_to_shelf">“%1$s” añadido a “%2$s”</string>
+	<string name="shelf_creator_title">Crear nuevo estante</string>
+	<string name="new_shelf_name_hint">Nuevo nombre de estante</string>
+	<string name="read_progress">Leer: %s%%</string>
+	<string name="no_books_found">No se han encontrado libros</string>
+	<string name="button_send">Enviar</string>
+	<string name="button_install">Instalar</string>
+	<string name="button_yes">Sí</string>
+	<string name="button_no">No</string>
+	<string name="button_ok">OK</string>
+	<string name="button_cancel">Cancelar</string>
+	<string name="button_buy">Comprar</string>
+	<string name="button_no_thanks">No, gracias</string>
+	<string name="fbreader_not_found">FBReader no encontrado. ¿Instalar desde Google Play?</string>
+	<string name="delete_book_confirmation">¿Eliminar libro desde el dispositivo?</string>
+	<string name="send_report">La estantería FBReader %s ha sido almacenada en caché. Puede enviar el informe a los desarrolladores.</string>
+
+	<string name="settings_category_shelves">Estantes</string>
+	<string name="settings_visible_shelves">Mostrar estantes estándar</string>
+	<string name="settings_visible_shelves_summary_all">Todos</string>
+	<string name="settings_visible_shelves_summary_none">Ninguno</string>
+	<string name="settings_max_books_count_recently_added">Número máximo de libros en “Añadidos Recientemente”</string>
+	<string name="settings_max_books_count_recently_opened">Número máximo de libros en “Abiertos Recientemente”</string>
+	<string name="settings_author_group_by_series">Grupo de libros por serie en estantes de autor</string>
+	<string name="settings_author_group_by_series_summary_on">Mostrar lista mixta de libros y series</string>
+	<string name="settings_author_group_by_series_summary_off">Mostrar lista plana de libros</string>
+	<string name="settings_show_intro">Mostrar libro de introducción de FBReader</string>
+	<string name="settings_show_intro_always">Siempre</string>
+	<string name="settings_show_intro_if_empty">Si no hay ningún otro libro en la biblioteca</string>
+	<string name="settings_show_intro_never">Nunca</string>
+	<string name="settings_series_show">Mostrar serie</string>
+	<string name="settings_series_show_all">Todos</string>
+	<string name="settings_series_show_two_or_more">Que contengan dos o más libros</string>
+	<string name="settings_series_group">Cómo agrupar series</string>
+	<string name="settings_authors_group">Como agrupar autores</string>
+	<string name="settings_titles_group">Cómo agrupar títulos</string>
+	<string name="settings_group_by_first_letter">Agrupar por primera letra</string>
+	<string name="settings_group_none">No agrupar</string>
+	<string name="settings_group_auto">Comportamiento automático</string>
+
+	<string name="settings_category_ui">Apariencia</string>
+	<string name="settings_color_scheme">Combinación de colores</string>
+	<string name="color_scheme_indigo_default">Índigo (predeterminado)</string>
+	<string name="color_scheme_pink">Rosa</string>
+	<string name="color_scheme_teal">Verde Turquesa</string>
+	<string name="color_scheme_green">Verde</string>
+	<string name="color_scheme_grey_light">Gris (claro)</string>
+	<string name="color_scheme_grey_dark">Gris (oscuro)</string>
+	<string name="settings_view_mode">Modo de vista</string>
+	<string name="view_mode_small_cards">Tarjetas pequeñas</string>
+	<string name="view_mode_tiny_cards">Tarjetas diminutas</string>
+	<string name="view_mode_wide_cards">Tarjetas anchas</string>
+
+	<string name="settings_category_wide_cards">Modo de Tarjetas Anchas</string>
+	<string name="settings_category_file_view">Vista de archivos</string>
+	<string name="settings_column_number_portrait">Número de columnas en el modo de retrato</string>
+	<string name="settings_column_number_landscape">Número de columnas en modo horizontal</string>
+
+	<string name="settings_category_library">Biblioteca</string>
+	<string name="settings_supported_file_formats">Formatos de archivo admitidos</string>
+	<string name="settings_supported_file_formats_summary_all">Todos</string>
+	<string name="settings_supported_file_formats_summary_none">Ninguno (¿está seguro?)</string>
+
+	<string name="desc_book_cover">Portada de Libro</string>
+	<string name="desc_book_stack_covers">Portadas de Libros</string>
+	<string name="desc_file_icon">Ícono de archivo</string>
+	<string name="desc_open_drawer">Mostrar lista de estantes</string>
+	<string name="desc_close_drawer">Ocultar lista de estantes</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="LibraryTheme">
+		<attr name="cardViewStyle" format="reference"/>
+		<attr name="compactCardViewStyle" format="reference"/>
+		<attr name="mainBackgroundColor" format="color"/>
+		<attr name="gridBackgroundColor" format="color"/>
+		<attr name="mainTextColor" format="color"/>
+		<attr name="disabledTextColor" format="color"/>
+		<attr name="bottomShadowDrawable" format="reference"/>
+		<attr name="flatButtonStyle" format="reference"/>
+		<attr name="flatButtonPseudoStyle" format="reference"/>
+		<attr name="flatButtonMoreStyle" format="reference"/>
+		<attr name="isThemeDark" format="boolean"/>
+	</declare-styleable>
+</resources>
