@@ -19,31 +19,12 @@
 
 package org.fbreader.util;
 
-public class Pair<T1,T2> {
-	public final T1 First;
-	public final T2 Second;
-
-	public Pair(T1 first, T2 second) {
-		First = first;
-		Second = second;
+public class ComparisonUtil {
+	public static boolean equal(Object o1, Object o2) {
+		return o1 == null ? o2 == null : o1.equals(o2);
 	}
 
-	@Override
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof Pair)) {
-			return false;
-		}
-		final Pair pair = (Pair)other;
-		return
-			ComparisonUtil.equal(First, pair.First) &&
-			ComparisonUtil.equal(Second, pair.Second);
-	}
-
-	@Override
-	public int hashCode() {
-		return ComparisonUtil.hashCode(First) + 23 * ComparisonUtil.hashCode(Second);
+	public static int hashCode(Object o) {
+		return o != null ? o.hashCode() : 0;
 	}
 }
