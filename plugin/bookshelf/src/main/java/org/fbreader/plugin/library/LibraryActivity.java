@@ -701,25 +701,36 @@ public final class LibraryActivity extends FullActivity {
 	}
 
 	void invalidateGrid() {
-		if (myGrid != null) {
-			myGrid.invalidateViews();
-			myBooksAdapter.PositionManager.selectItem();
+		final GridView grid = myGrid;
+		if (grid != null) {
+			grid.post(new Runnable() {
+				public void run() {
+					grid.invalidateViews();
+					myBooksAdapter.PositionManager.selectItem();
+				}
+			});
 		}
 	}
 
 	void selectItemInternal(final int position) {
-		if (myGrid != null) {
-			myGrid.post(new Runnable() {
+		final GridView grid = myGrid;
+		if (grid != null) {
+			grid.post(new Runnable() {
 				public void run() {
-					myGrid.setSelection(position);
+					grid.setSelection(position);
 				}
 			});
 		}
 	}
 
 	void invalidateDrawer() {
-		if (myDrawer != null) {
-			myDrawer.invalidateViews();
+		final ListView drawer = myDrawer;
+		if (drawer != null) {
+			drawer.post(new Runnable() {
+				public void run() {
+					drawer.invalidateViews();
+				}
+			});
 		}
 	}
 
