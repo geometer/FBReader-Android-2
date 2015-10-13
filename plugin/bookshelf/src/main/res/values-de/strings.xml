@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="bookshelf_title">Bücherregal</string>
+	<string name="settings_title">Einstellungen Bücherregal</string>
+
+	<string name="menu_continue_reading">Weiter lesen</string>
+	<string name="menu_choose_view">Ansicht auswählen</string>
+	<string name="menu_small_cards_view">Schmale Karten</string>
+	<string name="menu_tiny_cards_view">Winzige Karten</string>
+	<string name="menu_wide_cards_view">Breite Karten</string>
+	<string name="menu_covers_only_view">Titelseiten</string>
+	<string name="menu_old_view">Klassisch</string>
+	<string name="menu_rescan">Neu einlesen</string>
+	<string name="menu_level_up">Level up</string>
+	<string name="menu_settings">Einstellungen</string>
+
+	<string name="shared_from_fbreader">Bereitgestellt von &lt;a href=&quot;https://fbreader.org/&quot;&gt;FBReader&lt;/a&gt;</string>
+
+	<string name="category_favorites">Favoriten</string>
+	<string name="category_recently_added">Zuletzt hinzugefügt</string>
+	<string name="category_recently_opened">Zuletzt geöffnet</string>
+	<string name="category_titles">Titel</string>
+	<string name="category_authors">Autoren</string>
+	<string name="category_series">Reihe</string>
+	<string name="category_tags">Schlagwörter (Tags)</string>
+	<string name="category_file_tree">Ordneransicht</string>
+
+	<string name="book_action_read">Lesen</string>
+	<string name="book_action_more">Mehr…</string>
+	<string name="book_action_share">Teilen…</string>
+	<string name="book_action_delete">Löschen</string>
+	<string name="book_action_add_to_favorites">zu Favoriten hinzufügen</string>
+	<string name="book_action_add_to_custom_shelf">zu benutzerdefiniertem Regal hinzufügen…</string>
+
+	<string name="settings_category_shelves">Regale</string>
+	<string name="settings_visible_shelves">Regale Alle</string>
+	<string name="settings_max_books_count_recently_added">Maximale Anzahl Bücher in „Zuletzt hinzugefügt“</string>
+	<string name="settings_max_books_count_recently_opened">Maximale Anzahl Bücher in „Zuletzt geöffnet“</string>
+	<string name="settings_show_intro">Zeige FBReader Einführung</string>
+	<string name="settings_show_intro_always">Immer</string>
+	<string name="settings_show_intro_never">Niemals</string>
+
+	<string name="settings_color_scheme">Farbschema</string>
+	<string name="color_scheme_indigo_default">Indigo (Standard)</string>
+	<string name="color_scheme_pink">Pink</string>
+	<string name="color_scheme_teal">Blaugrün</string>
+	<string name="color_scheme_green">Grün</string>
+	<string name="color_scheme_grey_light">Grau (hell)</string>
+	<string name="color_scheme_grey_dark">Grau (dunkel)</string>
+	<string name="settings_view_mode">Ansicht</string>
+	<string name="view_mode_small_cards">Schmale Karten</string>
+	<string name="view_mode_tiny_cards">Winzige Karten</string>
+	<string name="view_mode_wide_cards">Breite Karten</string>
+
+	<string name="settings_category_wide_cards">Breite Karten Ansicht</string>
+	<string name="settings_category_file_view">Dateiansicht</string>
+	<string name="settings_column_number_portrait">Anzahl Spalten im Querformat</string>
+	<string name="settings_column_number_landscape">Anzahl Spalten im Hochformat</string>
+
+	<string name="settings_category_library">Bibliothek</string>
+	<string name="settings_supported_file_formats">Unterstützte Dateiformate</string>
+</resources>
