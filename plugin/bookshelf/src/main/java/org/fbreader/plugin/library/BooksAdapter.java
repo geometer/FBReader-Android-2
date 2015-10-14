@@ -13,6 +13,7 @@ import android.widget.*;
 import org.fbreader.util.NaturalOrderComparator;
 import org.fbreader.util.Pair;
 import org.fbreader.util.android.LinearIndexer;
+import org.fbreader.util.android.OrderedIndexer;
 
 import org.geometerplus.zlibrary.core.util.RationalNumber;
 import org.geometerplus.fbreader.book.*;
@@ -56,12 +57,18 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 
 	private abstract class Provider {
 		abstract SetupAction setupAction();
-		abstract SectionIndexer sectionIndexer();
 		abstract boolean onBookEventList(List<Pair<BookEvent,Book>> events);
+		abstract SectionIndexer sectionIndexer();
 
 		void reset() {
 			synchronized (myItemList) {
 				myItemList.clear();
+				final SectionIndexer indexer = sectionIndexer();
+				if (indexer instanceof LinearIndexer) {
+					((LinearIndexer)indexer).reset();
+				} else if (indexer instanceof OrderedIndexer) {
+					((OrderedIndexer)indexer).reset();
+				}
 			}
 		}
 
@@ -102,15 +109,6 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 	private Filter defaultFilter() {
 		return myActivity.preferences().getBoolean("show_intro", false)
 			? new Filter.Empty() : new Filter.HasPhysicalFile();
-	}
-
-	private void addBooksToList(Collection<Book> books) {
-		final Filter filter = defaultFilter();
-		for (Book b : books) {
-			if (filter.matches(b)) {
-				myItemList.add(b);
-			}
-		}
 	}
 
 	@Override
@@ -534,6 +532,11 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 
 	private abstract class BooksProvider extends Provider {
 		@Override
+		OrderedIndexer sectionIndexer() {
+			return null;
+		}
+
+		@Override
 		boolean onBookEventList(List<Pair<BookEvent,Book>> events) {
 			boolean updated = false;
 			for (Pair<BookEvent,Book> pair : events) {
@@ -556,15 +559,46 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 					synchronized (myItemList) {
 						final int index = myItemList.indexOf(book);
 						if (index != -1) {
-							((Book)myItemList.get(index)).updateFrom(book);
+							final Book existing = (Book)myItemList.get(index);
+							removeFromIndexer(existing);
+							existing.updateFrom(book);
+							addToIndexer(existing);
 							return true;
 						}
 						return false;
 					}
 				case Removed:
 					synchronized (myItemList) {
-						return myItemList.remove(book);
+						if (myItemList.remove(book)) {
+							removeFromIndexer(book);
+							return true;
+						}
+						return false;
 					}
+			}
+		}
+
+		protected final void addToIndexer(Book book) {
+			final OrderedIndexer indexer = sectionIndexer();
+			if (indexer != null) {
+				indexer.addLabel(label(book.getSortKey()));
+			}
+		}
+
+		protected final void removeFromIndexer(Book book) {
+			final OrderedIndexer indexer = sectionIndexer();
+			if (indexer != null) {
+				indexer.removeLabel(label(book.getSortKey()));
+			}
+		}
+
+		protected final void addBooksToList(Collection<Book> books) {
+			final Filter filter = defaultFilter();
+			for (Book b : books) {
+				if (filter.matches(b)) {
+					myItemList.add(b);
+					addToIndexer(b);
+				}
 			}
 		}
 	}
@@ -587,11 +621,6 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 	private final class RecentlyAddedProvider extends SimpleBooksProvider<Shelf.RecentlyAddedShelf> {
 		RecentlyAddedProvider(Shelf.RecentlyAddedShelf shelf) {
 			super(shelf);
-		}
-
-		@Override
-		SectionIndexer sectionIndexer() {
-			return null;
 		}
 
 		@Override
@@ -623,11 +652,6 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 	private final class RecentlyOpenedProvider extends SimpleBooksProvider<Shelf.RecentlyOpenedShelf> {
 		RecentlyOpenedProvider(Shelf.RecentlyOpenedShelf shelf) {
 			super(shelf);
-		}
-
-		@Override
-		SectionIndexer sectionIndexer() {
-			return null;
 		}
 
 		@Override
@@ -674,19 +698,13 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 	}
 
-	private class FilterProvider extends BooksProvider {
+	private abstract class FilterProvider extends BooksProvider {
 		private final Filter myFilter;
 		private final Comparator<Book> myComparator;
 
 		FilterProvider(Filter filter, Comparator<Book> comparator) {
 			myFilter = filter;
 			myComparator = comparator;
-		}
-
-		@Override
-		SectionIndexer sectionIndexer() {
-			// TODO: indexer
-			return null;
 		}
 
 		@Override
@@ -726,7 +744,11 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						}
 					} else if (myItemList.contains(book)) {
 						synchronized (myItemList) {
-							return myItemList.remove(book);
+							if (myItemList.remove(book)) {
+								removeFromIndexer(book);
+								return true;
+							}
+							return false;
 						}
 					}
 					return super.processBookEvent(event, book);
@@ -750,6 +772,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				} else {
 					myItemList.add(book);
 				}
+				addToIndexer(book);
 			}
 			return true;
 		}
@@ -761,6 +784,10 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 					newBooks.addAll(myItemList);
 				}
 				myItemList.clear();
+				final OrderedIndexer indexer = sectionIndexer();
+				if (indexer != null) {
+					indexer.reset();
+				}
 				addBooksToList(newBooks);
 				if (myComparator != null) {
 					Collections.sort((List<Book>)myItemList, myComparator);
@@ -771,9 +798,22 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 	}
 
-	private class SingleAuthorProvider extends FilterProvider {
+	private class TitlesProvider extends FilterProvider {
+		private final OrderedIndexer myIndexer = new OrderedIndexer();
+
+		TitlesProvider(Filter filter) {
+			super(filter, TITLE_COMPARATOR);
+		}
+
+		@Override
+		OrderedIndexer sectionIndexer() {
+			return myIndexer;
+		}
+	}
+
+	private class SingleAuthorProvider extends TitlesProvider {
 		SingleAuthorProvider(Shelf.AuthorShelf shelf) {
-			super(new Filter.ByAuthor(shelf.Author), TITLE_COMPARATOR);
+			super(new Filter.ByAuthor(shelf.Author));
 		}
 
 		@Override
@@ -889,6 +929,16 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 	}
 
+	private static String label(String title) {
+		if (title == null || "".equals(title)) {
+			return "";
+		} else if (Character.isDigit(title.charAt(0))) {
+			return "0-9";
+		} else {
+			return title.substring(0, 1).toUpperCase();
+		}
+	}
+
 	private final class FileSystemProvider extends Provider {
 		private Shelf.FileSystemShelf myShelf;
 		private final List<String> myHistory =
@@ -947,12 +997,8 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						myIndexer.reset();
 
 						myItemList.addAll(itemList);
-
 						for (int i = 0; i < itemList.size(); ++i) {
-							final String name = itemList.get(i).Name;
-							myIndexer.addElement(
-								"".equals(name) ? "" : name.substring(0, 1).toUpperCase()
-							);
+							myIndexer.addLabel(label(itemList.get(i).Name));
 						}
 					}
 
@@ -1002,11 +1048,11 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 	}
 
-	private final class CustomCategoryProvider extends FilterProvider {
+	private final class CustomCategoryProvider extends TitlesProvider {
 		final String myLabel;
 
 		CustomCategoryProvider(Shelf.CustomShelf item) {
-			super(item.filter(), TITLE_COMPARATOR);
+			super(item.filter());
 			myLabel = item.Label;
 		}
 
@@ -1036,10 +1082,11 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 	}
 
 	private final class AuthorsProvider extends Provider implements Comparator<Object> {
+		private final OrderedIndexer myIndexer = new OrderedIndexer();
+
 		@Override
 		SectionIndexer sectionIndexer() {
-			// TODO: indexer
-			return null;
+			return myIndexer;
 		}
 
 		@Override
@@ -1048,9 +1095,14 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				public SetupAction run() {
 					synchronized (myItemList) {
 						myItemList.clear();
+						myIndexer.reset();
+
 						myItemList.addAll(myActivity.Collection.authors());
 						myItemList.remove(Author.NULL);
 						Collections.sort(myItemList, AuthorsProvider.this);
+						for (Object item : myItemList) {
+							myIndexer.addLabel(label(((Author)item).SortKey));
+						}
 					}
 					notifyDataSetChanged();
 					myActivity.invalidateGrid();
@@ -1087,6 +1139,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						Collections.binarySearch(myItemList, a, AuthorsProvider.this);
 					if (index < 0) {
 						myItemList.add(- index - 1, a);
+						myIndexer.addLabel(label(a.SortKey));
 						updated = true;
 					}
 				}
@@ -1100,10 +1153,11 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 	}
 
 	private final class SeriesProvider extends Provider implements Comparator<Object> {
+		private final OrderedIndexer myIndexer = new OrderedIndexer();
+
 		@Override
 		SectionIndexer sectionIndexer() {
-			// TODO: indexer
-			return null;
+			return myIndexer;
 		}
 
 		@Override
@@ -1112,8 +1166,13 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				public SetupAction run() {
 					synchronized (myItemList) {
 						myItemList.clear();
+						myIndexer.reset();
+
 						myItemList.addAll(myActivity.Collection.series());
 						Collections.sort(myItemList, SeriesProvider.this);
+						for (Object item : myItemList) {
+							myIndexer.addLabel(label((String)item));
+						}
 					}
 					notifyDataSetChanged();
 					myActivity.invalidateGrid();
@@ -1152,6 +1211,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						Collections.binarySearch(myItemList, series, SeriesProvider.this);
 					if (index < 0) {
 						myItemList.add(- index - 1, series);
+						myIndexer.addLabel(label(series));
 						updated = true;
 					}
 				}
@@ -1196,8 +1256,8 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		myActivity.mainView().setFastScrollEnabled(provider.sectionIndexer() != null);
 	}
 
-	private void setProvider(Filter filter, Comparator<Book> comparator) {
-		setProvider(new FilterProvider(filter, comparator));
+	private void setTitlesProvider(Filter filter) {
+		setProvider(new TitlesProvider(filter));
 	}
 
 	private final List<Pair<Pair<BookEvent,Book>,Provider>> myEventQueue =
@@ -1337,10 +1397,10 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				setProvider(new SingleSeriesProvider((Shelf.SeriesShelf)shelf));
 				break;
 			case AllTitles:
-				setProvider(new Filter.Empty(), TITLE_COMPARATOR);
+				setTitlesProvider(new Filter.Empty());
 				break;
 			case Favorites:
-				setProvider(new Filter.ByLabel(Book.FAVORITE_LABEL), TITLE_COMPARATOR);
+				setTitlesProvider(new Filter.ByLabel(Book.FAVORITE_LABEL));
 				break;
 			case RecentlyAdded:
 				setProvider(new RecentlyAddedProvider((Shelf.RecentlyAddedShelf)shelf));
@@ -1360,7 +1420,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 					if (filter == null) {
 						throw new RuntimeException("empty search parameter");
 					}
-					setProvider(filter, null);
+					setProvider(new FilterProvider(filter, null) {});
 				}
 				break;
 			case FileSystem:

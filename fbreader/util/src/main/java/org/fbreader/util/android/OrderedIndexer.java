@@ -19,64 +19,88 @@
 
 package org.fbreader.util.android;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import android.widget.SectionIndexer;
 
-public class LinearIndexer implements SectionIndexer {
-	private static class Section {
+public class OrderedIndexer implements SectionIndexer {
+	private static class Section implements Comparable<Section> {
 		final String Title;
-		final int FirstIndex;
+		int Count;
 
-		Section(String title, int firstIndex) {
+		Section(String title) {
 			Title = title;
-			FirstIndex = firstIndex;
+			Count = 1;
 		}
 
 		@Override
 		public String toString() {
 			return Title;
 		}
+
+		@Override
+		public int compareTo(Section section) {
+			return Title.compareTo(section.Title);
+		}
 	}
 
 	private final List<Section> mySections = new ArrayList<Section>();
-	private int myCount;
 	private volatile Object[] myCache;
 
 	public synchronized void reset() {
 		mySections.clear();
-		myCount = 0;
 		myCache = null;
 	}
 
 	public synchronized void addLabel(String title) {
-		if (mySections.isEmpty() || !title.equals(mySections.get(mySections.size() - 1).Title)) {
-			mySections.add(new Section(title, myCount));
+		final Section section = new Section(title);
+		final int index = Collections.binarySearch(mySections, section);
+		if (index >= 0) {
+			mySections.get(index).Count += 1;
+		} else {
+			mySections.add(- index - 1, section);
 			myCache = null;
 		}
-		++myCount;
 	}
 
-	public int getPositionForSection(int sectionIndex) {
-		try {
-			return mySections.get(sectionIndex).FirstIndex;
-		} catch (Exception e) {
-			return 0;
+	public synchronized void removeLabel(String title) {
+		final Section section = new Section(title);
+		final int index = Collections.binarySearch(mySections, section);
+		if (index >= 0) {
+			final Section existing = mySections.get(index);
+			if (existing.Count > 1) {
+				existing.Count -= 1;
+			} else {
+				mySections.remove(index);
+				myCache = null;
+			}
 		}
+	}
+
+	public synchronized int getPositionForSection(int sectionIndex) {
+		int position = 0;
+		int index = 0;
+		for (Section section : mySections) {
+			index += 1;
+			if (index > sectionIndex) {
+				break;
+			}
+			position += section.Count;
+		}
+		return position;
 	}
 
 	public int getSectionForPosition(int positionIndex) {
-		try {
-			for (int i = 0; i < mySections.size(); ++i) {
-				if (mySections.get(i).FirstIndex <= positionIndex) {
-					return i;
-				}
+		int position = 0;
+		int index = 0;
+		for (Section section : mySections) {
+			position += section.Count;
+			if (position > positionIndex) {
+				break;
 			}
-			return mySections.size() - 1;
-		} catch (Exception e) {
-			return 0;
+			index += 1;
 		}
+		return index;
 	}
 
 	public synchronized Object[] getSections() {
