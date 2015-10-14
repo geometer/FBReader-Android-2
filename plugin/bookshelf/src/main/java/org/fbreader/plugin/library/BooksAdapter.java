@@ -10,14 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import org.fbreader.util.NaturalOrderComparator;
+import org.fbreader.util.Pair;
+import org.fbreader.util.android.LinearIndexer;
+
 import org.geometerplus.zlibrary.core.util.RationalNumber;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.book.Filter;
 
-import org.fbreader.util.android.LinearIndexer;
 import org.fbreader.plugin.library.view.*;
 
 final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener<Book>, AbsListView.OnScrollListener, SectionIndexer {
+	private static final NaturalOrderComparator NATURAL_ORDER_COMPARATOR =
+		new NaturalOrderComparator();
+
 	interface ItemViewType {
 		int SmallCards = 0;
 		int TinyCards = 3;
@@ -32,10 +38,6 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 
 	private interface SetupAction {
 		SetupAction run();
-	}
-
-	private interface Action {
-		boolean run();
 	}
 
 	private static final Comparator<Book> TITLE_COMPARATOR = new Comparator<Book>() {
@@ -54,8 +56,8 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 
 	private abstract class Provider {
 		abstract SetupAction setupAction();
-		abstract Action bookEventAction(BookEvent event, Book book);
 		abstract SectionIndexer sectionIndexer();
+		abstract boolean onBookEventList(List<Pair<BookEvent,Book>> events);
 
 		void reset() {
 			synchronized (myItemList) {
@@ -532,61 +534,38 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 
 	private abstract class BooksProvider extends Provider {
 		@Override
-		Action bookEventAction(BookEvent event, Book book) {
+		boolean onBookEventList(List<Pair<BookEvent,Book>> events) {
+			boolean updated = false;
+			for (Pair<BookEvent,Book> pair : events) {
+				if (processBookEvent(pair.First, pair.Second)) {
+					updated = true;
+				}
+			}
+			return updated;
+		}
+
+		boolean processBookEvent(BookEvent event, final Book book) {
+			if (!myItemList.contains(book)) {
+				return false;
+			}
+
 			switch (event) {
 				default:
-					return null;
+					return false;
 				case Updated:
 					synchronized (myItemList) {
 						final int index = myItemList.indexOf(book);
 						if (index != -1) {
 							((Book)myItemList.get(index)).updateFrom(book);
-							// TODO: update single view
-							notifyDataSetChanged();
+							return true;
 						}
+						return false;
 					}
-					return null;
 				case Removed:
-					if (myItemList.contains(book)) {
-						return removeSingleBookAction(book);
-					}
-					return null;
-			}
-		}
-
-		protected Action addSingleBookAction(final Book book, final Comparator<Book> comparator) {
-			return new Action() {
-				public boolean run() {
-					synchronized (myItemList) {
-						if (myItemList.contains(book)) {
-							return false;
-						}
-						if (!defaultFilter().matches(book)) {
-							return false;
-						}
-
-						if (comparator != null) {
-							final int index = Collections.binarySearch(
-								(List<Book>)myItemList, book, comparator
-							);
-							myItemList.add(index < 0 ? - index - 1 : index, book);
-						} else {
-							myItemList.add(book);
-						}
-					}
-					return true;
-				}
-			};
-		}
-
-		protected Action removeSingleBookAction(final Book book) {
-			return new Action() {
-				public boolean run() {
 					synchronized (myItemList) {
 						return myItemList.remove(book);
 					}
-				}
-			};
+			}
 		}
 	}
 
@@ -602,8 +581,6 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				myItemList.clear();
 				addBooksToList(books);
 			}
-			notifyDataSetChanged();
-			myActivity.invalidateGrid();
 		}
 	}
 
@@ -623,32 +600,23 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				public SetupAction run() {
 					final int limit = myShelf.maxBooksCount(myActivity.preferences());
 					setBooks(myActivity.Collection.recentlyAddedBooks(limit));
+					notifyDataSetChanged();
+					myActivity.invalidateGrid();
 					return null;
 				}
 			};
 		}
 
 		@Override
-		Action bookEventAction(BookEvent event, Book book) {
-			switch (event) {
-				default:
-					return super.bookEventAction(event, book);
-				case Added:
-				case Removed:
-					break;
-			}
+		boolean onBookEventList(List<Pair<BookEvent,Book>> events) {
 			final int limit = myShelf.maxBooksCount(myActivity.preferences());
 			final List<Book> books = myActivity.Collection.recentlyAddedBooks(limit);
-			if (books.equals(myItemList)) {
-				return super.bookEventAction(event, book);
+			if (!books.equals(myItemList)) {
+				setBooks(books);
+				return true;
 			}
-			return new Action() {
-				public boolean run() {
-					// TODO: do not replace all books (?)
-					setBooks(books);
-					return true;
-				}
-			};
+
+			return super.onBookEventList(events);
 		}
 	}
 
@@ -668,34 +636,23 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				public SetupAction run() {
 					final int limit = myShelf.maxBooksCount(myActivity.preferences());
 					setBooks(myActivity.Collection.recentlyOpenedBooks(limit));
+					notifyDataSetChanged();
+					myActivity.invalidateGrid();
 					return null;
 				}
 			};
 		}
 
 		@Override
-		Action bookEventAction(BookEvent event, Book book) {
-			switch (event) {
-				default:
-					return super.bookEventAction(event, book);
-				case Added:
-				case Updated:
-				case Removed:
-				case Opened:
-					break;
-			}
+		boolean onBookEventList(List<Pair<BookEvent,Book>> events) {
 			final int limit = myShelf.maxBooksCount(myActivity.preferences());
 			final List<Book> books = myActivity.Collection.recentlyOpenedBooks(limit);
-			if (books.equals(myItemList)) {
-				return super.bookEventAction(event, book);
+			if (!books.equals(myItemList)) {
+				setBooks(books);
+				return true;
 			}
-			return new Action() {
-				public boolean run() {
-					// TODO: do not replace all books (?)
-					setBooks(books);
-					return true;
-				}
-			};
+
+			return super.onBookEventList(events);
 		}
 
 		@Override
@@ -756,22 +713,45 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 
 		@Override
-		Action bookEventAction(BookEvent event, Book book) {
+		boolean processBookEvent(BookEvent event, Book book) {
 			switch (event) {
 				default:
-					return super.bookEventAction(event, book);
+					return super.processBookEvent(event, book);
 				case Added:
-					return myFilter.matches(book) ? addSingleBookAction(book, myComparator) : null;
+					return myFilter.matches(book) && addSingleBook(book, myComparator);
 				case Updated:
 					if (myFilter.matches(book)) {
 						if (!myItemList.contains(book)) {
-							return addSingleBookAction(book, myComparator);
+							return addSingleBook(book, myComparator);
 						}
 					} else if (myItemList.contains(book)) {
-						return removeSingleBookAction(book);
+						synchronized (myItemList) {
+							return myItemList.remove(book);
+						}
 					}
-					return super.bookEventAction(event, book);
+					return super.processBookEvent(event, book);
 			}
+		}
+
+		private boolean addSingleBook(final Book book, final Comparator<Book> comparator) {
+			synchronized (myItemList) {
+				if (myItemList.contains(book)) {
+					return false;
+				}
+				if (!defaultFilter().matches(book)) {
+					return false;
+				}
+
+				if (comparator != null) {
+					final int index = Collections.binarySearch(
+						(List<Book>)myItemList, book, comparator
+					);
+					myItemList.add(index < 0 ? - index - 1 : index, book);
+				} else {
+					myItemList.add(book);
+				}
+			}
+			return true;
 		}
 
 		private void addBooks(final Collection<Book> books, final boolean removeOld) {
@@ -905,7 +885,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 			if (Kind != other.Kind) {
 				return Kind.compareTo(other.Kind);
 			}
-			return Name.compareToIgnoreCase(other.Name);
+			return NATURAL_ORDER_COMPARATOR.compare(Name, other.Name);
 		}
 	}
 
@@ -984,8 +964,8 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 
 		@Override
-		Action bookEventAction(BookEvent event, Book book) {
-			return null;
+		boolean onBookEventList(List<Pair<BookEvent,Book>> events) {
+			return false;
 		}
 
 		@Override
@@ -1080,41 +1060,38 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 
 		@Override
-		Action bookEventAction(BookEvent event, Book book) {
-			switch (event) {
-				default:
-					return null;
-				case Added:
-					return addAuthorsAction(book.authors());
-			}
-		}
-
-		private Action addAuthorsAction(List<Author> authors) {
+		boolean onBookEventList(List<Pair<BookEvent,Book>> events) {
 			final List<Author> toAdd = new ArrayList<Author>();
-			for (Author a : authors) {
-				if (!Author.NULL.equals(a) && !myItemList.contains(a)) {
-					toAdd.add(a);
+
+			final HashSet<Author> alreadyInUse = new HashSet<Author>(myItemList);
+			for (Pair<BookEvent,Book> e : events) {
+				if (e.First != BookEvent.Added) {
+					continue;
+				}
+
+				for (Author a : e.Second.authors()) {
+					if (!Author.NULL.equals(a) && !alreadyInUse.contains(a)) {
+						alreadyInUse.add(a);
+						toAdd.add(a);
+					}
 				}
 			}
 			if (toAdd.isEmpty()) {
-				return null;
+				return false;
 			}
-			return new Action() {
-				public boolean run() {
-					synchronized (myItemList) {
-						boolean changed = false;
-						for (Author a : toAdd) {
-							final int index =
-								Collections.binarySearch(myItemList, a, AuthorsProvider.this);
-							if (index < 0) {
-								myItemList.add(- index - 1, a);
-								changed = true;
-							}
-						}
-						return changed;
+
+			synchronized (myItemList) {
+				boolean updated = false;
+				for (Author a : toAdd) {
+					final int index =
+						Collections.binarySearch(myItemList, a, AuthorsProvider.this);
+					if (index < 0) {
+						myItemList.add(- index - 1, a);
+						updated = true;
 					}
 				}
-			};
+				return updated;
+			}
 		}
 
 		public int compare(Object o0, Object o1) {
@@ -1146,41 +1123,44 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 
 		@Override
-		Action bookEventAction(BookEvent event, Book book) {
-			switch (event) {
-				default:
-					return null;
-				case Added:
-					return addSeriesAction(book.getSeriesInfo());
-			}
-		}
+		boolean onBookEventList(List<Pair<BookEvent,Book>> events) {
+			final List<String> toAdd = new ArrayList<String>();
 
-		private Action addSeriesAction(SeriesInfo info) {
-			if (info == null) {
-				return null;
+			final HashSet<String> alreadyInUse = new HashSet<String>(myItemList);
+			for (Pair<BookEvent,Book> e : events) {
+				if (e.First != BookEvent.Added) {
+					continue;
+				}
+
+				final SeriesInfo info = e.Second.getSeriesInfo();
+				if (info == null) {
+					continue;
+				}
+				final String series = info.Series.getTitle();
+				if (!alreadyInUse.contains(series)) {
+					alreadyInUse.add(series);
+					toAdd.add(series);
+				}
 			}
-			final String series = info.Series.getTitle();
-			if (myItemList.contains(series)) {
-				return null;
+			if (toAdd.isEmpty()) {
+				return false;
 			}
-			return new Action() {
-				public boolean run() {
-					synchronized (myItemList) {
-						final int index =
-							Collections.binarySearch(myItemList, series, SeriesProvider.this);
-						if (index < 0) {
-							myItemList.add(- index - 1, series);
-							return true;
-						} else {
-							return false;
-						}
+			synchronized (myItemList) {
+				boolean updated = false;
+				for (String series : toAdd) {
+					final int index =
+						Collections.binarySearch(myItemList, series, SeriesProvider.this);
+					if (index < 0) {
+						myItemList.add(- index - 1, series);
+						updated = true;
 					}
 				}
-			};
+				return updated;
+			}
 		}
 
 		public int compare(Object o0, Object o1) {
-			return ((String)o0).compareTo((String)o1);
+			return NATURAL_ORDER_COMPARATOR.compare((String)o0, (String)o1);
 		}
 	}
 
@@ -1220,38 +1200,55 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		setProvider(new FilterProvider(filter, comparator));
 	}
 
+	private final List<Pair<Pair<BookEvent,Book>,Provider>> myEventQueue =
+		Collections.synchronizedList(new LinkedList<Pair<Pair<BookEvent,Book>,Provider>>());
+	private final Runnable myEventQueueHandler = new Runnable() {
+		public void run() {
+			final List<Pair<Pair<BookEvent,Book>,Provider>> queue;
+			synchronized (myEventQueue) {
+				queue = new ArrayList<Pair<Pair<BookEvent,Book>,Provider>>(myEventQueue);
+				myEventQueue.clear();
+			}
+
+			final Set<String> names = new HashSet<String>();
+			for (Pair<Pair<BookEvent,Book>,Provider> pair : queue) {
+				final Pair<BookEvent,Book> event = pair.First;
+				switch (event.First) {
+					case Added:
+					case Updated:
+						for (Label l : event.Second.labels()) {
+							names.add(l.Name);
+						}
+						break;
+					default:
+						break;
+				}
+			}
+			myActivity.updateCustomCategoryList(names);
+
+			synchronized (BooksAdapter.this) {
+				final List<Pair<BookEvent,Book>> events =
+					new ArrayList<Pair<BookEvent,Book>>();
+				for (Pair<Pair<BookEvent,Book>,Provider> pair : queue) {
+					if (pair.Second == myProvider) {
+						events.add(pair.First);
+					}
+				}
+				if (!events.isEmpty() && myProvider.onBookEventList(events)) {
+					notifyDataSetChanged();
+					myActivity.invalidateGrid();
+				}
+			}
+		}
+	};
+
 	@Override
 	public synchronized void onBookEvent(BookEvent event, Book book) {
-		switch (event) {
-			case Added:
-			case Updated:
-			{
-				final List<Label> labels = book.labels();
-				if (!labels.isEmpty()) {
-					final List<String> names = new ArrayList<String>(labels.size());
-					for (Label l : labels) {
-						names.add(l.Name);
-					}
-					myActivity.updateCustomCategoryList(names);
-				}
-				break;
+		synchronized (myEventQueue) {
+			myEventQueue.add(new Pair(new Pair(event, book), myProvider));
+			if (myEventQueue.size() == 1) {
+				myActivity.mainView().postDelayed(myEventQueueHandler, 100);
 			}
-			default:
-				break;
-		}
-		final Provider provider = myProvider;
-		final Action action = provider != null ? provider.bookEventAction(event, book) : null;
-		if (action != null) {
-			myActivity.runOnUiThread(new Runnable() {
-				public void run() {
-					synchronized (BooksAdapter.this) {
-						if (provider == myProvider && action.run()) {
-							notifyDataSetChanged();
-							myActivity.invalidateGrid();
-						}
-					}
-				}
-			});
 		}
 		invalidateStateCache();
 	}

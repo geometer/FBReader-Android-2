@@ -746,7 +746,11 @@ public final class LibraryActivity extends FullActivity {
 		return new ArrayList<String>(myCustomCategories);
 	}
 
-	void updateCustomCategoryList(List<String> labels) {
+	void updateCustomCategoryList(Collection<String> labels) {
+		if (labels.isEmpty()) {
+			return;
+		}
+
 		final Set<String> labelSet = new TreeSet<String>();
 		for (String l : labels) {
 			if (BookUtil.isCustomCategoryLabel(l) && !myCustomCategories.contains(l)) {
