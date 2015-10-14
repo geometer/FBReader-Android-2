@@ -73,10 +73,10 @@ public class VNTNumberPickerPreference extends DialogPreference {
 		super.onPrepareDialogBuilder(builder);
 
 		final View layout = ((Activity)getContext()).getLayoutInflater().inflate(
-			R.layout.picker_preference, null
+			R.layout.vnt_picker_preference, null
 		);
 
-		myPicker = layout.findViewById(R.id.picker_preference_picker);
+		myPicker = (NumberPicker)layout.findViewById(R.id.vnt_picker_preference_picker);
 		myPicker.setMinValue(myMinValue);
 		myPicker.setMaxValue(myMaxValue);
 		myPicker.setValue(mySelectedValue);
