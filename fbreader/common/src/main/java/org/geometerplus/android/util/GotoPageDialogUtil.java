@@ -23,8 +23,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.NumberPicker;
+import net.simonvt.numberpicker.NumberPicker;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 

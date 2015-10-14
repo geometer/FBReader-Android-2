@@ -72,6 +72,7 @@
 		<item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
 		<item name="isThemeDark">false</item>
 		<item name="listProgressIndicatorStyle">@style/Library.ListProgressIndicator</item>
+		<item name="numberPickerStyle">@style/FBReaderMD.NumberPicker.Light</item>
 	</style>
 	<style name="Theme.Library.Dark" parent="@style/Theme.AppCompat.NoActionBar">
 		<item name="android:colorPrimary">@color/background_material_dark</item>
@@ -96,6 +97,7 @@
 		<item name="actionBarTheme">@style/Library.Dark.ActionBar</item>
 		<item name="isThemeDark">true</item>
 		<item name="listProgressIndicatorStyle">@style/Library.ListProgressIndicator</item>
+		<item name="numberPickerStyle">@style/FBReaderMD.NumberPicker.Dark</item>
 	</style>
 
 	<style name="Library.Dark.ActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">

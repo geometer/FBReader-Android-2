@@ -10,10 +10,6 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-dependencies {
-	compile project(':third-party/android-numberpicker')
-}
-
 android {
 	compileSdkVersion 23
 	buildToolsVersion '23.0.1'
@@ -27,9 +23,15 @@ android {
 		targetCompatibility JavaVersion.VERSION_1_7
 	}
 
+	sourceSets {
+		main.java.srcDirs = ['library/src']
+		main.res.srcDirs = ['library/res']
+		main.manifest.srcFile 'library/AndroidManifest.xml'
+	}
+
 	defaultConfig {
 		minSdkVersion 9
-		targetSdkVersion 19
+		targetSdkVersion 17
 		versionCode 1
 		versionName "1.0"
 	}
