@@ -889,6 +889,16 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 	}
 
+	private static String label(String title) {
+		if (title == null || "".equals(title)) {
+			return "";
+		} else if (Character.isDigit(title.charAt(0))) {
+			return "0-9";
+		} else {
+			return title.substring(0, 1).toUpperCase();
+		}
+	}
+
 	private final class FileSystemProvider extends Provider {
 		private Shelf.FileSystemShelf myShelf;
 		private final List<String> myHistory =
@@ -949,10 +959,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						myItemList.addAll(itemList);
 
 						for (int i = 0; i < itemList.size(); ++i) {
-							final String name = itemList.get(i).Name;
-							myIndexer.addElement(
-								"".equals(name) ? "" : name.substring(0, 1).toUpperCase()
-							);
+							myIndexer.addElement(label(itemList.get(i).Name));
 						}
 					}
 
