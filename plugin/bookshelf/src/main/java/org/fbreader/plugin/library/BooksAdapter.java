@@ -13,6 +13,7 @@ import android.widget.*;
 import org.fbreader.util.NaturalOrderComparator;
 import org.fbreader.util.Pair;
 import org.fbreader.util.android.LinearIndexer;
+import org.fbreader.util.android.OrderedIndexer;
 
 import org.geometerplus.zlibrary.core.util.RationalNumber;
 import org.geometerplus.fbreader.book.*;
@@ -959,7 +960,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						myItemList.addAll(itemList);
 
 						for (int i = 0; i < itemList.size(); ++i) {
-							myIndexer.addElement(label(itemList.get(i).Name));
+							myIndexer.addLabel(label(itemList.get(i).Name));
 						}
 					}
 
@@ -1043,10 +1044,11 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 	}
 
 	private final class AuthorsProvider extends Provider implements Comparator<Object> {
+		private final OrderedIndexer myIndexer = new OrderedIndexer();
+
 		@Override
 		SectionIndexer sectionIndexer() {
-			// TODO: indexer
-			return null;
+			return myIndexer;
 		}
 
 		@Override
@@ -1055,9 +1057,14 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				public SetupAction run() {
 					synchronized (myItemList) {
 						myItemList.clear();
+						myIndexer.reset();
+
 						myItemList.addAll(myActivity.Collection.authors());
 						myItemList.remove(Author.NULL);
 						Collections.sort(myItemList, AuthorsProvider.this);
+						for (Object item : myItemList) {
+							myIndexer.addLabel(label(((Author)item).SortKey));
+						}
 					}
 					notifyDataSetChanged();
 					myActivity.invalidateGrid();
@@ -1094,6 +1101,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						Collections.binarySearch(myItemList, a, AuthorsProvider.this);
 					if (index < 0) {
 						myItemList.add(- index - 1, a);
+						myIndexer.addLabel(label(a.SortKey));
 						updated = true;
 					}
 				}
@@ -1107,10 +1115,11 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 	}
 
 	private final class SeriesProvider extends Provider implements Comparator<Object> {
+		private final OrderedIndexer myIndexer = new OrderedIndexer();
+
 		@Override
 		SectionIndexer sectionIndexer() {
-			// TODO: indexer
-			return null;
+			return myIndexer;
 		}
 
 		@Override
@@ -1119,8 +1128,13 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				public SetupAction run() {
 					synchronized (myItemList) {
 						myItemList.clear();
+						myIndexer.reset();
+
 						myItemList.addAll(myActivity.Collection.series());
 						Collections.sort(myItemList, SeriesProvider.this);
+						for (Object item : myItemList) {
+							myIndexer.addLabel(label((String)item));
+						}
 					}
 					notifyDataSetChanged();
 					myActivity.invalidateGrid();
@@ -1159,6 +1173,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						Collections.binarySearch(myItemList, series, SeriesProvider.this);
 					if (index < 0) {
 						myItemList.add(- index - 1, series);
+						myIndexer.addLabel(label(series));
 						updated = true;
 					}
 				}
