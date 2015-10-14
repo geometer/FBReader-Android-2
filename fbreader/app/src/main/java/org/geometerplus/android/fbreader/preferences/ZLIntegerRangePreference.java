@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader.preferences;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.NumberPicker;
+import net.simonvt.numberpicker.NumberPicker;
 
 import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;

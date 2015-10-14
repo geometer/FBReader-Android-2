@@ -24,16 +24,14 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.NumberPicker;
+import net.simonvt.numberpicker.NumberPicker;
 
 public class VNTNumberPickerPreference extends DialogPreference {
 	private int mySelectedValue;
 	private int myMinValue = 0;
 	private int myMaxValue = 100;
-	private View myCentralView;
+	private NumberPicker myPicker;
 
 	public VNTNumberPickerPreference(Context context) {
 		super(context, null);
@@ -70,20 +68,6 @@ public class VNTNumberPickerPreference extends DialogPreference {
 		return a.getInteger(index, 0);
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setupNumberPicker() {
-		final NumberPicker picker = (NumberPicker)myCentralView;
-		picker.setMinValue(myMinValue);
-		picker.setMaxValue(myMaxValue);
-		picker.setValue(mySelectedValue);
-		picker.setWrapSelectorWheel(false);
-	}
-
-	private void setupSimpleEditor() {
-		final EditText text = (EditText)myCentralView;
-		text.setText(String.valueOf(mySelectedValue));
-	}
-
 	@Override
 	protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
 		super.onPrepareDialogBuilder(builder);
@@ -91,35 +75,21 @@ public class VNTNumberPickerPreference extends DialogPreference {
 		final View layout = ((Activity)getContext()).getLayoutInflater().inflate(
 			R.layout.picker_preference, null
 		);
-		myCentralView = layout.findViewById(R.id.picker_preference_central);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			setupNumberPicker();
-		} else {
-			setupSimpleEditor();
-		}
+
+		myPicker = layout.findViewById(R.id.picker_preference_picker);
+		myPicker.setMinValue(myMinValue);
+		myPicker.setMaxValue(myMaxValue);
+		myPicker.setValue(mySelectedValue);
+		myPicker.setWrapSelectorWheel(false);
+
 		builder.setTitle(getTitle());
 		builder.setView(layout);
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private int getValueHoneycomb() {
-		return ((NumberPicker)myCentralView).getValue();
 	}
 
 	@Override
 	protected void onDialogClosed(boolean positiveResult) {
 		if (positiveResult && shouldPersist()) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-				mySelectedValue = getValueHoneycomb();
-			} else {
-				try {
-					final String text = ((EditText)myCentralView).getText().toString();
-					mySelectedValue =
-						Math.min(myMaxValue, Math.max(myMinValue, Integer.valueOf(text)));
-				} catch (Throwable t) {
-					// ignore
-				}
-			}
+			mySelectedValue = myPicker.getValue();
 			persistInt(mySelectedValue);
 			updateSummary();
 		}
