@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import org.fbreader.util.NaturalOrderComparator;
 import org.fbreader.util.Pair;
 import org.fbreader.util.android.LinearIndexer;
 
@@ -20,6 +21,9 @@ import org.geometerplus.fbreader.book.Filter;
 import org.fbreader.plugin.library.view.*;
 
 final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener<Book>, AbsListView.OnScrollListener, SectionIndexer {
+	private static final NaturalOrderComparator NATURAL_ORDER_COMPARATOR =
+		new NaturalOrderComparator();
+
 	interface ItemViewType {
 		int SmallCards = 0;
 		int TinyCards = 3;
@@ -881,7 +885,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 			if (Kind != other.Kind) {
 				return Kind.compareTo(other.Kind);
 			}
-			return Name.compareToIgnoreCase(other.Name);
+			return NATURAL_ORDER_COMPARATOR.compare(Name, other.Name);
 		}
 	}
 
@@ -1156,7 +1160,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 
 		public int compare(Object o0, Object o1) {
-			return ((String)o0).compareTo((String)o1);
+			return NATURAL_ORDER_COMPARATOR.compare((String)o0, (String)o1);
 		}
 	}
 
