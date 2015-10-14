@@ -70,7 +70,7 @@ public class Provider extends AppWidgetProvider {
 			case Icon.CLASSIC:
 				return R.drawable.classic;
 			case Icon.LIBRARY:
-				return R.drawable.library_old;
+				return R.drawable.library;
 			case Icon.LIBRARY_OLD:
 				return R.drawable.library_old;
 		}
