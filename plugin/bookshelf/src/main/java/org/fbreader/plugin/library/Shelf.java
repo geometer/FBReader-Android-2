@@ -346,7 +346,7 @@ public abstract class Shelf {
 			Author = author;
 		}
 
-		AuthorShelf(String serialized) {
+		private AuthorShelf(String serialized) {
 			super(Category.Author);
 			final String[] split = serialized.split("\000");
 			Author = new Author(split[0], split[1]);
@@ -374,11 +374,15 @@ public abstract class Shelf {
 	}
 
 	static final class SeriesShelf extends Shelf {
-		final String Series;
+		final Series Series;
 
-		SeriesShelf(String series) {
+		SeriesShelf(Series series) {
 			super(Category.Series);
 			Series = series;
+		}
+
+		private SeriesShelf(String series) {
+			this(new Series(series));
 		}
 
 		@Override
@@ -388,7 +392,7 @@ public abstract class Shelf {
 
 		@Override
 		String windowTitle(LibraryActivity activity) {
-			return Series;
+			return Series.getTitle();
 		}
 
 		@Override
@@ -398,7 +402,7 @@ public abstract class Shelf {
 
 		@Override
 		String subcategoryInternal() {
-			return Series;
+			return Series.getTitle();
 		}
 	}
 

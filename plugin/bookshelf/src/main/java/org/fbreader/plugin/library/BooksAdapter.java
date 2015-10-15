@@ -18,6 +18,7 @@ import org.fbreader.util.android.OrderedIndexer;
 import org.geometerplus.zlibrary.core.util.RationalNumber;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.book.Filter;
+import org.geometerplus.fbreader.sort.TitledEntity;
 
 import org.fbreader.plugin.library.view.*;
 
@@ -404,11 +405,11 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 
 	private class SeriesCoversHolder {
 		private final SeriesView myView;
-		private final String mySeries;
+		private final Series mySeries;
 		private final Bitmap[] myCovers;
 		private volatile int myLeft;
 
-		SeriesCoversHolder(SeriesView view, String series, int len) {
+		SeriesCoversHolder(SeriesView view, Series series, int len) {
 			myView = view;
 			mySeries = series;
 			myCovers = new Bitmap[len];
@@ -443,19 +444,19 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 	}
 
-	private void setupSeriesView(SeriesView view, final String series) {
+	private void setupSeriesView(SeriesView view, final Series series) {
 		if (view.getTag() == series) {
 			return;
 		}
 
 		view.setTag(series);
 
-		view.titleView().setText(series);
+		view.titleView().setText(series.getTitle());
 
 		final ImageView coversView = view.coversView();
 		setBookIcon(coversView);
 		final List<Book> books =
-			myActivity.Collection.books(new BookQuery(new Filter.BySeries(new Series(series)), 3));
+			myActivity.Collection.books(new BookQuery(new Filter.BySeries(series), 3));
 		final SeriesCoversHolder holder = new SeriesCoversHolder(view, series, books.size());
 		for (int i = 0; i < books.size(); ++i) {
 			final int index = i;
@@ -522,9 +523,9 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 					selectShelf(new Shelf.AuthorShelf(author));
 				}
 			});
-		} else if (item instanceof String) {
+		} else if (item instanceof Series) {
 			synchronized (view) {
-				setupSeriesView((SeriesView)view, (String)item);
+				setupSeriesView((SeriesView)view, (Series)item);
 			}
 		}
 		return view;
@@ -548,7 +549,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 
 		boolean processBookEvent(BookEvent event, final Book book) {
-			if (!myItemList.contains(book)) {
+			if (book == null || !myItemList.contains(book)) {
 				return false;
 			}
 
@@ -581,14 +582,14 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		protected final void addToIndexer(Book book) {
 			final OrderedIndexer indexer = sectionIndexer();
 			if (indexer != null) {
-				indexer.addLabel(label(book.getSortKey()));
+				indexer.addLabel(label(book));
 			}
 		}
 
 		protected final void removeFromIndexer(Book book) {
 			final OrderedIndexer indexer = sectionIndexer();
 			if (indexer != null) {
-				indexer.removeLabel(label(book.getSortKey()));
+				indexer.removeLabel(label(book));
 			}
 		}
 
@@ -830,7 +831,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 
 	private class SingleSeriesProvider extends FilterProvider {
 		SingleSeriesProvider(Shelf.SeriesShelf shelf) {
-			super(new Filter.BySeries(new Series(shelf.Series)), SERIES_INDEX_COMPARATOR);
+			super(new Filter.BySeries(shelf.Series), SERIES_INDEX_COMPARATOR);
 		}
 
 		@Override
@@ -929,6 +930,18 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 	}
 
+	private static String label(TitledEntity item) {
+		return label(item.getSortKey());
+	}
+
+	private static String label(Author author) {
+		return label(author.SortKey);
+	}
+
+	private static String label(FileItem item) {
+		return label(item.Name);
+	}
+
 	private static String label(String title) {
 		if (title == null || "".equals(title)) {
 			return "";
@@ -997,8 +1010,8 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						myIndexer.reset();
 
 						myItemList.addAll(itemList);
-						for (int i = 0; i < itemList.size(); ++i) {
-							myIndexer.addLabel(label(itemList.get(i).Name));
+						for (FileItem item : itemList) {
+							myIndexer.addLabel(label(item));
 						}
 					}
 
@@ -1101,7 +1114,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						myItemList.remove(Author.NULL);
 						Collections.sort(myItemList, AuthorsProvider.this);
 						for (Object item : myItemList) {
-							myIndexer.addLabel(label(((Author)item).SortKey));
+							myIndexer.addLabel(label((Author)item));
 						}
 					}
 					notifyDataSetChanged();
@@ -1117,7 +1130,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 
 			final HashSet<Author> alreadyInUse = new HashSet<Author>(myItemList);
 			for (Pair<BookEvent,Book> e : events) {
-				if (e.First != BookEvent.Added) {
+				if (e.First != BookEvent.Added || e.Second == null) {
 					continue;
 				}
 
@@ -1139,7 +1152,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						Collections.binarySearch(myItemList, a, AuthorsProvider.this);
 					if (index < 0) {
 						myItemList.add(- index - 1, a);
-						myIndexer.addLabel(label(a.SortKey));
+						myIndexer.addLabel(label(a));
 						updated = true;
 					}
 				}
@@ -1168,10 +1181,12 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 						myItemList.clear();
 						myIndexer.reset();
 
-						myItemList.addAll(myActivity.Collection.series());
+						for (String title : myActivity.Collection.series()) {
+							myItemList.add(new Series(title));
+						}
 						Collections.sort(myItemList, SeriesProvider.this);
 						for (Object item : myItemList) {
-							myIndexer.addLabel(label((String)item));
+							myIndexer.addLabel(label((Series)item));
 						}
 					}
 					notifyDataSetChanged();
@@ -1183,11 +1198,11 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 
 		@Override
 		boolean onBookEventList(List<Pair<BookEvent,Book>> events) {
-			final List<String> toAdd = new ArrayList<String>();
+			final List<Series> toAdd = new ArrayList<Series>();
 
-			final HashSet<String> alreadyInUse = new HashSet<String>(myItemList);
+			final HashSet<Series> alreadyInUse = new HashSet<Series>(myItemList);
 			for (Pair<BookEvent,Book> e : events) {
-				if (e.First != BookEvent.Added) {
+				if (e.First != BookEvent.Added || e.Second == null) {
 					continue;
 				}
 
@@ -1195,10 +1210,9 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				if (info == null) {
 					continue;
 				}
-				final String series = info.Series.getTitle();
-				if (!alreadyInUse.contains(series)) {
-					alreadyInUse.add(series);
-					toAdd.add(series);
+				if (!alreadyInUse.contains(info.Series)) {
+					alreadyInUse.add(info.Series);
+					toAdd.add(info.Series);
 				}
 			}
 			if (toAdd.isEmpty()) {
@@ -1206,7 +1220,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 			}
 			synchronized (myItemList) {
 				boolean updated = false;
-				for (String series : toAdd) {
+				for (Series series : toAdd) {
 					final int index =
 						Collections.binarySearch(myItemList, series, SeriesProvider.this);
 					if (index < 0) {
@@ -1220,7 +1234,9 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 		}
 
 		public int compare(Object o0, Object o1) {
-			return NATURAL_ORDER_COMPARATOR.compare((String)o0, (String)o1);
+			return NATURAL_ORDER_COMPARATOR.compare(
+				((Series)o0).getSortKey(), ((Series)o1).getSortKey()
+			);
 		}
 	}
 
