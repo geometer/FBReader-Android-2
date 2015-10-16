@@ -42,12 +42,13 @@ public abstract class GotoPageDialogUtil {
 		picker.setMaxValue(total);
 		picker.setValue(current);
 		picker.setWrapSelectorWheel(false);
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
+		final ZLResource dialogResource = ZLResource.resource("dialog");
 
 		final AlertDialog dialog = new MDAlertDialogBuilder(activity)
+			.setTitle(dialogResource.getResource("gotoPage").getValue())
 			.setView(root)
 			.setPositiveButton(
-				buttonResource.getResource("ok").getValue(),
+				dialogResource.getResource("button").getResource("ok").getValue(),
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
