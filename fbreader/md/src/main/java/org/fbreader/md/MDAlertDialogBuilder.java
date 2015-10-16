@@ -22,6 +22,8 @@ package org.fbreader.md;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.LayoutInflater;
 
@@ -63,6 +65,18 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 				};
 			}
 			myToolbar.setNavigationOnClickListener(myNavigationListener);
+		}
+		final View view = dialog.getWindow().getDecorView();
+		if (view != null && view.getMinimumWidth() == 0) {
+			final DisplayMetrics dm = dialog.getContext().getResources().getDisplayMetrics();
+			final int minWidth = Math.min(
+				(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 250, dm),
+				dm.widthPixels * 9 / 10
+			);
+			view.setMinimumWidth(minWidth);
+			if (myToolbar != null) {
+				myToolbar.setMinimumWidth(minWidth);
+			}
 		}
 		return dialog;
 	}
