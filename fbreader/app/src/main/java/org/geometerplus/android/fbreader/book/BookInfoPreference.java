@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package com.fbreader.android.fbreader.book;
+package org.geometerplus.android.fbreader.book;
 
 interface BookInfoPreference {
 	void updateView();
