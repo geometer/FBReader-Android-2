@@ -40,7 +40,6 @@
 	>
 		<ImageView
 			android:id="@+id/menu_configure_item_drag_icon"
-			android:src="@drawable/drag_icon"
 			android:layout_width="wrap_content"
 			android:layout_height="fill_parent"
 			android:layout_alignParentRight="true"

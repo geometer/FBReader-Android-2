@@ -181,6 +181,12 @@ public class ConfigurationActivity extends MDListActivity {
 					ConfigurationActivity.this, MenuData.iconId(menuItem.Id), R.color.text_primary
 				));
 
+				final ImageView dragIconView =
+					ViewUtil.findImageView(view, R.id.menu_configure_item_drag_icon);
+				dragIconView.setImageDrawable(DrawableUtil.tintedDrawable(
+					ConfigurationActivity.this, R.drawable.ic_button_drag_large, R.color.text_primary
+				));
+
 				final CheckBox checkBox =
 					(CheckBox)ViewUtil.findView(view, R.id.menu_configure_item_checkbox);
 				checkBox.setChecked(menuItem.IsChecked);
