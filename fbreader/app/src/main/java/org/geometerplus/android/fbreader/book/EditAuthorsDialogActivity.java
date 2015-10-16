@@ -153,11 +153,9 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 				final ImageView deleteButton =
 					ViewUtil.findImageView(view, R.id.edit_authors_item_delete);
 				deleteButton.setImageDrawable(deleteIcon());
-				deleteButton.setVisibility(myAuthors.size() > 1 ? View.VISIBLE : View.GONE);
 				deleteButton.setOnClickListener(new View.OnClickListener() {
 					public void onClick(final View v) {
-						myAuthors.remove(position);
-						notifyDataSetChanged();
+						showRemoveAuthorDialog(position, author);
 					}
 				});
 			} else {
@@ -272,6 +270,23 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 				}
 			}
 			notifyDataSetChanged();
+		}
+
+		private void showRemoveAuthorDialog(final int position, Author author) {
+			final ZLResource resource = myResource.getResource("removeAuthor");
+			new MDAlertDialogBuilder(EditAuthorsDialogActivity.this)
+				.setTitle(resource.getValue())
+				.setMessage(resource.getResource("message").getValue().replace("%s", author.DisplayName))
+				.setPositiveButton(
+					myButtonResource.getResource("yes").getValue(),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							myAuthors.remove(position);
+							notifyDataSetChanged();
+						}
+					}
+				)
+				.create().show();
 		}
 	}
 }
