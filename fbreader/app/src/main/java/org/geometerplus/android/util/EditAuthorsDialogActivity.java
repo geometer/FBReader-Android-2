@@ -49,7 +49,7 @@ public class EditAuthorsDialogActivity extends EditListDialogActivity {
 		myResource = ZLResource.resource("dialog").getResource("editAuthors");
 		
 		final Intent intent = getIntent();
-		ArrayList<String> allAuthorList = intent.getStringArrayListExtra(EditListDialogActivity.Key.ALL_ITEMS_LIST);
+		ArrayList<String> allAuthorList = intent.getStringArrayListExtra(Key.ALL_ITEMS_LIST);
 
 		myInputField = (AutoCompleteTextView)findViewById(R.id.edit_authors_input_field);
 		myInputField.setHint(myResource.getResource("addAuthor").getValue());
@@ -96,7 +96,7 @@ public class EditAuthorsDialogActivity extends EditListDialogActivity {
 				editAuthor(itemPosition);
 				break;
 			case 1:
-				deleteItem(itemPosition);
+				showAuthorRemoveDialog(itemPosition);
 				break; 
 		}
 	}	
@@ -122,7 +122,7 @@ public class EditAuthorsDialogActivity extends EditListDialogActivity {
 				deleteButton.setVisibility(View.VISIBLE);
 				deleteButton.setOnClickListener(new View.OnClickListener() {
 					public void onClick(final View v) {
-						deleteItem(position);
+						showAuthorRemoveDialog(position);
 					}
 				});
 			}else{
@@ -131,5 +131,28 @@ public class EditAuthorsDialogActivity extends EditListDialogActivity {
 
 			return view;
 		}
+	}
+
+	protected void showAuthorRemoveDialog(final int index) {
+		if (index < 0 || myResource == null) {
+			return;
+		}
+
+		final ZLResource resource = myResource.getResource("removeAuthor");
+		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
+		new AlertDialog.Builder(EditAuthorsDialogActivity.this)
+			.setCancelable(false)
+			.setTitle(resource.getValue())
+			.setMessage(resource.getResource("message").getValue().replace("%s", myEditList.get(index)))
+			.setPositiveButton(buttonResource.getResource("yes").getValue(), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					myEditList.remove(index);
+					if (getListAdapter() != null) {
+						((BaseAdapter)getListAdapter()).notifyDataSetChanged();
+					}
+				}
+			})
+			.setNegativeButton(buttonResource.getResource("cancel").getValue(), null)
+			.create().show();
 	}
 }

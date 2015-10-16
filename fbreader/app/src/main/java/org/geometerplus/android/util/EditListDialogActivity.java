@@ -84,27 +84,6 @@ public abstract class EditListDialogActivity extends ListActivity {
 			});
 		}
 	}
-
-	protected void showItemRemoveDialog(final int index) {
-		if(index < 0 || myResource == null)
-			return;
-
-		final ZLResource resource = myResource.getResource("removeDialog");
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		new AlertDialog.Builder(EditListDialogActivity.this)
-			.setCancelable(false)
-			.setTitle(resource.getValue())
-			.setMessage(resource.getResource("message").getValue().replace("%s", myEditList.get(index)))
-			.setPositiveButton(buttonResource.getResource("yes").getValue(), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					myEditList.remove(index);
-					if(getListAdapter() != null)
-						((BaseAdapter)getListAdapter()).notifyDataSetChanged();
-				}
-			})
-			.setNegativeButton(buttonResource.getResource("cancel").getValue(), null)
-			.create().show();
-	}
 	
 	protected void showItemContextMenuDialog(final int position){
 		new AlertDialog.Builder(EditListDialogActivity.this)
@@ -124,10 +103,6 @@ public abstract class EditListDialogActivity extends ListActivity {
 	
 	protected void onLongClick(int position){
 		//can be overriden in children
-	}
-	
-	protected void deleteItem(int position){
-		showItemRemoveDialog(position);
 	}
 	
 	protected class EditListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener,AdapterView.OnItemLongClickListener {
