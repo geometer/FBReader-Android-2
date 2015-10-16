@@ -107,7 +107,7 @@ class ProcessHyperlinkAction extends FBAndroidAction {
 						} else {
 							toast = new SuperActivityToast(BaseActivity, SuperToast.Type.BUTTON);
 							toast.setButtonIcon(
-								android.R.drawable.ic_menu_more,
+								android.R.drawable.ic_menu_more, 0,
 								ZLResource.resource("toast").getResource("more").getValue()
 							);
 							toast.setOnClickWrapper(new OnClickWrapper("ftnt", new SuperToast.OnClickListener() {

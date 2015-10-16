@@ -2,16 +2,16 @@
  *  Copyright 2014 John Persano
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
- *	you may not use this file except in compliance with the License.
+ *    you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
  *  http://www.apache.org/licenses/LICENSE-2.0
  *
- *	Unless required by applicable law or agreed to in writing, software
- *	distributed under the License is distributed on an "AS IS" BASIS,
- *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *	See the License for the specific language governing permissions and
- *	limitations under the License.
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  *
  */
 
@@ -39,6 +39,8 @@ import com.github.johnpersano.supertoasts.util.Style;
 import com.github.johnpersano.supertoasts.util.Wrappers;
 
 import java.util.LinkedList;
+
+import org.fbreader.util.android.DrawableUtil;
 
 
 /**
@@ -70,6 +72,7 @@ public class SuperActivityToast {
     private int mDuration = SuperToast.Duration.SHORT;
     private int mBackground = Style.getBackground(Style.GRAY);
     private int mButtonIcon = SuperToast.Icon.Dark.UNDO;
+    private int mTintColorRes;
     private int mDividerColor = Color.LTGRAY;
     private int mIcon;
     private int mTypefaceStyle = Typeface.NORMAL;
@@ -336,11 +339,11 @@ public class SuperActivityToast {
 
     }
 
-	public void setTypeface(Typeface typeface) {
-		if (typeface != null) {
-			mMessageTextView.setTypeface(typeface);
-		}
-	}
+    public void setTypeface(Typeface typeface) {
+        if (typeface != null) {
+            mMessageTextView.setTypeface(typeface);
+        }
+    }
 
     /**
      * Sets the message typeface style of the {@value #TAG}.
@@ -723,7 +726,7 @@ public class SuperActivityToast {
      *
      * @param buttonIcon {@link com.github.johnpersano.supertoasts.SuperToast.Icon}
      */
-    public void setButtonIcon(int buttonIcon) {
+    public void setButtonIcon(int buttonIcon, int tintColorRes) {
 
         if (mType != Type.BUTTON) {
 
@@ -732,11 +735,14 @@ public class SuperActivityToast {
         }
 
         this.mButtonIcon = buttonIcon;
+        this.mTintColorRes = tintColorRes;
 
         if (mButton != null) {
 
-            mButton.setCompoundDrawablesWithIntrinsicBounds(mActivity
-                    .getResources().getDrawable(buttonIcon), null, null, null);
+            mButton.setCompoundDrawablesWithIntrinsicBounds(
+                DrawableUtil.tintedDrawable(mActivity, buttonIcon, tintColorRes),
+                null, null, null
+            );
 
         }
 
@@ -749,7 +755,7 @@ public class SuperActivityToast {
      * @param buttonIcon {@link com.github.johnpersano.supertoasts.SuperToast.Icon}
      * @param buttonText {@link CharSequence}
      */
-    public void setButtonIcon(int buttonIcon, CharSequence buttonText) {
+    public void setButtonIcon(int buttonIcon, int tintColorRes, CharSequence buttonText) {
 
         if (mType != Type.BUTTON) {
 
@@ -758,11 +764,14 @@ public class SuperActivityToast {
         }
 
         this.mButtonIcon = buttonIcon;
+        this.mTintColorRes = tintColorRes;
 
         if (mButton != null) {
 
-            mButton.setCompoundDrawablesWithIntrinsicBounds(mActivity
-                    .getResources().getDrawable(buttonIcon), null, null, null);
+            mButton.setCompoundDrawablesWithIntrinsicBounds(
+                DrawableUtil.tintedDrawable(mActivity, buttonIcon, tintColorRes),
+                null, null, null
+            );
 
             mButton.setText(buttonText);
 
@@ -779,6 +788,12 @@ public class SuperActivityToast {
     public int getButtonIcon() {
 
         return this.mButtonIcon;
+
+    }
+
+    public int getTintColorRes() {
+
+        return this.mTintColorRes;
 
     }
 
@@ -1389,7 +1404,7 @@ public class SuperActivityToast {
             superActivityToast.setButtonText(referenceHolder.mButtonText);
             superActivityToast.setButtonTextSizeFloat(referenceHolder.mButtonTextSize);
             superActivityToast.setButtonTextColor(referenceHolder.mButtonTextColor);
-            superActivityToast.setButtonIcon(referenceHolder.mButtonIcon);
+            superActivityToast.setButtonIcon(referenceHolder.mButtonIcon, referenceHolder.mTintColorRes);
             superActivityToast.setDividerColor(referenceHolder.mDivider);
             superActivityToast.setButtonTypefaceStyle(referenceHolder.mButtonTypefaceStyle);
 
@@ -1544,6 +1559,7 @@ public class SuperActivityToast {
         int mTypefaceStyle;
         int mButtonTextColor;
         int mButtonIcon;
+        int mTintColorRes;
         int mDivider;
         int mButtonTypefaceStyle;
         Parcelable mToken;
@@ -1563,6 +1579,7 @@ public class SuperActivityToast {
                 mButtonTextSize = superActivityToast.getButtonTextSize();
                 mButtonTextColor = superActivityToast.getButtonTextColor();
                 mButtonIcon = superActivityToast.getButtonIcon();
+                mTintColorRes = superActivityToast.getTintColorRes();
                 mDivider = superActivityToast.getDividerColor();
                 mClickListenerTag = superActivityToast.getOnClickWrapperTag();
                 mButtonTypefaceStyle = superActivityToast.getButtonTypefaceStyle();
@@ -1600,6 +1617,7 @@ public class SuperActivityToast {
                 mButtonTextSize = parcel.readFloat();
                 mButtonTextColor = parcel.readInt();
                 mButtonIcon = parcel.readInt();
+                mTintColorRes = parcel.readInt();
                 mDivider = parcel.readInt();
                 mButtonTypefaceStyle = parcel.readInt();
                 mClickListenerTag = parcel.readString();
@@ -1641,6 +1659,7 @@ public class SuperActivityToast {
                 parcel.writeFloat(mButtonTextSize);
                 parcel.writeInt(mButtonTextColor);
                 parcel.writeInt(mButtonIcon);
+                parcel.writeInt(mTintColorRes);
                 parcel.writeInt(mDivider);
                 parcel.writeInt(mButtonTypefaceStyle);
                 parcel.writeString(mClickListenerTag);
