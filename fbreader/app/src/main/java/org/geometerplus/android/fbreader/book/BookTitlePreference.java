@@ -27,7 +27,7 @@ import org.geometerplus.fbreader.book.Book;
 
 import org.fbreader.md.MDEditTextPreference;
 
-class BookTitlePreference extends MDEditTextPreference {
+class BookTitlePreference extends MDEditTextPreference implements BookInfoPreference {
 	private final Book myBook;
 
 	BookTitlePreference(Context context, ZLResource rootResource, String resourceKey, Book book) {
@@ -35,6 +35,11 @@ class BookTitlePreference extends MDEditTextPreference {
 
 		setTitle(rootResource.getResource(resourceKey).getValue());
 		myBook = book;
+	}
+
+	@Override
+	public void updateView() {
+		notifyChanged();
 	}
 
 	@Override

@@ -26,18 +26,23 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
-class EditAuthorsPreference extends Preference {
+class EditAuthorsPreference extends Preference implements BookInfoPreference {
 	private final EditBookInfoActivity myActivity;
 
 	EditAuthorsPreference(EditBookInfoActivity activity, ZLResource rootResource, String resourceKey) {
 		super(activity);
 		myActivity = activity;
 		setTitle(rootResource.getResource(resourceKey).getValue());
-		updateSummary();
 	}
 
-	void updateSummary() {
-		setSummary(myActivity.Book.authorsString(", "));
+	@Override
+	public String getSummary() {
+		return myActivity.Book.authorsString(", ");
+	}
+
+	@Override
+	public void updateView() {
+		notifyChanged();
 	}
 
 	@Override

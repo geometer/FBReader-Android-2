@@ -32,7 +32,7 @@ import org.geometerplus.fbreader.book.Book;
 
 import org.geometerplus.android.fbreader.preferences.LanguagePreference;
 
-class BookLanguagePreference extends LanguagePreference {
+class BookLanguagePreference extends LanguagePreference implements BookInfoPreference {
 	private final Book myBook;
 
 	private static List<Language> languages() {
@@ -47,6 +47,11 @@ class BookLanguagePreference extends LanguagePreference {
 	BookLanguagePreference(Context context, ZLResource resource, Book book) {
 		super(context, resource, languages());
 		myBook = book;
+	}
+
+	@Override
+	public void updateView() {
+		notifyChanged();
 	}
 
 	@Override
