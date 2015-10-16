@@ -28,15 +28,16 @@ import android.widget.*;
 
 import com.mobeta.android.dslv.DragSortListView;
 
+import org.fbreader.md.MDListActivity;
+import org.fbreader.util.android.DrawableUtil;
+import org.fbreader.util.android.ViewUtil;
+
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.android.fbreader.FBReader;
 import org.geometerplus.android.fbreader.covers.CoverManager;
 
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
-
-import org.fbreader.md.MDListActivity;
-import org.fbreader.util.android.ViewUtil;
 
 public class CatalogManagerActivity extends MDListActivity {
 	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
@@ -214,6 +215,12 @@ public class CatalogManagerActivity extends MDListActivity {
 				if (!myCoverManager.trySetCoverImage(coverView, catalogItem.Tree)) {
 					coverView.setImageResource(R.drawable.ic_list_library_books);
 				}
+
+				final ImageView dragIconView =
+					ViewUtil.findImageView(view, R.id.menu_configure_item_drag_icon);
+				dragIconView.setImageDrawable(DrawableUtil.tintedDrawable(
+					CatalogManagerActivity.this, R.drawable.ic_button_drag_large, R.color.text_primary
+				));
 
 				final CheckBox checkBox = (CheckBox)ViewUtil.findView(view, R.id.catalog_manager_item_checkbox);
 				checkBox.setChecked(catalogItem.IsChecked);
