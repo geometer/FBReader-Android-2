@@ -27,8 +27,11 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 public class DrawableUtil {
 	public static Drawable tintedDrawable(Context context, int drawableId, int colorId) {
 		final Resources res = context.getResources();
-		final Drawable drawable = DrawableCompat.wrap(res.getDrawable(drawableId));
-		DrawableCompat.setTint(drawable, res.getColor(colorId));
+		Drawable drawable = res.getDrawable(drawableId);
+		if (colorId != 0) {
+			drawable = DrawableCompat.wrap(drawable);
+			DrawableCompat.setTint(drawable, res.getColor(colorId));
+		}
 		return drawable;
 	}
 }

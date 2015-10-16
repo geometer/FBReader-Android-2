@@ -58,7 +58,7 @@ public class SelectionBookmarkAction extends FBAndroidAction {
 		toast.setText(bookmark.getText());
 		toast.setDuration(SuperToast.Duration.EXTRA_LONG);
 		toast.setButtonIcon(
-			android.R.drawable.ic_menu_edit,
+			android.R.drawable.ic_menu_edit, 0,
 			ZLResource.resource("dialog").getResource("button").getResource("edit").getValue()
 		);
 		toast.setOnClickWrapper(new OnClickWrapper("bkmk", new SuperToast.OnClickListener() {
