@@ -22,14 +22,18 @@ package org.geometerplus.android.util;
 import java.util.ArrayList;
 
 import android.content.*;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.ui.android.R;
 import org.fbreader.md.MDAlertDialogBuilder;
 import org.fbreader.md.MDListActivity;
+import org.fbreader.util.android.DrawableUtil;
+import org.fbreader.util.android.ViewUtil;
+
+import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.ui.android.R;
 
 public class FolderListDialogActivity extends MDListActivity {
 	interface Key {
@@ -110,7 +114,6 @@ public class FolderListDialogActivity extends MDListActivity {
 					((DirectoriesAdapter)getListAdapter()).notifyDataSetChanged();
 				}
 			})
-			.setNegativeButton(buttonResource.getResource("cancel").getValue(), null)
 			.create().show();
 	}
 
@@ -138,12 +141,12 @@ public class FolderListDialogActivity extends MDListActivity {
 				? convertView
 				: LayoutInflater.from(FolderListDialogActivity.this).inflate(R.layout.folder_list_item, parent, false);
 
-			((TextView)view.findViewById(R.id.folder_list_item_title)).setText(getItem(position));
+			ViewUtil.setSubviewText(view, R.id.folder_list_item_title, getItem(position));
 
-			final View deleteButton = view.findViewById(R.id.folder_list_item_remove);
-
+			final ImageView deleteButton = ViewUtil.findImageView(view, R.id.folder_list_item_remove);
 			if (position > 0 && myFolderList.size() > 1) {
 				deleteButton.setVisibility(View.VISIBLE);
+				deleteButton.setImageDrawable(deleteIcon());
 				deleteButton.setOnClickListener(new View.OnClickListener() {
 					public void onClick(final View v) {
 						showItemRemoveDialog(position - 1);
@@ -166,5 +169,15 @@ public class FolderListDialogActivity extends MDListActivity {
 				myChooseWritableDirectoriesOnly
 			);
 		}
+	}
+
+	private Drawable myDeleteIcon;
+	private Drawable deleteIcon() {
+		if (myDeleteIcon == null) {
+			myDeleteIcon = DrawableUtil.tintedDrawable(
+				this, R.drawable.ic_button_delete, R.color.text_primary
+			);
+		}
+		return myDeleteIcon;
 	}
 }
