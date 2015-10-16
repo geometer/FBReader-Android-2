@@ -155,8 +155,7 @@ public class EditTagsDialogActivity extends MDListActivity {
 				deleteButton.setImageDrawable(deleteIcon());
 				deleteButton.setOnClickListener(new View.OnClickListener() {
 					public void onClick(final View v) {
-						myTags.remove(position);
-						notifyDataSetChanged();
+						showRemoveTagDialog(position, tag);
 					}
 				});
 			} else {
@@ -271,6 +270,23 @@ public class EditTagsDialogActivity extends MDListActivity {
 				}
 			}
 			notifyDataSetChanged();
+		}
+
+		private void showRemoveTagDialog(final int position, Tag tag) {
+			final ZLResource resource = myResource.getResource("removeTag");
+			new MDAlertDialogBuilder(EditTagsDialogActivity.this)
+				.setTitle(resource.getValue())
+				.setMessage(resource.getResource("message").getValue().replace("%s", tag.Name))
+				.setPositiveButton(
+					myButtonResource.getResource("yes").getValue(),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							myTags.remove(position);
+							notifyDataSetChanged();
+						}
+					}
+				)
+				.create().show();
 		}
 	}
 }
