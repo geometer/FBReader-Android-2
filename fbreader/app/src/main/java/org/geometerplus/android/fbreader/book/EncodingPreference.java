@@ -31,7 +31,7 @@ import org.geometerplus.fbreader.formats.*;
 
 import org.geometerplus.android.fbreader.preferences.SingleChoicePreference;
 
-class EncodingPreference extends SingleChoicePreference {
+class EncodingPreference extends SingleChoicePreference implements BookInfoPreference {
 	private final PluginCollection myPluginCollection;
 	private final Book myBook;
 
@@ -68,6 +68,11 @@ class EncodingPreference extends SingleChoicePreference {
 		if (encodings.size() == 1) {
 			setEnabled(false);
 		}
+	}
+
+	@Override
+	public void updateView() {
+		notifyChanged();
 	}
 
 	@Override

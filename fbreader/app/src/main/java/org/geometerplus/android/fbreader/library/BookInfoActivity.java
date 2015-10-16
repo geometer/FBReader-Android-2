@@ -297,11 +297,10 @@ public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemC
 	private static final int OPEN_BOOK = 1;
 	private static final int EDIT_INFO = 2;
 	private static final int SHARE_BOOK = 3;
-	private static final int RELOAD_INFO = 4;
-	private static final int ADD_TO_FAVORITES = 5;
-	private static final int REMOVE_FROM_FAVORITES = 6;
-	private static final int MARK_AS_READ = 7;
-	private static final int MARK_AS_UNREAD = 8;
+	private static final int ADD_TO_FAVORITES = 4;
+	private static final int REMOVE_FROM_FAVORITES = 5;
+	private static final int MARK_AS_READ = 6;
+	private static final int MARK_AS_UNREAD = 7;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -309,7 +308,6 @@ public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemC
 		addMenuItem(menu, OPEN_BOOK, "openBook", true);
 		addMenuItem(menu, EDIT_INFO, "edit", true);
 		addMenuItem(menu, SHARE_BOOK, "shareBook", false);
-		addMenuItem(menu, RELOAD_INFO, "reloadInfo", false);
 		if (myBook.hasLabel(Book.FAVORITE_LABEL)) {
 			addMenuItem(menu, REMOVE_FROM_FAVORITES, "removeFromFavorites", false);
 		} else {
@@ -353,15 +351,6 @@ public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemC
 			}
 			case SHARE_BOOK:
 				FBUtil.shareBook(this, myBook);
-				return true;
-			case RELOAD_INFO:
-				if (myBook != null) {
-					BookUtil.reloadInfoFromFile(
-						myBook, PluginCollection.Instance(Paths.systemInfo(this))
-					);
-					setupBookInfo(myBook);
-					saveBook();
-				}
 				return true;
 			case ADD_TO_FAVORITES:
 				if (myBook != null) {

@@ -26,18 +26,23 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
-class EditTagsPreference extends Preference {
+class EditTagsPreference extends Preference implements BookInfoPreference {
 	private final EditBookInfoActivity myActivity;
 
 	EditTagsPreference(EditBookInfoActivity activity, ZLResource rootResource, String resourceKey) {
 		super(activity);
 		myActivity = activity;
 		setTitle(rootResource.getResource(resourceKey).getValue());
-		updateSummary();
 	}
 
-	void updateSummary() {
-		setSummary(myActivity.Book.tagsString(", "));
+	@Override
+	public String getSummary() {
+		return myActivity.Book.tagsString(", ");
+	}
+
+	@Override
+	public void updateView() {
+		notifyChanged();
 	}
 
 	@Override
