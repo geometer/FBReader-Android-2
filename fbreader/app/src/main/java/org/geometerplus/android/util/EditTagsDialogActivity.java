@@ -49,7 +49,7 @@ public class EditTagsDialogActivity extends EditListDialogActivity {
 		myResource = ZLResource.resource("dialog").getResource("editTags");
 		
 		final Intent intent = getIntent();
-		ArrayList<String> allTagsList = intent.getStringArrayListExtra(EditListDialogActivity.Key.ALL_ITEMS_LIST);
+		ArrayList<String> allTagsList = intent.getStringArrayListExtra(Key.ALL_ITEMS_LIST);
 
 		myInputField = (AutoCompleteTextView)findViewById(R.id.edit_tags_input_field);
 		myInputField.setHint(myResource.getResource("addTag").getValue());
@@ -103,7 +103,7 @@ public class EditTagsDialogActivity extends EditListDialogActivity {
 				editTag(itemPosition);
 				break;
 			case 1:
-				deleteItem(itemPosition);
+				showTagRemoveDialog(itemPosition);
 				break; 
 		}
 	}
@@ -126,11 +126,34 @@ public class EditTagsDialogActivity extends EditListDialogActivity {
 			final View deleteButton = view.findViewById(R.id.edit_item_remove);
 			deleteButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(final View v) {
-					deleteItem(position);
+					showTagRemoveDialog(position);
 				}
 			});
 
 			return view;
 		}
+	}
+
+	protected void showTagRemoveDialog(final int index) {
+		if (index < 0 || myResource == null) {
+			return;
+		}
+
+		final ZLResource resource = myResource.getResource("removeTag");
+		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
+		new AlertDialog.Builder(EditTagsDialogActivity.this)
+			.setCancelable(false)
+			.setTitle(resource.getValue())
+			.setMessage(resource.getResource("message").getValue().replace("%s", myEditList.get(index)))
+			.setPositiveButton(buttonResource.getResource("yes").getValue(), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					myEditList.remove(index);
+					if (getListAdapter() != null) {
+						((BaseAdapter)getListAdapter()).notifyDataSetChanged();
+					}
+				}
+			})
+			.setNegativeButton(buttonResource.getResource("cancel").getValue(), null)
+			.create().show();
 	}
 }
