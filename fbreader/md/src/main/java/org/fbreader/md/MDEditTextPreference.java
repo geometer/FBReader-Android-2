@@ -83,7 +83,10 @@ public abstract class MDEditTextPreference extends MDDialogPreference {
 	@Override
 	protected final void onBindDialogView(View view) {
 		myEditor = (EditText)view.findViewById(R.id.md_edit_text_preference_editor);
-		myEditor.setText(getValue());
+		final String value = getValue();
+		myEditor.setText(value);
+		final int len = value.length();
+		myEditor.setSelection(len, len);
 
 		if (myConstraint != null) {
 			final TextView hintView =

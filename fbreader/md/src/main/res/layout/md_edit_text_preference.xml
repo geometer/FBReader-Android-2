@@ -4,15 +4,15 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
+	android:paddingLeft="15dp"
+	android:paddingRight="15dp"
+	android:paddingTop="18dp"
 >
 	<EditText
 		android:id="@+id/md_edit_text_preference_editor"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceLarge"
-		android:paddingTop="16dip"
-		android:paddingLeft="8dip"
-		android:paddingRight="8dip"
 	/>
 	<TextView
 		android:id="@+id/md_edit_text_preference_hint"
