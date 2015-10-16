@@ -50,6 +50,13 @@ public class CatalogManagerActivity extends MDListActivity {
 	}
 
 	@Override
+	protected void onCreate(Bundle savedState) {
+		super.onCreate(savedState);
+
+		setTitle(NetworkLibrary.resource().getResource("manageCatalogs").getValue());
+	}
+
+	@Override
 	protected void onStart() {
 		super.onStart();
 
