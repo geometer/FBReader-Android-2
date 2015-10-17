@@ -28,14 +28,13 @@ import android.view.*;
 import android.widget.*;
 
 import org.fbreader.md.MDAlertDialogBuilder;
-import org.fbreader.md.MDListActivity;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
 
-public class FolderListDialogActivity extends MDListActivity {
+public class FolderListDialogActivity extends EditableListDialogActivity {
 	interface Key {
 		String FOLDER_LIST            = "folder_list.folder_list";
 		String ACTIVITY_TITLE         = "folder_list.title";
@@ -49,11 +48,6 @@ public class FolderListDialogActivity extends MDListActivity {
 	private ZLResource myResource;
 
 	@Override
-	protected int layoutId() {
-		return R.layout.folder_list_dialog;
-	}
-
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -64,9 +58,8 @@ public class FolderListDialogActivity extends MDListActivity {
 		myChooseWritableDirectoriesOnly = intent.getBooleanExtra(Key.WRITABLE_FOLDERS_ONLY, true);
 		myResource = ZLResource.resource("dialog").getResource("folderList");
 
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
 		final Button okButton = (Button)findViewById(R.id.md_single_button);
-		okButton.setText(buttonResource.getResource("ok").getValue());
+		okButton.setText(myButtonResource.getResource("ok").getValue());
 		okButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				setResult(RESULT_OK, new Intent().putExtra(Key.FOLDER_LIST, myFolderList));
@@ -87,13 +80,13 @@ public class FolderListDialogActivity extends MDListActivity {
 			final String path = FileChooserUtil.folderPathFromData(data);
 			final int existing = myFolderList.indexOf(path);
 			if (existing == -1) {
-				if (index == 0) {
-					myFolderList.add(path);
+				if (index < myFolderList.size()) {
+					myFolderList.set(index, path);
 				} else {
-					myFolderList.set(index - 1, path);
+					myFolderList.add(path);
 				}
 				((DirectoriesAdapter)getListAdapter()).notifyDataSetChanged();
-			} else if (existing != index - 1) {
+			} else if (existing != index) {
 				UIMessageUtil.showMessageText(
 					this, myResource.getResource("duplicate").getValue().replace("%s", path)
 				);
@@ -103,12 +96,11 @@ public class FolderListDialogActivity extends MDListActivity {
 
 	private void showItemRemoveDialog(final int index) {
 		final ZLResource resource = myResource.getResource("removeDialog");
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
 		new MDAlertDialogBuilder(FolderListDialogActivity.this)
 			.setCancelable(false)
 			.setTitle(resource.getValue())
 			.setMessage(resource.getResource("message").getValue().replace("%s", myFolderList.get(index)))
-			.setPositiveButton(buttonResource.getResource("yes").getValue(), new DialogInterface.OnClickListener() {
+			.setPositiveButton(myButtonResource.getResource("yes").getValue(), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					myFolderList.remove(index);
 					((DirectoriesAdapter)getListAdapter()).notifyDataSetChanged();
@@ -118,6 +110,16 @@ public class FolderListDialogActivity extends MDListActivity {
 	}
 
 	private class DirectoriesAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
+		@Override
+		public int getViewTypeCount() {
+			return 2;
+		}
+
+		@Override
+		public int getItemViewType(int position) {
+			return getItem(position) != null ? 0 : 1;
+		}
+
 		@Override
 		public int getCount() {
 			return myFolderList.size() + 1;
@@ -130,30 +132,41 @@ public class FolderListDialogActivity extends MDListActivity {
 
 		@Override
 		public String getItem(int position) {
-			return position != 0
-				? myFolderList.get(position - 1)
-				: myResource.getResource("addFolder").getValue();
+			return position < myFolderList.size() ? myFolderList.get(position) : null;
 		}
 
 		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			final View view = convertView != null
-				? convertView
-				: LayoutInflater.from(FolderListDialogActivity.this).inflate(R.layout.folder_list_item, parent, false);
+		public View getView(final int position, View view, ViewGroup parent) {
+			final String dir = getItem(position);
+			if (view == null) {
+				final int id = dir != null
+					? R.layout.editable_list_item : R.layout.editable_list_add_item;
+				view = getLayoutInflater().inflate(id, parent, false);
+			}
 
-			ViewUtil.setSubviewText(view, R.id.folder_list_item_title, getItem(position));
-
-			final ImageView deleteButton = ViewUtil.findImageView(view, R.id.folder_list_item_remove);
-			if (position > 0 && myFolderList.size() > 1) {
-				deleteButton.setVisibility(View.VISIBLE);
+			if (dir != null) {
+				ViewUtil.setSubviewText(view, R.id.editable_list_item_title, dir);
+				final ImageView deleteButton =
+					ViewUtil.findImageView(view, R.id.editable_list_item_delete);
+				deleteButton.setVisibility(myFolderList.size() > 1 ? View.VISIBLE : View.GONE);
 				deleteButton.setImageDrawable(deleteIcon());
 				deleteButton.setOnClickListener(new View.OnClickListener() {
 					public void onClick(final View v) {
-						showItemRemoveDialog(position - 1);
+						showItemRemoveDialog(position);
 					}
 				});
 			} else {
-				deleteButton.setVisibility(View.INVISIBLE);
+				ViewUtil.findImageView(view, R.id.editable_list_add_item_icon)
+					.setImageDrawable(DrawableUtil.tintedDrawable(
+						FolderListDialogActivity.this,
+						R.drawable.ic_button_add,
+						R.color.text_primary
+					));
+				ViewUtil.setSubviewText(
+					view,
+					R.id.editable_list_add_item_text,
+					myResource.getResource("addFolder").getValue()
+				);
 			}
 
 			return view;
@@ -165,19 +178,9 @@ public class FolderListDialogActivity extends MDListActivity {
 				FolderListDialogActivity.this,
 				position,
 				myChooserTitle,
-				position == 0 ? "/" : myFolderList.get(position - 1),
+				position < myFolderList.size() ? myFolderList.get(position) : "/",
 				myChooseWritableDirectoriesOnly
 			);
 		}
-	}
-
-	private Drawable myDeleteIcon;
-	private Drawable deleteIcon() {
-		if (myDeleteIcon == null) {
-			myDeleteIcon = DrawableUtil.tintedDrawable(
-				this, R.drawable.ic_button_delete, R.color.text_primary
-			);
-		}
-		return myDeleteIcon;
 	}
 }

@@ -30,7 +30,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
 import org.fbreader.md.MDAlertDialogBuilder;
-import org.fbreader.md.MDListActivity;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 
@@ -41,22 +40,17 @@ import org.geometerplus.fbreader.book.Book;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
+import org.geometerplus.android.util.EditableListDialogActivity;
 
 import org.geometerplus.zlibrary.ui.android.R;
 
-public class EditAuthorsDialogActivity extends MDListActivity {
+public class EditAuthorsDialogActivity extends EditableListDialogActivity {
 	private final ZLResource myResource = ZLResource.resource("dialog").getResource("editAuthors");
-	private final ZLResource myButtonResource = ZLResource.resource("dialog").getResource("button");
 
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 	private volatile Book myBook;
 	private final List<Author> myAuthors = new ArrayList<Author>();
 	private final List<Author> myAllAuthors = Collections.synchronizedList(new ArrayList<Author>());
-
-	@Override
-	protected int layoutId() {
-		return R.layout.edit_authors;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,16 +94,6 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 		super.onDestroy();
 	}
 
-	private Drawable myDeleteIcon;
-	private Drawable deleteIcon() {
-		if (myDeleteIcon == null) {
-			myDeleteIcon = DrawableUtil.tintedDrawable(
-				this, R.drawable.ic_button_delete, R.color.text_primary
-			);
-		}
-		return myDeleteIcon;
-	}
-
 	private class AuthorsAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 		@Override
 		public int getViewTypeCount() {
@@ -144,14 +128,14 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 			final Author author = getItem(position);
 			if (view == null) {
 				final int id = author != null
-					? R.layout.edit_authors_item : R.layout.edit_authors_add_item;
+					? R.layout.editable_list_item : R.layout.editable_list_add_item;
 				view = getLayoutInflater().inflate(id, parent, false);
 			}
 
 			if (author != null) {
-				ViewUtil.setSubviewText(view, R.id.edit_authors_item_title, author.DisplayName);
+				ViewUtil.setSubviewText(view, R.id.editable_list_item_title, author.DisplayName);
 				final ImageView deleteButton =
-					ViewUtil.findImageView(view, R.id.edit_authors_item_delete);
+					ViewUtil.findImageView(view, R.id.editable_list_item_delete);
 				deleteButton.setImageDrawable(deleteIcon());
 				deleteButton.setOnClickListener(new View.OnClickListener() {
 					public void onClick(final View v) {
@@ -159,7 +143,7 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 					}
 				});
 			} else {
-				ViewUtil.findImageView(view, R.id.edit_authors_add_item_icon)
+				ViewUtil.findImageView(view, R.id.editable_list_add_item_icon)
 					.setImageDrawable(DrawableUtil.tintedDrawable(
 						EditAuthorsDialogActivity.this,
 						R.drawable.ic_button_add_author,
@@ -167,7 +151,7 @@ public class EditAuthorsDialogActivity extends MDListActivity {
 					));
 				ViewUtil.setSubviewText(
 					view,
-					R.id.edit_authors_add_item_text,
+					R.id.editable_list_add_item_text,
 					myResource.getResource("addAuthor").getValue()
 				);
 			}

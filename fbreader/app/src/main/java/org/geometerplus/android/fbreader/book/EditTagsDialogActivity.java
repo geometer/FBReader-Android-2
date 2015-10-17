@@ -30,7 +30,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
 import org.fbreader.md.MDAlertDialogBuilder;
-import org.fbreader.md.MDListActivity;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 
@@ -41,22 +40,17 @@ import org.geometerplus.fbreader.book.Tag;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
+import org.geometerplus.android.util.EditableListDialogActivity;
 
 import org.geometerplus.zlibrary.ui.android.R;
 
-public class EditTagsDialogActivity extends MDListActivity {
+public class EditTagsDialogActivity extends EditableListDialogActivity {
 	private final ZLResource myResource = ZLResource.resource("dialog").getResource("editTags");
-	private final ZLResource myButtonResource = ZLResource.resource("dialog").getResource("button");
 
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 	private volatile Book myBook;
 	private final List<Tag> myTags = new ArrayList<Tag>();
 	private final List<Tag> myAllTags = Collections.synchronizedList(new ArrayList<Tag>());
-
-	@Override
-	protected int layoutId() {
-		return R.layout.edit_tags;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,16 +94,6 @@ public class EditTagsDialogActivity extends MDListActivity {
 		super.onDestroy();
 	}
 
-	private Drawable myDeleteIcon;
-	private Drawable deleteIcon() {
-		if (myDeleteIcon == null) {
-			myDeleteIcon = DrawableUtil.tintedDrawable(
-				this, R.drawable.ic_button_delete, R.color.text_primary
-			);
-		}
-		return myDeleteIcon;
-	}
-
 	private class TagsAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 		@Override
 		public int getViewTypeCount() {
@@ -144,14 +128,14 @@ public class EditTagsDialogActivity extends MDListActivity {
 			final Tag tag = getItem(position);
 			if (view == null) {
 				final int id = tag != null
-					? R.layout.edit_tags_item : R.layout.edit_tags_add_item;
+					? R.layout.editable_list_item : R.layout.editable_list_add_item;
 				view = getLayoutInflater().inflate(id, parent, false);
 			}
 
 			if (tag != null) {
-				ViewUtil.setSubviewText(view, R.id.edit_tags_item_title, tag.Name);
+				ViewUtil.setSubviewText(view, R.id.editable_list_item_title, tag.Name);
 				final ImageView deleteButton =
-					ViewUtil.findImageView(view, R.id.edit_tags_item_delete);
+					ViewUtil.findImageView(view, R.id.editable_list_item_delete);
 				deleteButton.setImageDrawable(deleteIcon());
 				deleteButton.setOnClickListener(new View.OnClickListener() {
 					public void onClick(final View v) {
@@ -159,7 +143,7 @@ public class EditTagsDialogActivity extends MDListActivity {
 					}
 				});
 			} else {
-				ViewUtil.findImageView(view, R.id.edit_tags_add_item_icon)
+				ViewUtil.findImageView(view, R.id.editable_list_add_item_icon)
 					.setImageDrawable(DrawableUtil.tintedDrawable(
 						EditTagsDialogActivity.this,
 						R.drawable.ic_button_add,
@@ -167,7 +151,7 @@ public class EditTagsDialogActivity extends MDListActivity {
 					));
 				ViewUtil.setSubviewText(
 					view,
-					R.id.edit_tags_add_item_text,
+					R.id.editable_list_add_item_text,
 					myResource.getResource("addTag").getValue()
 				);
 			}
