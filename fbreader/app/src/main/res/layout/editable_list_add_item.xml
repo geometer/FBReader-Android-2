@@ -9,13 +9,13 @@
 	android:foreground="?android:attr/selectableItemBackground"
 >
 	<ImageView
-		android:id="@+id/edit_tags_add_item_icon"
+		android:id="@+id/editable_list_add_item_icon"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:layout_gravity="center_vertical"
 	/>
 	<TextView
-		android:id="@+id/edit_tags_add_item_text"
+		android:id="@+id/editable_list_add_item_text"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:layout_gravity="center_vertical"

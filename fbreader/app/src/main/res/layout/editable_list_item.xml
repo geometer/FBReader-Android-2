@@ -9,7 +9,7 @@
 	android:foreground="?android:attr/selectableItemBackground"
 >
 	<TextView
-		android:id="@+id/edit_tags_item_title"
+		android:id="@+id/editable_list_item_title"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:layout_alignParentLeft="true"
@@ -17,7 +17,7 @@
 		android:textAppearance="?android:attr/textAppearanceMedium"
 	/>
 	<ImageView
-		android:id="@+id/edit_tags_item_delete"
+		android:id="@+id/editable_list_item_delete"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:layout_alignParentRight="true"
