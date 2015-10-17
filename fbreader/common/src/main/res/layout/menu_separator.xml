@@ -5,6 +5,6 @@
 	android:layout_height="9dp"
 	android:paddingBottom="3dp"
 	android:paddingTop="3dp"
-	android:background="@drawable/horizontal_divider"
+	android:background="@drawable/md_horizontal_divider"
 	android:enabled="false"
 />

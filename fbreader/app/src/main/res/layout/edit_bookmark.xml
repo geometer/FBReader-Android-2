@@ -12,7 +12,7 @@
 		android:layout_width="match_parent"
 		android:theme="@style/FBReaderMD.ActionBar"
 		android:orientation="horizontal"
-		android:background="@drawable/primary_color"
+		android:background="@drawable/md_primary_color"
 	>
 		<include
 			layout="@layout/md_toolbar"
@@ -23,8 +23,8 @@
 			android:id="@+id/edit_bookmark_tab_layout"
 			android:layout_height="match_parent"
 			android:layout_width="wrap_content"
-			android:background="@drawable/primary_color"
-			background="@drawable/primary_color"
+			android:background="@drawable/md_primary_color"
+			background="@drawable/md_primary_color"
 		/>
 	</LinearLayout>
 	<android.support.v4.view.ViewPager
