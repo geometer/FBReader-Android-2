@@ -23,11 +23,12 @@
 		android:ellipsize="end"
 		android:paddingTop="4dp"
 	/>
-	<SeekBar
+	<com.gc.materialdesign.views.Slider
 		android:id="@+id/navigation_slider"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:paddingTop="4dp"
+		android:background="@color/accent_material_dark"
 	/>
 	<RelativeLayout
 		android:layout_width="match_parent"
