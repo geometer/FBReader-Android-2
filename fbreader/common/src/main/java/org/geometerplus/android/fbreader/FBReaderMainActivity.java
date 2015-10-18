@@ -21,6 +21,7 @@ package org.geometerplus.android.fbreader;
 
 import java.util.*;
 
+import android.app.SearchManager;
 import android.content.*;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import android.os.PowerManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
@@ -79,10 +81,15 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	private volatile Toolbar myDrawerToolbar;
 	private volatile Bitmap myCoverBitmap;
 
+	private volatile MenuItem mySearchItem;
+
 	private volatile Book myCurrentBook;
 
 	private PowerManager.WakeLock myWakeLock;
 	private boolean myWakeLockToCreate;
+
+	private ZLStringOption myTextSearchPatternOption =
+		new ZLStringOption("TextSearch", "Pattern", "");
 
 	private final BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
@@ -114,6 +121,15 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
 
 		setupDrawer();
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			doSearch(intent.getStringExtra(SearchManager.QUERY));
+		} else {
+			super.onNewIntent(intent);
+		}
 	}
 
 	private String[] ACTION_IDS = {
@@ -244,6 +260,10 @@ public abstract class FBReaderMainActivity extends MDActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.search_only, menu);
+		mySearchItem = menu.findItem(R.id.menu_search_item);
+		mySearchItem.setVisible(false);
+
 		fillMenu(menu, MenuData.topLevelNodes());
 		return true;
 	}
@@ -260,6 +280,65 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	protected abstract Boolean3 isMenuActionChecked(String code);
 	protected abstract boolean isActionBarVisible();
 	/* ---- MENU ---- */
+
+	/* ++++ SEARCH ++++ */
+	public boolean hasSearchView() {
+		return mySearchItem != null;
+	}
+
+	public void openSearchView() {
+		final MenuItem searchItem = mySearchItem;
+		if (searchItem == null) {
+			return;
+		}
+		searchItem.setVisible(true);
+		final SearchView searchView = (SearchView)mySearchItem.getActionView();
+		searchView.setIconified(false);
+		searchView.setQuery(myTextSearchPatternOption.getValue(), false);
+		searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+			@Override
+			public boolean onClose() {
+				hideSearchItem();
+				return false;
+			}
+		});
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextChange(String query) {
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				query = query.trim();
+				if (!"".equals(query)) {
+					myTextSearchPatternOption.setValue(query);
+					doSearch(query);
+					invalidateOptionsMenu();
+				}
+				return false;
+			}
+		});
+	}
+
+	public boolean hideSearchItem() {
+		final MenuItem searchItem = mySearchItem;
+		if (searchItem == null || !searchItem.isVisible()) {
+			return false;
+		}
+
+		searchItem.getActionView().clearFocus();
+		searchItem.setVisible(false);
+		return true;
+	}
+
+	protected abstract void doSearch(String query);
+
+	//@Override
+	//public boolean onSearchRequested() {
+	//	return true;
+	//}
+	/* ---- SEARCH ---- */
 
 	private final void setupDrawer() {
 		final ListView drawerMenu = (ListView)findViewById(R.id.main_drawer_menu);

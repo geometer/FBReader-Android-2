@@ -30,6 +30,10 @@ class ShowCancelMenuAction extends FBAndroidAction {
 
 	@Override
 	protected void run(Object ... params) {
+		if (BaseActivity.hideSearchItem()) {
+			return;
+		}
+
 		if (BaseActivity.barsAreShown()) {
 			BaseActivity.hideBars();
 		}

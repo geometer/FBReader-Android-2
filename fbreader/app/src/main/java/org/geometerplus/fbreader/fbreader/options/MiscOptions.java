@@ -24,7 +24,6 @@ import org.geometerplus.fbreader.fbreader.DurationEnum;
 
 public class MiscOptions {
 	public final ZLBooleanOption AllowScreenBrightnessAdjustment;
-	public final ZLStringOption TextSearchPattern;
 
 	public final ZLBooleanOption EnableDoubleTap;
 	public final ZLBooleanOption NavigateAllWords;
@@ -44,8 +43,6 @@ public class MiscOptions {
 	public MiscOptions() {
 		AllowScreenBrightnessAdjustment =
 			new ZLBooleanOption("LookNFeel", "AllowScreenBrightnessAdjustment", true);
-		TextSearchPattern =
-			new ZLStringOption("TextSearch", "Pattern", "");
 
 		EnableDoubleTap =
 			new ZLBooleanOption("Options", "EnableDoubleTap", false);
