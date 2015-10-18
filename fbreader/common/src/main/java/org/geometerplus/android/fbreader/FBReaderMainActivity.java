@@ -217,7 +217,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	}
 
 	protected final void addMenuItem(Menu menu, final String actionId, String name, Integer iconId) {
-		final MenuItem menuItem = menu.add(name);
+		final MenuItem menuItem = menu.add(Menu.NONE, actionId.hashCode(), Menu.NONE, name);
 		if (iconId != null) {
 			menuItem.setIcon(DrawableUtil.tintedDrawable(
 				FBReaderMainActivity.this, iconId, R.color.text_primary
@@ -287,11 +287,10 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	}
 
 	public void openSearchView() {
-		final MenuItem searchItem = mySearchItem;
-		if (searchItem == null) {
+		if (mySearchItem == null) {
 			return;
 		}
-		searchItem.setVisible(true);
+		mySearchItem.setVisible(true);
 		final SearchView searchView = (SearchView)mySearchItem.getActionView();
 		searchView.setIconified(false);
 		searchView.setQuery(myTextSearchPatternOption.getValue(), false);
@@ -314,11 +313,11 @@ public abstract class FBReaderMainActivity extends MDActivity {
 				if (!"".equals(query)) {
 					myTextSearchPatternOption.setValue(query);
 					doSearch(query);
-					invalidateOptionsMenu();
 				}
 				return false;
 			}
 		});
+		getToolbar().getMenu().removeItem(ActionCode.SEARCH.hashCode());
 	}
 
 	public boolean hideSearchItem() {
@@ -329,15 +328,19 @@ public abstract class FBReaderMainActivity extends MDActivity {
 
 		searchItem.getActionView().clearFocus();
 		searchItem.setVisible(false);
+
+		invalidateOptionsMenu();
+
 		return true;
 	}
 
 	protected abstract void doSearch(String query);
 
-	//@Override
-	//public boolean onSearchRequested() {
-	//	return true;
-	//}
+	@Override
+	public boolean onSearchRequested() {
+		openSearchView();
+		return true;
+	}
 	/* ---- SEARCH ---- */
 
 	private final void setupDrawer() {
