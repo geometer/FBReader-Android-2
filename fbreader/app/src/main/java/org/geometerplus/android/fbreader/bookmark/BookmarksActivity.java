@@ -28,6 +28,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.*;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.view.*;
 import android.widget.*;
 
@@ -56,6 +57,7 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 
 	private TabLayout myTabLayout;
 	private ViewPager myViewPager;
+	private volatile MenuItem mySearchItem;
 
 	private final Map<Integer,HighlightingStyle> myStyles =
 		Collections.synchronizedMap(new HashMap<Integer,HighlightingStyle>());
@@ -185,6 +187,14 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 		OrientationUtil.setOrientation(this, getIntent());
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.search_only, menu);
+		mySearchItem = menu.findItem(R.id.menu_search_item);
+		mySearchItem.setVisible(false);
+		return true;
+	}
+
 	private void updateStyles() {
 		synchronized (myStyles) {
 			myStyles.clear();
@@ -269,15 +279,11 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 	@Override
 	protected void onNewIntent(Intent intent) {
 		OrientationUtil.setOrientation(this, intent);
+	}
 
-		if (!Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			return;
-		}
-		String pattern = intent.getStringExtra(SearchManager.QUERY);
-		myBookmarkSearchPatternOption.setValue(pattern);
-
+	private void doSearch(String pattern) {
 		final LinkedList<Bookmark> bookmarks = new LinkedList<Bookmark>();
-		pattern = pattern.trim().toLowerCase();
+		pattern = pattern.toLowerCase();
 		for (Bookmark b : myAllBooksFragment.getBookmarksAdapter().bookmarks()) {
 			if (MiscUtil.matchesIgnoreCase(b.getText(), pattern)) {
 				bookmarks.add(b);
@@ -299,11 +305,7 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 
 	@Override
 	public boolean onSearchRequested() {
-		if (DeviceType.Instance().hasStandardSearchDialog()) {
-			startSearch(myBookmarkSearchPatternOption.getValue(), true, null, false);
-		} else {
-			SearchDialogUtil.showDialog(this, BookmarksActivity.class, myBookmarkSearchPatternOption.getValue(), null);
-		}
+		openSearchView();
 		return true;
 	}
 
@@ -554,5 +556,69 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 
 	// method from IBookCollection.Listener
 	public void onBuildEvent(IBookCollection.Status status) {
+	}
+
+	public void openSearchView() {
+		if (mySearchItem == null) {
+			return;
+		}
+		mySearchItem.setVisible(true);
+		final SearchView searchView = (SearchView)mySearchItem.getActionView();
+		searchView.setIconified(false);
+		searchView.setQuery(myBookmarkSearchPatternOption.getValue(), false);
+		searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+			@Override
+			public boolean onClose() {
+				hideSearchItem();
+				return false;
+			}
+		});
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextChange(String query) {
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				query = query.trim();
+				if (!"".equals(query)) {
+					myBookmarkSearchPatternOption.setValue(query);
+					doSearch(query);
+					hideSearchItem();
+				}
+				return false;
+			}
+		});
+	}
+
+	public boolean hideSearchItem() {
+		final MenuItem searchItem = mySearchItem;
+		if (searchItem == null || !searchItem.isVisible()) {
+			return false;
+		}
+
+		searchItem.getActionView().clearFocus();
+		searchItem.setVisible(false);
+
+		invalidateOptionsMenu();
+
+		return true;
+	}
+
+	@Override
+	public void onBackPressed() {
+		final MenuItem searchItem = mySearchItem;
+		if (searchItem != null && searchItem.isVisible() && searchItem.isEnabled()) {
+			final SearchView searchView = (SearchView)mySearchItem.getActionView();
+			if (!searchView.isIconified()) {
+				searchView.setIconified(true);
+				searchView.setIconified(true);
+				searchView.setQuery(myBookmarkSearchPatternOption.getValue(), false);
+				return;
+			}
+		}
+
+		super.onBackPressed();
 	}
 }
