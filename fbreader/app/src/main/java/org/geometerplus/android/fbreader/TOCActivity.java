@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.util.android.ViewUtil;
+
 import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.tree.ZLTree;
@@ -36,7 +38,6 @@ import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.util.OrientationUtil;
-import org.geometerplus.android.util.ViewUtil;
 
 public class TOCActivity extends ListActivity {
 	private TOCAdapter myAdapter;

@@ -23,6 +23,8 @@ import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.fbreader.util.android.ViewUtil;
+
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.fbreader.network.*;
@@ -33,8 +35,6 @@ import org.geometerplus.android.fbreader.tree.TreeAdapter;
 import org.geometerplus.android.fbreader.covers.CoverManager;
 
 import org.geometerplus.android.fbreader.network.action.NetworkBookActions;
-
-import org.geometerplus.android.util.ViewUtil;
 
 class NetworkLibraryAdapter extends TreeAdapter {
 	NetworkLibraryAdapter(NetworkLibraryActivity activity) {
