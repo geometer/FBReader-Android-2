@@ -23,6 +23,8 @@ import android.text.Html;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.util.android.ViewUtil;
+
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 
 import org.geometerplus.zlibrary.ui.android.R;
@@ -33,8 +35,6 @@ import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.android.fbreader.tree.TreeActivity;
 import org.geometerplus.android.fbreader.tree.TreeAdapter;
 import org.geometerplus.android.fbreader.covers.CoverManager;
-
-import org.geometerplus.android.util.ViewUtil;
 
 class LibraryTreeAdapter extends TreeAdapter {
 	private CoverManager myCoverManager;
