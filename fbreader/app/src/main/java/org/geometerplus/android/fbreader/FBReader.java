@@ -1047,23 +1047,8 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	}
 
 	@Override
-	protected void runMenuAction(String code) {
-		myFBReaderApp.runAction(code);
-	}
-
-	@Override
-	protected boolean isMenuActionVisible(String code) {
-		return myFBReaderApp.isActionVisible(code);
-	}
-
-	@Override
-	protected boolean isMenuActionEnabled(String code) {
-		return myFBReaderApp.isActionEnabled(code);
-	}
-
-	@Override
-	protected Boolean3 isMenuActionChecked(String code) {
-		return myFBReaderApp.isActionChecked(code);
+	protected FBReaderApp getDataModel() {
+		return myFBReaderApp;
 	}
 
 	@Override
