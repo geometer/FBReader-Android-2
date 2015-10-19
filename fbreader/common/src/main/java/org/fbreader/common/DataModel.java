@@ -17,30 +17,13 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.fbreader.common;
 
-import org.geometerplus.fbreader.book.Bookmark;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.fbreader.util.Boolean3;
 
-import org.geometerplus.android.fbreader.FBReaderUtil;
-
-public class SelectionBookmarkAction extends FBAndroidAction {
-	SelectionBookmarkAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
-	}
-
-	@Override
-	protected void run(Object ... params) {
-		final Bookmark bookmark;
-		if (params.length != 0) {
-			bookmark = (Bookmark)params[0];
-		} else {
-			bookmark = Reader.addSelectionBookmark();
-		}
-		if (bookmark == null) {
-			return;
-		}
-
-		FBReaderUtil.showBookmarkToast(BaseActivity, bookmark);
-	}
+public interface DataModel {
+	boolean runAction(String actionId);
+	boolean isActionVisible(String actionId);
+	boolean isActionEnabled(String actionId);
+	Boolean3 isActionChecked(String actionId);
 }

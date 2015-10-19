@@ -22,12 +22,13 @@ package org.geometerplus.zlibrary.core.application;
 import java.util.*;
 
 import org.fbreader.util.Boolean3;
+import org.fbreader.common.DataModel;
 
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 import org.geometerplus.zlibrary.core.view.ZLView;
 import org.geometerplus.zlibrary.core.view.ZLViewWidget;
 
-public abstract class ZLApplication {
+public abstract class ZLApplication implements DataModel {
 	public static ZLApplication Instance() {
 		return ourInstance;
 	}
@@ -154,11 +155,9 @@ public abstract class ZLApplication {
 		myIdToActionMap.remove(actionId);
 	}
 
-	public final void runAction(String actionId) {
+	public final boolean runAction(String actionId) {
 		final ZLAction action = myIdToActionMap.get(actionId);
-		if (action != null) {
-			action.checkAndRun();
-		}
+		return action != null ? action.checkAndRun() : false;
 	}
 
 	public final boolean isActionVisible(String actionId) {
@@ -176,11 +175,9 @@ public abstract class ZLApplication {
 		return action != null ? action.isChecked() : Boolean3.UNDEFINED;
 	}
 
-	public final void runAction(String actionId, Object ... params) {
+	public final boolean runAction(String actionId, Object ... params) {
 		final ZLAction action = myIdToActionMap.get(actionId);
-		if (action != null) {
-			action.checkAndRun(params);
-		}
+		return action != null ? action.checkAndRun(params) : false;
 	}
 
 	//may be protected

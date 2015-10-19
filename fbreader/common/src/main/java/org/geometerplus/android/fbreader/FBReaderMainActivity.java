@@ -41,6 +41,7 @@ import org.fbreader.util.Boolean3;
 import org.fbreader.util.Pair;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
+import org.fbreader.common.DataModel;
 
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 
@@ -192,7 +193,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		}
 
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			runMenuAction(getItem(position));
+			getDataModel().runAction(getItem(position));
 			myDrawerLayout.closeDrawer(GravityCompat.START);
 		}
 	};
@@ -229,7 +230,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		);
 		menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				runMenuAction(actionId);
+				getDataModel().runAction(actionId);
 				return true;
 			}
 		});
@@ -238,11 +239,12 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	}
 
 	protected final void refreshMenu() {
+		final DataModel model = getDataModel();
 		for (Pair<MenuItem,String> pair : myMenuItems) {
 			final MenuItem menuItem = pair.First;
 			final String actionId = pair.Second;
-			menuItem.setVisible(isMenuActionVisible(actionId) && isMenuActionEnabled(actionId));
-			switch (isMenuActionChecked(actionId)) {
+			menuItem.setVisible(model.isActionVisible(actionId) && model.isActionEnabled(actionId));
+			switch (model.isActionChecked(actionId)) {
 				case TRUE:
 					menuItem.setCheckable(true);
 					menuItem.setChecked(true);
@@ -274,10 +276,6 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		return super.onPrepareOptionsMenu(menu);
 	}
 
-	protected abstract void runMenuAction(String code);
-	protected abstract boolean isMenuActionVisible(String code);
-	protected abstract boolean isMenuActionEnabled(String code);
-	protected abstract Boolean3 isMenuActionChecked(String code);
 	protected abstract boolean isActionBarVisible();
 	/* ---- MENU ---- */
 
@@ -599,4 +597,6 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		super.setTitleVisible(visible);
 		findViewById(R.id.main_shadow).setVisibility(visible ? View.VISIBLE : View.GONE);
 	}
+
+	protected abstract DataModel getDataModel();
 }
