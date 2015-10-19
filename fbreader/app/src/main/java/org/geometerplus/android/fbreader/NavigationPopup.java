@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader;
 import android.view.View;
 import android.widget.*;
 
-import com.gc.materialdesign.views.Slider;
+import org.fbreader.md.widget.Slider;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 

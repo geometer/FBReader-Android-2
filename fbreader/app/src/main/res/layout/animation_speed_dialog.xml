@@ -4,10 +4,40 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 >
-	<SeekBar
-		android:id="@+id/animation_speed_slider"
+	<LinearLayout
+		android:id="@+id/layout"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:padding="4dip"
-	/>
+		android:layout_marginTop="24dp"
+		android:orientation="vertical"
+	>
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+		>
+			<TextView
+				android:id="@+id/slow"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentTop="true"
+				android:paddingLeft="20dp"
+			/>
+			<TextView
+				android:id="@+id/fast"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:layout_alignParentRight="true"
+				android:layout_alignParentTop="true"
+				android:paddingRight="20dp"
+			/>
+		</RelativeLayout>
+		<org.fbreader.md.widget.Slider
+			android:id="@+id/animation_speed_slider"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+		/>
+	</LinearLayout>
 </ScrollView>

@@ -22,7 +22,6 @@ dependencies {
 	compile project(':third-party/SuperToasts')
 	compile project(':third-party/AmbilWarna')
 	compile project(':third-party/patches')
-	compile project(':third-party/MaterialDesign')
 	compile files('libs/nanohttpd-2.0.5.jar')
 	compile files('libs/httpmime-4.2.5.jar')
 	compile files('libs/pdfparse.jar')
