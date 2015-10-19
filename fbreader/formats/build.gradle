@@ -10,11 +10,6 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-dependencies {
-	compile project(':fbreader/api')
-	compile project(':fbreader/common')
-}
-
 android {
 	compileSdkVersion 19
 	buildToolsVersion '20'
