@@ -95,10 +95,10 @@ final class NavigationPopup {
 			}
 
 			public void onValueChanged(int progress) {
-					final int page = progress + 1;
-					final int pagesNumber = slider.getMax() + 1;
-					gotoPage(page);
-					text.setText(makeProgressText(page, pagesNumber));
+				final int page = progress + 1;
+				final int pagesNumber = slider.getMax() + 1;
+				gotoPage(page);
+				text.setText(makeProgressText(page, pagesNumber));
 			}
 		});
 
