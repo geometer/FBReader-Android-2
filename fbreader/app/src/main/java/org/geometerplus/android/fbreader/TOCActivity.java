@@ -24,6 +24,9 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.md.MDActivity;
+import org.fbreader.util.android.ViewUtil;
+
 import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.tree.ZLTree;
@@ -34,8 +37,6 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.util.*;
 
-import org.fbreader.md.MDActivity;
-import org.fbreader.util.android.ViewUtil;
 import org.geometerplus.zlibrary.ui.android.R;
 
 public class TOCActivity extends MDActivity {

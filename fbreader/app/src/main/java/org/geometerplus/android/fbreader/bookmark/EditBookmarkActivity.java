@@ -38,6 +38,9 @@ import android.widget.*;
 
 import yuku.ambilwarna.widget.AmbilWarnaPrefWidgetView;
 
+import org.fbreader.md.MDActivity;
+import org.fbreader.util.android.ViewUtil;
+
 import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
@@ -46,9 +49,6 @@ import org.geometerplus.fbreader.book.*;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-
-import org.fbreader.md.MDActivity;
-import org.fbreader.util.android.ViewUtil;
 
 public class EditBookmarkActivity extends MDActivity implements IBookCollection.Listener<Book> {
 	private TabLayout myTabLayout;

@@ -34,13 +34,14 @@ import android.widget.*;
 
 import yuku.ambilwarna.widget.AmbilWarnaPrefWidgetView;
 
+import org.fbreader.md.MDActivity;
+import org.fbreader.util.android.DrawableUtil;
+import org.fbreader.util.android.ViewUtil;
+
 import org.geometerplus.zlibrary.core.util.MiscUtil;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
 
-import org.fbreader.md.MDActivity;
-import org.fbreader.util.android.DrawableUtil;
-import org.fbreader.util.android.ViewUtil;
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.fbreader.book.*;
