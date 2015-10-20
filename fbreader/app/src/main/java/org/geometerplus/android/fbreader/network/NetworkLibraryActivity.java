@@ -484,11 +484,7 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 	private void showInitLibraryDialog(String error) {
 		final DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				if (which == DialogInterface.BUTTON_POSITIVE) {
-					Util.initLibrary(NetworkLibraryActivity.this, myNetworkContext, null);
-				} else {
-					finish();
-				}
+				Util.initLibrary(NetworkLibraryActivity.this, myNetworkContext, null);
 			}
 		};
 
@@ -497,17 +493,12 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 		final ZLResource buttonResource = dialogResource.getResource("button");
 		new MDAlertDialogBuilder(this)
 			.setTitle(boxResource.getResource("title").getValue())
-			.setNavigationOnClickListener(new View.OnClickListener() {
-				public void onClick(View view) {
-					finish();
-				}
-			})
 			.setMessage(error)
 			.setIcon(0)
 			.setPositiveButton(buttonResource.getResource("tryAgain").getValue(), listener)
 			.setOnCancelListener(new DialogInterface.OnCancelListener() {
 				public void onCancel(DialogInterface dialog) {
-					listener.onClick(dialog, DialogInterface.BUTTON_NEGATIVE);
+					finish();
 				}
 			})
 			.create().show();

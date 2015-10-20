@@ -106,14 +106,6 @@ public class AmbilWarnaDialog {
 
 		dialog = new MDAlertDialogBuilder(context)
 			.setTitle(title)
-			.setNavigationOnClickListener(new View.OnClickListener() {
-				@Override public void onClick(View view) {
-					if (AmbilWarnaDialog.this.listener != null) {
-						AmbilWarnaDialog.this.listener.onCancel(AmbilWarnaDialog.this);
-					}
-					dialog.dismiss();
-				}
-			})
 			.setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
 				@Override public void onClick(DialogInterface dialog, int which) {
 					if (AmbilWarnaDialog.this.listener != null) {
@@ -127,7 +119,6 @@ public class AmbilWarnaDialog {
 					if (AmbilWarnaDialog.this.listener != null) {
 						AmbilWarnaDialog.this.listener.onCancel(AmbilWarnaDialog.this);
 					}
-
 				}
 			})
 			.create();
