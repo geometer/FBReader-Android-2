@@ -29,7 +29,6 @@ import android.view.LayoutInflater;
 
 public class MDAlertDialogBuilder extends AlertDialog.Builder {
 	private Toolbar myToolbar;
-	private View.OnClickListener myNavigationListener;
 
 	public MDAlertDialogBuilder(Context context) {
 		super(context, R.style.FBReaderMD_Dialog);
@@ -44,27 +43,16 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 		return this;
 	}
 
-	public MDAlertDialogBuilder setNavigationOnClickListener(View.OnClickListener listener) {
-		if (listener != null) {
-			createToolbar();
-			myNavigationListener = listener;
-		}
-		return this;
-	}
-
 	@Override
 	public AlertDialog create() {
 		final AlertDialog dialog = super.create();
 		if (myToolbar != null) {
-			if (myNavigationListener == null) {
-				myNavigationListener = new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						dialog.dismiss();
-					}
-				};
-			}
-			myToolbar.setNavigationOnClickListener(myNavigationListener);
+			myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					dialog.cancel();
+				}
+			});
 		}
 		final View view = dialog.getWindow().getDecorView();
 		if (view != null && view.getMinimumWidth() == 0) {
