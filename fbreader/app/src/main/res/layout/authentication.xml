@@ -4,6 +4,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
+	android:minWidth="250dp"
 >
 	<include layout="@layout/md_toolbar"/>
 	<ScrollView
@@ -82,7 +83,7 @@
 					android:layout_marginBottom="5dp"
 				/>
 			</LinearLayout>
-			<include layout="@layout/ok_cancel_buttons" android:id="@+id/authentication_buttons" />
+			<include layout="@layout/md_single_button_bar"/>
 		</LinearLayout>
 	</ScrollView>
 </LinearLayout>

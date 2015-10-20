@@ -163,8 +163,7 @@ public class AuthenticationActivity extends MDActivity {
 
 		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
 
-		final View buttonsView = findViewById(R.id.authentication_buttons);
-		myOkButton = (Button)buttonsView.findViewById(R.id.ok_button);
+		myOkButton = (Button)findViewById(R.id.md_single_button);
 		myOkButton.setText(buttonResource.getResource("ok").getValue());
 		myOkButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
@@ -178,9 +177,7 @@ public class AuthenticationActivity extends MDActivity {
 			}
 		});
 
-		final Button cancelButton = (Button)buttonsView.findViewById(R.id.cancel_button);
-		cancelButton.setText(buttonResource.getResource("cancel").getValue());
-		cancelButton.setOnClickListener(new Button.OnClickListener() {
+		getToolbar().setNavigationOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				runOnUiThread(new Runnable() {
 					public void run() {
