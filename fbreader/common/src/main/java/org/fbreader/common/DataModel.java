@@ -26,4 +26,6 @@ public interface DataModel {
 	boolean isActionVisible(String actionId);
 	boolean isActionEnabled(String actionId);
 	Boolean3 isActionChecked(String actionId);
+
+	void storePosition();
 }
