@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<declare-styleable name="FBReaderMDTheme">
-		<attr name="titleOnlyTextAppearance" format="reference"/>
-		<attr name="colorPrimaryDrawable" format="reference"/>
-		<attr name="listProgressIndicatorStyle" format="reference"/>
+	<attr name="titleOnlyTextAppearance" format="reference"/>
+	<attr name="colorPrimaryDrawable" format="reference"/>
+	<attr name="listProgressIndicatorStyle" format="reference"/>
+
+	<attr name="sliderStyle" format="reference"/>
+	<declare-styleable name="Slider">
+		<attr name="activeSectionColor" format="color|reference"/>
+		<attr name="inactiveSectionColor" format="color|reference"/>
+		<attr name="activeBallRadius" format="dimension"/>
+		<attr name="ballHighlightingRadius" format="dimension"/>
+		<attr name="ballHighlightingColor" format="color|reference"/>
+		<attr name="sliderLineWidth" format="dimension"/>
+		<attr name="sliderMinWidth" format="dimension"/>
+		<attr name="sliderMinHeight" format="dimension"/>
 	</declare-styleable>
 </resources>
