@@ -350,6 +350,7 @@ void ZLTextModel::addImage(const std::string &id, short vOffset, bool isCover) {
 	ZLCachedMemoryAllocator::writeUInt16(myLastEntryStart + 6 + len, isCover ? 1 : 0);
 	myParagraphs.back()->addEntry(myLastEntryStart);
 	++myParagraphLengths.back();
+	myTextSizes.back() += 100;
 }
 
 void ZLTextModel::addBidiReset() {
@@ -383,6 +384,7 @@ void ZLTextModel::addVideoEntry(const ZLVideoEntry &entry) {
 
 	myParagraphs.back()->addEntry(myLastEntryStart);
 	++myParagraphLengths.back();
+	myTextSizes.back() += 100;
 }
 
 void ZLTextModel::addExtensionEntry(const std::string &action, const std::map<std::string,std::string> &data) {
@@ -413,6 +415,7 @@ void ZLTextModel::addExtensionEntry(const std::string &action, const std::map<st
 
 	myParagraphs.back()->addEntry(myLastEntryStart);
 	++myParagraphLengths.back();
+	myTextSizes.back() += 100;
 }
 
 void ZLTextModel::flush() {
