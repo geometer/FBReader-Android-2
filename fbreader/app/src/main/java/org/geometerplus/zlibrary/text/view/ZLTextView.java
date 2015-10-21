@@ -612,90 +612,17 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		return sizeOfText;
 	}
 
-	// Can be called only when (myModel.getParagraphsNumber() != 0)
-	private synchronized float computeCharsPerPage() {
-		setTextStyle(getTextStyleCollection().getBaseStyle());
-
+	private int myStoredTextWidth, myStoredTextHeight;
+	private void updateTextParams() {
 		final int textWidth = getTextColumnWidth();
 		final int textHeight = getTextAreaHeight();
-
-		final int num = myModel.getParagraphsNumber();
-		final int totalTextSize = myModel.getTextLength(num - 1);
-		final float charsPerParagraph = ((float)totalTextSize) / num;
-
-		final float charWidth = computeCharWidth();
-
-		final int indentWidth = getElementWidth(ZLTextElement.Indent, 0);
-		final float effectiveWidth = textWidth - (indentWidth + 0.5f * textWidth) / charsPerParagraph;
-		float charsPerLine = Math.min(effectiveWidth / charWidth,
-				charsPerParagraph * 1.2f);
-
-		final int strHeight = getWordHeight() + getContext().getDescent();
-		final int effectiveHeight = (int)
-			(textHeight -
-				(getTextStyle().getSpaceBefore(metrics())
-				+ getTextStyle().getSpaceAfter(metrics()) / 2) / charsPerParagraph);
-		final int linesPerPage = effectiveHeight / strHeight;
-
-		return charsPerLine * linesPerPage;
-	}
-
-	private synchronized int computeTextPageNumber(int textSize) {
-		if (myModel == null || myModel.getParagraphsNumber() == 0) {
-			return 1;
+		if (textWidth != myStoredTextWidth || textHeight != myStoredTextHeight) {
+			myStoredTextWidth = textWidth;
+			myStoredTextHeight = textHeight;
+			myCharsPerPage = -1f;
+			myStartPages.clear();
+			myEndPages.clear();
 		}
-
-		final float factor = 1.0f / computeCharsPerPage();
-		final float pages = textSize * factor;
-		return Math.max((int)(pages + 1.0f - 0.5f * factor), 1);
-	}
-
-	private static final char[] ourDefaultLetters = "System developers have used modeling languages for decades to specify, visualize, construct, and document systems. The Unified Modeling Language (UML) is one of those languages. UML makes it possible for team members to collaborate by providing a common language that applies to a multitude of different systems. Essentially, it enables you to communicate solutions in a consistent, tool-supported language.".toCharArray();
-
-	private final char[] myLettersBuffer = new char[512];
-	private int myLettersBufferLength = 0;
-	private ZLTextModel myLettersModel = null;
-	private float myCharWidth = -1f;
-
-	private final float computeCharWidth() {
-		if (myLettersModel != myModel) {
-			myLettersModel = myModel;
-			myLettersBufferLength = 0;
-			myCharWidth = -1f;
-
-			int paragraph = 0;
-			final int textSize = myModel.getTextLength(myModel.getParagraphsNumber() - 1);
-			if (textSize > myLettersBuffer.length) {
-				paragraph = myModel.findParagraphByTextLength((textSize - myLettersBuffer.length) / 2);
-			}
-			while (paragraph < myModel.getParagraphsNumber()
-					&& myLettersBufferLength < myLettersBuffer.length) {
-				final ZLTextParagraph.EntryIterator it = myModel.getParagraph(paragraph++).iterator();
-				while (myLettersBufferLength < myLettersBuffer.length && it.next()) {
-					if (it.getType() == ZLTextParagraph.Entry.TEXT) {
-						final int len = Math.min(it.getTextLength(),
-								myLettersBuffer.length - myLettersBufferLength);
-						System.arraycopy(it.getTextData(), it.getTextOffset(),
-								myLettersBuffer, myLettersBufferLength, len);
-						myLettersBufferLength += len;
-					}
-				}
-			}
-
-			if (myLettersBufferLength == 0) {
-				myLettersBufferLength = Math.min(myLettersBuffer.length, ourDefaultLetters.length);
-				System.arraycopy(ourDefaultLetters, 0, myLettersBuffer, 0, myLettersBufferLength);
-			}
-		}
-
-		if (myCharWidth < 0f) {
-			myCharWidth = computeCharWidth(myLettersBuffer, myLettersBufferLength);
-		}
-		return myCharWidth;
-	}
-
-	private final float computeCharWidth(char[] pattern, int length) {
-		return getContext().getStringWidth(pattern, 0, length) / ((float)length);
 	}
 
 	public static class PagePosition {
@@ -708,50 +635,123 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 	}
 
-	public final synchronized PagePosition pagePosition() {
-		int current = computeTextPageNumber(getCurrentCharNumber(PageIndex.current, false));
-		int total = computeTextPageNumber(sizeOfFullText());
-
-		if (total > 3) {
-			return new PagePosition(current, total);
+	private static final int MAX_PRECOMPUTED_PAGES = 5;
+	private final List<Integer> myStartPages = new ArrayList<Integer>(MAX_PRECOMPUTED_PAGES);
+	private final List<Integer> myEndPages = new ArrayList<Integer>(MAX_PRECOMPUTED_PAGES);
+	private float myCharsPerPage;
+	private int myTotalPages;
+	private synchronized void precomputePagePositions() {
+		updateTextParams();
+		if (!myStartPages.isEmpty()) {
+			return;
 		}
 
-		preparePaintInfo(myCurrentPage);
 		ZLTextWordCursor cursor = myCurrentPage.StartCursor;
-		if (cursor == null || cursor.isNull()) {
-			return new PagePosition(current, total);
+		if (cursor.isNull()) {
+			cursor = myCurrentPage.EndCursor;
+		}
+		if (cursor.isNull()) {
+			myCharsPerPage = 1000;
+			myTotalPages = 1;
+			return;
 		}
 
-		if (cursor.isStartOfText()) {
-			current = 1;
+		final ArrayList<Integer> all = new ArrayList<Integer>();
+		final ZLTextPage testPage = new ZLTextPage();
+		testPage.StartCursor.setCursor(cursor);
+		testPage.moveStartCursor(0, 0, 0);
+		int prev = 0;
+		for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
+			testPage.PaintState = PaintStateEnum.START_IS_KNOWN;
+			preparePaintInfo(testPage, false);
+			final int size = sizeOfTextBeforeCursor(testPage.EndCursor);
+			myStartPages.add(size);
+			if (testPage.EndCursor.isEndOfText()) {
+				break;
+			}
+			all.add(size - prev);
+			prev = size;
+			testPage.StartCursor.setCursor(testPage.EndCursor);
+		}
+		testPage.moveEndCursor(myModel.getParagraphsNumber(), 0, 0);
+		prev = sizeOfFullText();
+		for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
+			testPage.PaintState = PaintStateEnum.END_IS_KNOWN;
+			preparePaintInfo(testPage, true);
+			final int size = sizeOfTextBeforeCursor(testPage.StartCursor);
+			myEndPages.add(size);
+			if (testPage.StartCursor.isStartOfText()) {
+				break;
+			}
+			all.add(prev - size);
+			prev = size;
+			testPage.EndCursor.setCursor(testPage.StartCursor);
+		}
+
+		all.addAll(myStartPages);
+		all.addAll(myEndPages);
+		Collections.sort(all);
+		if (all.size() == 0) {
+			myCharsPerPage = 1000;
+		} else if (all.size() % 2 == 0) {
+			myCharsPerPage = .5f * (all.get(all.size() / 2 - 1) + all.get(all.size() / 2));
 		} else {
-			ZLTextWordCursor prevCursor = myPreviousPage.StartCursor;
-			if (prevCursor == null || prevCursor.isNull()) {
-				preparePaintInfo(myPreviousPage);
-				prevCursor = myPreviousPage.StartCursor;
-			}
-			if (prevCursor != null && !prevCursor.isNull()) {
-				current = prevCursor.isStartOfText() ? 2 : 3;
-			}
+			myCharsPerPage = all.get(all.size() / 2);
 		}
 
-		total = current;
-		cursor = myCurrentPage.EndCursor;
-		if (cursor == null || cursor.isNull()) {
-			return new PagePosition(current, total);
+		if (myStartPages.isEmpty() || myEndPages.isEmpty()) {
+			myTotalPages = 1;
+		} else {
+			myTotalPages = myStartPages.size();
+			final int lastStartPagesChar = myStartPages.get(myStartPages.size() - 1);
+			final int firstEndPagesChar = myEndPages.get(myEndPages.size() - 1);
+			if (lastStartPagesChar >= firstEndPagesChar) {
+				if (lastStartPagesChar < sizeOfFullText()) {
+					++myTotalPages;
+					for (int c : myEndPages) {
+						if (c >= lastStartPagesChar) {
+							++myTotalPages;
+						} else {
+							break;
+						}
+					}
+				}
+			} else {
+				myTotalPages += myEndPages.size();
+				final int uncountedChars = firstEndPagesChar - lastStartPagesChar;
+				myTotalPages +=
+					Math.max(1, (int)((uncountedChars + myCharsPerPage - 1) / myCharsPerPage));
+			}
 		}
-		if (!cursor.isEndOfText()) {
-			ZLTextWordCursor nextCursor = myNextPage.EndCursor;
-			if (nextCursor == null || nextCursor.isNull()) {
-				preparePaintInfo(myNextPage);
-				nextCursor = myNextPage.EndCursor;
-			}
-			if (nextCursor != null) {
-				total += nextCursor.isEndOfText() ? 1 : 2;
-			}
+	}
+
+	public final synchronized PagePosition pagePosition() {
+		if (myModel == null || myModel.getParagraphsNumber() == 0) {
+			return new PagePosition(1, 1);
 		}
 
-		return new PagePosition(current, total);
+		precomputePagePositions();
+
+		final int currentChars = getCurrentCharNumber(PageIndex.current, false);
+		if (myCurrentPage.EndCursor.isEndOfText()) {
+			return new PagePosition(myTotalPages, myTotalPages);
+		}
+		for (int i = 0; i < myStartPages.size(); ++i) {
+			if (currentChars <= myStartPages.get(i)) {
+				return new PagePosition(i + 1, myTotalPages);
+			}
+		}
+		for (int i = 0; i < myEndPages.size(); ++i) {
+			if (currentChars >= myEndPages.get(i)) {
+				return new PagePosition(myTotalPages - i - 1, myTotalPages);
+			}
+		}
+		final int lastStartPagesChar =
+			myStartPages.size() > 0 ? myStartPages.get(myStartPages.size() - 1) : 0;
+		final int uncountedChars = currentChars - lastStartPagesChar;
+		final int page =
+			myStartPages.size() + Math.max(1, (int)(uncountedChars / myCharsPerPage + .5f));
+		return new PagePosition(page, myTotalPages);
 	}
 
 	public final RationalNumber getProgress() {
@@ -764,8 +764,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
 			return;
 		}
 
-		final float factor = computeCharsPerPage();
-		final float textSize = page * factor;
+		precomputePagePositions();
+		final float textSize = page * myCharsPerPage;
 
 		int intTextSize = (int) textSize;
 		int paragraphIndex = myModel.findParagraphByTextLength(intTextSize);
@@ -795,6 +795,25 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 
 		gotoPositionByEnd(paragraphIndex, wordIndex, 0);
+
+		PagePosition position = pagePosition();
+		if (position.Current > page) {
+			for (; position.Current > page; position = pagePosition()) {
+				preparePaintInfo(myCurrentPage);
+				if (myCurrentPage.StartCursor.isStartOfText()) {
+					break;
+				}
+				turnPage(false, ScrollingMode.NO_OVERLAPPING, 1);
+			}
+		} else if (position.Current < page) {
+			for (; position.Current < page; position = pagePosition()) {
+				preparePaintInfo(myCurrentPage);
+				if (myCurrentPage.EndCursor.isEndOfText()) {
+					break;
+				}
+				turnPage(true, ScrollingMode.NO_OVERLAPPING, 1);
+			}
+		}
 	}
 
 	public void gotoHome() {
@@ -1400,7 +1419,11 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	}
 
 	private synchronized void preparePaintInfo(ZLTextPage page) {
-		page.setSize(getTextColumnWidth(), getTextAreaHeight(), twoColumnView(), page == myPreviousPage);
+		preparePaintInfo(page, page == myPreviousPage);
+	}
+
+	private synchronized void preparePaintInfo(ZLTextPage page, boolean keepEndNotStart) {
+		page.setSize(getTextColumnWidth(), getTextAreaHeight(), twoColumnView(), keepEndNotStart);
 
 		if (page.PaintState == PaintStateEnum.NOTHING_TO_PAINT || page.PaintState == PaintStateEnum.READY) {
 			return;
@@ -1522,7 +1545,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		resetMetrics();
 		rebuildPaintInfo();
 		Application.getViewWidget().reset();
-		myCharWidth = -1;
+		myStartPages.clear();
+		myEndPages.clear();
 	}
 
 	protected synchronized void rebuildPaintInfo() {
