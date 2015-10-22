@@ -663,7 +663,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		int prev = 0;
 		for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
 			testPage.PaintState = PaintStateEnum.START_IS_KNOWN;
-			preparePaintInfo(testPage, false);
+			preparePaintInfo(testPage, false, false);
 			final int size = sizeOfTextBeforeCursor(testPage.EndCursor);
 			myStartPages.add(size);
 			if (testPage.EndCursor.isEndOfText()) {
@@ -677,7 +677,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		prev = sizeOfFullText();
 		for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
 			testPage.PaintState = PaintStateEnum.END_IS_KNOWN;
-			preparePaintInfo(testPage, true);
+			preparePaintInfo(testPage, false, true);
 			final int size = sizeOfTextBeforeCursor(testPage.StartCursor);
 			myEndPages.add(size);
 			if (testPage.StartCursor.isStartOfText()) {
@@ -1419,11 +1419,11 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	}
 
 	private synchronized void preparePaintInfo(ZLTextPage page) {
-		preparePaintInfo(page, page == myPreviousPage);
+		preparePaintInfo(page, twoColumnView(), page == myPreviousPage);
 	}
 
-	private synchronized void preparePaintInfo(ZLTextPage page, boolean keepEndNotStart) {
-		page.setSize(getTextColumnWidth(), getTextAreaHeight(), twoColumnView(), keepEndNotStart);
+	private synchronized void preparePaintInfo(ZLTextPage page, boolean twoColumns, boolean keepEndNotStart) {
+		page.setSize(getTextColumnWidth(), getTextAreaHeight(), twoColumns, keepEndNotStart);
 
 		if (page.PaintState == PaintStateEnum.NOTHING_TO_PAINT || page.PaintState == PaintStateEnum.READY) {
 			return;
@@ -1631,7 +1631,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	}
 
 	private ZLTextWordCursor findStartOfPrevousPage(ZLTextPage page, ZLTextWordCursor end) {
-		if (twoColumnView()) {
+		if (page.twoColumnView()) {
 			end = findStart(page, end, SizeUnit.PIXEL_UNIT, page.getTextHeight());
 		}
 		end = findStart(page, end, SizeUnit.PIXEL_UNIT, page.getTextHeight());
