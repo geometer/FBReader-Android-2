@@ -3,8 +3,8 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:minHeight="?android:attr/listPreferredItemHeight"
-	android:paddingLeft="5dip"
-	android:paddingRight="8dip"
+	android:paddingLeft="5dp"
+	android:paddingRight="8dp"
 	android:orientation="horizontal"
 >
 	<ImageView
@@ -17,9 +17,9 @@
 		android:id="@+id/toc_tree_item_text"
 		android:layout_width="wrap_content"
 		android:layout_height="match_parent"
-		android:layout_marginLeft="5dip"
-		android:layout_marginTop="5dip"
-		android:layout_marginBottom="5dip"
+		android:layout_marginLeft="5dp"
+		android:layout_marginTop="5dp"
+		android:layout_marginBottom="5dp"
 		android:gravity="center_vertical|left"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:ellipsize="marquee"
