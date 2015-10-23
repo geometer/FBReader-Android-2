@@ -12,6 +12,7 @@
 * Goto page number dialog
 * Fora Dictionary Pro support
 * New page numbering algorithm
+* Support for utf8-encoded zip entry names
 * Updated Belarusian localization (by Usievaład Čorny)
 * Updated Dutch localisation (by Frank Fesevur)
 * Updated German localisation (by Matthias Dill)
