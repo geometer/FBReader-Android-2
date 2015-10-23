@@ -221,15 +221,19 @@ public class BookDownloaderService extends Service {
 			resource.getResource("downloadFailed").getValue();
 		final Intent intent = success ? getFBReaderIntent(file) : new Intent();
 
-		return new Notification.Builder(getApplicationContext())
+		final Notification.Builder builder = new Notification.Builder(getApplicationContext())
 			.setSmallIcon(R.drawable.fbreader)
 			.setTicker(tickerText)
 			.setWhen(System.currentTimeMillis())
 			.setAutoCancel(true)
 			.setContentTitle(title)
 			.setContentText(contentText)
-			.setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))
-			.build();
+			.setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			return builder.build();
+		} else {
+			return builder.getNotification();
+		}
 	}
 
 	private Notification createDownloadProgressNotification(String title) {

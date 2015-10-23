@@ -20,6 +20,7 @@
 package org.fbreader.md;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -43,6 +44,14 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 		return this;
 	}
 
+	private int getMinimumWidth(View view) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			return view.getMinimumWidth();
+		} else {
+			return 0;
+		}
+	}
+
 	@Override
 	public AlertDialog create() {
 		final AlertDialog dialog = super.create();
@@ -55,7 +64,7 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 			});
 		}
 		final View view = dialog.getWindow().getDecorView();
-		if (view != null && view.getMinimumWidth() == 0) {
+		if (view != null && getMinimumWidth(view) == 0) {
 			final DisplayMetrics dm = dialog.getContext().getResources().getDisplayMetrics();
 			final int minWidth = Math.min(
 				(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 250, dm),
