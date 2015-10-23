@@ -22,6 +22,7 @@ package org.geometerplus.zlibrary.ui.android.view;
 import java.util.List;
 
 import android.graphics.*;
+import android.os.Build;
 
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.fonts.FontEntry;
@@ -41,16 +42,8 @@ public final class ZLAndroidPaintContext extends ZLPaintContext {
 	public static ZLBooleanOption HintingOption = new ZLBooleanOption("Fonts", "Hinting", false);
 	public static ZLBooleanOption SubpixelOption = new ZLBooleanOption("Fonts", "Subpixel", false);
 
-	private static Boolean ourUsesHintingOption;
 	public static boolean usesHintingOption() {
-		if (ourUsesHintingOption == null) {
-			try {
-				ourUsesHintingOption = Paint.class.getMethod("setHinting", int.class) != null;
-			} catch (NoSuchMethodException e) {
-				ourUsesHintingOption = false;
-			}
-		}
-		return ourUsesHintingOption;
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 	}
 
 	private final Canvas myCanvas;
