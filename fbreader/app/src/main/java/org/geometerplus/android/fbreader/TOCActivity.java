@@ -124,7 +124,15 @@ public class TOCActivity extends MDActivity {
 			final TOCTree tree = (TOCTree)getItem(position);
 			view.setBackgroundColor(tree == mySelectedItem ? 0xff808080 : 0);
 			setIcon(ViewUtil.findImageView(view, R.id.toc_tree_item_icon), tree);
-			ViewUtil.findTextView(view, R.id.toc_tree_item_text).setText(tree.getText());
+			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.getText());
+			final TOCTree.Reference reference = tree.getReference();
+			if (reference != null) {
+				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
+				final int page = fbreader.BookTextView.pageNoFromParagraph(reference.ParagraphIndex);
+				ViewUtil.setSubviewText(view, R.id.toc_tree_item_pageno, String.valueOf(page));
+			} else {
+				ViewUtil.setSubviewText(view, R.id.toc_tree_item_pageno, "");
+			}
 			return view;
 		}
 
