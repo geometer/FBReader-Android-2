@@ -182,14 +182,16 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 			imageView.setImageDrawable(null);
 		}
 		final DisplayMetrics dm = context.getResources().getDisplayMetrics();
-		final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+		final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 			(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, dm),
-			LinearLayout.LayoutParams.MATCH_PARENT
+			RelativeLayout.LayoutParams.MATCH_PARENT
 		);
 		params.setMargins(
 			(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15 * (tree.Level - 1), dm),
 			0, 0, 0
 		);
+		params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+		params.addRule(RelativeLayout.CENTER_VERTICAL);
 		imageView.setLayoutParams(params);
 	}
 }

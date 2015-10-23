@@ -731,27 +731,35 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 
 		precomputePagePositions();
-
-		final int currentChars = getCurrentCharNumber(PageIndex.current, false);
 		if (myCurrentPage.EndCursor.isEndOfText()) {
 			return new PagePosition(myTotalPages, myTotalPages);
 		}
+
+		return new PagePosition(
+			pageNoFromChars(getCurrentCharNumber(PageIndex.current, false)), myTotalPages
+		);
+	}
+
+	public final synchronized int pageNoFromParagraph(int paragraphIndex) {
+		precomputePagePositions();
+		return pageNoFromChars(myModel.getTextLength(paragraphIndex - 1)) + 1;
+	}
+
+	private final synchronized int pageNoFromChars(int chars) {
 		for (int i = 0; i < myStartPages.size(); ++i) {
-			if (currentChars <= myStartPages.get(i)) {
-				return new PagePosition(i + 1, myTotalPages);
+			if (chars <= myStartPages.get(i)) {
+				return i + 1;
 			}
 		}
 		for (int i = 0; i < myEndPages.size(); ++i) {
-			if (currentChars >= myEndPages.get(i)) {
-				return new PagePosition(myTotalPages - i - 1, myTotalPages);
+			if (chars >= myEndPages.get(i)) {
+				return myTotalPages - i - 1;
 			}
 		}
 		final int lastStartPagesChar =
 			myStartPages.size() > 0 ? myStartPages.get(myStartPages.size() - 1) : 0;
-		final int uncountedChars = currentChars - lastStartPagesChar;
-		final int page =
-			myStartPages.size() + Math.max(1, (int)(uncountedChars / myCharsPerPage + .5f));
-		return new PagePosition(page, myTotalPages);
+		final int uncountedChars = chars - lastStartPagesChar;
+		return myStartPages.size() + Math.max(1, (int)(uncountedChars / myCharsPerPage + .5f));
 	}
 
 	public final RationalNumber getProgress() {
