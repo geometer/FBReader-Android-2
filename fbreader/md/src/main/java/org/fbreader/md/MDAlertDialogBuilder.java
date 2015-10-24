@@ -62,6 +62,7 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 					dialog.cancel();
 				}
 			});
+			myToolbar.setNavigationContentDescription(android.R.string.cancel);
 		}
 		final View view = dialog.getWindow().getDecorView();
 		if (view != null && getMinimumWidth(view) == 0) {
