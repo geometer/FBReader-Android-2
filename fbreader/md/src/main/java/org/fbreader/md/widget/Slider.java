@@ -137,11 +137,19 @@ public class Slider extends RelativeLayout {
 	}
 
 	private float xCoord() {
-		return xLeft() + xRange() * (myValue - myMin) / (myMax - myMin);
+		final int len = myMax - myMin;
+		if (len <= 0) {
+			return xLeft() + .5f * xRange();
+		}
+		return xLeft() + 1f * xRange() * (myValue - myMin) / len;
 	}
 
 	private int valueFromCoord(float coord, int minValue, int maxValue) {
-		final int value = (int)((maxValue - minValue) * (coord - xLeft()) / xRange()  + .5f);
+		final int range = xRange();
+		if (range <= 0) {
+			return myMin;
+		}
+		final int value = (int)((maxValue - minValue) * (coord - xLeft()) / range  + .5f);
 		return Math.min(maxValue, Math.max(minValue, value));
 	}
 
