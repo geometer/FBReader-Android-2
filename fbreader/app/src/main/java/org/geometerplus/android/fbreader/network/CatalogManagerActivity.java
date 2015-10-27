@@ -217,7 +217,7 @@ public class CatalogManagerActivity extends MDListActivity {
 				}
 
 				final ImageView dragIconView =
-					ViewUtil.findImageView(view, R.id.menu_configure_item_drag_icon);
+					ViewUtil.findImageView(view, R.id.catalog_manager_item_drag_icon);
 				dragIconView.setImageDrawable(DrawableUtil.tintedDrawable(
 					CatalogManagerActivity.this, R.drawable.ic_button_drag_large, R.color.text_primary
 				));
