@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/menu_configure_section_head_title"
+	android:id="@+id/menu_configure_item_title"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:paddingLeft="16dp"
