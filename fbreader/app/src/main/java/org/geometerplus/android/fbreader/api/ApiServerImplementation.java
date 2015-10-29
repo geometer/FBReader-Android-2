@@ -650,13 +650,20 @@ public class ApiServerImplementation extends ApiInterface.Stub implements Api, A
 	}
 
 	public List<MenuNode> getMainMenuContent() {
-		final List<MenuNode> nodes = MenuData.topLevelNodes();
-		final List<MenuNode> copies = new ArrayList<MenuNode>(nodes.size());
-		for (MenuNode n : nodes) {
-			copies.add(n.clone());
+		final MenuData.Location[] locations = new MenuData.Location[] {
+			MenuData.Location.toolbarOrMainMenu,
+			MenuData.Location.bookMenuUpperSection,
+			MenuData.Location.bookMenuLowerSection,
+			MenuData.Location.mainMenu
+		};
+		final List<MenuNode> nodes = new ArrayList<MenuNode>();
+		for (MenuData.Location loc : locations) {
+			for (MenuNode n : MenuData.topLevelNodes(loc)) {
+				nodes.add(n.clone());
+			}
 		}
-		setMenuTitles(copies, ZLResource.resource("menu"));
-		return copies;
+		setMenuTitles(nodes, ZLResource.resource("menu"));
+		return nodes;
 	}
 
 	public String getResourceString(String ... keys) {

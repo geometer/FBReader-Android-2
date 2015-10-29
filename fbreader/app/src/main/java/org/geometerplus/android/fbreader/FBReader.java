@@ -237,7 +237,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 				config.requestAllValuesForGroup("Fonts");
 				config.requestAllValuesForGroup("Colors");
 				config.requestAllValuesForGroup("Files");
-				config.requestAllValuesForGroup("MainMenu");
+				config.requestAllValuesForGroup("ReadingModeMenu");
 			}
 		});
 

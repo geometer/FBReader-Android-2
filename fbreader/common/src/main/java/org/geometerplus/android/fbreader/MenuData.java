@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
+
 import org.fbreader.common.R;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
@@ -34,63 +35,126 @@ public abstract class MenuData {
 	private static List<MenuNode> ourNodes;
 	private static final Map<String,ZLIntegerOption> ourNodeOptions =
 		new HashMap<String,ZLIntegerOption>();
+	private static final Map<Location,Integer> ourSizes = new HashMap<Location,Integer>();
 	private static final Map<String,Integer> ourDefaultValues = new HashMap<String,Integer>();
 	private static final Map<String,String> ourConfigCodes = new HashMap<String,String>();
-	private static final Set<String> ourAlwaysEnabledCodes = new HashSet<String>();
+	private static final Map<String,Set<Location>> ourGroups = new HashMap<String,Set<Location>>();
 
 	private static final String CONFIG_CODE_DAY_NIGHT = "dayNight";
 	private static final String CONFIG_CODE_CHANGE_FONT_SIZE = "changeFontSize";
 
-	private enum Status {
-		AlwaysEnabled,
-		EnabledByDefault,
-		DisabledByDefault
+	public enum Location {
+		bookMenuUpperSection(0),
+		bookMenuLowerSection(1000),
+		toolbarOrMainMenu(2000),
+		mainMenu(3000),
+		disabled(100000);
+
+		static Location byIndex(int index) {
+			Location previous = disabled;
+			for (Location location : values()) {
+				if (index < location.StartIndex) {
+					return previous;
+				}
+				previous = location;
+			}
+			return disabled;
+		}
+
+		public final int StartIndex;
+
+		private Location(int startIndex) {
+			StartIndex = startIndex;
+		}
+
+		public String resourceKey() {
+			return name();
+		}
+
+		static final Set<Location> GroupAny = Collections.unmodifiableSet(
+			new HashSet<Location>(Arrays.asList(Location.values()))
+		);
+		static final Set<Location> GroupAlwaysEnabled;
+		static {
+			final Set<Location> group = new HashSet<Location>(GroupAny);
+			group.remove(Location.disabled);
+			GroupAlwaysEnabled = Collections.unmodifiableSet(group);
+		}
+		static final Set<Location> GroupMainMenuOnly = Collections.unmodifiableSet(
+			new HashSet<Location>(Arrays.asList(Location.mainMenu, Location.disabled))
+		);
 	}
 
-	private static void addToplevelNode(MenuNode node) {
-		addToplevelNode(node, node.Code, Status.EnabledByDefault);
+	private static void addToplevelNode(MenuNode node, Location location) {
+		addToplevelNode(node, node.Code, location, Location.GroupAny);
 	}
 
-	private static void addToplevelNode(MenuNode node, String configCode, Status status) {
+	private static void addToplevelNode(MenuNode node, String configCode, Location location, Set<Location> group) {
 		ourConfigCodes.put(node.Code, configCode);
-		if (status != Status.DisabledByDefault && !ourDefaultValues.containsKey(configCode)) {
-			ourDefaultValues.put(configCode, ourDefaultValues.size());
+		if (!ourDefaultValues.containsKey(configCode)) {
+			Integer index = ourSizes.get(location);
+			if (index == null) {
+				index = 0;
+			}
+			ourDefaultValues.put(configCode, location.StartIndex + index);
+			ourSizes.put(location, index + 1);
 		}
 		ourNodes.add(node);
-		if (status == Status.AlwaysEnabled) {
-			ourAlwaysEnabledCodes.add(configCode);
-		}
+		ourGroups.put(configCode, group);
 	}
 
 	private static synchronized List<MenuNode> allTopLevelNodes() {
 		if (ourNodes == null) {
 			ourNodes = new ArrayList<MenuNode>();
-			addToplevelNode(new MenuNode.Item(ActionCode.SHOW_LIBRARY, R.drawable.ic_menu_library));
-			if (DeviceType.Instance() == DeviceType.YOTA_PHONE) {
-				addToplevelNode(new MenuNode.Item(ActionCode.YOTA_SWITCH_TO_BACK_SCREEN, R.drawable.ic_menu_p2b));
-				//addToplevelNode(new MenuNode.Item(ActionCode.YOTA_SWITCH_TO_FRONT_SCREEN, R.drawable.ic_menu_p2b));
-			}
-			addToplevelNode(new MenuNode.Item(ActionCode.SHOW_NETWORK_LIBRARY, R.drawable.ic_menu_networklibrary));
-			addToplevelNode(new MenuNode.Item(ActionCode.SHOW_TOC, R.drawable.ic_menu_toc));
-			addToplevelNode(new MenuNode.Item(ActionCode.SHOW_BOOKMARKS, R.drawable.ic_menu_bookmarks));
+
 			addToplevelNode(
 				new MenuNode.Item(ActionCode.SWITCH_TO_NIGHT_PROFILE, R.drawable.ic_menu_night),
 				CONFIG_CODE_DAY_NIGHT,
-				Status.EnabledByDefault
+				Location.toolbarOrMainMenu,
+				Location.GroupAny
 			);
 			addToplevelNode(
 				new MenuNode.Item(ActionCode.SWITCH_TO_DAY_PROFILE, R.drawable.ic_menu_day),
 				CONFIG_CODE_DAY_NIGHT,
-				Status.EnabledByDefault
+				Location.toolbarOrMainMenu,
+				Location.GroupAny
 			);
-			addToplevelNode(new MenuNode.Item(ActionCode.SEARCH, R.drawable.abc_ic_search_api_mtrl_alpha));
-			addToplevelNode(new MenuNode.Item(ActionCode.SHARE_BOOK, R.drawable.ic_menu_share));
+			addToplevelNode(new MenuNode.Item(ActionCode.SEARCH, R.drawable.abc_ic_search_api_mtrl_alpha), Location.toolbarOrMainMenu);
+			if (DeviceType.Instance() == DeviceType.YOTA_PHONE) {
+				addToplevelNode(new MenuNode.Item(ActionCode.YOTA_SWITCH_TO_BACK_SCREEN, R.drawable.ic_menu_p2b), Location.toolbarOrMainMenu);
+				//addToplevelNode(new MenuNode.Item(ActionCode.YOTA_SWITCH_TO_FRONT_SCREEN, R.drawable.ic_menu_p2b), Location.toolbarOrMainMenu);
+			}
+
 			addToplevelNode(
-				new MenuNode.Item(ActionCode.SHOW_PREFERENCES, R.drawable.ic_menu_settings),
-				ActionCode.SHOW_PREFERENCES,
-				Status.AlwaysEnabled
+				new MenuNode.Item(ActionCode.SHOW_BOOK_INFO, R.drawable.ic_menu_info),
+				Location.bookMenuUpperSection
 			);
-			addToplevelNode(new MenuNode.Item(ActionCode.SHOW_BOOK_INFO, R.drawable.ic_menu_info));
+			addToplevelNode(
+				new MenuNode.Item(ActionCode.SHOW_TOC, R.drawable.ic_menu_toc),
+				Location.bookMenuUpperSection
+			);
+			addToplevelNode(
+				new MenuNode.Item(ActionCode.SHOW_BOOKMARKS, R.drawable.ic_menu_bookmarks),
+				Location.bookMenuUpperSection
+			);
+			addToplevelNode(
+				new MenuNode.Item(ActionCode.SHARE_BOOK, R.drawable.ic_menu_share),
+				Location.bookMenuUpperSection
+			);
+			addToplevelNode(
+				new MenuNode.Item(ActionCode.GOTO_PAGE_NUMBER, R.drawable.ic_menu_goto),
+				Location.bookMenuUpperSection
+			);
+
+			addToplevelNode(
+				new MenuNode.Item(ActionCode.SHOW_LIBRARY, R.drawable.ic_menu_library),
+				Location.bookMenuLowerSection
+			);
+			addToplevelNode(
+				new MenuNode.Item(ActionCode.SHOW_NETWORK_LIBRARY, R.drawable.ic_menu_networklibrary),
+				Location.bookMenuLowerSection
+			);
+
 			final MenuNode.Submenu orientations = new MenuNode.Submenu("screenOrientation", R.drawable.ic_menu_orientation);
 			orientations.Children.add(new MenuNode.Item(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM));
 			orientations.Children.add(new MenuNode.Item(ActionCode.SET_SCREEN_ORIENTATION_SENSOR));
@@ -100,31 +164,34 @@ public abstract class MenuData {
 				orientations.Children.add(new MenuNode.Item(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT));
 				orientations.Children.add(new MenuNode.Item(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
 			}
-			addToplevelNode(orientations);
+			addToplevelNode(orientations, orientations.Code, Location.mainMenu, Location.GroupMainMenuOnly);
 			addToplevelNode(
 				new MenuNode.Item(ActionCode.INCREASE_FONT, R.drawable.ic_menu_zoom_in),
 				CONFIG_CODE_CHANGE_FONT_SIZE,
-				Status.EnabledByDefault
+				Location.mainMenu,
+				Location.GroupAny
 			);
 			addToplevelNode(
 				new MenuNode.Item(ActionCode.DECREASE_FONT, R.drawable.ic_menu_zoom_out),
 				CONFIG_CODE_CHANGE_FONT_SIZE,
-				Status.EnabledByDefault
+				Location.mainMenu,
+				Location.GroupAny
 			);
-			addToplevelNode(new MenuNode.Item(ActionCode.INSTALL_PLUGINS, R.drawable.ic_menu_plugins));
-			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_WEB_HELP, R.drawable.ic_menu_help));
-			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_START_SCREEN, R.drawable.ic_menu_home));
 			addToplevelNode(
-				new MenuNode.Item(ActionCode.GOTO_PAGE_NUMBER, R.drawable.ic_menu_goto),
-				ActionCode.GOTO_PAGE_NUMBER,
-				Status.DisabledByDefault
+				new MenuNode.Item(ActionCode.SHOW_PREFERENCES, R.drawable.ic_menu_settings),
+				ActionCode.SHOW_PREFERENCES,
+				Location.mainMenu,
+				Location.GroupAlwaysEnabled
 			);
+			addToplevelNode(new MenuNode.Item(ActionCode.INSTALL_PLUGINS, R.drawable.ic_menu_plugins), Location.mainMenu);
+			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_WEB_HELP, R.drawable.ic_menu_help), Location.mainMenu);
+			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_START_SCREEN, R.drawable.ic_menu_home), Location.mainMenu);
 			ourNodes = Collections.unmodifiableList(ourNodes);
 		}
 		return ourNodes;
 	}
 
-	private static String code(MenuNode node) {
+	public static String code(MenuNode node) {
 		return ourConfigCodes.get(node.Code);
 	}
 
@@ -135,56 +202,15 @@ public abstract class MenuData {
 		}
 	}
 
-	private static class CodeComparator implements Comparator<String> {
-		@Override
-		public int compare(String lhs, String rhs) {
-			return nodeOption(lhs).getValue() - nodeOption(rhs).getValue();
-		}
-	}
-
-	public static ArrayList<String> enabledCodes() {
-		final ArrayList<String> codes = new ArrayList<String>();
-		for (MenuNode node : allTopLevelNodes()) {
-			final String c = code(node);
-			if (!codes.contains(c) && isCodeEnabled(c)) {
-				codes.add(c);
+	public static synchronized List<MenuNode> topLevelNodes(Location location) {
+		final List<MenuNode> nodes = new ArrayList<MenuNode>();
+		for (MenuNode n : allTopLevelNodes()) {
+			if (Location.byIndex(nodeOption(code(n)).getValue()) == location) {
+				nodes.add(n);
 			}
 		}
-		Collections.sort(codes, new CodeComparator());
-		return codes;
-	}
-
-	public static ArrayList<String> disabledCodes() {
-		final ArrayList<String> codes = new ArrayList<String>();
-		for (MenuNode node : allTopLevelNodes()) {
-			final String c = code(node);
-			if (!codes.contains(c) && !isCodeEnabled(c)) {
-				codes.add(c);
-			}
-		}
-		return codes;
-	}
-
-	public static int iconId(String itemCode) {
-		final List<MenuNode> allNodes = allTopLevelNodes();
-		for (MenuNode node : allNodes) {
-			if (itemCode.equals(code(node))) {
-				return node.IconId != null ? node.IconId : R.drawable.ic_menu_none;
-			}
-		}
-		return R.drawable.ic_menu_none;
-	}
-
-	public static synchronized List<MenuNode> topLevelNodes() {
-		final List<MenuNode> allNodes = new ArrayList<MenuNode>(allTopLevelNodes());
-		final List<MenuNode> activeNodes = new ArrayList<MenuNode>(allNodes.size());
-		for (MenuNode node : allNodes) {
-			if (isCodeEnabled(code(node))) {
-				activeNodes.add(node);
-			}
-		}
-		Collections.<MenuNode>sort(activeNodes, new MenuComparator());
-		return activeNodes;
+		Collections.<MenuNode>sort(nodes, new MenuComparator());
+		return nodes;
 	}
 
 	public static ZLIntegerOption nodeOption(String code) {
@@ -193,7 +219,9 @@ public abstract class MenuData {
 			if (option == null) {
 				final Integer defaultValue = ourDefaultValues.get(code);
 				option = new ZLIntegerOption(
-					"MainMenu", code, defaultValue != null ? defaultValue : -1
+					"ReadingModeMenu",
+					code,
+					defaultValue != null ? defaultValue : Location.disabled.StartIndex
 				);
 				ourNodeOptions.put(code, option);
 			}
@@ -201,11 +229,8 @@ public abstract class MenuData {
 		}
 	}
 
-	public static boolean isCodeAlwaysEnabled(String code) {
-		return ourAlwaysEnabledCodes.contains(code);
-	}
-
-	private static boolean isCodeEnabled(String code) {
-		return ourAlwaysEnabledCodes.contains(code) || nodeOption(code).getValue() >= 0;
+	public static Set<Location> locationGroup(String code) {
+		final Set<Location> group = ourGroups.get(code);
+		return group != null ? group : Collections.singleton(Location.disabled);
 	}
 }
