@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2015 FBReader.ORG Limited <contact@fbreader.org>
+ * Copyright (C) 2010-2015 FBReader.ORG Limited <contact@fbreader.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,28 +19,21 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.fbreader.book.Bookmark;
+import org.geometerplus.zlibrary.core.resources.ZLResource;
+
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import org.geometerplus.android.fbreader.FBReaderUtil;
-
-public class SelectionBookmarkAction extends FBAndroidAction {
-	SelectionBookmarkAction(FBReader baseActivity, FBReaderApp fbreader) {
+class ShowWhatsNewDialogAction extends FBAndroidAction {
+	ShowWhatsNewDialogAction(FBReader baseActivity, FBReaderApp fbreader) {
 		super(baseActivity, fbreader);
 	}
 
 	@Override
 	protected void run(Object ... params) {
-		final Bookmark bookmark;
-		if (params.length != 0) {
-			bookmark = (Bookmark)params[0];
-		} else {
-			bookmark = Reader.addSelectionBookmark();
-		}
-		if (bookmark == null) {
-			return;
-		}
-
-		BaseActivity.showBookmarkToast(bookmark);
+		FBReaderUtil.showHtmlDialog(
+			BaseActivity,
+			ZLResource.resource("menu").getResource("whatsnew").getValue(),
+			"whatsnew"
+		);
 	}
 }

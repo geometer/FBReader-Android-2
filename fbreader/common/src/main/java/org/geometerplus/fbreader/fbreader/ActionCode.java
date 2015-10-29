@@ -81,6 +81,7 @@ public interface ActionCode {
 
 	String HIDE_TOAST = "hideToast";
 	String OPEN_START_SCREEN = "openStartScreen";
+	String SHOW_WHATSNEW_DIALOG = "whatsnew";
 	String OPEN_WEB_HELP = "help";
 	String INSTALL_PLUGINS = "plugins";
 

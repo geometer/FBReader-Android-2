@@ -184,6 +184,7 @@ public abstract class MenuData {
 				Location.GroupAlwaysEnabled
 			);
 			addToplevelNode(new MenuNode.Item(ActionCode.INSTALL_PLUGINS, R.drawable.ic_menu_plugins), Location.mainMenu);
+			addToplevelNode(new MenuNode.Item(ActionCode.SHOW_WHATSNEW_DIALOG, R.drawable.ic_menu_whatsnew), Location.mainMenu);
 			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_WEB_HELP, R.drawable.ic_menu_help), Location.mainMenu);
 			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_START_SCREEN, R.drawable.ic_menu_home), Location.mainMenu);
 			ourNodes = Collections.unmodifiableList(ourNodes);
