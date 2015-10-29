@@ -202,13 +202,19 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	private final List<Pair<MenuItem,String>> myMenuItems =
 		Collections.synchronizedList(new LinkedList<Pair<MenuItem,String>>());
 
-	private void fillMenu(Menu menu, List<MenuNode> nodes) {
+	private void addMenuNodes(Menu menu, List<MenuNode> nodes, boolean placeOnToolbarIfPossible) {
 		for (MenuNode item : nodes) {
 			if (item instanceof MenuNode.Item) {
-				addMenuItem(menu, item.Code, itemName(item.Code), ((MenuNode.Item)item).IconId);
+				addMenuItem(
+					menu,
+					item.Code,
+					itemName(item.Code),
+					((MenuNode.Item)item).IconId,
+					placeOnToolbarIfPossible
+				);
 			} else /* if (item instanceof MenuNode.Submenu) */ {
 				final Menu subMenu = menu.addSubMenu(itemName(item.Code));
-				fillMenu(subMenu, ((MenuNode.Submenu)item).Children);
+				addMenuNodes(subMenu, ((MenuNode.Submenu)item).Children, false);
 			}
 		}
 	}
@@ -217,7 +223,11 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		return myMenuResource.getResource(code).getValue();
 	}
 
-	protected final void addMenuItem(Menu menu, final String actionId, String name, Integer iconId) {
+	protected final void addMenuItem(Menu menu, final String actionId, String name) {
+		addMenuItem(menu, actionId, name, null, false);
+	}
+
+	private final void addMenuItem(Menu menu, final String actionId, String name, Integer iconId, boolean placeOnToolbarIfPossible) {
 		final MenuItem menuItem = menu.add(Menu.NONE, actionId.hashCode(), Menu.NONE, name);
 		if (iconId != null) {
 			menuItem.setIcon(DrawableUtil.tintedDrawable(
@@ -225,7 +235,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 			));
 		}
 		menuItem.setShowAsAction(
-			iconId != null && isActionBarVisible()
+			iconId != null && isActionBarVisible() && placeOnToolbarIfPossible
 				? MenuItem.SHOW_AS_ACTION_IF_ROOM : MenuItem.SHOW_AS_ACTION_NEVER
 		);
 		menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -266,7 +276,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		mySearchItem = menu.findItem(R.id.menu_search_item);
 		mySearchItem.setVisible(false);
 
-		fillMenu(menu, MenuData.topLevelNodes());
+		addMenuNodes(menu, MenuData.topLevelNodes(), true);
 		return true;
 	}
 
