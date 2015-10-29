@@ -693,8 +693,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 					addMenuItem(
 						menu,
 						PLUGIN_ACTION_PREFIX + index++,
-						((PluginApi.MenuActionInfo)info).MenuItemName,
-						null
+						((PluginApi.MenuActionInfo)info).MenuItemName
 					);
 				}
 			}
