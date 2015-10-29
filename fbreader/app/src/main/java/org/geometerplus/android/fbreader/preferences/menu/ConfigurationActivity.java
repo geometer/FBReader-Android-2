@@ -38,7 +38,8 @@ import org.geometerplus.android.fbreader.MenuData;
 import org.geometerplus.android.fbreader.api.MenuNode;
 
 public class ConfigurationActivity extends MDListActivity {
-	private static final ZLResource Resource = ZLResource.resource("Preferences").getResource("menu");
+	private static final ZLResource myResource = ZLResource.resource("Preferences").getResource("menu");
+	private static final ZLResource myMenuResource = ZLResource.resource("menu");
 
 	private final List<Item> myAllItems = new ArrayList<Item>();
 
@@ -50,7 +51,7 @@ public class ConfigurationActivity extends MDListActivity {
 	@Override
 	protected void onCreate(Bundle state) {
 		super.onCreate(state);
-		setTitle(Resource.getValue());
+		setTitle(myResource.getValue());
 	}
 
 	@Override
@@ -77,18 +78,17 @@ public class ConfigurationActivity extends MDListActivity {
 
 	private static abstract class Item {
 		private MenuData.Location Location;
+		private final String Title;
 
-		public Item(MenuData.Location location) {
+		public Item(MenuData.Location location, String title) {
 			Location = location;
+			Title = title;
 		}
 	}
 
 	private static class SectionItem extends Item {
-		private final String Title;
-
 		public SectionItem(MenuData.Location location) {
-			super(location);
-			Title = Resource.getResource(location.resourceKey()).getValue();
+			super(location, myResource.getResource(location.resourceKey()).getValue());
 		}
 	}
 
@@ -97,13 +97,9 @@ public class ConfigurationActivity extends MDListActivity {
 		private final String Id;
 
 		public MenuNodeItem(MenuData.Location location, MenuNode node, String id) {
-			super(location);
+			super(location, myMenuResource.getResource(id).getValue());
 			Node = node;
 			Id = id;
-		}
-
-		public String getTitle() {
-			return ZLResource.resource("menu").getResource(Id).getValue();
 		}
 	}
 
@@ -113,20 +109,16 @@ public class ConfigurationActivity extends MDListActivity {
 		}
 
 		private void saveChanges() {
-			final HashMap<MenuData.Location,Integer> sizes =
-				new HashMap<MenuData.Location,Integer>();
+			int count = 0;
 			for (int i = 0; i < getCount(); ++i) {
 				final Item item = getItem(i);
-				if (!(item instanceof MenuNodeItem)) {
-					continue;
+				if (item instanceof SectionItem) {
+					count = 0;
+				} else /* if (item instanceof MenuNodeItem) */ {
+					MenuData.nodeOption(((MenuNodeItem)item).Id)
+						.setValue(item.Location.StartIndex + count);
+					++count;
 				}
-				Integer index = sizes.get(item.Location);
-				if (index == null) {
-					index = 0;
-				}
-				sizes.put(item.Location, index + 1);
-				MenuData.nodeOption(((MenuNodeItem)item).Id)
-					.setValue(item.Location.StartIndex + index);
 			}
 		}
 
@@ -144,28 +136,24 @@ public class ConfigurationActivity extends MDListActivity {
 		public View getView(int position, View view, final ViewGroup parent) {
 			final Item item = getItem(position);
 
-			if (item instanceof SectionItem) {
-				if (view == null) {
+			if (view == null) {
+				if (item instanceof SectionItem) {
 					view = getLayoutInflater().inflate(R.layout.menu_configure_section_head, null);
-				}
-				ViewUtil.setSubviewText(
-					view, R.id.menu_configure_section_head_title, ((SectionItem)item).Title
-				);
-			} else /* if (item instanceof MenuNodeItem) */ {
-				if (view == null) {
+				} else /* if (item instanceof MenuNodeItem) */ {
 					view = getLayoutInflater().inflate(R.layout.menu_configure_item, null);
 				}
+			} else if (view.getTag() == item) {
+				return view;
+			}
+			view.setTag(item);
 
-				final MenuNodeItem menuItem = (MenuNodeItem)item;
+			ViewUtil.setSubviewText(view, R.id.menu_configure_item_title, item.Title);
 
-				final TextView titleView =
-					ViewUtil.findTextView(view, R.id.menu_configure_item_title);
-				titleView.setText(menuItem.getTitle());
-
+			if (item instanceof MenuNodeItem) {
 				final ImageView iconView =
 					ViewUtil.findImageView(view, R.id.menu_configure_item_icon);
 				iconView.setImageDrawable(DrawableUtil.tintedDrawable(
-					ConfigurationActivity.this, menuItem.Node.IconId, R.color.text_primary
+					ConfigurationActivity.this, ((MenuNodeItem)item).Node.IconId, R.color.text_primary
 				));
 
 				final ImageView dragIconView =
