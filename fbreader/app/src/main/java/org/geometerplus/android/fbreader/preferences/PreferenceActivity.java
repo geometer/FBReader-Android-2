@@ -195,7 +195,7 @@ public class PreferenceActivity extends MDSettingsActivity {
 			config.requestAllValuesForGroup("Scrolling");
 			config.requestAllValuesForGroup("Colors");
 			config.requestAllValuesForGroup("Sync");
-			config.requestAllValuesForGroup("MainMenu");
+			config.requestAllValuesForGroup("ReadingModeMenu");
 			setResult(FBReader.RESULT_REPAINT);
 
 			final ViewOptions viewOptions = new ViewOptions();
@@ -832,12 +832,7 @@ public class PreferenceActivity extends MDSettingsActivity {
 			imagesScreen.addOption(imageOptions.ImageViewBackground, "backgroundColor");
 			imagesScreen.addOption(imageOptions.MatchBackground, "matchBackground");
 
-			myMenuPreference = new MenuPreference(
-				PreferenceActivity.this,
-				Resource.getResource("menu"),
-				MENU_REQUEST_CODE
-			);
-			addPreference(myMenuPreference);
+			addPreference(new MenuPreference(PreferenceActivity.this, Resource.getResource("menu")));
 
 			final CancelMenuHelper cancelMenuHelper = new CancelMenuHelper();
 			final Screen cancelMenuScreen = createPreferenceScreen("cancelMenu");
@@ -884,12 +879,10 @@ public class PreferenceActivity extends MDSettingsActivity {
 	}
 
 	private static final int BACKGROUND_REQUEST_CODE = 3000;
-	private static final int MENU_REQUEST_CODE = 3001;
 
 	private final ActivityNetworkContext myNetworkContext = new ActivityNetworkContext(this);
 	private final FileChooserCollection myChooserCollection = new FileChooserCollection(this, 2000);
 	private BackgroundPreference myBackgroundPreference;
-	private MenuPreference myMenuPreference;
 
 	private PreferenceScreen myScreen;
 	final ZLResource Resource = ZLResource.resource("Preferences");
@@ -922,11 +915,6 @@ public class PreferenceActivity extends MDSettingsActivity {
 			case BACKGROUND_REQUEST_CODE:
 				if (myBackgroundPreference != null) {
 					myBackgroundPreference.update(data);
-				}
-				break;
-			case MENU_REQUEST_CODE:
-				if (myMenuPreference != null) {
-					myMenuPreference.update(data);
 				}
 				break;
 		}

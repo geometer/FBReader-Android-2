@@ -77,11 +77,13 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	private volatile MainView myMainView;
 	private volatile SuperActivityToast myToast;
 
+	private final HamburgerMenuAdapter myHamburgerMenuAdapter = new HamburgerMenuAdapter();
 	private volatile DrawerLayout myDrawerLayout;
 	private volatile ActionBarDrawerToggle myDrawerToggle;
 	private volatile Toolbar myDrawerToolbar;
 	private volatile Bitmap myCoverBitmap;
 
+	private ZLResource myMenuResource = ZLResource.resource("menu");
 	private volatile MenuItem mySearchItem;
 
 	private volatile Book myCurrentBook;
@@ -121,7 +123,22 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		super.onCreate(saved);
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
 
-		setupDrawer();
+		final ListView drawerMenu = (ListView)findViewById(R.id.main_drawer_menu);
+		drawerMenu.setAdapter(myHamburgerMenuAdapter);
+		drawerMenu.setOnItemClickListener(myHamburgerMenuAdapter);
+
+		myDrawerLayout = (DrawerLayout)findViewById(R.id.main_drawer_layout);
+		myDrawerToolbar = (Toolbar)findViewById(R.id.main_drawer_toolbar);
+		myDrawerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				myDrawerLayout.closeDrawer(GravityCompat.START);
+			}
+		});
+		myDrawerToggle = new ActionBarDrawerToggle(
+			this, myDrawerLayout, getToolbar(), R.string.empty_string, R.string.empty_string
+		);
+		myDrawerLayout.setDrawerListener(myDrawerToggle);
+		myDrawerLayout.setDrawerShadow(R.drawable.shadow_right_6dp, GravityCompat.START);
 	}
 
 	@Override
@@ -133,20 +150,37 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		}
 	}
 
-	private String[] ACTION_IDS = {
-		ActionCode.SHOW_BOOK_INFO,
-		ActionCode.SHOW_TOC,
-		ActionCode.SHOW_BOOKMARKS,
-		ActionCode.SHARE_BOOK,
-		ActionCode.GOTO_PAGE_NUMBER,
-		null,
-		ActionCode.SHOW_LIBRARY,
-		ActionCode.SHOW_NETWORK_LIBRARY
-	};
-
-	private ZLResource myMenuResource = ZLResource.resource("menu");
-
+	/* ++++ MENU ++++ */
 	private final class HamburgerMenuAdapter extends BaseAdapter implements ListView.OnItemClickListener {
+		private final List<MenuNode> myNodes = new ArrayList<MenuNode>();
+
+		private void rebuild(DataModel model) {
+			final List<MenuNode> upperSection =
+				MenuData.topLevelNodes(MenuData.Location.bookMenuUpperSection);
+			final List<MenuNode> lowerSection =
+				MenuData.topLevelNodes(MenuData.Location.bookMenuLowerSection);
+			final List<MenuNode> nodes =
+				new ArrayList<MenuNode>(upperSection.size() + lowerSection.size() + 1);
+			for (MenuNode node : upperSection) {
+				if (model.isActionVisible(node.Code) && model.isActionEnabled(node.Code)) {
+					nodes.add(node);
+				}
+			}
+			if (!upperSection.isEmpty() && !lowerSection.isEmpty()) {
+				nodes.add(null);
+			}
+			for (MenuNode node : lowerSection) {
+				if (model.isActionVisible(node.Code) && model.isActionEnabled(node.Code)) {
+					nodes.add(node);
+				}
+			}
+			if (!nodes.equals(myNodes)) {
+				myNodes.clear();
+				myNodes.addAll(nodes);
+				notifyDataSetChanged();
+			}
+		}
+
 		@Override
 		public int getViewTypeCount() {
 			return 2;
@@ -154,7 +188,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 
 		@Override
 		public int getCount() {
-			return ACTION_IDS.length;
+			return myNodes.size();
 		}
 
 		@Override
@@ -163,8 +197,8 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		}
 
 		@Override
-		public String getItem(int position) {
-			return ACTION_IDS[position];
+		public MenuNode getItem(int position) {
+			return myNodes.get(position);
 		}
 
 		@Override
@@ -174,18 +208,18 @@ public abstract class FBReaderMainActivity extends MDActivity {
 
 		@Override
 		public View getView(int position, View convertView, final ViewGroup parent) {
-			final String code = getItem(position);
-			final int id = code != null ? R.layout.menu_item_with_icon : R.layout.menu_separator;
+			final MenuNode node = getItem(position);
+			final int id = node != null ? R.layout.menu_item_with_icon : R.layout.menu_separator;
 			final View view = convertView != null
 				? convertView
 				: LayoutInflater.from(parent.getContext()).inflate(id, parent, false);
-			if (code != null) {
+			if (node != null) {
 				ViewUtil.findTextView(view, R.id.menu_item_text).setText(
-					myMenuResource.getResource(code).getValue()
+					myMenuResource.getResource(node.Code).getValue()
 				);
 				ViewUtil.findImageView(view, R.id.menu_item_icon).setImageDrawable(
 					DrawableUtil.tintedDrawable(
-						FBReaderMainActivity.this, MenuData.iconId(code), R.color.text_primary
+						FBReaderMainActivity.this, node.IconId, R.color.text_primary
 					)
 				);
 			}
@@ -193,12 +227,14 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		}
 
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			getDataModel().runAction(getItem(position));
-			myDrawerLayout.closeDrawer(GravityCompat.START);
+			final MenuNode node = getItem(position);
+			if (node != null) {
+				getDataModel().runAction(node.Code);
+				myDrawerLayout.closeDrawer(GravityCompat.START);
+			}
 		}
 	};
 
-	/* ++++ MENU ++++ */
 	private final List<Pair<MenuItem,String>> myMenuItems =
 		Collections.synchronizedList(new LinkedList<Pair<MenuItem,String>>());
 
@@ -250,6 +286,9 @@ public abstract class FBReaderMainActivity extends MDActivity {
 
 	protected final void refreshMenu() {
 		final DataModel model = getDataModel();
+
+		myHamburgerMenuAdapter.rebuild(model);
+
 		for (Pair<MenuItem,String> pair : myMenuItems) {
 			final MenuItem menuItem = pair.First;
 			final String actionId = pair.Second;
@@ -275,8 +314,8 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		getMenuInflater().inflate(R.menu.search_only, menu);
 		mySearchItem = menu.findItem(R.id.menu_search_item);
 		mySearchItem.setVisible(false);
-
-		addMenuNodes(menu, MenuData.topLevelNodes(), true);
+		addMenuNodes(menu, MenuData.topLevelNodes(MenuData.Location.toolbarOrMainMenu), true);
+		addMenuNodes(menu, MenuData.topLevelNodes(MenuData.Location.mainMenu), false);
 		return true;
 	}
 
@@ -350,26 +389,6 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		return true;
 	}
 	/* ---- SEARCH ---- */
-
-	private final void setupDrawer() {
-		final ListView drawerMenu = (ListView)findViewById(R.id.main_drawer_menu);
-		final HamburgerMenuAdapter adapter = new HamburgerMenuAdapter();
-		drawerMenu.setAdapter(adapter);
-		drawerMenu.setOnItemClickListener(adapter);
-
-		myDrawerLayout = (DrawerLayout)findViewById(R.id.main_drawer_layout);
-		myDrawerToolbar = (Toolbar)findViewById(R.id.main_drawer_toolbar);
-		myDrawerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				myDrawerLayout.closeDrawer(GravityCompat.START);
-			}
-		});
-		myDrawerToggle = new ActionBarDrawerToggle(
-			this, myDrawerLayout, getToolbar(), R.string.empty_string, R.string.empty_string
-		);
-		myDrawerLayout.setDrawerListener(myDrawerToggle);
-		myDrawerLayout.setDrawerShadow(R.drawable.shadow_right_6dp, GravityCompat.START);
-	}
 
 	@Override
 	protected void onPostCreate(Bundle savedState) {

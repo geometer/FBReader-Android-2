@@ -7,13 +7,6 @@
 	android:minHeight="?android:attr/listPreferredItemHeight"
 	android:orientation="horizontal"
 >
-	<CheckBox
-		android:id="@+id/menu_configure_item_checkbox"
-		android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
-		android:text=""
-		android:gravity="center|center_vertical"
-	/>
 	<ImageView
 		android:id="@+id/menu_configure_item_icon"
 		android:layout_width="wrap_content"

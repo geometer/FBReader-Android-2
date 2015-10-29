@@ -19,45 +19,22 @@
 
 package org.geometerplus.android.fbreader.preferences.menu;
 
-import java.util.*;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.preference.Preference;
 
-import org.geometerplus.android.fbreader.MenuData;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 public class MenuPreference extends Preference {
-	private final int myRequestCode;
-
-	public MenuPreference(Activity activity, ZLResource resource, int requestCode) {
+	public MenuPreference(Activity activity, ZLResource resource) {
 		super(activity);
 
 		setTitle(resource.getValue());
 		setSummary(resource.getResource("summary").getValue());
-
-		myRequestCode = requestCode;
 	}
 
 	@Override
 	protected void onClick() {
-		((Activity)getContext()).startActivityForResult(
-			new Intent(getContext(), ConfigurationActivity.class)
-				.putStringArrayListExtra(ConfigurationActivity.ENABLED_MENU_IDS_KEY, MenuData.enabledCodes())
-				.putStringArrayListExtra(ConfigurationActivity.DISABLED_MENU_IDS_KEY, MenuData.disabledCodes()),
-			myRequestCode
-		);
-	}
-
-	public void update(Intent data) {
-		int i = 0;
-		for (String s : data.getStringArrayListExtra(ConfigurationActivity.ENABLED_MENU_IDS_KEY)) {
-			MenuData.nodeOption(s).setValue(i);
-			++i;
-		}
-		for (String s : data.getStringArrayListExtra(ConfigurationActivity.DISABLED_MENU_IDS_KEY)) {
-			MenuData.nodeOption(s).setValue(-1);
-		}
+		getContext().startActivity(new Intent(getContext(), ConfigurationActivity.class));
 	}
 }

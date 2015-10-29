@@ -19,10 +19,8 @@
 
 package org.geometerplus.android.fbreader.preferences.menu;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
@@ -37,11 +35,9 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.android.fbreader.MenuData;
+import org.geometerplus.android.fbreader.api.MenuNode;
 
 public class ConfigurationActivity extends MDListActivity {
-	static final String ENABLED_MENU_IDS_KEY = "enabledMenuIds";
-	static final String DISABLED_MENU_IDS_KEY = "disabledMenuIds";
-
 	private static final ZLResource Resource = ZLResource.resource("Preferences").getResource("menu");
 
 	private final List<Item> myAllItems = new ArrayList<Item>();
@@ -63,49 +59,47 @@ public class ConfigurationActivity extends MDListActivity {
 
 		myAllItems.clear();
 
-		final Intent intent = getIntent();
-
-		myAllItems.add(new SectionItem("enabled"));
-		final List<String> enabledIds =
-			intent.getStringArrayListExtra(ENABLED_MENU_IDS_KEY);
-		if (enabledIds.size() > 0) {
-			for (String id : enabledIds) {
-				myAllItems.add(new MenuNodeItem(id, true));
-			}
-		}
-
-		myAllItems.add(new SectionItem("disabled"));
-		final List<String> disabledIds =
-			intent.getStringArrayListExtra(DISABLED_MENU_IDS_KEY);
-		if (disabledIds.size() > 0) {
-			for (String id : disabledIds) {
-				myAllItems.add(new MenuNodeItem(id, false));
+		final Set<String> usedIds = new HashSet<String>();
+		for (MenuData.Location location : MenuData.Location.values()) {
+			myAllItems.add(new SectionItem(location));
+			for (MenuNode node : MenuData.topLevelNodes(location)) {
+				final String id = MenuData.code(node);
+				if (usedIds.contains(id)) {
+					continue;
+				}
+				usedIds.add(id);
+				myAllItems.add(new MenuNodeItem(location, node, id));
 			}
 		}
 
 		setListAdapter(new MenuListAdapter());
 	}
 
-	private static interface Item {
-	}
+	private static abstract class Item {
+		private MenuData.Location Location;
 
-	private static class SectionItem implements Item {
-		private final String Title;
-
-		public SectionItem(String key) {
-			Title = Resource.getResource(key).getValue();
+		public Item(MenuData.Location location) {
+			Location = location;
 		}
 	}
 
-	private static class MenuNodeItem implements Item {
-		private final String Id;
-		private boolean IsChecked;
-		private final boolean IsEnabled;
+	private static class SectionItem extends Item {
+		private final String Title;
 
-		public MenuNodeItem(String id, boolean checked) {
+		public SectionItem(MenuData.Location location) {
+			super(location);
+			Title = Resource.getResource(location.resourceKey()).getValue();
+		}
+	}
+
+	private static class MenuNodeItem extends Item {
+		private final MenuNode Node;
+		private final String Id;
+
+		public MenuNodeItem(MenuData.Location location, MenuNode node, String id) {
+			super(location);
+			Node = node;
 			Id = id;
-			IsChecked = checked;
-			IsEnabled = !MenuData.isCodeAlwaysEnabled(id);
 		}
 
 		public String getTitle() {
@@ -118,34 +112,22 @@ public class ConfigurationActivity extends MDListActivity {
 			super(ConfigurationActivity.this, R.layout.menu_configure_item, myAllItems);
 		}
 
-		private int indexOfDisabledSectionItem() {
-			for (int i = 1; i < getCount(); i++) {
-				if (getItem(i) instanceof SectionItem) {
-					return i;
-				}
-			}
-			// should be impossible
-			return 0;
-		}
-
-		private void setResultIds() {
-			final ArrayList<String> eIds = new ArrayList<String>();
-			final ArrayList<String> dIds = new ArrayList<String>();
-			for (int i = 1; i < getCount(); ++i) {
+		private void saveChanges() {
+			final HashMap<MenuData.Location,Integer> sizes =
+				new HashMap<MenuData.Location,Integer>();
+			for (int i = 0; i < getCount(); ++i) {
 				final Item item = getItem(i);
-				if (item instanceof SectionItem) {
+				if (!(item instanceof MenuNodeItem)) {
 					continue;
 				}
-				final MenuNodeItem menuItem = (MenuNodeItem)item;
-				if (menuItem.IsChecked) {
-					eIds.add(menuItem.Id);
-				} else {
-					dIds.add(menuItem.Id);
+				Integer index = sizes.get(item.Location);
+				if (index == null) {
+					index = 0;
 				}
+				sizes.put(item.Location, index + 1);
+				MenuData.nodeOption(((MenuNodeItem)item).Id)
+					.setValue(item.Location.StartIndex + index);
 			}
-			setResult(RESULT_OK, new Intent()
-				.putStringArrayListExtra(ENABLED_MENU_IDS_KEY, eIds)
-				.putStringArrayListExtra(DISABLED_MENU_IDS_KEY, dIds));
 		}
 
 		@Override
@@ -183,7 +165,7 @@ public class ConfigurationActivity extends MDListActivity {
 				final ImageView iconView =
 					ViewUtil.findImageView(view, R.id.menu_configure_item_icon);
 				iconView.setImageDrawable(DrawableUtil.tintedDrawable(
-					ConfigurationActivity.this, MenuData.iconId(menuItem.Id), R.color.text_primary
+					ConfigurationActivity.this, menuItem.Node.IconId, R.color.text_primary
 				));
 
 				final ImageView dragIconView =
@@ -191,26 +173,6 @@ public class ConfigurationActivity extends MDListActivity {
 				dragIconView.setImageDrawable(DrawableUtil.tintedDrawable(
 					ConfigurationActivity.this, R.drawable.ic_button_drag_large, R.color.text_primary
 				));
-
-				final CheckBox checkBox =
-					(CheckBox)ViewUtil.findView(view, R.id.menu_configure_item_checkbox);
-				checkBox.setChecked(menuItem.IsChecked);
-				checkBox.setEnabled(menuItem.IsEnabled);
-
-				if (menuItem.IsEnabled) {
-					final View.OnClickListener updateCheckbox = new View.OnClickListener() {
-						public void onClick(View v) {
-							if (v != checkBox) {
-								checkBox.performClick();
-							}
-							menuItem.IsChecked = checkBox.isChecked();
-							setResultIds();
-						}
-					};
-					checkBox.setOnClickListener(updateCheckbox);
-					iconView.setOnClickListener(updateCheckbox);
-					titleView.setOnClickListener(updateCheckbox);
-				}
 			}
 			return view;
 		}
@@ -221,16 +183,23 @@ public class ConfigurationActivity extends MDListActivity {
 			if (from == to) {
 				return;
 			}
+
 			final Item item = getItem(from);
-			if (item instanceof MenuNodeItem) {
-				remove(item);
-				insert(item, to);
-				if (((MenuNodeItem)item).IsEnabled) {
-					((MenuNodeItem)item).IsChecked = to < indexOfDisabledSectionItem();
-				}
-				((DragSortListView)getListView()).moveCheckState(from, to);
-				setResultIds();
+			if (!(item instanceof MenuNodeItem)) {
+				return;
 			}
+			final MenuNodeItem menuNodeItem = (MenuNodeItem)item;
+
+			final Item toItem = getItem(from < to ? to : to - 1);
+			if (!MenuData.locationGroup(menuNodeItem.Id).contains(toItem.Location)) {
+				return;
+			}
+
+			remove(item);
+			insert(item, to);
+			item.Location = toItem.Location;
+			((DragSortListView)getListView()).moveCheckState(from, to);
+			saveChanges();
 		}
 
 		// method from DragSortListView.RemoveListener
