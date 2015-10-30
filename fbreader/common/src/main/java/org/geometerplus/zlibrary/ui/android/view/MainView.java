@@ -28,7 +28,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import org.fbreader.common.android.FBReaderMainActivity;
+import org.fbreader.common.android.MainActivity;
 
 import org.fbreader.common.R;
 
@@ -53,7 +53,7 @@ public abstract class MainView extends View {
 	/* ++++ INFO ++++ */
 	protected final void showInfo(final String text) {
 		if (myInfoView == null) {
-			myInfoView = (TextView)((FBReaderMainActivity)getContext()).findViewById(R.id.main_view_info);
+			myInfoView = (TextView)((MainActivity)getContext()).findViewById(R.id.main_view_info);
 		}
 		if (myInfoView == null) {
 			return;
@@ -96,7 +96,7 @@ public abstract class MainView extends View {
 		}
 
 		final Context context = getContext();
-		if (!(context instanceof FBReaderMainActivity)) {
+		if (!(context instanceof MainActivity)) {
 			return;
 		}
 
@@ -111,7 +111,7 @@ public abstract class MainView extends View {
 			myColorLevel = 0x60 + (0xFF - 0x60) * Math.max(percent, 0) / 25;
 		}
 
-		final FBReaderMainActivity activity = (FBReaderMainActivity)context;
+		final MainActivity activity = (MainActivity)context;
 		activity.getZLibrary().ScreenBrightnessLevelOption.setValue(percent);
 		if (showPercent) {
 			showInfo(percent + "%");
@@ -129,10 +129,10 @@ public abstract class MainView extends View {
 		}
 
 		final Context context = getContext();
-		if (!(context instanceof FBReaderMainActivity)) {
+		if (!(context instanceof MainActivity)) {
 			return 50;
 		}
-		final float level = ((FBReaderMainActivity)context).getScreenBrightnessSystem();
+		final float level = ((MainActivity)context).getScreenBrightnessSystem();
 		// level = .01f + (percent - 25) * .99f / 75;
 		return 25 + (int)((level - .01f) * 75 / .99f);
 	}

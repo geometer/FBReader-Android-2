@@ -30,7 +30,7 @@ import com.github.johnpersano.supertoasts.util.OnDismissWrapper;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.fbreader.common.android.FBReaderMainActivity;
+import org.fbreader.common.android.MainActivity;
 import org.geometerplus.android.util.PackageUtil;
 
 abstract class InternalUtil {
@@ -45,7 +45,7 @@ abstract class InternalUtil {
 		activity.startActivity(intent);
 	}
 
-	static void startDictionaryActivity(FBReaderMainActivity fbreader, Intent intent, DictionaryUtil.PackageInfo info) {
+	static void startDictionaryActivity(MainActivity fbreader, Intent intent, DictionaryUtil.PackageInfo info) {
 		try {
 			fbreader.startActivity(intent);
 			fbreader.overridePendingTransition(0, 0);
@@ -54,7 +54,7 @@ abstract class InternalUtil {
 		}
 	}
 
-	static void showToast(SuperActivityToast toast, final FBReaderMainActivity fbreader) {
+	static void showToast(SuperActivityToast toast, final MainActivity fbreader) {
 		if (toast == null) {
 			fbreader.hideDictionarySelection();
 			return;

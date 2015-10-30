@@ -17,18 +17,18 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.fbreader.common.android;
 
 import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
 
+import org.fbreader.common.AbstractReader;
+
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-
-class OpenWebHelpAction extends FBAndroidAction {
-	OpenWebHelpAction(FBReader baseActivity, FBReaderApp fbreader) {
+class OpenWebHelpAction extends MainActivity.Action<MainActivity,AbstractReader> {
+	OpenWebHelpAction(MainActivity baseActivity, AbstractReader fbreader) {
 		super(baseActivity, fbreader);
 	}
 

@@ -37,7 +37,7 @@ import org.geometerplus.zlibrary.core.options.ZLStringOption;
 import org.geometerplus.zlibrary.core.util.XmlUtil;
 
 import org.geometerplus.fbreader.fbreader.DurationEnum;
-import org.fbreader.common.android.FBReaderMainActivity;
+import org.fbreader.common.android.MainActivity;
 import org.geometerplus.android.util.PackageUtil;
 
 public abstract class DictionaryUtil {
@@ -109,11 +109,11 @@ public abstract class DictionaryUtil {
 			}
 		}
 
-		void onActivityResult(FBReaderMainActivity fbreader, int resultCode, final Intent data) {
+		void onActivityResult(MainActivity fbreader, int resultCode, final Intent data) {
 			// does nothing; implement in subclasses
 		}
 
-		abstract void open(String text, Runnable outliner, FBReaderMainActivity fbreader, PopupFrameMetric frameMetrics);
+		abstract void open(String text, Runnable outliner, MainActivity fbreader, PopupFrameMetric frameMetrics);
 	}
 
 	private static class PlainPackageInfo extends PackageInfo {
@@ -122,7 +122,7 @@ public abstract class DictionaryUtil {
 		}
 
 		@Override
-		void open(String text, Runnable outliner, FBReaderMainActivity fbreader, PopupFrameMetric frameMetrics) {
+		void open(String text, Runnable outliner, MainActivity fbreader, PopupFrameMetric frameMetrics) {
 			final Intent intent = getActionIntent(text);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -343,7 +343,7 @@ public abstract class DictionaryUtil {
 		}
 	}
 
-	public static void openTextInDictionary(final FBReaderMainActivity fbreader, String text, boolean singleWord, int selectionTop, int selectionBottom, final Runnable outliner) {
+	public static void openTextInDictionary(final MainActivity fbreader, String text, boolean singleWord, int selectionTop, int selectionBottom, final Runnable outliner) {
 		final String textToTranslate;
 		if (singleWord) {
 			int start = 0;
@@ -371,7 +371,7 @@ public abstract class DictionaryUtil {
 		});
 	}
 
-	public static void onActivityResult(final FBReaderMainActivity fbreader, int resultCode, final Intent data) {
+	public static void onActivityResult(final MainActivity fbreader, int resultCode, final Intent data) {
 		getDictionaryInfo("dictan").onActivityResult(fbreader, resultCode, data);
 	}
 }

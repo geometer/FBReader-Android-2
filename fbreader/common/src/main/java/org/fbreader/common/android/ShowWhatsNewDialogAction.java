@@ -23,8 +23,8 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.fbreader.common.AbstractReader;
 
-class ShowWhatsNewDialogAction extends FBReaderMainActivity.Action<FBReaderMainActivity,AbstractReader> {
-	ShowWhatsNewDialogAction(FBReaderMainActivity baseActivity, AbstractReader reader) {
+class ShowWhatsNewDialogAction extends MainActivity.Action<MainActivity,AbstractReader> {
+	ShowWhatsNewDialogAction(MainActivity baseActivity, AbstractReader reader) {
 		super(baseActivity, reader);
 	}
 

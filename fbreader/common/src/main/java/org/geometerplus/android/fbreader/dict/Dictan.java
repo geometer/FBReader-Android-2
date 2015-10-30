@@ -30,7 +30,7 @@ import android.view.View;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.fbreader.common.android.FBReaderMainActivity;
+import org.fbreader.common.android.MainActivity;
 
 final class Dictan extends DictionaryUtil.PackageInfo {
 	private static final int MAX_LENGTH_FOR_TOAST = 180;
@@ -40,14 +40,14 @@ final class Dictan extends DictionaryUtil.PackageInfo {
 	}
 
 	@Override
-	void open(String text, Runnable outliner, FBReaderMainActivity fbreader, DictionaryUtil.PopupFrameMetric frameMetrics) {
+	void open(String text, Runnable outliner, MainActivity fbreader, DictionaryUtil.PopupFrameMetric frameMetrics) {
 		final Intent intent = getActionIntent(text);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 		intent.putExtra("article.mode", 20);
 		intent.putExtra("article.text.size.max", MAX_LENGTH_FOR_TOAST);
 		try {
-			fbreader.startActivityForResult(intent, FBReaderMainActivity.REQUEST_DICTIONARY);
+			fbreader.startActivityForResult(intent, MainActivity.REQUEST_DICTIONARY);
 			fbreader.overridePendingTransition(0, 0);
 			if (outliner != null) {
 				outliner.run();
@@ -57,14 +57,14 @@ final class Dictan extends DictionaryUtil.PackageInfo {
 		}
 	}
 
-	void onActivityResult(final FBReaderMainActivity fbreader, int resultCode, final Intent data) {
+	void onActivityResult(final MainActivity fbreader, int resultCode, final Intent data) {
 		if (data == null) {
 			fbreader.hideDictionarySelection();
 			return;
 		}
 
 		final int errorCode = data.getIntExtra("error.code", -1);
-		if (resultCode != FBReaderMainActivity.RESULT_OK || errorCode != -1) {
+		if (resultCode != MainActivity.RESULT_OK || errorCode != -1) {
 			showError(fbreader, errorCode, data);
 			return;
 		}
@@ -128,7 +128,7 @@ final class Dictan extends DictionaryUtil.PackageInfo {
 		}
 	}
 
-	private static void showError(final FBReaderMainActivity fbreader, int code, Intent data) {
+	private static void showError(final MainActivity fbreader, int code, Intent data) {
 		final ZLResource resource = ZLResource.resource("dictanErrors");
 		String message;
 		switch (code) {

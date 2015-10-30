@@ -27,7 +27,7 @@ import com.paragon.dictionary.fbreader.OpenDictionaryFlyout;
 import com.paragon.open.dictionary.api.Dictionary;
 import com.paragon.open.dictionary.api.OpenDictionaryAPI;
 
-import org.fbreader.common.android.FBReaderMainActivity;
+import org.fbreader.common.android.MainActivity;
 
 final class OpenDictionary extends DictionaryUtil.PackageInfo {
 	static void collect(Context context, Map<DictionaryUtil.PackageInfo,Integer> dictMap) {
@@ -58,7 +58,7 @@ final class OpenDictionary extends DictionaryUtil.PackageInfo {
 	}
 
 	@Override
-	void open(String text, Runnable outliner, FBReaderMainActivity fbreader, DictionaryUtil.PopupFrameMetric frameMetrics) {
+	void open(String text, Runnable outliner, MainActivity fbreader, DictionaryUtil.PopupFrameMetric frameMetrics) {
 		Flyout.showTranslation(fbreader, text, frameMetrics);
 	}
 }
