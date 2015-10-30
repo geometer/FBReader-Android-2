@@ -31,7 +31,7 @@ import org.geometerplus.zlibrary.core.util.ZLColor;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
-import org.geometerplus.android.fbreader.FBReaderUtil;
+import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.android.util.OrientationUtil;
 
 public class ImageViewActivity extends ActionBarActivity {

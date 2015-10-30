@@ -17,15 +17,15 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.fbreader.common.android;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.fbreader.common.AbstractReader;
 
-class ShowWhatsNewDialogAction extends FBAndroidAction {
-	ShowWhatsNewDialogAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+class ShowWhatsNewDialogAction extends FBReaderMainActivity.Action<FBReaderMainActivity,AbstractReader> {
+	ShowWhatsNewDialogAction(FBReaderMainActivity baseActivity, AbstractReader reader) {
+		super(baseActivity, reader);
 	}
 
 	@Override

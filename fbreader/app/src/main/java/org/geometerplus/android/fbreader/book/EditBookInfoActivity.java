@@ -33,7 +33,7 @@ import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.formats.PluginCollection;
 
-import org.geometerplus.android.fbreader.FBReaderUtil;
+import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.util.OrientationUtil;

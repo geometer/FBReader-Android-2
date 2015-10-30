@@ -26,6 +26,7 @@ import android.widget.*;
 
 import org.fbreader.md.MDActivity;
 import org.fbreader.util.android.ViewUtil;
+import org.fbreader.common.android.FBReaderUtil;
 
 import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.resources.ZLResource;

@@ -28,7 +28,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import org.geometerplus.android.fbreader.FBReaderMainActivity;
+import org.fbreader.common.android.FBReaderMainActivity;
 
 import org.fbreader.common.R;
 

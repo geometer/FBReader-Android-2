@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-public class SelectionClearAction extends FBAction {
+public class SelectionClearAction extends FBReaderApp.Action<FBReaderApp> {
 	SelectionClearAction(FBReaderApp fbreader) {
 		super(fbreader);
 	}

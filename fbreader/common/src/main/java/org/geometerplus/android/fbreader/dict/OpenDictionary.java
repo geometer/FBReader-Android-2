@@ -27,7 +27,7 @@ import com.paragon.dictionary.fbreader.OpenDictionaryFlyout;
 import com.paragon.open.dictionary.api.Dictionary;
 import com.paragon.open.dictionary.api.OpenDictionaryAPI;
 
-import org.geometerplus.android.fbreader.FBReaderMainActivity;
+import org.fbreader.common.android.FBReaderMainActivity;
 
 final class OpenDictionary extends DictionaryUtil.PackageInfo {
 	static void collect(Context context, Map<DictionaryUtil.PackageInfo,Integer> dictMap) {

@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.fbreader;
 
 import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
 
-class ChangeFontSizeAction extends FBAction {
+class ChangeFontSizeAction extends FBReaderApp.Action<FBReaderApp> {
 	private final int myDelta;
 
 	ChangeFontSizeAction(FBReaderApp fbreader, int delta) {

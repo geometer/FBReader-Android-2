@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.fbreader.common.android;
 
 import java.util.*;
 
@@ -40,7 +40,7 @@ import org.fbreader.util.Boolean3;
 import org.fbreader.util.Pair;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
-import org.fbreader.common.DataModel;
+import org.fbreader.common.AbstractReader;
 
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
@@ -57,6 +57,7 @@ import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 import org.geometerplus.zlibrary.ui.android.view.MainView;
 
+import org.geometerplus.android.fbreader.MenuData;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.api.MenuNode;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
@@ -156,7 +157,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	private final class HamburgerMenuAdapter extends BaseAdapter implements ListView.OnItemClickListener {
 		private final List<MenuNode> myNodes = new ArrayList<MenuNode>();
 
-		private void rebuild(DataModel model) {
+		private void rebuild(AbstractReader reader) {
 			final List<MenuNode> upperSection =
 				MenuData.topLevelNodes(MenuData.Location.bookMenuUpperSection);
 			final List<MenuNode> lowerSection =
@@ -164,7 +165,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 			final List<MenuNode> nodes =
 				new ArrayList<MenuNode>(upperSection.size() + lowerSection.size() + 1);
 			for (MenuNode node : upperSection) {
-				if (model.isActionVisible(node.Code) && model.isActionEnabled(node.Code)) {
+				if (reader.isActionVisible(node.Code) && reader.isActionEnabled(node.Code)) {
 					nodes.add(node);
 				}
 			}
@@ -172,7 +173,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 				nodes.add(null);
 			}
 			for (MenuNode node : lowerSection) {
-				if (model.isActionVisible(node.Code) && model.isActionEnabled(node.Code)) {
+				if (reader.isActionVisible(node.Code) && reader.isActionEnabled(node.Code)) {
 					nodes.add(node);
 				}
 			}
@@ -231,7 +232,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			final MenuNode node = getItem(position);
 			if (node != null) {
-				getDataModel().runAction(node.Code);
+				getReader().runAction(node.Code);
 				myDrawerLayout.closeDrawer(GravityCompat.START);
 			}
 		}
@@ -278,7 +279,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		);
 		menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				getDataModel().runAction(actionId);
+				getReader().runAction(actionId);
 				return true;
 			}
 		});
@@ -287,15 +288,15 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	}
 
 	protected final void refreshMenu() {
-		final DataModel model = getDataModel();
+		final AbstractReader reader = getReader();
 
-		myHamburgerMenuAdapter.rebuild(model);
+		myHamburgerMenuAdapter.rebuild(reader);
 
 		for (Pair<MenuItem,String> pair : myMenuItems) {
 			final MenuItem menuItem = pair.First;
 			final String actionId = pair.Second;
-			menuItem.setVisible(model.isActionVisible(actionId) && model.isActionEnabled(actionId));
-			switch (model.isActionChecked(actionId)) {
+			menuItem.setVisible(reader.isActionVisible(actionId) && reader.isActionEnabled(actionId));
+			switch (reader.isActionChecked(actionId)) {
 				case TRUE:
 					menuItem.setCheckable(true);
 					menuItem.setChecked(true);
@@ -396,6 +397,8 @@ public abstract class FBReaderMainActivity extends MDActivity {
 	protected void onPostCreate(Bundle savedState) {
 		super.onPostCreate(savedState);
 		myDrawerToggle.syncState();
+
+		getReader().addAction(ActionCode.SHOW_WHATSNEW_DIALOG, new ShowWhatsNewDialogAction(this, getReader()));
 	}
 
 	@Override
@@ -623,13 +626,22 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		}
 	}
 
+	public abstract static class Action<ActivityT extends FBReaderMainActivity,ReaderT extends AbstractReader> extends AbstractReader.Action<ReaderT> {
+		protected final ActivityT BaseActivity;
+
+		protected Action(ActivityT baseActivity, ReaderT reader) {
+			super(reader);
+			BaseActivity = baseActivity;
+		}
+	}
+
 	@Override
 	protected void setTitleVisible(boolean visible) {
 		super.setTitleVisible(visible);
 		findViewById(R.id.main_shadow).setVisibility(visible ? View.VISIBLE : View.GONE);
 	}
 
-	protected abstract DataModel getDataModel();
+	protected abstract AbstractReader getReader();
 
 	public final void showBookmarkToast(final Bookmark bookmark) {
 		final SuperActivityToast toast = new SuperActivityToast(this, SuperToast.Type.BUTTON);
