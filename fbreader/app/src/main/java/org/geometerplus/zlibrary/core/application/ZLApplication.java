@@ -22,13 +22,13 @@ package org.geometerplus.zlibrary.core.application;
 import java.util.*;
 
 import org.fbreader.util.Boolean3;
-import org.fbreader.common.DataModel;
+import org.fbreader.common.AbstractReader;
 
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 import org.geometerplus.zlibrary.core.view.ZLView;
 import org.geometerplus.zlibrary.core.view.ZLViewWidget;
 
-public abstract class ZLApplication implements DataModel {
+public abstract class ZLApplication extends AbstractReader {
 	public static ZLApplication Instance() {
 		return ourInstance;
 	}
@@ -40,8 +40,6 @@ public abstract class ZLApplication implements DataModel {
 	public final SystemInfo SystemInfo;
 	private volatile ZLApplicationWindow myWindow;
 	private volatile ZLView myView;
-
-	private final HashMap<String,ZLAction> myIdToActionMap = new HashMap<String,ZLAction>();
 
 	protected ZLApplication(SystemInfo systemInfo) {
 		SystemInfo = systemInfo;
@@ -147,49 +145,11 @@ public abstract class ZLApplication implements DataModel {
 		}
 	}
 
-	public final void addAction(String actionId, ZLAction action) {
-		myIdToActionMap.put(actionId, action);
-	}
-
-	public final void removeAction(String actionId) {
-		myIdToActionMap.remove(actionId);
-	}
-
-	public final boolean runAction(String actionId) {
-		final ZLAction action = myIdToActionMap.get(actionId);
-		return action != null ? action.checkAndRun() : false;
-	}
-
-	public final boolean isActionVisible(String actionId) {
-		final ZLAction action = myIdToActionMap.get(actionId);
-		return action != null && action.isVisible();
-	}
-
-	public final boolean isActionEnabled(String actionId) {
-		final ZLAction action = myIdToActionMap.get(actionId);
-		return action != null && action.isEnabled();
-	}
-
-	public final Boolean3 isActionChecked(String actionId) {
-		final ZLAction action = myIdToActionMap.get(actionId);
-		return action != null ? action.isChecked() : Boolean3.UNDEFINED;
-	}
-
-	public final boolean runAction(String actionId, Object ... params) {
-		final ZLAction action = myIdToActionMap.get(actionId);
-		return action != null ? action.checkAndRun(params) : false;
-	}
-
 	//may be protected
 	abstract public ZLKeyBindings keyBindings();
 
 	public final boolean runActionByKey(int key, boolean longPress) {
-		final String actionId = keyBindings().getBinding(key, longPress);
-		if (actionId != null) {
-			final ZLAction action = myIdToActionMap.get(actionId);
-			return action != null && action.checkAndRun();
-		}
-		return false;
+		return runAction(keyBindings().getBinding(key, longPress));
 	}
 
 	public boolean closeWindow() {
@@ -201,31 +161,6 @@ public abstract class ZLApplication implements DataModel {
 	}
 
 	public void onWindowClosing() {
-	}
-
-	//Action
-	static abstract public class ZLAction {
-		public boolean isVisible() {
-			return true;
-		}
-
-		public boolean isEnabled() {
-			return isVisible();
-		}
-
-		public Boolean3 isChecked() {
-			return Boolean3.UNDEFINED;
-		}
-
-		public final boolean checkAndRun(Object ... params) {
-			if (isEnabled()) {
-				run(params);
-				return true;
-			}
-			return false;
-		}
-
-		abstract protected void run(Object ... params);
 	}
 
 	public static abstract class PopupPanel {

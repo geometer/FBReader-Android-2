@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-class ClearFindResultsAction extends FBAction {
+class ClearFindResultsAction extends FBReaderApp.Action<FBReaderApp> {
 	ClearFindResultsAction(FBReaderApp fbreader) {
 		super(fbreader);
 	}

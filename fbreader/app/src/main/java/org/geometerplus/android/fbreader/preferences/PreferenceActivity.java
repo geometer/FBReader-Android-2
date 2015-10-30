@@ -54,6 +54,8 @@ import org.geometerplus.fbreader.network.sync.SyncData;
 import org.geometerplus.fbreader.network.sync.SyncUtil;
 import org.geometerplus.fbreader.tips.TipsManager;
 
+import org.fbreader.common.android.FBReaderUtil;
+
 import org.geometerplus.android.fbreader.*;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;

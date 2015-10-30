@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-class ExitAction extends FBAction {
+class ExitAction extends FBReaderApp.Action<FBReaderApp> {
 	ExitAction(FBReaderApp fbreader) {
 		super(fbreader);
 	}

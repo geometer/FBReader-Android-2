@@ -30,7 +30,7 @@ import android.view.View;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.geometerplus.android.fbreader.FBReaderMainActivity;
+import org.fbreader.common.android.FBReaderMainActivity;
 
 final class Dictan extends DictionaryUtil.PackageInfo {
 	private static final int MAX_LENGTH_FOR_TOAST = 180;

@@ -22,7 +22,7 @@ package org.geometerplus.fbreader.fbreader;
 import org.geometerplus.zlibrary.text.view.ZLTextRegion;
 import org.geometerplus.zlibrary.text.view.ZLTextWordRegionSoul;
 
-class MoveCursorAction extends FBAction {
+class MoveCursorAction extends FBReaderApp.Action<FBReaderApp> {
 	private final FBView.Direction myDirection;
 
 	MoveCursorAction(FBReaderApp fbreader, FBView.Direction direction) {

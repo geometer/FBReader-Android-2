@@ -47,6 +47,7 @@ import org.geometerplus.fbreader.network.opds.OPDSBookItem;
 import org.geometerplus.fbreader.network.urlInfo.BookUrlInfo;
 import org.geometerplus.fbreader.network.urlInfo.UrlInfo;
 
+import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.android.util.UIMessageUtil;
 import org.geometerplus.android.util.UIUtil;
 

@@ -37,7 +37,7 @@ import org.geometerplus.zlibrary.core.options.ZLStringOption;
 import org.geometerplus.zlibrary.core.util.XmlUtil;
 
 import org.geometerplus.fbreader.fbreader.DurationEnum;
-import org.geometerplus.android.fbreader.FBReaderMainActivity;
+import org.fbreader.common.android.FBReaderMainActivity;
 import org.geometerplus.android.util.PackageUtil;
 
 public abstract class DictionaryUtil {
