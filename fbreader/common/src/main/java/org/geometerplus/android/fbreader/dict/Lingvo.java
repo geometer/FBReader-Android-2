@@ -25,7 +25,7 @@ import com.abbyy.mobile.lingvo.api.MinicardContract;
 
 import org.geometerplus.zlibrary.core.language.Language;
 
-import org.fbreader.common.android.FBReaderMainActivity;
+import org.fbreader.common.android.MainActivity;
 
 final class Lingvo extends DictionaryUtil.PackageInfo {
 	Lingvo(String id, String title) {
@@ -33,7 +33,7 @@ final class Lingvo extends DictionaryUtil.PackageInfo {
 	}
 
 	@Override
-	void open(String text, Runnable outliner, FBReaderMainActivity fbreader, DictionaryUtil.PopupFrameMetric frameMetrics) {
+	void open(String text, Runnable outliner, MainActivity fbreader, DictionaryUtil.PopupFrameMetric frameMetrics) {
 		final Intent intent = getActionIntent(text);
 		intent.putExtra(MinicardContract.EXTRA_GRAVITY, frameMetrics.Gravity);
 		intent.putExtra(MinicardContract.EXTRA_HEIGHT, frameMetrics.Height);

@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader.dict;
 
 import android.content.Intent;
 
-import org.fbreader.common.android.FBReaderMainActivity;
+import org.fbreader.common.android.MainActivity;
 
 final class ColorDict extends DictionaryUtil.PackageInfo {
 	private interface ColorDict3 {
@@ -42,7 +42,7 @@ final class ColorDict extends DictionaryUtil.PackageInfo {
 	}
 
 	@Override
-	void open(String text, Runnable outliner, FBReaderMainActivity fbreader, DictionaryUtil.PopupFrameMetric frameMetrics) {
+	void open(String text, Runnable outliner, MainActivity fbreader, DictionaryUtil.PopupFrameMetric frameMetrics) {
 		final Intent intent = getActionIntent(text);
 		intent.putExtra(ColorDict3.HEIGHT, frameMetrics.Height);
 		intent.putExtra(ColorDict3.GRAVITY, frameMetrics.Gravity);

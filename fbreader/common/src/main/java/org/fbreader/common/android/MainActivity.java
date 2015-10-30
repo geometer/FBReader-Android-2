@@ -70,7 +70,7 @@ import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.formats.IFormatPluginCollection;
 
-public abstract class FBReaderMainActivity extends MDActivity {
+public abstract class MainActivity extends MDActivity {
 	public static final int REQUEST_PREFERENCES = 1;
 	public static final int REQUEST_CANCEL_MENU = 2;
 	public static final int REQUEST_DICTIONARY = 3;
@@ -222,7 +222,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 				);
 				ViewUtil.findImageView(view, R.id.menu_item_icon).setImageDrawable(
 					DrawableUtil.tintedDrawable(
-						FBReaderMainActivity.this, node.IconId, R.color.text_primary
+						MainActivity.this, node.IconId, R.color.text_primary
 					)
 				);
 			}
@@ -270,7 +270,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		final MenuItem menuItem = menu.add(Menu.NONE, actionId.hashCode(), Menu.NONE, name);
 		if (iconId != null) {
 			menuItem.setIcon(DrawableUtil.tintedDrawable(
-				FBReaderMainActivity.this, iconId, R.color.text_primary
+				MainActivity.this, iconId, R.color.text_primary
 			));
 		}
 		menuItem.setShowAsAction(
@@ -545,7 +545,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 					return;
 				}
 
-				FBReaderUtil.setBookTitle(FBReaderMainActivity.this, book);
+				FBReaderUtil.setBookTitle(MainActivity.this, book);
 			}
 		});
 
@@ -587,8 +587,8 @@ public abstract class FBReaderMainActivity extends MDActivity {
 					coverView.setVisibility(View.GONE);
 				}
 				if (myDrawerToolbar != null) {
-					myDrawerToolbar.setTitleTextAppearance(FBReaderMainActivity.this, R.style.FBReaderMD_TextAppearance_Title);
-					myDrawerToolbar.setSubtitleTextAppearance(FBReaderMainActivity.this, R.style.FBReaderMD_TextAppearance_Subtitle);
+					myDrawerToolbar.setTitleTextAppearance(MainActivity.this, R.style.FBReaderMD_TextAppearance_Title);
+					myDrawerToolbar.setSubtitleTextAppearance(MainActivity.this, R.style.FBReaderMD_TextAppearance_Subtitle);
 					myDrawerToolbar.setTitle(book.getTitle());
 					myDrawerToolbar.setSubtitle(book.authorsString(", "));
 				}
@@ -626,7 +626,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 		}
 	}
 
-	public abstract static class Action<ActivityT extends FBReaderMainActivity,ReaderT extends AbstractReader> extends AbstractReader.Action<ReaderT> {
+	public abstract static class Action<ActivityT extends MainActivity,ReaderT extends AbstractReader> extends AbstractReader.Action<ReaderT> {
 		protected final ActivityT BaseActivity;
 
 		protected Action(ActivityT baseActivity, ReaderT reader) {
@@ -657,7 +657,7 @@ public abstract class FBReaderMainActivity extends MDActivity {
 				final Intent intent =
 					FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.EDIT_BOOKMARK);
 				FBReaderIntents.putBookmarkExtra(intent, bookmark);
-				OrientationUtil.startActivity(FBReaderMainActivity.this, intent);
+				OrientationUtil.startActivity(MainActivity.this, intent);
 			}
 		}));
 		showToast(toast);
