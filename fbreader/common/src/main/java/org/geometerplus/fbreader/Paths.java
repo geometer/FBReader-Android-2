@@ -27,6 +27,8 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 
+import org.fbreader.util.IOUtil;
+
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
 import org.geometerplus.zlibrary.core.options.ZLStringListOption;
 import org.geometerplus.zlibrary.core.util.SystemInfo;
@@ -127,10 +129,7 @@ public abstract class Paths {
 			}
 		} catch (Throwable e) {
 		} finally {
-			try {
-				reader.close();
-			} catch (Throwable t) {
-			}
+			IOUtil.closeQuietly(reader);
 		}
 		*/
 		return dirs;
@@ -159,10 +158,7 @@ public abstract class Paths {
 			}
 		} catch (Throwable e) {
 		} finally {
-			try {
-				reader.close();
-			} catch (Throwable t) {
-			}
+			IOUtil.closeQuietly(reader);
 		}
 
 		for (String dir : dirNames) {
