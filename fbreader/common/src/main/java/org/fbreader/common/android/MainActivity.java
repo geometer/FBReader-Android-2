@@ -398,7 +398,10 @@ public abstract class MainActivity extends MDActivity {
 		super.onPostCreate(savedState);
 		myDrawerToggle.syncState();
 
-		getReader().addAction(ActionCode.SHOW_WHATSNEW_DIALOG, new ShowWhatsNewDialogAction(this, getReader()));
+ 		final AbstractReader reader = getReader();
+ 		reader.addAction(ActionCode.SHARE_BOOK, new ShareBookAction(this));
+ 		reader.addAction(ActionCode.OPEN_WEB_HELP, new OpenWebHelpAction(this));
+ 		reader.addAction(ActionCode.SHOW_WHATSNEW_DIALOG, new ShowWhatsNewDialogAction(this));
 	}
 
 	@Override
@@ -626,11 +629,11 @@ public abstract class MainActivity extends MDActivity {
 		}
 	}
 
-	public abstract static class Action<ActivityT extends MainActivity,ReaderT extends AbstractReader> extends AbstractReader.Action<ReaderT> {
-		protected final ActivityT BaseActivity;
+	public abstract static class Action<A extends MainActivity,R extends AbstractReader> extends AbstractReader.Action<R> {
+		protected final A BaseActivity;
 
-		protected Action(ActivityT baseActivity, ReaderT reader) {
-			super(reader);
+		protected Action(A baseActivity) {
+			super((R)baseActivity.getReader());
 			BaseActivity = baseActivity;
 		}
 	}

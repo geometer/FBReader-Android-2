@@ -40,6 +40,7 @@ import org.geometerplus.fbreader.formats.PluginCollection;
 import org.geometerplus.fbreader.library.*;
 import org.geometerplus.fbreader.tree.FBTree;
 
+import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.android.util.*;
 import org.geometerplus.android.fbreader.*;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
@@ -256,7 +257,7 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 				showBookInfo(book);
 				return true;
 			case ContextItemId.ShareBook:
-				FBUtil.shareBook(this, book);
+				FBReaderUtil.shareBook(this, book);
 				return true;
 			case ContextItemId.AddToFavorites:
 				book.addNewLabel(Book.FAVORITE_LABEL);

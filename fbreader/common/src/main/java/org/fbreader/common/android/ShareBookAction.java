@@ -17,25 +17,26 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.fbreader.common.android;
 
+import org.fbreader.common.AbstractReader;
+
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.fbreader.book.Book;
-import org.geometerplus.fbreader.book.BookUtil;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-public class ShareBookAction extends FBAndroidAction {
-	ShareBookAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+class ShareBookAction extends MainActivity.Action<MainActivity,AbstractReader> {
+	ShareBookAction(MainActivity baseActivity) {
+		super(baseActivity);
 	}
 
 	@Override
 	public boolean isVisible() {
-		final Book book = Reader.getCurrentBook();
-		return book != null && BookUtil.fileByBook(book).getPhysicalFile() != null;
+		final Book book = BaseActivity.getReader().getCurrentBook();
+		return book != null && ZLFile.createFileByPath(book.getPath()).getPhysicalFile() != null;
 	}
 
 	@Override
 	protected void run(Object ... params) {
-		FBUtil.shareBook(BaseActivity, Reader.getCurrentBook());
+		FBReaderUtil.shareBook(BaseActivity, BaseActivity.getReader().getCurrentBook());
 	}
 }

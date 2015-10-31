@@ -133,6 +133,7 @@ public final class FBReaderApp extends ZLApplication {
 		setView(BookTextView);
 	}
 
+	@Override
 	public Book getCurrentBook() {
 		final BookModel m = Model;
 		return m != null ? m.Book : ExternalBook;
