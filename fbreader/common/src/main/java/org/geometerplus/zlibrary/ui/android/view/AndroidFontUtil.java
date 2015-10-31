@@ -27,6 +27,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import android.graphics.Typeface;
 
+import org.fbreader.util.IOUtil;
+
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.fonts.FileInfo;
 import org.geometerplus.zlibrary.core.fonts.FontEntry;
@@ -245,32 +247,13 @@ public final class AndroidFontUtil {
 
 	private static boolean copy(FileInfo from, String to) {
 		InputStream is = null;
-		OutputStream os = null;
 		try {
 			is = ZLFile.createFileByPath(from.Path).getInputStream(from.EncryptionInfo);
-			os = new FileOutputStream(to);
-			final byte[] buffer = new byte[8192];
-			while (true) {
-				final int len = is.read(buffer);
-				if (len <= 0) {
-					break;
-				}
-				os.write(buffer, 0, len);
-			}
-			return true;
-		} catch (Exception e) {
+			return IOUtil.copyToFile(is, to);
+		} catch (IOException e) {
 			return false;
 		} finally {
-			try {
-				os.close();
-			} catch (Throwable t) {
-				// ignore
-			}
-			try {
-				is.close();
-			} catch (Throwable t) {
-				// ignore
-			}
+			IOUtil.closeQuietly(is);
 		}
 	}
 

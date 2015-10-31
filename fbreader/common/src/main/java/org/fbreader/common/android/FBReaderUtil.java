@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
+import android.support.v4.content.FileProvider;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 
 import org.fbreader.md.MDActivity;
 import org.fbreader.md.MDAlertDialogBuilder;
+import org.fbreader.util.IOUtil;
 
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.filesystem.ZLPhysicalFile;
@@ -146,12 +148,23 @@ public abstract class FBReaderUtil {
 			}
 			final CharSequence sharedFrom =
 				Html.fromHtml(ZLResource.resource("sharing").getResource("sharedFrom").getValue());
+			final File shareDir = new File(activity.getCacheDir(), "books");
+			shareDir.mkdirs();
+			final File toShare = IOUtil.copyToDir(file.javaFile(), shareDir);
+			if (toShare == null) {
+				// TODO: show toast
+				return;
+			}
+			final Uri uri = FileProvider.getUriForFile(
+				activity, activity.getString(R.string.file_provider_authority), toShare
+			);
 			activity.startActivity(
 				new Intent(Intent.ACTION_SEND)
 					.setType(FileTypeCollection.Instance.rawMimeType(file).Name)
 					.putExtra(Intent.EXTRA_SUBJECT, book.getTitle())
 					.putExtra(Intent.EXTRA_TEXT, sharedFrom)
-					.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.javaFile()))
+					.putExtra(Intent.EXTRA_STREAM, uri)
+					.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 			);
 		} catch (ActivityNotFoundException e) {
 			// TODO: show toast
