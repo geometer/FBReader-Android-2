@@ -41,8 +41,10 @@ import org.fbreader.util.IOUtil;
 
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.filesystem.ZLPhysicalFile;
+import org.geometerplus.zlibrary.core.filetypes.FileType;
 import org.geometerplus.zlibrary.core.filetypes.FileTypeCollection;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.core.util.MimeType;
 
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
@@ -116,10 +118,7 @@ public abstract class FBReaderUtil {
 			e.printStackTrace();
 			// ignore
 		} finally {
-			try {
-				reader.close();
-			} catch (Exception e) {
-			}
+			IOUtil.closeQuietly(reader);
 		}
 
 		return buffer.toString();
@@ -136,7 +135,7 @@ public abstract class FBReaderUtil {
 			.create().show();
 	}
 
-	public static void shareBook(MDActivity activity, Book book) {
+	public static void shareBook(Activity activity, Book book) {
 		if (book == null) {
 			return;
 		}
@@ -148,9 +147,20 @@ public abstract class FBReaderUtil {
 			}
 			final CharSequence sharedFrom =
 				Html.fromHtml(ZLResource.resource("sharing").getResource("sharedFrom").getValue());
+			final File origFile = file.javaFile();
+
 			final File shareDir = new File(activity.getCacheDir(), "books");
 			shareDir.mkdirs();
-			final File toShare = IOUtil.copyToDir(file.javaFile(), shareDir);
+
+			String name = null;
+			final MimeType mime = FileTypeCollection.Instance.mimeType(file);
+			if (mime != null) {
+				final FileType type = FileTypeCollection.Instance.typeForMime(mime);
+				if (type != null) {
+					name = book.getTitle() + "." + type.defaultExtension(mime);
+				}
+			}
+			final File toShare = IOUtil.copyToDir(file.javaFile(), shareDir, name);
 			if (toShare == null) {
 				// TODO: show toast
 				return;

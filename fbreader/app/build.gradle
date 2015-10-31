@@ -16,6 +16,7 @@ dependencies {
 	compile project(':fbreader/api')
 	compile project(':fbreader/util')
 	compile project(':fbreader/common')
+	compile project(':fbreader/fonts')
 	compile project(':fbreader/formats')
 	compile project(':third-party/drag-sort-listview')
 	compile project(':third-party/android-filechooser')

@@ -10,6 +10,7 @@ import android.text.Html;
 import android.util.SparseArray;
 import android.view.*;
 
+import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.fbreader.book.Book;
 
 class BookActionMenu extends PopupMenu {
@@ -54,25 +55,8 @@ class BookActionMenu extends PopupMenu {
 		if (path.startsWith("/")) {
 			actions.put(R.id.bks_book_action_share, new Action() {
 				@Override
-				void run(final LibraryActivity activity, final Book book) {
-					try {
-						final int delimIndex = path.indexOf(":");
-						final String url = "file://" +
-							(delimIndex > 0 ? path.substring(0, delimIndex) : path);
-						final CharSequence sharedFrom =
-							Html.fromHtml(activity.getResources().getString(
-								R.string.shared_from_fbreader
-							));
-						activity.startActivity(
-							new Intent(Intent.ACTION_SEND)
-								.setType(BookUtil.mime(url))
-								.putExtra(Intent.EXTRA_SUBJECT, book.getTitle())
-								.putExtra(Intent.EXTRA_TEXT, sharedFrom)
-								.putExtra(Intent.EXTRA_STREAM, Uri.parse(url))
-						);
-					} catch (ActivityNotFoundException e) {
-						// TODO: show toast
-					}
+				void run(LibraryActivity activity, Book book) {
+					FBReaderUtil.shareBook(activity, book);
 				}
 			});
 		}
