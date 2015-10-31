@@ -118,10 +118,7 @@ public abstract class FBReaderUtil {
 			e.printStackTrace();
 			// ignore
 		} finally {
-			try {
-				reader.close();
-			} catch (Exception e) {
-			}
+			IOUtil.closeQuietly(reader);
 		}
 
 		return buffer.toString();
