@@ -3,11 +3,11 @@ package org.fbreader.util;
 import java.io.*;
 
 public class IOUtil {
-	public static File copyToDir(File file, File dstDir) {
+	public static File copyToDir(File file, File dstDir, String name) {
 		InputStream is = null;
 		try {
 			is = new FileInputStream(file);
-			final File copy = new File(dstDir, file.getName());
+			final File copy = new File(dstDir, name != null ? name : file.getName());
 			return copyToFile(is, copy) ? copy : null;
 		} catch (IOException e) {
 			return null;
