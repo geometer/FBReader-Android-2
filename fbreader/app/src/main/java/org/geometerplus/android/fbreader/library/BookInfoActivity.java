@@ -351,7 +351,7 @@ public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemC
 				return true;
 			}
 			case SHARE_BOOK:
-				FBUtil.shareBook(this, myBook);
+				FBReaderUtil.shareBook(this, myBook);
 				return true;
 			case ADD_TO_FAVORITES:
 				if (myBook != null) {

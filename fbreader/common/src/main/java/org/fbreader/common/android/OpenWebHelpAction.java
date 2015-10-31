@@ -28,8 +28,8 @@ import org.fbreader.common.AbstractReader;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 class OpenWebHelpAction extends MainActivity.Action<MainActivity,AbstractReader> {
-	OpenWebHelpAction(MainActivity baseActivity, AbstractReader fbreader) {
-		super(baseActivity, fbreader);
+	OpenWebHelpAction(MainActivity baseActivity) {
+		super(baseActivity);
 	}
 
 	@Override

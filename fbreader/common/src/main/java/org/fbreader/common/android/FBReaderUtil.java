@@ -24,7 +24,9 @@ import java.io.*;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.text.Html;
@@ -35,6 +37,9 @@ import android.widget.TextView;
 import org.fbreader.md.MDActivity;
 import org.fbreader.md.MDAlertDialogBuilder;
 
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.core.filesystem.ZLPhysicalFile;
+import org.geometerplus.zlibrary.core.filetypes.FileTypeCollection;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
@@ -127,5 +132,29 @@ public abstract class FBReaderUtil {
 			.setTitle(title)
 			.setView(textView)
 			.create().show();
+	}
+
+	public static void shareBook(MDActivity activity, Book book) {
+		if (book == null) {
+			return;
+		}
+
+		try {
+			final ZLPhysicalFile file = ZLFile.createFileByPath(book.getPath()).getPhysicalFile();
+			if (file == null) {
+				return;
+			}
+			final CharSequence sharedFrom =
+				Html.fromHtml(ZLResource.resource("sharing").getResource("sharedFrom").getValue());
+			activity.startActivity(
+				new Intent(Intent.ACTION_SEND)
+					.setType(FileTypeCollection.Instance.rawMimeType(file).Name)
+					.putExtra(Intent.EXTRA_SUBJECT, book.getTitle())
+					.putExtra(Intent.EXTRA_TEXT, sharedFrom)
+					.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.javaFile()))
+			);
+		} catch (ActivityNotFoundException e) {
+			// TODO: show toast
+		}
 	}
 }

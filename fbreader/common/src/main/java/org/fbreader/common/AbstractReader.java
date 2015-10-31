@@ -24,6 +24,8 @@ import java.util.HashMap;
 
 import org.fbreader.util.Boolean3;
 
+import org.geometerplus.fbreader.book.Book;
+
 public abstract class AbstractReader {
 	static abstract public class Action<T extends AbstractReader> {
 		protected final T Reader;
@@ -87,6 +89,8 @@ public abstract class AbstractReader {
 		final Action action = myIdToActionMap.get(actionId);
 		return action != null ? action.isChecked() : Boolean3.UNDEFINED;
 	}
+
+	public abstract Book getCurrentBook();
 
 	public abstract void storePosition();
 }
