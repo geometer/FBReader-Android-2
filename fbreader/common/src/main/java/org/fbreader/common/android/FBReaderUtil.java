@@ -138,7 +138,7 @@ public abstract class FBReaderUtil {
 			.create().show();
 	}
 
-	public static void shareBook(MDActivity activity, Book book) {
+	public static void shareBook(Activity activity, Book book) {
 		if (book == null) {
 			return;
 		}
