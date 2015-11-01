@@ -51,9 +51,9 @@ import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.android.util.UIMessageUtil;
 import org.geometerplus.android.util.UIUtil;
 
-class DisplayBookPopupAction extends FBAndroidAction {
-	DisplayBookPopupAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+class DisplayBookPopupAction extends FBReader.Action<FBReader,FBReaderApp> {
+	DisplayBookPopupAction(FBReader baseActivity) {
+		super(baseActivity);
 	}
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)

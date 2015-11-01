@@ -23,9 +23,9 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
-class ShowCancelMenuAction extends FBAndroidAction {
-	ShowCancelMenuAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+class ShowCancelMenuAction extends FBReader.Action<FBReader,FBReaderApp> {
+	ShowCancelMenuAction(FBReader baseActivity) {
+		super(baseActivity);
 	}
 
 	@Override

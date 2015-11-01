@@ -24,9 +24,9 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.fbreader.common.android.FBReaderUtil;
 
-public class SelectionBookmarkAction extends FBAndroidAction {
-	SelectionBookmarkAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+public class SelectionBookmarkAction extends FBReader.Action<FBReader,FBReaderApp> {
+	SelectionBookmarkAction(FBReader baseActivity) {
+		super(baseActivity);
 	}
 
 	@Override

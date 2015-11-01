@@ -29,9 +29,9 @@ import org.geometerplus.android.fbreader.library.LibraryActivity;
 import org.geometerplus.android.util.OrientationUtil;
 import org.geometerplus.android.util.PackageUtil;
 
-class ShowLibraryAction extends FBAndroidAction {
-	ShowLibraryAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+class ShowLibraryAction extends FBReader.Action<FBReader,FBReaderApp> {
+	ShowLibraryAction(FBReader baseActivity) {
+		super(baseActivity);
 	}
 
 	@Override

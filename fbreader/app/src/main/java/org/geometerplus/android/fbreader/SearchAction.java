@@ -21,9 +21,9 @@ package org.geometerplus.android.fbreader;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class SearchAction extends FBAndroidAction {
-	SearchAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+class SearchAction extends FBReader.Action<FBReader,FBReaderApp> {
+	SearchAction(FBReader baseActivity) {
+		super(baseActivity);
 	}
 
 	@Override

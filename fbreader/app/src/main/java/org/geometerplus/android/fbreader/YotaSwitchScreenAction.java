@@ -32,11 +32,11 @@ import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-class YotaSwitchScreenAction extends FBAndroidAction {
+class YotaSwitchScreenAction extends FBReader.Action<FBReader,FBReaderApp> {
 	private final boolean mySwitchToBack;
 
-	YotaSwitchScreenAction(FBReader baseActivity, FBReaderApp fbreader, boolean switchToBack) {
-		super(baseActivity, fbreader);
+	YotaSwitchScreenAction(FBReader baseActivity, boolean switchToBack) {
+		super(baseActivity);
 		mySwitchToBack = switchToBack;
 	}
 

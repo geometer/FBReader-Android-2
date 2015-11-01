@@ -19,11 +19,11 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.fbreader.common.AbstractReader;
 
-class ToggleBarsAction extends FBAndroidAction {
-	ToggleBarsAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+class ToggleBarsAction extends FBReader.Action<FBReader,AbstractReader> {
+	ToggleBarsAction(FBReader baseActivity) {
+		super(baseActivity);
 	}
 
 	@Override
