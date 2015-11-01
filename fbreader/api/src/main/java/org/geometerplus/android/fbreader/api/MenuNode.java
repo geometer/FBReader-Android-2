@@ -26,10 +26,12 @@ public abstract class MenuNode implements Cloneable, Serializable {
 	public static final long serialVersionUID = 42L;
 
 	public final String Code;
+	public final Integer IconId;
 	public String OptionalTitle;
 
-	private MenuNode(String code) {
+	private MenuNode(String code, Integer iconId) {
 		Code = code;
+		IconId = iconId;
 	}
 
 	public abstract MenuNode clone();
@@ -37,11 +39,8 @@ public abstract class MenuNode implements Cloneable, Serializable {
 	public static final class Item extends MenuNode {
 		public static final long serialVersionUID = 43L;
 
-		public final Integer IconId;
-
 		public Item(String code, Integer iconId) {
-			super(code);
-			IconId = iconId;
+			super(code, iconId);
 		}
 
 		public Item(String code) {
@@ -58,12 +57,16 @@ public abstract class MenuNode implements Cloneable, Serializable {
 
 		public final ArrayList<MenuNode> Children = new ArrayList<MenuNode>();
 
+		public Submenu(String code, Integer iconId) {
+			super(code, iconId);
+		}
+
 		public Submenu(String code) {
-			super(code);
+			this(code, null);
 		}
 
 		public Submenu clone() {
-			final Submenu copy = new Submenu(Code);
+			final Submenu copy = new Submenu(Code, IconId);
 			for (MenuNode node : Children) {
 				copy.Children.add(node.clone());
 			}
