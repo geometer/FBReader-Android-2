@@ -25,9 +25,9 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.util.GotoPageDialogUtil;
 
-public class GotoPageNumberAction extends FBAndroidAction {
-	GotoPageNumberAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+public class GotoPageNumberAction extends FBReader.Action<FBReader,FBReaderApp> {
+	GotoPageNumberAction(FBReader baseActivity) {
+		super(baseActivity);
 	}
 
 	@Override

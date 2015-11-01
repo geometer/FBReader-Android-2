@@ -24,9 +24,9 @@ import org.geometerplus.fbreader.util.TextSnippet;
 
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 
-public class SelectionTranslateAction extends FBAndroidAction {
-	SelectionTranslateAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(baseActivity, fbreader);
+public class SelectionTranslateAction extends FBReader.Action<FBReader,FBReaderApp> {
+	SelectionTranslateAction(FBReader baseActivity) {
+		super(baseActivity);
 	}
 
 	@Override

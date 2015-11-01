@@ -17,12 +17,23 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.fbreader.common.android;
 
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.fbreader.common.AbstractReader;
 
-abstract class FBAndroidAction extends FBReader.Action<FBReader,FBReaderApp> {
-	FBAndroidAction(FBReader baseActivity, FBReaderApp reader) {
+import org.geometerplus.android.fbreader.api.FBReaderIntents;
+import org.geometerplus.android.util.OrientationUtil;
+
+class ShowNetworkLibraryAction extends MainActivity.Action<MainActivity,AbstractReader> {
+	ShowNetworkLibraryAction(MainActivity baseActivity) {
 		super(baseActivity);
+	}
+
+	@Override
+	protected void run(Object ... params) {
+		OrientationUtil.startActivity(
+			BaseActivity,
+			FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.NETWORK_LIBRARY)
+		);
 	}
 }
