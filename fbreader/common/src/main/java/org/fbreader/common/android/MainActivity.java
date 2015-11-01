@@ -23,6 +23,7 @@ import java.util.*;
 
 import android.app.SearchManager;
 import android.content.*;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.*;
@@ -664,5 +665,30 @@ public abstract class MainActivity extends MDActivity {
 			}
 		}));
 		showToast(toast);
+	}
+
+	public final void setOrientation(String optionValue) {
+		final int orientation;
+		switch (optionValue) {
+			default:
+				orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+				break;
+			case ZLAndroidLibrary.SCREEN_ORIENTATION_SENSOR:
+				orientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
+				break;
+			case ZLAndroidLibrary.SCREEN_ORIENTATION_PORTRAIT:
+				orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+				break;
+			case ZLAndroidLibrary.SCREEN_ORIENTATION_LANDSCAPE:
+				orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+				break;
+			case ZLAndroidLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+				orientation = 9; // ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+				break;
+			case ZLAndroidLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+				orientation = 8; // ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+				break;
+		}
+		setRequestedOrientation(orientation);
 	}
 }
