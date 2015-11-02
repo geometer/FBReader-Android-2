@@ -236,7 +236,6 @@ public final class LibraryActivity extends FullActivity {
 
 		new AlertDialog.Builder(this)
 			.setMessage(R.string.conflict_question)
-			.setIcon(0)
 			.setPositiveButton(
 				R.string.conflict_premium,
 				new DialogInterface.OnClickListener() {
@@ -531,7 +530,6 @@ public final class LibraryActivity extends FullActivity {
 		textView.setMovementMethod(new LinkMovementMethod());
 		new AlertDialog.Builder(this)
 			.setView(textView)
-			.setIcon(0)
 			.setPositiveButton(R.string.button_ok, null)
 			.create().show();
 	}
