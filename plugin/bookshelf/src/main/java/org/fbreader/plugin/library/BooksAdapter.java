@@ -557,6 +557,7 @@ final class BooksAdapter extends BaseAdapter implements IBookCollection.Listener
 				default:
 					return false;
 				case Updated:
+				case ProgressUpdated:
 					synchronized (myItemList) {
 						final int index = myItemList.indexOf(book);
 						if (index != -1) {

@@ -3,10 +3,8 @@ package org.fbreader.plugin.library;
 import java.util.List;
 
 import android.content.*;
-import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
-import android.text.Html;
 import android.util.SparseArray;
 import android.view.*;
 
