@@ -6,11 +6,11 @@ import android.preference.PreferenceManager;
 import android.os.Build;
 import android.util.TypedValue;
 
-import org.fbreader.plugin.library.report.ExceptionHandler;
-
 public abstract class ActivityUtil {
 	public static int setup(Activity activity, boolean dialog) {
-		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(activity));
+		Thread.setDefaultUncaughtExceptionHandler(
+			new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(activity)
+		);
 		return selectTheme(activity, dialog);
 	}
 

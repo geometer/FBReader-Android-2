@@ -479,7 +479,7 @@ public final class LibraryActivity extends FullActivity {
 			);
 			return true;
 		} else if (itemId == R.id.bks_library_menu_whatsnew) {
-			showHtmlDialog(R.layout.bks_dialog_whatsnew, fromResourceFile("whatsnew"));
+			showHtmlDialog(R.layout.text_dialog, fromResourceFile("whatsnew"));
 			return true;
 		} else {
 			return super.onOptionsItemSelected(item);
@@ -535,7 +535,7 @@ public final class LibraryActivity extends FullActivity {
 	}
 
 	private void showPremiumDialog() {
-		final TextView textView = (TextView)getLayoutInflater().inflate(R.layout.bks_dialog_premium, null);
+		final TextView textView = (TextView)getLayoutInflater().inflate(R.layout.text_dialog, null);
 		textView.setText(Html.fromHtml(fromResourceFile("premium")));
 		textView.setMovementMethod(new LinkMovementMethod());
 		new AlertDialog.Builder(this)

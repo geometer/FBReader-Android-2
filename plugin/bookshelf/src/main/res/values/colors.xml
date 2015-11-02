@@ -3,7 +3,6 @@
 	<color name="light_text_main">#212121</color>
 	<color name="light_text_disabled">#9E9E9E</color>
 	<color name="light_text_hint">#D0D0D0</color>
-	<color name="light_shadow_end">#88333333</color>
 
 	<color name="dark_text_main">#9E9E9E</color>
 	<color name="dark_text_disabled">#525252</color>
