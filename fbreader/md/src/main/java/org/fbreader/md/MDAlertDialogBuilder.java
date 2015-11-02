@@ -44,6 +44,13 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 		return this;
 	}
 
+	@Override
+	public MDAlertDialogBuilder setTitle(int titleId) {
+		createToolbar();
+		myToolbar.setTitle(titleId);
+		return this;
+	}
+
 	private int getMinimumWidth(View view) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			return view.getMinimumWidth();
