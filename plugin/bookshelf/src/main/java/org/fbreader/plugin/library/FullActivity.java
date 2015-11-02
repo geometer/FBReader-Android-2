@@ -15,7 +15,7 @@ public abstract class FullActivity extends MDActivity {
 	private volatile boolean myThemeIsDark;
 
 	@Override
-	protected void beforeSetContentView() {
+	protected void onPreCreate() {
 		myThemeId = ActivityUtil.setup(this, false);
 		myThemeIsDark =
 			getTheme().obtainStyledAttributes(new int[] {R.attr.isThemeDark}).getBoolean(0, false);
