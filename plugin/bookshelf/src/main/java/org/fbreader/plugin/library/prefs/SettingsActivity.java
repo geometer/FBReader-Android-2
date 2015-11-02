@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.*;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,18 +22,13 @@ public class SettingsActivity extends FullActivity {
 	private volatile SettingsFragment myFragment;
 
 	@Override
+	protected int layoutId() {
+		return R.layout.bks_settings;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
-
-		setContentView(R.layout.bks_settings);
-		final Toolbar toolbar = (Toolbar)findViewById(R.id.md_toolbar);
-		toolbar.setTitle(getTitle());
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				onBackPressed();
-			}
-		});
 
 		myFragment = new SettingsFragment();
 		getFragmentManager()

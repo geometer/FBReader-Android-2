@@ -16,7 +16,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.*;
@@ -111,6 +110,11 @@ public final class LibraryActivity extends FullActivity {
 	}
 
 	@Override
+	protected int layoutId() {
+		return R.layout.bks_library;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 
@@ -132,11 +136,8 @@ public final class LibraryActivity extends FullActivity {
 			old.commit();
 		}
 
-		setContentView(R.layout.bks_library);
 		BookUtil.resetPopup();
 
-		final Toolbar toolbar = (Toolbar)findViewById(R.id.md_toolbar);
-		setSupportActionBar(toolbar);
 		myGrid = (GridView)findViewById(R.id.bks_library_grid);
 
 		myDefaultViewType = GridViewType.fromString(
@@ -198,7 +199,7 @@ public final class LibraryActivity extends FullActivity {
 
 		myDrawerLayout = ((DrawerLayout)findViewById(R.id.bks_library_drawer_layout));
 		myDrawerToggle = new ActionBarDrawerToggle(
-			this, myDrawerLayout, toolbar, R.string.desc_open_drawer, R.string.desc_close_drawer
+			this, myDrawerLayout, getToolbar(), R.string.desc_open_drawer, R.string.desc_close_drawer
 		);
 		myDrawerLayout.setDrawerListener(myDrawerToggle);
 		myDrawerLayout.setDrawerShadow(R.drawable.shadow_right_6dp, GravityCompat.START);

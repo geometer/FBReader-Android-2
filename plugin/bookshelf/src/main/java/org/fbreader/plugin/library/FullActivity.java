@@ -6,15 +6,16 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 
+import org.fbreader.md.MDActivity;
+
 import org.geometerplus.android.util.OrientationUtil;
 
-public abstract class FullActivity extends ActionBarActivity {
+public abstract class FullActivity extends MDActivity {
 	private volatile int myThemeId;
 	private volatile boolean myThemeIsDark;
 
 	@Override
-	protected void onCreate(Bundle savedState) {
-		super.onCreate(savedState);
+	protected void beforeSetContentView() {
 		myThemeId = ActivityUtil.setup(this, false);
 		myThemeIsDark =
 			getTheme().obtainStyledAttributes(new int[] {R.attr.isThemeDark}).getBoolean(0, false);
