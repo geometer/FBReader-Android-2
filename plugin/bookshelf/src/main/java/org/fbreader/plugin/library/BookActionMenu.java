@@ -3,11 +3,11 @@ package org.fbreader.plugin.library;
 import java.util.List;
 
 import android.content.*;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.util.SparseArray;
 import android.view.*;
 
+import org.fbreader.md.MDAlertDialogBuilder;
 import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.fbreader.book.Book;
 
@@ -62,7 +62,7 @@ class BookActionMenu extends PopupMenu {
 			actions.put(R.id.bks_book_action_delete, new Action() {
 				@Override
 				void run(final LibraryActivity activity, final Book book) {
-					new AlertDialog.Builder(activity)
+					new MDAlertDialogBuilder(activity)
 						.setTitle(book.getTitle())
 						.setMessage(R.string.delete_book_confirmation)
 						.setPositiveButton(

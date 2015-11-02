@@ -14,7 +14,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -23,6 +22,8 @@ import android.widget.*;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
+import org.fbreader.md.MDAlertDialogBuilder;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
@@ -234,7 +235,7 @@ public final class LibraryActivity extends FullActivity {
 			return;
 		}
 
-		new AlertDialog.Builder(this)
+		new MDAlertDialogBuilder(this)
 			.setMessage(R.string.conflict_question)
 			.setPositiveButton(
 				R.string.conflict_premium,
@@ -528,9 +529,8 @@ public final class LibraryActivity extends FullActivity {
 		final TextView textView = (TextView)getLayoutInflater().inflate(layoutId, null);
 		textView.setText(Html.fromHtml(html));
 		textView.setMovementMethod(new LinkMovementMethod());
-		new AlertDialog.Builder(this)
+		new MDAlertDialogBuilder(this)
 			.setView(textView)
-			.setPositiveButton(R.string.button_ok, null)
 			.create().show();
 	}
 
@@ -538,9 +538,8 @@ public final class LibraryActivity extends FullActivity {
 		final TextView textView = (TextView)getLayoutInflater().inflate(R.layout.text_dialog, null);
 		textView.setText(Html.fromHtml(fromResourceFile("premium")));
 		textView.setMovementMethod(new LinkMovementMethod());
-		new AlertDialog.Builder(this)
+		new MDAlertDialogBuilder(this)
 			.setView(textView)
-			.setIcon(0)
 			.setPositiveButton(
 				R.string.button_buy,
 				new DialogInterface.OnClickListener() {
@@ -552,12 +551,11 @@ public final class LibraryActivity extends FullActivity {
 					}
 				}
 			)
-			.setNegativeButton(R.string.button_no_thanks, null)
 			.create().show();
 	}
 
 	void showMissingFBReaderDialog() {
-		new AlertDialog.Builder(this)
+		new MDAlertDialogBuilder(this)
 			.setTitle(R.string.app_title)
 			.setMessage(R.string.fbreader_not_found)
 			.setPositiveButton(R.string.button_install, new DialogInterface.OnClickListener() {
@@ -568,7 +566,6 @@ public final class LibraryActivity extends FullActivity {
 					));
 				}
 			})
-			.setNegativeButton(R.string.button_cancel, null)
 			.create().show();
 	}
 
