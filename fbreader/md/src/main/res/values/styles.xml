@@ -14,6 +14,7 @@
 		<item name="listProgressIndicatorStyle">@style/FBReaderMD.ListProgressIndicator</item>
 		<item name="numberPickerStyle">@style/FBReaderMD.NumberPicker.Dark</item>
 		<item name="sliderStyle">@style/FBReaderMD.Slider</item>
+		<item name="alertDialogTheme">@style/FBReaderMD.Dialog</item>
 	</style>
 	<style name="FBReaderMD.Dialog" parent="@style/Theme.AppCompat.Dialog">
 		<item name="android:textColorPrimary">@color/text_primary</item>
@@ -32,6 +33,7 @@
 		<item name="listProgressIndicatorStyle">@style/FBReaderMD.ListProgressIndicator</item>
 		<item name="numberPickerStyle">@style/FBReaderMD.NumberPicker.Dark</item>
 		<item name="sliderStyle">@style/FBReaderMD.Slider</item>
+		<item name="alertDialogTheme">@style/FBReaderMD.Dialog</item>
 	</style>
 	<style name="FBReaderMD.Dialog.Translucent" parent="@style/FBReaderMD.Dialog">
 		<item name="android:background">@null</item>

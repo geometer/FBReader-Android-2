@@ -32,7 +32,7 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 	private Toolbar myToolbar;
 
 	public MDAlertDialogBuilder(Context context) {
-		super(context, R.style.FBReaderMD_Dialog);
+		super(context);
 	}
 
 	@Override
@@ -41,6 +41,13 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 			createToolbar();
 			myToolbar.setTitle(title);
 		}
+		return this;
+	}
+
+	@Override
+	public MDAlertDialogBuilder setTitle(int titleId) {
+		createToolbar();
+		myToolbar.setTitle(titleId);
 		return this;
 	}
 
