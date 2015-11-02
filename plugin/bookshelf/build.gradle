@@ -17,8 +17,6 @@ dependencies {
 	compile project(':third-party/patches')
 	compile project(':fbreader/zip-amse')
 	compile project(':fbreader/common')
-	compile project(':fbreader/api')
-	compile project(':fbreader/md')
 }
 
 android {
