@@ -33,8 +33,12 @@ public abstract class MDActivity extends ActionBarActivity {
 
 	protected abstract int layoutId();
 
+	protected void onPreCreate() {
+	}
+
 	@Override
 	protected void onCreate(Bundle icicle) {
+		onPreCreate();
 		super.onCreate(icicle);
 		setContentView(layoutId());
 

@@ -1,45 +1,21 @@
-<RelativeLayout
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
-	android:layout_height="200sp"
-	android:paddingTop="10sp"
-	android:paddingLeft="35sp"
-	android:paddingRight="35sp"
+	android:layout_height="wrap_content"
+	android:minWidth="250dp"
+	android:orientation="vertical"
 >
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
-		android:textAppearance="?android:attr/textAppearanceLarge"
-		android:gravity="center_horizontal"
-		android:text="@string/shelf_creator_title"
-	/>
+	<include layout="@layout/md_toolbar"/>
 	<EditText
 		android:id="@+id/bks_shelf_creator_label"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
-		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:layout_marginTop="15sp"
+		android:layout_marginLeft="20sp"
+		android:layout_marginRight="20sp"
+		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:hint="@string/new_shelf_name_hint"
 	/>
-	<TextView
-		android:id="@+id/bks_shelf_creator_ok"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:layout_alignParentRight="true"
-		style="?attr/flatButtonStyle"
-		android:textSize="15sp"
-		android:text="@string/button_ok"
-	/>
-	<TextView
-		android:id="@+id/bks_shelf_creator_cancel"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:layout_toLeftOf="@id/bks_shelf_creator_ok"
-		style="?attr/flatButtonStyle"
-		android:textSize="15sp"
-		android:text="@string/button_cancel"
-	/>
-</RelativeLayout>
+	<include layout="@layout/md_single_button_bar"/>
+</LinearLayout>

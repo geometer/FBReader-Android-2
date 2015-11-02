@@ -33,9 +33,15 @@ import org.fbreader.plugin.library.R;
 public class BugReportActivity extends FullActivity {
 	static final String STACKTRACE = "fbreader.stacktrace";
 
-	public void onCreate(Bundle icicle) {
+	@Override
+	protected int layoutId() {
+		return R.layout.bks_bug_report;
+	}
+
+	@Override
+	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		setContentView(R.layout.bks_bug_report);
+
 		final StringBuilder reportText = new StringBuilder();
 
 		reportText.append("Model:").append(Build.MODEL).append("\n");
