@@ -21,12 +21,17 @@ package org.fbreader.md;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 
 public abstract class MDDialogPreference extends MDBaseDialogPreference {
 	protected MDDialogPreference(Context context) {
 		super(context);
+	}
+
+	protected MDDialogPreference(Context context, AttributeSet attrs) {
+		super(context, attrs);
 	}
 
 	@Override
