@@ -35,12 +35,6 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".report.BugReportActivity"
-			android:process=":crash"
-			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:exported="false"
-		/>
-		<activity
 			android:name=".CreateShelfActivity"
 			android:theme="@style/Theme.Library.Dark.Dialog"
 			android:configChanges="orientation|keyboardHidden|screenSize"
