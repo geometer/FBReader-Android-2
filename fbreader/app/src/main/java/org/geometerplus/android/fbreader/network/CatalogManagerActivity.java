@@ -23,6 +23,7 @@ import java.util.*;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.*;
 import android.widget.*;
 
@@ -145,7 +146,7 @@ public class CatalogManagerActivity extends MDListActivity {
 		}
 	}
 
-	private class CatalogsListAdapter extends ArrayAdapter<Item> implements DragSortListView.DropListener, DragSortListView.RemoveListener {
+	private class CatalogsListAdapter extends ArrayAdapter<Item> implements DragSortListView.DropListener, DragSortListView.RemoveListener, DragSortListView.DragRangeConstraint {
 		private CoverManager myCoverManager;
 
 		public CatalogsListAdapter() {
@@ -257,6 +258,11 @@ public class CatalogManagerActivity extends MDListActivity {
 				remove(item);
 				getDSListView().removeCheckState(which);
 			}
+		}
+
+		@Override
+		public Pair<Integer,Integer> dragRange(int itemPosition) {
+			return new Pair(1, getCount() - 1);
 		}
 	}
 }

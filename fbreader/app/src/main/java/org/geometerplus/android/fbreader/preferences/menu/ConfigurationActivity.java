@@ -104,7 +104,7 @@ public class ConfigurationActivity extends MDListActivity {
 		}
 	}
 
-	private class MenuListAdapter extends ArrayAdapter<Item> implements DragSortListView.DropListener, DragSortListView.RemoveListener, DragSortListView.DragRestrictor {
+	private class MenuListAdapter extends ArrayAdapter<Item> implements DragSortListView.DropListener, DragSortListView.RemoveListener, DragSortListView.DragRangeConstraint {
 		public MenuListAdapter() {
 			super(ConfigurationActivity.this, R.layout.menu_configure_item, myAllItems);
 		}

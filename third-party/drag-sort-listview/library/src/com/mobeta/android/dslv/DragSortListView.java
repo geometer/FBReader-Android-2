@@ -439,14 +439,14 @@ public class DragSortListView extends ListView {
     private boolean mUseRemoveVelocity;
     private float mRemoveVelocityX = 0;
 
-    public interface DragRestrictor {
+    public interface DragRangeConstraint {
         Pair<Integer,Integer> dragRange(int itemPosition);
     }
 
-    private DragRestrictor mDragRestrictor;
+    private DragRangeConstraint mDragRangeConstraint;
 
-    public void setDragRestrictor(DragRestrictor d) {
-        mDragRestrictor = d;
+    public void setDragRangeConstraint(DragRangeConstraint d) {
+        mDragRangeConstraint = d;
     }
 
     public DragSortListView(Context context, AttributeSet attrs) {
@@ -627,8 +627,8 @@ public class DragSortListView extends ListView {
             if (adapter instanceof RemoveListener) {
                 setRemoveListener((RemoveListener) adapter);
             }
-            if (adapter instanceof DragRestrictor) {
-                setDragRestrictor((DragRestrictor) adapter);
+            if (adapter instanceof DragRangeConstraint) {
+                setDragRangeConstraint((DragRangeConstraint) adapter);
             }
         } else {
             mAdapterWrapper = null;
@@ -2234,8 +2234,8 @@ public class DragSortListView extends ListView {
         if (v == null) {
             return false;
         } else {
-            if (mDragRestrictor != null) {
-                v.setTag(mDragRestrictor.dragRange(position));
+            if (mDragRangeConstraint != null) {
+                v.setTag(mDragRangeConstraint.dragRange(position));
             }
             return startDrag(position, v, dragFlags, deltaX, deltaY);
         }
