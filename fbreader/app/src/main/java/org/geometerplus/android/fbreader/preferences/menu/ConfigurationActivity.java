@@ -22,6 +22,7 @@ package org.geometerplus.android.fbreader.preferences.menu;
 import java.util.*;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.*;
 import android.widget.*;
 
@@ -103,7 +104,7 @@ public class ConfigurationActivity extends MDListActivity {
 		}
 	}
 
-	private class MenuListAdapter extends ArrayAdapter<Item> implements DragSortListView.DropListener, DragSortListView.RemoveListener {
+	private class MenuListAdapter extends ArrayAdapter<Item> implements DragSortListView.DropListener, DragSortListView.RemoveListener, DragSortListView.DragRestrictor {
 		public MenuListAdapter() {
 			super(ConfigurationActivity.this, R.layout.menu_configure_item, myAllItems);
 		}
@@ -197,6 +198,31 @@ public class ConfigurationActivity extends MDListActivity {
 				remove(item);
 				((DragSortListView)getListView()).removeCheckState(which);
 			}
+		}
+
+		@Override
+		public Pair<Integer,Integer> dragRange(int itemPosition) {
+			final Item item = getItem(itemPosition);
+			if (!(item instanceof MenuNodeItem)) {
+				return new Pair(itemPosition, itemPosition);
+			}
+
+			final Set<MenuData.Location> itemLocations =
+				MenuData.locationGroup(((MenuNodeItem)item).Id);
+			int first = 1; // not 0 because first position is for SectionItem
+			for (int i = itemPosition - 1; i >= first; --i) {
+				if (!itemLocations.contains(getItem(i).Location)) {
+					// not i + 1 because first item with the same Location is a SectionItem
+					first = i + 2;
+				}
+			}
+			int second = getCount() - 1;
+			for (int i = itemPosition + 1; i <= second; ++i) {
+				if (!itemLocations.contains(getItem(i).Location)) {
+					second = i - 1;
+				}
+			}
+			return new Pair(first, second);
 		}
 	}
 }

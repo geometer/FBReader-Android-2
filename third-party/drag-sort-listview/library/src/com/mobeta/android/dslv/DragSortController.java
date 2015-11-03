@@ -1,6 +1,7 @@
 package com.mobeta.android.dslv;
 
 import android.graphics.Point;
+import android.util.Pair;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -276,6 +277,21 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
 
         if (mRemoveEnabled && mIsRemoving) {
             mPositionX = position.x;
+        }
+
+        final Pair<Integer,Integer> range = (Pair<Integer,Integer>)floatView.getTag();
+        if (range != null) {
+            final int first = mDslv.getFirstVisiblePosition();
+            final int lvDivHeight = mDslv.getDividerHeight();
+
+            View div = mDslv.getChildAt(range.first - 1 - first);
+            if (div != null) {
+                position.y = Math.max(position.y, div.getBottom() + lvDivHeight);
+            }
+            div = mDslv.getChildAt(range.second + 1 - first);
+            if (div != null) {
+                position.y = Math.min(position.y, div.getTop() - lvDivHeight - floatView.getHeight());
+            }
         }
     }
 
