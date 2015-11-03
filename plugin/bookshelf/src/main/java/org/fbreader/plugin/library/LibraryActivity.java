@@ -255,6 +255,10 @@ public final class LibraryActivity extends FullActivity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		myDrawerToggle.onConfigurationChanged(newConfig);
+
+		final int position = myGrid.getFirstVisiblePosition();
+		applyViewType(SelectedViewType);
+		myGrid.setSelection(position);
 	}
 
 	@Override
