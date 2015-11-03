@@ -23,17 +23,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.preference.Preference;
 import android.support.v7.app.AlertDialog;
+import android.util.AttributeSet;
 
-public abstract class MDBaseDialogPreference extends Preference implements Preference.OnPreferenceClickListener {
+public abstract class MDBaseDialogPreference extends Preference {
 	private volatile AlertDialog myDialog;
 
 	protected MDBaseDialogPreference(Context context) {
 		super(context);
-		setOnPreferenceClickListener(this);
+	}
+
+	protected MDBaseDialogPreference(Context context, AttributeSet attrs) {
+		super(context, attrs);
 	}
 
 	@Override
-	public boolean onPreferenceClick(Preference preference) {
+	protected void onClick() {
 		final MDAlertDialogBuilder builder = new MDAlertDialogBuilder(getContext());
 		builder.setTitle(getTitle());
 		configureDialog(builder);
@@ -45,8 +49,6 @@ public abstract class MDBaseDialogPreference extends Preference implements Prefe
 			}
 		});
 		myDialog.show();
-
-		return true;
 	}
 
 	protected AlertDialog getDialog() {

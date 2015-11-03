@@ -18,23 +18,24 @@ package com.vanniktech.vntnumberpickerpreference;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
+
 import net.simonvt.numberpicker.NumberPicker;
 
-public class VNTNumberPickerPreference extends DialogPreference {
+import org.fbreader.md.MDDialogPreference;
+
+public class VNTNumberPickerPreference extends MDDialogPreference {
 	private int mySelectedValue;
 	private int myMinValue = 0;
 	private int myMaxValue = 100;
 	private NumberPicker myPicker;
 
 	public VNTNumberPickerPreference(Context context) {
-		super(context, null);
+		super(context);
 	}
 
 	public VNTNumberPickerPreference(Context context, AttributeSet attrs) {
@@ -69,26 +70,27 @@ public class VNTNumberPickerPreference extends DialogPreference {
 	}
 
 	@Override
-	protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-		super.onPrepareDialogBuilder(builder);
+	protected String positiveButtonText() {
+		return getContext().getResources().getString(android.R.string.ok);
+	}
 
-		final View layout = ((Activity)getContext()).getLayoutInflater().inflate(
-			R.layout.vnt_picker_preference, null
-		);
+	@Override
+	protected int dialogLayoutId() {
+		return R.layout.vnt_picker_preference;
+	}
 
-		myPicker = (NumberPicker)layout.findViewById(R.id.vnt_picker_preference_picker);
+	@Override
+	protected void onBindDialogView(View view) {
+		myPicker = (NumberPicker)view.findViewById(R.id.vnt_picker_preference_picker);
 		myPicker.setMinValue(myMinValue);
 		myPicker.setMaxValue(myMaxValue);
 		myPicker.setValue(mySelectedValue);
 		myPicker.setWrapSelectorWheel(false);
-
-		builder.setTitle(getTitle());
-		builder.setView(layout);
 	}
 
 	@Override
-	protected void onDialogClosed(boolean positiveResult) {
-		if (positiveResult && shouldPersist()) {
+	protected void onPositiveDialogResult() {
+		if (shouldPersist()) {
 			mySelectedValue = myPicker.getValue();
 			persistInt(mySelectedValue);
 			updateSummary();

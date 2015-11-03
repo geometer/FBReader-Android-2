@@ -12,6 +12,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
 	compile project(':third-party/android-numberpicker')
+	compile project(':fbreader/md')
 }
 
 android {
