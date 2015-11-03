@@ -32,6 +32,7 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Pair;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.view.Gravity;
@@ -438,6 +439,16 @@ public class DragSortListView extends ListView {
     private boolean mUseRemoveVelocity;
     private float mRemoveVelocityX = 0;
 
+    public interface DragRestrictor {
+        Pair<Integer,Integer> dragRange(int itemPosition);
+    }
+
+    private DragRestrictor mDragRestrictor;
+
+    public void setDragRestrictor(DragRestrictor d) {
+        mDragRestrictor = d;
+    }
+
     public DragSortListView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -615,6 +626,9 @@ public class DragSortListView extends ListView {
             }
             if (adapter instanceof RemoveListener) {
                 setRemoveListener((RemoveListener) adapter);
+            }
+            if (adapter instanceof DragRestrictor) {
+                setDragRestrictor((DragRestrictor) adapter);
             }
         } else {
             mAdapterWrapper = null;
@@ -970,7 +984,15 @@ public class DragSortListView extends ListView {
         return edge;
     }
 
+    private int fromRange(int value, Pair<Integer,Integer> range) {
+        if (range == null) {
+            return value;
+        }
+        return Math.max(range.first, Math.min(range.second, value));
+    }
+
     private boolean updatePositions() {
+        final Pair<Integer,Integer> range = (Pair<Integer,Integer>)mFloatView.getTag();
 
         final int first = getFirstVisiblePosition();
         int startPos = mFirstExpPos;
@@ -1069,17 +1091,17 @@ public class DragSortListView extends ListView {
 
             // Three regions
             if (mFloatViewMid < slideEdgeTop) {
-                mFirstExpPos = itemPos - 1;
-                mSecondExpPos = itemPos;
+                mFirstExpPos = fromRange(itemPos - 1, range);
+                mSecondExpPos = fromRange(itemPos, range);
                 mSlideFrac = 0.5f * ((float) (slideEdgeTop - mFloatViewMid)) / slideRgnHeightF;
                 // Log.d("mobeta",
                 // "firstExp="+mFirstExpPos+" secExp="+mSecondExpPos+" slideFrac="+mSlideFrac);
             } else if (mFloatViewMid < slideEdgeBottom) {
-                mFirstExpPos = itemPos;
-                mSecondExpPos = itemPos;
+                mFirstExpPos = fromRange(itemPos, range);
+                mSecondExpPos = fromRange(itemPos, range);
             } else {
-                mFirstExpPos = itemPos;
-                mSecondExpPos = itemPos + 1;
+                mFirstExpPos = fromRange(itemPos, range);
+                mSecondExpPos = fromRange(itemPos + 1, range);
                 mSlideFrac = 0.5f * (1.0f + ((float) (edgeBottom - mFloatViewMid))
                         / slideRgnHeightF);
                 // Log.d("mobeta",
@@ -1087,19 +1109,19 @@ public class DragSortListView extends ListView {
             }
 
         } else {
-            mFirstExpPos = itemPos;
-            mSecondExpPos = itemPos;
+            mFirstExpPos = fromRange(itemPos, range);
+            mSecondExpPos = fromRange(itemPos, range);
         }
 
         // correct for headers and footers
         if (mFirstExpPos < numHeaders) {
             itemPos = numHeaders;
-            mFirstExpPos = itemPos;
-            mSecondExpPos = itemPos;
+            mFirstExpPos = fromRange(itemPos, range);
+            mSecondExpPos = fromRange(itemPos, range);
         } else if (mSecondExpPos >= getCount() - numFooters) {
             itemPos = getCount() - numFooters - 1;
-            mFirstExpPos = itemPos;
-            mSecondExpPos = itemPos;
+            mFirstExpPos = fromRange(itemPos, range);
+            mSecondExpPos = fromRange(itemPos, range);
         }
 
         if (mFirstExpPos != oldFirstExpPos || mSecondExpPos != oldSecondExpPos
@@ -2212,6 +2234,9 @@ public class DragSortListView extends ListView {
         if (v == null) {
             return false;
         } else {
+            if (mDragRestrictor != null) {
+                v.setTag(mDragRestrictor.dragRange(position));
+            }
             return startDrag(position, v, dragFlags, deltaX, deltaY);
         }
 
