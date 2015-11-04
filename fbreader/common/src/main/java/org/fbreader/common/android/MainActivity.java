@@ -507,7 +507,7 @@ public abstract class MainActivity extends MDActivity {
 		final int dpi = getZLibrary().getDisplayDPI();
 		final int defaultFontSize = dpi * 18 / 160;
 		final int fontSize = new ZLIntegerOption("Style", "Base:fontSize", defaultFontSize).getValue();
-		final int percent = new ZLIntegerRangeOption("Options", "ToastFontSizePercent", 25, 100, 90).getValue();
+		final int percent = getReader().MiscOptions.ToastFontSizePercent.getValue();
 		final int dpFontSize = fontSize * 160 * percent / dpi / 100;
 		toast.setTextSize(dpFontSize);
 		toast.setButtonTextSize(dpFontSize * 7 / 8);
@@ -585,7 +585,7 @@ public abstract class MainActivity extends MDActivity {
 			public void run() {
 				final ImageView coverView = (ImageView)findViewById(R.id.main_drawer_cover);
 				final Bitmap bmp = myCoverBitmap;
-				if (bmp != null) {
+				if (bmp != null && getReader().MiscOptions.CoverAsMenuBackground.getValue()) {
 					coverView.setVisibility(View.VISIBLE);
 					coverView.setImageBitmap(bmp);
 				} else {

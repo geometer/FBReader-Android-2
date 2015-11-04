@@ -29,7 +29,7 @@ import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
 
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.book.IBookCollection;
-import org.geometerplus.fbreader.fbreader.options.SyncOptions;
+import org.fbreader.common.options.SyncOptions;
 
 public class SyncData {
 	public final static class ServerBookInfo {

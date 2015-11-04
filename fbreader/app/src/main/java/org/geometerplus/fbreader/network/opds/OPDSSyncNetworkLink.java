@@ -24,7 +24,8 @@ import org.geometerplus.zlibrary.core.network.QuietNetworkContext;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
-import org.geometerplus.fbreader.fbreader.options.SyncOptions;
+import org.fbreader.common.options.SyncOptions;
+
 import org.geometerplus.fbreader.network.ISyncNetworkLink;
 import org.geometerplus.fbreader.network.NetworkLibrary;
 import org.geometerplus.fbreader.network.sync.SyncUtil;

@@ -32,6 +32,8 @@ import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
 
+import org.fbreader.common.options.SyncOptions;
+
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.bookmodel.*;
 import org.geometerplus.fbreader.fbreader.options.*;
@@ -54,11 +56,9 @@ public final class FBReaderApp extends ZLApplication {
 		myExternalFileOpener = o;
 	}
 
-	public final MiscOptions MiscOptions = new MiscOptions();
 	public final ImageOptions ImageOptions = new ImageOptions();
 	public final ViewOptions ViewOptions = new ViewOptions();
 	public final PageTurningOptions PageTurningOptions = new PageTurningOptions();
-	public final SyncOptions SyncOptions = new SyncOptions();
 
 	private final ZLKeyBindings myBindings = new ZLKeyBindings();
 

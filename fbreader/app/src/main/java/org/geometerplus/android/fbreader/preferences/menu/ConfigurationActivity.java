@@ -39,7 +39,8 @@ import org.geometerplus.android.fbreader.MenuData;
 import org.geometerplus.android.fbreader.api.MenuNode;
 
 public class ConfigurationActivity extends MDListActivity {
-	private static final ZLResource myResource = ZLResource.resource("Preferences").getResource("menu");
+	private static final ZLResource myResource =
+		ZLResource.resource("Preferences").getResource("menu").getResource("items");
 	private static final ZLResource myMenuResource = ZLResource.resource("menu");
 
 	private final List<Item> myAllItems = new ArrayList<Item>();

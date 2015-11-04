@@ -46,6 +46,9 @@ import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.network.SQLiteCookieDatabase;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidPaintContext;
 
+import org.fbreader.common.options.MiscOptions;
+import org.fbreader.common.options.SyncOptions;
+
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.FBTextKind;
 import org.geometerplus.fbreader.fbreader.*;
@@ -183,6 +186,9 @@ public class PreferenceActivity extends MDSettingsActivity {
 					init(intent);
 					final Screen screen = myScreenMap.get(screenId);
 					setPreferenceScreen(screen != null ? screen.myScreen : myScreen);
+					if (screen != null) {
+						setTitle(screen.Resource.getValue());
+					}
 				}
 			});
 		}
@@ -834,7 +840,12 @@ public class PreferenceActivity extends MDSettingsActivity {
 			imagesScreen.addOption(imageOptions.ImageViewBackground, "backgroundColor");
 			imagesScreen.addOption(imageOptions.MatchBackground, "matchBackground");
 
-			addPreference(new MenuPreference(PreferenceActivity.this, Resource.getResource("menu")));
+			final Screen menuScreen = createPreferenceScreen("menu");
+			menuScreen.addPreference(new MenuPreference(
+				PreferenceActivity.this,
+				menuScreen.Resource.getResource("items"))
+			);
+			menuScreen.addOption(miscOptions.CoverAsMenuBackground, "backgroundCover");
 
 			final CancelMenuHelper cancelMenuHelper = new CancelMenuHelper();
 			final Screen cancelMenuScreen = createPreferenceScreen("cancelMenu");
