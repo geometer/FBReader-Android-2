@@ -34,6 +34,7 @@ import org.geometerplus.zlibrary.text.view.*;
 import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 
 import org.fbreader.common.options.MiscOptions;
+import org.fbreader.common.options.PageTurningOptions;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.FBHyperlinkType;
