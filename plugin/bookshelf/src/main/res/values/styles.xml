@@ -51,10 +51,8 @@
 	</style>
 	<style name="Theme.Library.Light" parent="@style/Theme.AppCompat.Light.NoActionBar">
 		<item name="android:colorPrimary">?colorPrimary</item>
-    <item name="android:colorControlNormal">?colorAccent</item>
     <item name="android:colorControlHighlight">?colorAccent</item>
     <item name="android:colorControlActivated">?colorAccent</item>
-    <item name="colorControlNormal">?colorAccent</item>
     <item name="colorControlHighlight">?colorAccent</item>
     <item name="colorControlActivated">?colorAccent</item>
 		<item name="android:textViewStyle">@style/Library.TextView</item>
@@ -78,10 +76,8 @@
 		<item name="colorPrimaryDrawable">@drawable/grey_900</item>
 		<item name="android:colorPrimaryDark">@android:color/black</item>
 		<item name="colorAccent">@color/grey_700</item>
-    <item name="android:colorControlNormal">?colorAccent</item>
     <item name="android:colorControlHighlight">?colorAccent</item>
     <item name="android:colorControlActivated">?colorAccent</item>
-    <item name="colorControlNormal">?colorAccent</item>
     <item name="colorControlHighlight">?colorAccent</item>
     <item name="colorControlActivated">?colorAccent</item>
 		<item name="android:textViewStyle">@style/Library.TextView</item>
@@ -141,10 +137,8 @@
 	</style>
 	<style name="Theme.Library.Light.Dialog" parent="@style/Theme.AppCompat.Light.Dialog">
 		<item name="android:colorPrimary">?colorPrimary</item>
-    <item name="android:colorControlNormal">?colorAccent</item>
     <item name="android:colorControlHighlight">?colorAccent</item>
     <item name="android:colorControlActivated">?colorAccent</item>
-    <item name="colorControlNormal">?colorAccent</item>
     <item name="colorControlHighlight">?colorAccent</item>
     <item name="colorControlActivated">?colorAccent</item>
 		<item name="android:textColorHint">@color/light_text_hint</item>
@@ -166,10 +160,8 @@
 		<item name="colorPrimaryDrawable">@drawable/grey_900</item>
 		<item name="android:colorPrimaryDark">@android:color/black</item>
 		<item name="colorAccent">@color/grey_700</item>
-		<item name="android:colorControlNormal">?colorAccent</item>
 		<item name="android:colorControlActivated">?colorAccent</item>
 		<item name="android:colorControlHighlight">?colorAccent</item>
-    <item name="colorControlNormal">?colorAccent</item>
     <item name="colorControlActivated">?colorAccent</item>
     <item name="colorControlHighlight">?colorAccent</item>
 		<item name="mainTextColor">@color/dark_text_main</item>
