@@ -740,6 +740,8 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow 
 	}
 
 	void hideBars() {
+		closeDrawer();
+
 		if (myNavigationPopup != null) {
 			myNavigationPopup.stopNavigation();
 			myNavigationPopup = null;

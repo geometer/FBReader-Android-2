@@ -135,7 +135,7 @@ public abstract class MainActivity extends MDActivity {
 		myDrawerToolbar = (Toolbar)findViewById(R.id.main_drawer_toolbar);
 		myDrawerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				myDrawerLayout.closeDrawer(GravityCompat.START);
+				closeDrawer();
 			}
 		});
 		myDrawerToggle = new ActionBarDrawerToggle(
@@ -143,6 +143,10 @@ public abstract class MainActivity extends MDActivity {
 		);
 		myDrawerLayout.setDrawerListener(myDrawerToggle);
 		myDrawerLayout.setDrawerShadow(R.drawable.shadow_right_6dp, GravityCompat.START);
+	}
+
+	protected final void closeDrawer() {
+		myDrawerLayout.closeDrawer(GravityCompat.START);
 	}
 
 	@Override
@@ -234,7 +238,7 @@ public abstract class MainActivity extends MDActivity {
 			final MenuNode node = getItem(position);
 			if (node != null) {
 				getReader().runAction(node.Code);
-				myDrawerLayout.closeDrawer(GravityCompat.START);
+				closeDrawer();
 			}
 		}
 	};
@@ -430,7 +434,7 @@ public abstract class MainActivity extends MDActivity {
 
 	@Override
 	protected void onPause() {
-		myDrawerLayout.closeDrawer(GravityCompat.START);
+		closeDrawer();
 
 		try {
 			unregisterReceiver(myBatteryInfoReceiver);
