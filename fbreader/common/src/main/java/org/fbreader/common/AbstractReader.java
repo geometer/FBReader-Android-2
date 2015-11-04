@@ -22,8 +22,7 @@ package org.fbreader.common;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.fbreader.common.options.MiscOptions;
-import org.fbreader.common.options.SyncOptions;
+import org.fbreader.common.options.*;
 import org.fbreader.util.Boolean3;
 
 import org.geometerplus.fbreader.book.Book;
@@ -62,6 +61,7 @@ public abstract class AbstractReader {
 	private final HashMap<String,Action> myIdToActionMap = new HashMap<String,Action>();
 
 	public final MiscOptions MiscOptions = new MiscOptions();
+	public final PageTurningOptions PageTurningOptions = new PageTurningOptions();
 	public final SyncOptions SyncOptions = new SyncOptions();
 
 	public final void addAction(String actionId, Action action) {
