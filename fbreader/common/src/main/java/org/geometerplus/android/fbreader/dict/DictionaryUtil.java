@@ -36,7 +36,7 @@ import org.geometerplus.zlibrary.core.options.ZLEnumOption;
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
 import org.geometerplus.zlibrary.core.util.XmlUtil;
 
-import org.geometerplus.fbreader.fbreader.DurationEnum;
+import org.fbreader.common.DurationEnum;
 import org.fbreader.common.android.MainActivity;
 import org.geometerplus.android.util.PackageUtil;
 

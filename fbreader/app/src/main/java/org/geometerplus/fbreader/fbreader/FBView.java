@@ -33,6 +33,8 @@ import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
 import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 
+import org.fbreader.common.options.MiscOptions;
+
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.FBHyperlinkType;
 import org.geometerplus.fbreader.bookmodel.TOCTree;

@@ -30,7 +30,8 @@ import org.geometerplus.zlibrary.core.options.*;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.*;
 
-import org.geometerplus.fbreader.fbreader.options.SyncOptions;
+import org.fbreader.common.options.SyncOptions;
+
 import org.geometerplus.fbreader.tree.FBTree;
 import org.geometerplus.fbreader.network.opds.OPDSSyncNetworkLink;
 import org.geometerplus.fbreader.network.opds.OPDSLinkReader;
