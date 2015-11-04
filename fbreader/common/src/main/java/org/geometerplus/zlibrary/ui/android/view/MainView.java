@@ -23,12 +23,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
 import org.fbreader.common.android.MainActivity;
+import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 
 import org.fbreader.common.R;
 
@@ -53,7 +55,7 @@ public abstract class MainView extends View {
 	/* ++++ INFO ++++ */
 	protected final void showInfo(final String text) {
 		if (myInfoView == null) {
-			myInfoView = (TextView)((MainActivity)getContext()).findViewById(R.id.main_view_info);
+			myInfoView = (TextView)getActivity().findViewById(R.id.main_view_info);
 		}
 		if (myInfoView == null) {
 			return;
@@ -95,10 +97,7 @@ public abstract class MainView extends View {
 			percent = 100;
 		}
 
-		final Context context = getContext();
-		if (!(context instanceof MainActivity)) {
-			return;
-		}
+		final MainActivity activity = getActivity();
 
 		final float level;
 		final Integer oldColorLevel = myColorLevel;
@@ -111,7 +110,6 @@ public abstract class MainView extends View {
 			myColorLevel = 0x60 + (0xFF - 0x60) * Math.max(percent, 0) / 25;
 		}
 
-		final MainActivity activity = (MainActivity)context;
 		activity.getZLibrary().ScreenBrightnessLevelOption.setValue(percent);
 		if (showPercent) {
 			showInfo(percent + "%");
@@ -128,11 +126,7 @@ public abstract class MainView extends View {
 			return (myColorLevel - 0x60) * 25 / (0xFF - 0x60);
 		}
 
-		final Context context = getContext();
-		if (!(context instanceof MainActivity)) {
-			return 50;
-		}
-		final float level = ((MainActivity)context).getScreenBrightnessSystem();
+		final float level = getActivity().getScreenBrightnessSystem();
 		// level = .01f + (percent - 25) * .99f / 75;
 		return 25 + (int)((level - .01f) * 75 / .99f);
 	}
@@ -151,6 +145,21 @@ public abstract class MainView extends View {
 		myBatteryLevel = percent;
 	}
 	/* ---- BATTERY ---- */
+
+	private MainActivity getActivity() {
+		Context context = getContext();
+		while (context instanceof ContextWrapper) {
+			if (context instanceof MainActivity) {
+				return (MainActivity)context;
+			}
+			context = ((ContextWrapper)context).getBaseContext();
+		}
+		throw new RuntimeException("MainView outside of MainActivity");
+	}
+
+	public ZLAndroidLibrary getZLibrary() {
+		return getActivity().getZLibrary();
+	}
 
 	public abstract void setPreserveSize(boolean preserve);
 }
