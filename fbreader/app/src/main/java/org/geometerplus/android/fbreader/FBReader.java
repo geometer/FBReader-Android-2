@@ -928,10 +928,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow 
 			return false;
 		}
 
-		final Intent premiumIntent = new Intent().setComponent(new ComponentName(
-			"com.fbreader",
-			"com.fbreader.android.fbreader.FBReader"
-		));
+		final Intent premiumIntent = FBReaderUtil.premiumIntent();
 		if (!PackageUtil.canBeStarted(this, premiumIntent, false)) {
 			return false;
 		}
@@ -960,7 +957,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow 
 	}
 
 	private void showPremiumDialog() {
-		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			return;
 		}
 

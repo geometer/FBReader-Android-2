@@ -21,6 +21,8 @@ package org.geometerplus.android.fbreader;
 
 import java.util.*;
 
+import android.os.Build;
+
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
 
@@ -42,6 +44,7 @@ public abstract class MenuData {
 
 	private static final String CONFIG_CODE_DAY_NIGHT = "dayNight";
 	private static final String CONFIG_CODE_CHANGE_FONT_SIZE = "changeFontSize";
+	private static final String CONFIG_CODE_PREMIUM = "premium";
 
 	public enum Location {
 		bookMenuUpperSection(0),
@@ -187,6 +190,20 @@ public abstract class MenuData {
 			addToplevelNode(new MenuNode.Item(ActionCode.SHOW_WHATSNEW_DIALOG, R.drawable.ic_menu_whatsnew), Location.mainMenu);
 			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_WEB_HELP, R.drawable.ic_menu_help), Location.mainMenu);
 			addToplevelNode(new MenuNode.Item(ActionCode.OPEN_START_SCREEN, R.drawable.ic_menu_home), Location.mainMenu);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				addToplevelNode(
+					new MenuNode.Item(ActionCode.INSTALL_PREMIUM, R.drawable.ic_menu_premium),
+					CONFIG_CODE_PREMIUM,
+					Location.mainMenu,
+					Location.GroupAny
+				);
+				addToplevelNode(
+					new MenuNode.Item(ActionCode.OPEN_PREMIUM, R.drawable.ic_menu_premium),
+					CONFIG_CODE_PREMIUM,
+					Location.mainMenu,
+					Location.GroupAny
+				);
+			}
 			ourNodes = Collections.unmodifiableList(ourNodes);
 		}
 		return ourNodes;
