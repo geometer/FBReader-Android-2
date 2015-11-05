@@ -22,15 +22,15 @@ package org.geometerplus.android.fbreader;
 import java.io.File;
 import java.util.List;
 
-import android.annotation.TargetApi;
-import android.os.Build;
+import android.content.DialogInterface;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.PopupWindow;
+import android.support.v7.app.AlertDialog;
 import android.widget.*;
+
+import org.fbreader.md.MDAlertDialogBuilder;
 
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.network.QuietNetworkContext;
@@ -56,21 +56,13 @@ class DisplayBookPopupAction extends FBReader.Action<FBReader,FBReaderApp> {
 		super(baseActivity);
 	}
 
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	private void setShadow(PopupWindow popup) {
-		popup.setElevation(TypedValue.applyDimension(
-			TypedValue.COMPLEX_UNIT_DIP, 14, BaseActivity.getResources().getDisplayMetrics()
-		));
-	}
-
-	private void openBook(final PopupWindow popup, final Book book) {
+	private void openBook(final Book book) {
 		if (book == null) {
 			return;
 		}
 
 		BaseActivity.runOnUiThread(new Runnable() {
 			public void run() {
-				popup.dismiss();
 				Reader.openBook(book, null, null, null);
 			}
 		});
@@ -95,26 +87,9 @@ class DisplayBookPopupAction extends FBReader.Action<FBReader,FBReaderApp> {
 		}
 
 		final View mainView = (View)BaseActivity.getViewWidget();
-		final View bookView = BaseActivity.getLayoutInflater().inflate(
-			ColorProfile.NIGHT.equals(Reader.ViewOptions.ColorProfileName.getValue())
-				? R.layout.book_popup_night : R.layout.book_popup,
-			null
-		);
-		FBReaderUtil.ensureFullscreen(BaseActivity, bookView);
-		final int inch = (int)TypedValue.applyDimension(
-			TypedValue.COMPLEX_UNIT_IN, 1, BaseActivity.getResources().getDisplayMetrics()
-		);
-		final PopupWindow popup = new PopupWindow(
-			bookView,
-			Math.min(4 * inch, mainView.getWidth() * 9 / 10),
-			Math.min(3 * inch, mainView.getHeight() * 9 / 10)
-		);
-		popup.setFocusable(true);
-		popup.setOutsideTouchable(true);
+		FBReaderUtil.ensureFullscreen(BaseActivity, mainView);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			setShadow(popup);
-		}
+		final View bookView = BaseActivity.getLayoutInflater().inflate(R.layout.book_popup, null);
 
 		final ImageView coverView = (ImageView)bookView.findViewById(R.id.book_popup_cover);
 		if (coverView != null) {
@@ -126,37 +101,29 @@ class DisplayBookPopupAction extends FBReader.Action<FBReader,FBReaderApp> {
 
 		final OPDSBookItem item = element.getItem();
 
-		final TextView headerView = (TextView)bookView.findViewById(R.id.book_popup_header_text);
-		final StringBuilder text = new StringBuilder();
-		for (OPDSBookItem.AuthorData author : item.Authors) {
-			text.append("<p><i>").append(author.DisplayName).append("</i></p>");
-		}
-		text.append("<h3>").append(item.Title).append("</h3>");
-		headerView.setText(Html.fromHtml(text.toString()));
-
-		final TextView descriptionView = (TextView)bookView.findViewById(R.id.book_popup_description_text);
+		final TextView descriptionView = (TextView)bookView.findViewById(R.id.book_popup_description);
 		descriptionView.setText(item.getSummary());
 		descriptionView.setMovementMethod(new LinkMovementMethod());
 
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		final View buttonsView = bookView.findViewById(R.id.book_popup_buttons);
+		final String downloadText;
+		final DialogInterface.OnClickListener downloadListener;
 
-		final Button downloadButton = (Button)buttonsView.findViewById(R.id.ok_button);
-		downloadButton.setText(buttonResource.getResource("download").getValue());
+		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
 		final List<UrlInfo> infos = item.getAllInfos(UrlInfo.Type.Book);
 		if (infos.isEmpty() || !(infos.get(0) instanceof BookUrlInfo)) {
-			downloadButton.setEnabled(false);
+			downloadText = buttonResource.getResource("cancel").getValue();
+			downloadListener = null;
 		} else {
 			final BookUrlInfo bookInfo = (BookUrlInfo)infos.get(0);
 			final String fileName = bookInfo.makeBookFileName(UrlInfo.Type.Book);
 			final Book book = Reader.Collection.getBookByFile(fileName);
 			if (book != null) {
-				downloadButton.setText(buttonResource.getResource("openBook").getValue());
-				downloadButton.setOnClickListener(new Button.OnClickListener() {
-					public void onClick(View v) {
-						openBook(popup, book);
+				downloadText = buttonResource.getResource("openBook").getValue();
+				downloadListener = new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						openBook(book);
 					}
-				});
+				};
 			} else {
 				final File file = new File(fileName);
 				if (file.exists()) {
@@ -165,15 +132,16 @@ class DisplayBookPopupAction extends FBReader.Action<FBReader,FBReaderApp> {
 				if (!file.getParentFile().exists()) {
 					file.getParentFile().mkdirs();
 				}
-				downloadButton.setOnClickListener(new Button.OnClickListener() {
-					public void onClick(View v) {
+				downloadText = buttonResource.getResource("download").getValue();
+				downloadListener = new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
 						UIUtil.wait(
 							"downloadingBook", item.Title.toString(),
 							new Runnable() {
 								public void run() {
 									try {
 										new QuietNetworkContext().downloadToFile(bookInfo.Url, file);
-										openBook(popup, Reader.Collection.getBookByFile(fileName));
+										openBook(Reader.Collection.getBookByFile(fileName));
 									} catch (ZLNetworkException e) {
 										UIMessageUtil.showErrorMessage(BaseActivity, "downloadFailed");
 										e.printStackTrace();
@@ -183,33 +151,32 @@ class DisplayBookPopupAction extends FBReader.Action<FBReader,FBReaderApp> {
 							BaseActivity
 						);
 					}
-				});
+				};
 			}
 		}
 
-		final Button cancelButton = (Button)buttonsView.findViewById(R.id.cancel_button);
-		cancelButton.setText(buttonResource.getResource("cancel").getValue());
-		cancelButton.setOnClickListener(new Button.OnClickListener() {
-			public void onClick(View v) {
-				popup.dismiss();
+		final StringBuilder subtitle = new StringBuilder();
+		boolean first = true;
+		for (OPDSBookItem.AuthorData author : item.Authors) {
+			if (first) {
+				first = false;
+			} else {
+				subtitle.append(", ");
 			}
-		});
-
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			downloadButton.setTextColor(0xFF777777);
-			cancelButton.setTextColor(0xFF777777);
+			subtitle.append(author.DisplayName);
 		}
-
-		popup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-			public void onDismiss() {
-				BaseActivity.runOnUiThread(new Runnable() {
-					public void run() {
-						BaseActivity.hideBars();
-					}
-				});
-			}
-		});
-
-		popup.showAtLocation(BaseActivity.getCurrentFocus(), Gravity.CENTER, 0, 0);
+		final AlertDialog dialog = new MDAlertDialogBuilder(BaseActivity)
+			.setTitleAndSubtitle(item.Title, subtitle)
+			.setView(bookView)
+			.setPositiveButton(downloadText, downloadListener)
+			.create();
+		final int inch = (int)TypedValue.applyDimension(
+			TypedValue.COMPLEX_UNIT_IN, 1, BaseActivity.getResources().getDisplayMetrics()
+		);
+		dialog.getWindow().setLayout(
+			Math.min(4 * inch, mainView.getWidth() * 9 / 10),
+			Math.min(3 * inch, mainView.getHeight() * 9 / 10)
+		);
+		dialog.show();
 	}
 }
