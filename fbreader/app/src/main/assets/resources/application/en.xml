@@ -819,9 +819,9 @@
 			</node>
 		</node>
 		<node name="menu" value="Menu">
-			<node name="summary" value="Configure reading mode menus"/>
-			<node name="backgroundCover" value="Book menu background">
-				<node name="summaryOn" value="Use book cover as background"/>
+			<node name="summary" value="Configure main screen menu"/>
+			<node name="backgroundCover" value="Use book cover as background">
+				<node name="summaryOn" value="Show cover in the book menu"/>
 				<node name="summaryOff" value="Keep background clear"/>
 			</node>
 			<node name="bookMenuStatusItem" value="Status item">
