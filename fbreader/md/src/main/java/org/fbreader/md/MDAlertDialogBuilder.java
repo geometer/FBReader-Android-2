@@ -44,6 +44,17 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 		return this;
 	}
 
+	public MDAlertDialogBuilder setTitleAndSubtitle(CharSequence title, CharSequence subtitle) {
+		if (subtitle == null && subtitle.length() > 0) {
+			setTitle(title);
+		} else {
+			createTwoLineToolbar();
+			myToolbar.setTitle(title);
+			myToolbar.setSubtitle(subtitle);
+		}
+		return this;
+	}
+
 	@Override
 	public MDAlertDialogBuilder setTitle(int titleId) {
 		createToolbar();
@@ -93,5 +104,11 @@ public class MDAlertDialogBuilder extends AlertDialog.Builder {
 			setCustomTitle(myToolbar);
 			myToolbar.setTitleTextAppearance(getContext(), R.style.FBReaderMD_TextAppearance_TitleOnly);
 		}
+	}
+
+	private void createTwoLineToolbar() {
+		createToolbar();
+		myToolbar.setTitleTextAppearance(getContext(), R.style.FBReaderMD_TextAppearance_Title);
+		myToolbar.setSubtitleTextAppearance(getContext(), R.style.FBReaderMD_TextAppearance_Subtitle);
 	}
 }
