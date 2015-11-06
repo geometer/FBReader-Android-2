@@ -408,6 +408,8 @@ public abstract class MainActivity extends MDActivity {
 		reader.addAction(ActionCode.SHARE_BOOK, new ShareBookAction(this));
 		reader.addAction(ActionCode.OPEN_WEB_HELP, new OpenWebHelpAction(this));
 		reader.addAction(ActionCode.SHOW_WHATSNEW_DIALOG, new ShowWhatsNewDialogAction(this));
+		reader.addAction(ActionCode.INSTALL_PREMIUM, new ShowPremiumDialogAction(this, false));
+		reader.addAction(ActionCode.OPEN_PREMIUM, new ShowPremiumDialogAction(this, true));
 	}
 
 	@Override

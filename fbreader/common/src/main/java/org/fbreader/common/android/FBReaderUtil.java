@@ -24,8 +24,7 @@ import java.io.*;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
+import android.content.*;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
@@ -179,5 +178,12 @@ public abstract class FBReaderUtil {
 		} catch (ActivityNotFoundException e) {
 			// TODO: show toast
 		}
+	}
+
+	public static Intent premiumIntent() {
+		return new Intent().setComponent(new ComponentName(
+			"com.fbreader",
+			"com.fbreader.android.fbreader.FBReader"
+		));
 	}
 }
