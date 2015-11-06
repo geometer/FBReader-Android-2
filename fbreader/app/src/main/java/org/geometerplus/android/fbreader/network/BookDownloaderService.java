@@ -50,7 +50,7 @@ public class BookDownloaderService extends Service {
 	public interface Key {
 		String FROM_SYNC = "fbreader.downloader.from.sync";
 		String BOOK_TITLE = "fbreader.downloader.book.title";
-		String BOOK_KIND = "fbreader.downloader.book.kind";
+		String BOOK_KIND = "fbreader.downloader.book.urlkind";
 		String BOOK_MIME = "fbreader.downloader.book.mime";
 		String CLEAN_URL = "fbreader.downloader.clean.url";
 		String SHOW_NOTIFICATIONS = "fbreader.downloader.show.notifications";
@@ -125,9 +125,11 @@ public class BookDownloaderService extends Service {
 
 		final String url = uri.toString();
 		final MimeType mime = MimeType.get(intent.getStringExtra(Key.BOOK_MIME));
-		UrlInfo.Type referenceType = (UrlInfo.Type)intent.getSerializableExtra(Key.BOOK_KIND);
-		if (referenceType == null) {
-			referenceType = UrlInfo.Type.Book;
+		UrlInfo.Type referenceType = UrlInfo.Type.Book;
+		try {
+			referenceType = UrlInfo.Type.valueOf(intent.getStringExtra(Key.BOOK_KIND));
+		} catch (Throwable t) {
+			// ignore
 		}
 
 		String cleanURL = intent.getStringExtra(Key.CLEAN_URL);

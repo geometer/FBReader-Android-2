@@ -73,7 +73,7 @@ class AppNotifier implements FBReaderApp.Notifier {
 			.setData(uri)
 			.putExtra(BookDownloaderService.Key.FROM_SYNC, true)
 			.putExtra(BookDownloaderService.Key.BOOK_MIME, info.Mimetype)
-			.putExtra(BookDownloaderService.Key.BOOK_KIND, UrlInfo.Type.Book)
+			.putExtra(BookDownloaderService.Key.BOOK_KIND, UrlInfo.Type.Book.name())
 			.putExtra(BookDownloaderService.Key.BOOK_TITLE, info.Title)
 			.putExtra(BookDownloaderService.Key.NOTIFICATION_TO_DISMISS_ID, nId);
 	}
