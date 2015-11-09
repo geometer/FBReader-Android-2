@@ -34,13 +34,11 @@ import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.formats.PluginCollection;
 
 import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.common.android.FBSettingsActivity;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.android.util.OrientationUtil;
 
-import org.fbreader.md.MDSettingsActivity;
-
-public class EditBookInfoActivity extends MDSettingsActivity implements MenuItem.OnMenuItemClickListener, IBookCollection.Listener<Book> {
+public class EditBookInfoActivity extends FBSettingsActivity implements MenuItem.OnMenuItemClickListener, IBookCollection.Listener<Book> {
 	private class EditBookInfoFragment extends PreferenceFragment {
 		@Override
 		public void onCreate(Bundle bundle) {
@@ -90,7 +88,6 @@ public class EditBookInfoActivity extends MDSettingsActivity implements MenuItem
 	@Override
 	protected void onStart() {
 		super.onStart();
-		OrientationUtil.setOrientation(this, getIntent());
 
 		myCollection.bindToService(this, new Runnable() {
 			public void run() {
@@ -105,11 +102,6 @@ public class EditBookInfoActivity extends MDSettingsActivity implements MenuItem
 		myCollection.removeListener(this);
 		myCollection.unbind();
 		super.onStop();
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
 	}
 
 	@Override

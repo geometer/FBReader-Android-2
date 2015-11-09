@@ -27,7 +27,6 @@ import org.fbreader.md.MDAlertDialogBuilder;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.android.util.OrientationUtil;
 import org.geometerplus.fbreader.book.Book;
 
 import org.fbreader.plugin.library.prefs.SettingsActivity;
@@ -444,7 +443,7 @@ public final class LibraryActivity extends FullActivity {
 			return true;
 		} else if (itemId == R.id.bks_library_menu_old_view) {
 			try {
-				OrientationUtil.startActivity(this, FBReaderIntents.internalIntent(FBReaderIntents.Action.LIBRARY));
+				startActivity(FBReaderIntents.internalIntent(FBReaderIntents.Action.LIBRARY));
 				finish();
 			} catch (ActivityNotFoundException e) {
 				showMissingFBReaderDialog();
@@ -466,7 +465,7 @@ public final class LibraryActivity extends FullActivity {
 			}
 			return true;
 		} else if (itemId == R.id.bks_library_menu_settings) {
-			OrientationUtil.startActivityForResult(this, new Intent(this, SettingsActivity.class), SETTINGS_CODE);
+			startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_CODE);
 			return true;
 		} else if (itemId == R.id.bks_library_menu_buy_premium) {
 			showPremiumDialog();

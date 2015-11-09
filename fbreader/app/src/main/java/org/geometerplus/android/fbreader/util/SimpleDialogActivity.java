@@ -27,9 +27,9 @@ import android.widget.TextView;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 
-public abstract class SimpleDialogActivity extends MDActivity {
+public abstract class SimpleDialogActivity extends FBActivity {
 	private TextView myTextView;
 	private View myButtonsView;
 	private Button myOkButton;

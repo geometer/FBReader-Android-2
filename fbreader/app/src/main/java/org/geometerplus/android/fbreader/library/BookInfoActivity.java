@@ -40,7 +40,7 @@ import org.geometerplus.zlibrary.core.language.Language;
 import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 import org.fbreader.common.android.FBReaderUtil;
 
 import org.geometerplus.zlibrary.ui.android.R;
@@ -58,9 +58,8 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.book.EditBookInfoActivity;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
-import org.geometerplus.android.util.OrientationUtil;
 
-public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemClickListener, IBookCollection.Listener<Book> {
+public class BookInfoActivity extends FBActivity implements MenuItem.OnMenuItemClickListener, IBookCollection.Listener<Book> {
 	private static final boolean ENABLE_EXTENDED_FILE_INFO = false;
 
 	public static final String FROM_READING_MODE_KEY = "fbreader.from.reading.mode";
@@ -96,8 +95,6 @@ public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemC
 	protected void onStart() {
 		super.onStart();
 
-		OrientationUtil.setOrientation(this, getIntent());
-
 		final PluginCollection pluginCollection =
 			PluginCollection.Instance(Paths.systemInfo(this));
 
@@ -117,11 +114,6 @@ public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemC
 
 		myCollection.bindToService(this, null);
 		myCollection.addListener(this);
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
 	}
 
 	@Override
@@ -347,7 +339,7 @@ public class BookInfoActivity extends MDActivity implements MenuItem.OnMenuItemC
 				final Intent intent =
 					new Intent(getApplicationContext(), EditBookInfoActivity.class);
 				FBReaderIntents.putBookExtra(intent, myBook);
-				OrientationUtil.startActivity(this, intent);
+				startActivity(intent);
 				return true;
 			}
 			case SHARE_BOOK:

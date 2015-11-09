@@ -6,31 +6,18 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 
-import org.geometerplus.android.util.OrientationUtil;
-
-public abstract class FullActivity extends MDActivity {
+public abstract class FullActivity extends FBActivity {
 	private volatile int myThemeId;
 	private volatile boolean myThemeIsDark;
 
 	@Override
 	protected void onPreCreate() {
+		super.onPreCreate();
 		myThemeId = ActivityUtil.setup(this, false);
 		myThemeIsDark =
 			getTheme().obtainStyledAttributes(new int[] {R.attr.isThemeDark}).getBoolean(0, false);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		OrientationUtil.setOrientation(this, getIntent());
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
-		super.onNewIntent(intent);
 	}
 
 	public final boolean applyTheme() {

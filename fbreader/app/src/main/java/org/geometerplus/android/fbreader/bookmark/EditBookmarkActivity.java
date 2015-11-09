@@ -38,7 +38,7 @@ import android.widget.*;
 
 import yuku.ambilwarna.widget.AmbilWarnaPrefWidgetView;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 import org.fbreader.util.android.ViewUtil;
 
 import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
@@ -50,7 +50,7 @@ import org.geometerplus.fbreader.book.*;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
-public class EditBookmarkActivity extends MDActivity implements IBookCollection.Listener<Book> {
+public class EditBookmarkActivity extends FBActivity implements IBookCollection.Listener<Book> {
 	private TabLayout myTabLayout;
 	private ViewPager myViewPager;
 

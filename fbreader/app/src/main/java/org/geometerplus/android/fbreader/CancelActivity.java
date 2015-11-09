@@ -26,7 +26,7 @@ import android.os.Bundle;
 import android.widget.*;
 import android.view.*;
 
-import org.fbreader.md.MDListActivity;
+import org.fbreader.common.android.FBListActivity;
 import org.fbreader.util.android.ViewUtil;
 import org.fbreader.common.android.FBReaderUtil;
 
@@ -39,7 +39,7 @@ import org.geometerplus.fbreader.fbreader.options.CancelMenuHelper;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
-public class CancelActivity extends MDListActivity {
+public class CancelActivity extends FBListActivity {
 	private BookCollectionShadow myCollection;
 
 	@Override

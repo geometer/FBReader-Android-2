@@ -31,9 +31,9 @@ import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.tips.*;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 
-public class TipsActivity extends MDActivity {
+public class TipsActivity extends FBActivity {
 	public static final String INITIALIZE_ACTION = "android.fbreader.action.tips.INITIALIZE";
 	public static final String SHOW_TIP_ACTION = "android.fbreader.action.tips.SHOW_TIP";
 

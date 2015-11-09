@@ -142,7 +142,7 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 	private void showBookInfo(Book book) {
 		final Intent intent = new Intent(getApplicationContext(), BookInfoActivity.class);
 		FBReaderIntents.putBookExtra(intent, book);
-		OrientationUtil.startActivity(this, intent);
+		startActivity(intent);
 	}
 
 	//

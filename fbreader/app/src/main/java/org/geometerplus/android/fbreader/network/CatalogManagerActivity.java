@@ -29,7 +29,7 @@ import android.widget.*;
 
 import com.mobeta.android.dslv.DragSortListView;
 
-import org.fbreader.md.MDListActivity;
+import org.fbreader.common.android.FBListActivity;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 
@@ -40,7 +40,7 @@ import org.geometerplus.android.fbreader.covers.CoverManager;
 
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 
-public class CatalogManagerActivity extends MDListActivity {
+public class CatalogManagerActivity extends FBListActivity {
 	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
 
 	private final List<Item> myAllItems = new ArrayList<Item>();

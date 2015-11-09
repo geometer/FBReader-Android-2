@@ -33,11 +33,11 @@ import org.geometerplus.fbreader.book.HighlightingStyle;
 
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.fbreader.md.MDEditTextPreference;
-import org.fbreader.md.MDSettingsActivity;
+import org.fbreader.common.android.FBSettingsActivity;
 import org.geometerplus.android.fbreader.preferences.*;
 import org.geometerplus.zlibrary.ui.android.R;
 
-public class EditStyleActivity extends MDSettingsActivity {
+public class EditStyleActivity extends FBSettingsActivity {
 	static final String STYLE_ID_KEY = "style.id";
 
 	private final ZLResource myRootResource = ZLResource.resource("editStyle");

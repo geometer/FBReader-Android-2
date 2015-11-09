@@ -35,7 +35,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
 
-import org.fbreader.md.MDActivity;
 import org.fbreader.md.MDAlertDialogBuilder;
 import org.fbreader.util.Boolean3;
 import org.fbreader.util.Pair;
@@ -63,7 +62,6 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.api.MenuNode;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
-import org.geometerplus.android.util.OrientationUtil;
 
 import org.fbreader.common.R;
 
@@ -71,7 +69,7 @@ import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.formats.IFormatPluginCollection;
 
-public abstract class MainActivity extends MDActivity {
+public abstract class MainActivity extends FBActivity {
 	public static final int REQUEST_PREFERENCES = 1;
 	public static final int REQUEST_CANCEL_MENU = 2;
 	public static final int REQUEST_DICTIONARY = 3;
@@ -668,7 +666,7 @@ public abstract class MainActivity extends MDActivity {
 				final Intent intent =
 					FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.EDIT_BOOKMARK);
 				FBReaderIntents.putBookmarkExtra(intent, bookmark);
-				OrientationUtil.startActivity(MainActivity.this, intent);
+				startActivity(intent);
 			}
 		}));
 		showToast(toast);

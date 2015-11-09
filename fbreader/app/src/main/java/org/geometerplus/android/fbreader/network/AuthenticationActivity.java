@@ -41,8 +41,9 @@ import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.android.util.UIUtil;
 
 import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 
-public class AuthenticationActivity extends MDActivity {
+public class AuthenticationActivity extends FBActivity {
 	private static final Map<Long,Runnable> ourOnSuccessRunnableMap =
 		Collections.synchronizedMap(new HashMap<Long,Runnable>());
 	private static volatile long ourNextCode;

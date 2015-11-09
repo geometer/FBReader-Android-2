@@ -34,7 +34,6 @@ import com.google.android.gms.common.*;
 
 import org.geometerplus.zlibrary.core.network.*;
 import org.geometerplus.android.fbreader.network.NetworkLibraryActivity;
-import org.geometerplus.android.util.OrientationUtil;
 
 public final class ActivityNetworkContext extends AndroidNetworkContext {
 	private final Activity myActivity;
@@ -151,7 +150,7 @@ public final class ActivityNetworkContext extends AndroidNetworkContext {
 
 	private void startActivityAndWait(Intent intent, int requestCode) {
 		synchronized (this) {
-			OrientationUtil.startActivityForResult(myActivity, intent, requestCode);
+			myActivity.startActivityForResult(intent, requestCode);
 			try {
 				wait();
 			} catch (InterruptedException e) {

@@ -11,9 +11,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.EditText;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 
-public class CreateShelfActivity extends MDActivity {
+public class CreateShelfActivity extends FBActivity {
 	static final String NEW_SHELF_TITLE_KEY = "fbreader.new.shelf_title";
 
 	private volatile TextView myOkButton;
@@ -22,6 +22,7 @@ public class CreateShelfActivity extends MDActivity {
 
 	@Override
 	protected void onPreCreate() {
+		super.onPreCreate();
 		ActivityUtil.setup(this, true);
 	}
 

@@ -32,7 +32,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.network.SQLiteCookieDatabase;
 
@@ -45,7 +45,7 @@ import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 import org.geometerplus.android.util.UIUtil;
 
 
-public class AddCustomCatalogActivity extends MDActivity {
+public class AddCustomCatalogActivity extends FBActivity {
 	static final String TYPE = "type";
 
 	private ZLResource myResource;

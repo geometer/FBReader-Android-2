@@ -33,7 +33,7 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
-import org.fbreader.md.MDListActivity;
+import org.fbreader.common.android.FBListActivity;
 import org.fbreader.util.android.ViewUtil;
 
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
@@ -43,7 +43,7 @@ import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.android.util.PackageUtil;
 
-public class PluginListActivity extends MDListActivity {
+public class PluginListActivity extends FBListActivity {
 	private final ZLResource myResource = ZLResource.resource("plugins");
 
 	@Override

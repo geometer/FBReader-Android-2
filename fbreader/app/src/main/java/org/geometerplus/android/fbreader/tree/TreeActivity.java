@@ -33,10 +33,10 @@ import org.geometerplus.fbreader.tree.FBTree;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 import org.geometerplus.android.util.*;
 
-import org.fbreader.md.MDListActivity;
+import org.fbreader.common.android.FBListActivity;
 import org.geometerplus.zlibrary.ui.android.R;
 
-public abstract class TreeActivity<T extends FBTree> extends MDListActivity implements ListView.OnItemClickListener, ListView.OnItemLongClickListener {
+public abstract class TreeActivity<T extends FBTree> extends FBListActivity implements ListView.OnItemClickListener, ListView.OnItemLongClickListener {
 	private static final String OPEN_TREE_ACTION = "android.fbreader.action.OPEN_TREE";
 
 	public static final String TREE_KEY_KEY = "TreeKey";
@@ -69,12 +69,6 @@ public abstract class TreeActivity<T extends FBTree> extends MDListActivity impl
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-		OrientationUtil.setOrientation(this, getIntent());
-	}
-
-	@Override
 	protected void onDestroy() {
 		ImageSynchronizer.clear();
 
@@ -87,8 +81,8 @@ public abstract class TreeActivity<T extends FBTree> extends MDListActivity impl
 
 	@Override
 	protected void onNewIntent(final Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
 		if (OPEN_TREE_ACTION.equals(intent.getAction())) {
+			applyParameters(intent);
 			runOnUiThread(new Runnable() {
 				public void run() {
 					init(intent);

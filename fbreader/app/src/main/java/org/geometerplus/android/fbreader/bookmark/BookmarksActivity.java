@@ -34,7 +34,7 @@ import android.widget.*;
 
 import yuku.ambilwarna.widget.AmbilWarnaPrefWidgetView;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 
@@ -51,7 +51,7 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.util.*;
 
-public class BookmarksActivity extends MDActivity implements IBookCollection.Listener<Book> {
+public class BookmarksActivity extends FBActivity implements IBookCollection.Listener<Book> {
 	private static final int OPEN_ITEM_ID = 0;
 	private static final int EDIT_ITEM_ID = 1;
 	private static final int DELETE_ITEM_ID = 2;
@@ -184,8 +184,6 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 				loadBookmarks();
 			}
 		});
-
-		OrientationUtil.setOrientation(this, getIntent());
 	}
 
 	@Override
@@ -275,11 +273,6 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 				}
 			}
 		}).start();
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
 	}
 
 	private void doSearch(String pattern) {
@@ -416,7 +409,7 @@ public class BookmarksActivity extends MDActivity implements IBookCollection.Lis
 						case EDIT_ITEM_ID:
 							final Intent intent = new Intent(BookmarksActivity.this, EditBookmarkActivity.class);
 							FBReaderIntents.putBookmarkExtra(intent, bookmark);
-							OrientationUtil.startActivity(BookmarksActivity.this, intent);
+							startActivity(intent);
 							break;
 						case DELETE_ITEM_ID:
 							myCollection.deleteBookmark(bookmark);

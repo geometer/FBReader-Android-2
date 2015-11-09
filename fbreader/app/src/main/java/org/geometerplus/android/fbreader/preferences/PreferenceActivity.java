@@ -69,9 +69,9 @@ import org.geometerplus.android.fbreader.sync.SyncOperations;
 
 import org.geometerplus.android.util.*;
 
-import org.fbreader.md.MDSettingsActivity;
+import org.fbreader.common.android.FBSettingsActivity;
 
-public class PreferenceActivity extends MDSettingsActivity {
+public class PreferenceActivity extends FBSettingsActivity {
 	public static String SCREEN_KEY = "screen";
 
 	private class Fragment extends PreferenceFragment {
@@ -943,16 +943,5 @@ public class PreferenceActivity extends MDSettingsActivity {
 		setTitle(Resource.getValue());
 		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
 		SQLiteCookieDatabase.init(this);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		OrientationUtil.setOrientation(this, getIntent());
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
 	}
 }

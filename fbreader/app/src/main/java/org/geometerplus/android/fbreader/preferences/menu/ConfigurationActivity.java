@@ -28,7 +28,7 @@ import android.widget.*;
 
 import com.mobeta.android.dslv.DragSortListView;
 
-import org.fbreader.md.MDListActivity;
+import org.fbreader.common.android.FBListActivity;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 
@@ -38,7 +38,7 @@ import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.android.fbreader.MenuData;
 import org.geometerplus.android.fbreader.api.MenuNode;
 
-public class ConfigurationActivity extends MDListActivity {
+public class ConfigurationActivity extends FBListActivity {
 	private static final ZLResource myResource =
 		ZLResource.resource("Preferences").getResource("menu").getResource("items");
 	private static final ZLResource myMenuResource = ZLResource.resource("menu");

@@ -30,7 +30,6 @@ import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.tree.*;
 
 import org.geometerplus.android.fbreader.network.*;
-import org.geometerplus.android.util.OrientationUtil;
 import org.geometerplus.android.util.PackageUtil;
 
 import org.fbreader.md.MDActivity;
@@ -67,8 +66,7 @@ public class OpenCatalogAction extends Action {
 		if (myActivity instanceof NetworkLibraryActivity) {
 			((NetworkLibraryActivity)myActivity).openTree(tree);
 		} else {
-			OrientationUtil.startActivity(
-				myActivity,
+			myActivity.startActivity(
 				new Intent(myActivity.getApplicationContext(), NetworkLibrarySecondaryActivity.class)
 					.putExtra(NetworkLibraryActivity.TREE_KEY_KEY, tree.getUniqueKey())
 			);

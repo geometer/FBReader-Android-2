@@ -15,7 +15,6 @@ import android.view.View;
 import org.fbreader.plugin.library.*;
 
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.android.util.OrientationUtil;
 
 public class SettingsActivity extends FullActivity {
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
@@ -35,18 +34,6 @@ public class SettingsActivity extends FullActivity {
 			.beginTransaction()
 			.replace(R.id.bks_settings_content, myFragment)
 			.commit();
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		OrientationUtil.setOrientation(this, getIntent());
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
-		super.onNewIntent(intent);
 	}
 
 	private class SettingsFragment extends PreferenceFragment {

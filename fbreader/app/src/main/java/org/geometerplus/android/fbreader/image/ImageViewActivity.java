@@ -24,6 +24,7 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.*;
+import android.widget.FrameLayout;
 
 import org.geometerplus.zlibrary.core.image.*;
 import org.geometerplus.zlibrary.core.util.ZLColor;
@@ -31,10 +32,12 @@ import org.geometerplus.zlibrary.core.util.ZLColor;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
+import org.fbreader.common.android.FBActivity;
 import org.fbreader.common.android.FBReaderUtil;
-import org.geometerplus.android.util.OrientationUtil;
 
-public class ImageViewActivity extends ActionBarActivity {
+import org.geometerplus.zlibrary.ui.android.R;
+
+public class ImageViewActivity extends FBActivity {
 	public static final String URL_KEY = "fbreader.imageview.url";
 	public static final String BACKGROUND_COLOR_KEY = "fbreader.imageview.background";
 
@@ -42,8 +45,15 @@ public class ImageViewActivity extends ActionBarActivity {
 	private ZLColor myBgColor;
 
 	@Override
+	protected int layoutId() {
+		return R.layout.image_view_container;
+	}
+
+	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+
+		setTitleVisible(false);
 
 		final boolean showStatusBar = FBReaderUtil.getZLibrary(this).ShowStatusBarOption.getValue();
 		getWindow().setFlags(
@@ -55,7 +65,8 @@ public class ImageViewActivity extends ActionBarActivity {
 			new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this)
 		);
 
-		setContentView(new ImageView());
+		final FrameLayout container = (FrameLayout)findViewById(R.id.image_view_container);
+		container.addView(new ImageView());
 
 		final Intent intent = getIntent();
 
@@ -83,17 +94,6 @@ public class ImageViewActivity extends ActionBarActivity {
 			// TODO: error message (?)
 			finish();
 		}
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		OrientationUtil.setOrientation(this, getIntent());
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
 	}
 
 	@Override
