@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 import org.fbreader.util.android.ViewUtil;
 import org.fbreader.common.android.FBReaderUtil;
 
@@ -40,7 +40,7 @@ import org.geometerplus.android.util.*;
 
 import org.geometerplus.zlibrary.ui.android.R;
 
-public class TOCActivity extends MDActivity {
+public class TOCActivity extends FBActivity {
 	private TOCAdapter myAdapter;
 	private ZLTree<?> mySelectedItem;
 
@@ -64,17 +64,6 @@ public class TOCActivity extends MDActivity {
 		TOCTree treeToSelect = fbreader.getCurrentTOCElement();
 		myAdapter.selectItem(treeToSelect);
 		mySelectedItem = treeToSelect;
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		OrientationUtil.setOrientation(this, getIntent());
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
 	}
 
 	private static final int PROCESS_TREE_ITEM_ID = 0;

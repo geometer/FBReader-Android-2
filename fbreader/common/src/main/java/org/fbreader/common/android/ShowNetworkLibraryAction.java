@@ -22,7 +22,6 @@ package org.fbreader.common.android;
 import org.fbreader.common.AbstractReader;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
-import org.geometerplus.android.util.OrientationUtil;
 
 class ShowNetworkLibraryAction extends MainActivity.Action<MainActivity,AbstractReader> {
 	ShowNetworkLibraryAction(MainActivity baseActivity) {
@@ -31,8 +30,7 @@ class ShowNetworkLibraryAction extends MainActivity.Action<MainActivity,Abstract
 
 	@Override
 	protected void run(Object ... params) {
-		OrientationUtil.startActivity(
-			BaseActivity,
+		BaseActivity.startActivity(
 			FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.NETWORK_LIBRARY)
 		);
 	}

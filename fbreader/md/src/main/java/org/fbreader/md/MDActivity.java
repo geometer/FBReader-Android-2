@@ -38,8 +38,8 @@ public abstract class MDActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle icicle) {
-		onPreCreate();
 		super.onCreate(icicle);
+		onPreCreate();
 		setContentView(layoutId());
 
 		myToolbar = (Toolbar)findViewById(R.id.md_toolbar);

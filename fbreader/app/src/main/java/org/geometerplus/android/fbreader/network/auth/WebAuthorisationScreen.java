@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader.network.auth;
 
 import java.util.*;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -36,18 +35,24 @@ import org.apache.http.impl.cookie.BasicClientCookie2;
 import org.geometerplus.zlibrary.core.network.ZLNetworkManager;
 import org.geometerplus.zlibrary.ui.android.network.SQLiteCookieDatabase;
 
-import org.geometerplus.android.util.OrientationUtil;
+import org.fbreader.common.android.FBActivity;
+import org.geometerplus.zlibrary.ui.android.R;
 
-public class WebAuthorisationScreen extends Activity {
+public class WebAuthorisationScreen extends FBActivity {
 	public static final String COMPLETE_URL_KEY = "android.fbreader.data.complete.url";
 
 	private final ActivityNetworkContext myNetworkContext = new ActivityNetworkContext(this);
 
 	@Override
+	protected int layoutId() {
+		return R.layout.web_auth;
+	}
+
+	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+		setTitleVisible(false);
 
-		requestWindowFeature(Window.FEATURE_PROGRESS);
 		SQLiteCookieDatabase.init(this);
 		CookieSyncManager.createInstance(getApplicationContext());
 		CookieManager.getInstance().removeAllCookie();
@@ -59,14 +64,13 @@ public class WebAuthorisationScreen extends Activity {
 		}
 		final String completeUrl = intent.getStringExtra(COMPLETE_URL_KEY);
 
-		OrientationUtil.setOrientation(this, intent);
-		final WebView view = new WebView(this);
+		final WebView view = (WebView)findViewById(R.id.web_auth);
 		view.getSettings().setJavaScriptEnabled(true);
 
 		view.setWebChromeClient(new WebChromeClient() {
 			@Override
 			public void onProgressChanged(WebView view, int progress) {
-				setProgress(progress * 100);
+				showProgressIndicator(progress < 100);
 			}
 		});
 		view.setWebViewClient(new WebViewClient() {
@@ -101,7 +105,6 @@ public class WebAuthorisationScreen extends Activity {
 				}
 			}
 		});
-		setContentView(view);
 		view.loadUrl(intent.getDataString());
 	}
 

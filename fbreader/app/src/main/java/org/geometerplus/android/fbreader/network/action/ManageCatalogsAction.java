@@ -29,7 +29,6 @@ import org.geometerplus.fbreader.network.NetworkTree;
 import org.geometerplus.fbreader.network.NetworkLibrary;
 import org.geometerplus.android.fbreader.network.CatalogManagerActivity;
 import org.geometerplus.android.fbreader.network.NetworkLibraryActivity;
-import org.geometerplus.android.util.OrientationUtil;
 
 import org.fbreader.md.MDActivity;
 
@@ -49,8 +48,7 @@ public class ManageCatalogsAction extends RootAction {
 		final ArrayList<String> inactiveIds = new ArrayList<String>(myLibrary.allIds());
 		inactiveIds.removeAll(ids);
 
-		OrientationUtil.startActivityForResult(
-			myActivity,
+		myActivity.startActivityForResult(
 			new Intent(myActivity.getApplicationContext(), CatalogManagerActivity.class)
 				.putStringArrayListExtra(NetworkLibraryActivity.ENABLED_CATALOG_IDS_KEY, ids)
 				.putStringArrayListExtra(NetworkLibraryActivity.DISABLED_CATALOG_IDS_KEY, inactiveIds),

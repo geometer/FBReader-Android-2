@@ -26,10 +26,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.text.method.ScrollingMovementMethod;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 import org.fbreader.common.R;
 
-public class BugReportActivity extends MDActivity implements ErrorKeys {
+public class BugReportActivity extends FBActivity implements ErrorKeys {
 	@Override
 	protected int layoutId() {
 		return R.layout.bug_report_view;

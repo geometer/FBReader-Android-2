@@ -26,7 +26,6 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.bookmark.BookmarksActivity;
-import org.geometerplus.android.util.OrientationUtil;
 import org.geometerplus.android.util.PackageUtil;
 
 class ShowBookmarksAction extends FBReader.Action<FBReader,FBReaderApp> {
@@ -59,6 +58,6 @@ class ShowBookmarksAction extends FBReader.Action<FBReader,FBReaderApp> {
 	private void startBookmarksActivity(Intent intent) {
 		FBReaderIntents.putBookExtra(intent, Reader.getCurrentBook());
 		FBReaderIntents.putBookmarkExtra(intent, Reader.createBookmark(80, true));
-		OrientationUtil.startActivity(BaseActivity, intent);
+		BaseActivity.startActivity(intent);
 	}
 }

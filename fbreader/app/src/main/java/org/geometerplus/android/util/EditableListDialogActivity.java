@@ -22,12 +22,12 @@ package org.geometerplus.android.util;
 import android.graphics.drawable.Drawable;
 
 import org.fbreader.util.android.DrawableUtil;
-import org.fbreader.md.MDListActivity;
+import org.fbreader.common.android.FBListActivity;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.R;
 
-public class EditableListDialogActivity extends MDListActivity {
+public class EditableListDialogActivity extends FBListActivity {
 	private Drawable myDeleteIcon;
 	protected final ZLResource myButtonResource = ZLResource.resource("dialog").getResource("button");
 

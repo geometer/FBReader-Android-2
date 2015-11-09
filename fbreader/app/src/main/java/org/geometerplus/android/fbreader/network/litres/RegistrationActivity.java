@@ -38,10 +38,10 @@ import org.geometerplus.fbreader.network.authentication.litres.*;
 import org.geometerplus.android.fbreader.network.Util;
 import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 import org.fbreader.md.MDAlertDialogBuilder;
 
-abstract class RegistrationActivity extends MDActivity implements UserRegistrationConstants {
+abstract class RegistrationActivity extends FBActivity implements UserRegistrationConstants {
 	protected final ActivityNetworkContext myNetworkContext = new ActivityNetworkContext(this);
 
 	protected ZLResource myResource;

@@ -26,7 +26,6 @@ import android.net.Uri;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.fbreader.api.PluginApi;
-import org.geometerplus.android.util.OrientationUtil;
 
 class RunPluginAction extends FBReader.Action<FBReader,FBReaderApp> {
 	private final Uri myUri;
@@ -43,9 +42,7 @@ class RunPluginAction extends FBReader.Action<FBReader,FBReaderApp> {
 		}
 		BaseActivity.hideBars();
 		try {
-			OrientationUtil.startActivity(
-				BaseActivity, new Intent(PluginApi.ACTION_RUN, myUri)
-			);
+			BaseActivity.startActivity(new Intent(PluginApi.ACTION_RUN, myUri));
 		} catch (ActivityNotFoundException e) {
 		}
 	}

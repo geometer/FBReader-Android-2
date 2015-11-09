@@ -44,7 +44,6 @@ import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 import org.geometerplus.android.fbreader.image.ImageViewActivity;
 import org.geometerplus.android.fbreader.network.*;
 import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
-import org.geometerplus.android.util.OrientationUtil;
 import org.geometerplus.android.util.UIMessageUtil;
 
 class ProcessHyperlinkAction extends FBReader.Action<FBReader,FBReaderApp> {
@@ -148,7 +147,7 @@ class ProcessHyperlinkAction extends FBReader.Action<FBReader,FBReaderApp> {
 						ImageViewActivity.BACKGROUND_COLOR_KEY,
 						Reader.ImageOptions.ImageViewBackground.getValue().intValue()
 					);
-					OrientationUtil.startActivity(BaseActivity, intent);
+					BaseActivity.startActivity(intent);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -195,7 +194,7 @@ class ProcessHyperlinkAction extends FBReader.Action<FBReader,FBReaderApp> {
 				BaseActivity.runOnUiThread(new Runnable() {
 					public void run() {
 						try {
-							OrientationUtil.startActivity(BaseActivity, intent);
+							BaseActivity.startActivity(intent);
 						} catch (ActivityNotFoundException e) {
 							e.printStackTrace();
 						}

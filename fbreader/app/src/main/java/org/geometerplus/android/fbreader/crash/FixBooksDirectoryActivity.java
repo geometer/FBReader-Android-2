@@ -30,14 +30,14 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.fbreader.Paths;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 
 import org.geometerplus.zlibrary.ui.android.R;
 
 import org.geometerplus.android.fbreader.FBReader;
 import org.geometerplus.android.util.FileChooserUtil;
 
-public class FixBooksDirectoryActivity extends MDActivity {
+public class FixBooksDirectoryActivity extends FBActivity {
 	private TextView myDirectoryView;
 
 	@Override

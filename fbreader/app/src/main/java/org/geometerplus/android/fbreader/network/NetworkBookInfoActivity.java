@@ -37,7 +37,7 @@ import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
-import org.fbreader.md.MDActivity;
+import org.fbreader.common.android.FBActivity;
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
@@ -56,7 +56,7 @@ import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 import org.geometerplus.android.util.*;
 
-public class NetworkBookInfoActivity extends MDActivity implements NetworkLibrary.ChangeListener {
+public class NetworkBookInfoActivity extends FBActivity implements NetworkLibrary.ChangeListener {
 	private NetworkBookTree myTree;
 	private NetworkBookItem myBook;
 
@@ -85,8 +85,6 @@ public class NetworkBookInfoActivity extends MDActivity implements NetworkLibrar
 	@Override
 	protected void onStart() {
 		super.onStart();
-
-		OrientationUtil.setOrientation(this, getIntent());
 
 		myConnection.bindToService(this, new Runnable() {
 			public void run() {
@@ -389,11 +387,6 @@ public class NetworkBookInfoActivity extends MDActivity implements NetworkLibrar
 		rootView.invalidate();
 		rootView.requestLayout();
 		invalidateOptionsMenu();
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		OrientationUtil.setOrientation(this, intent);
 	}
 
 	@Override
