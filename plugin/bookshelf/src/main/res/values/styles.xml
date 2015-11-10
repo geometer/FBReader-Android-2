@@ -65,7 +65,7 @@
 		<item name="disabledTextColor">@color/light_text_disabled</item>
 		<item name="bottomShadowDrawable">@drawable/light_shadow_bottom</item>
 		<item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-		<item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+		<item name="actionBarTheme">@style/Library.Light.ActionBar</item>
 		<item name="isThemeDark">false</item>
 		<item name="listProgressIndicatorStyle">@style/Library.ListProgressIndicator</item>
 		<item name="numberPickerStyle">@style/FBReaderMD.NumberPicker.Light</item>
@@ -149,7 +149,7 @@
 		<item name="disabledTextColor">@color/light_text_disabled</item>
 		<item name="android:windowBackground">@drawable/md_dialog_background_light</item>
 		<item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-		<item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+		<item name="actionBarTheme">@style/Library.Light.ActionBar</item>
 	</style>
 	<style name="Theme.Library.Dark.Dialog" parent="@style/Theme.AppCompat.Dialog">
 		<item name="android:textColorHint">@color/dark_text_hint</item>
@@ -175,6 +175,9 @@
 
 	<style name="Library.Dark.ActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 		<item name="android:textColorPrimary">@color/dark_text_main</item>
+	</style>
+	<style name="Library.Light.ActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+		<item name="editTextColor">@android:color/white</item>
 	</style>
 
 	<style name="Library.CardView.Light" parent="CardView.Light">
