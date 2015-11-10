@@ -81,15 +81,14 @@ public abstract class TreeActivity<T extends FBTree> extends FBListActivity impl
 
 	@Override
 	protected void onNewIntent(final Intent intent) {
+		super.onNewIntent(intent);
+
 		if (OPEN_TREE_ACTION.equals(intent.getAction())) {
-			applyParameters(intent);
 			runOnUiThread(new Runnable() {
 				public void run() {
 					init(intent);
 				}
 			});
-		} else {
-			super.onNewIntent(intent);
 		}
 	}
 

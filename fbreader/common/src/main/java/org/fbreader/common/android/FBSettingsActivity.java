@@ -26,46 +26,35 @@ import org.fbreader.md.MDSettingsActivity;
 public abstract class FBSettingsActivity extends MDSettingsActivity {
 	@Override
 	protected void onPreCreate() {
-		applyParameters(getIntent());
+		FBActivityUtil.applyParameters(this, getIntent());
 		super.onPreCreate();
 	}
 
 	@Override
 	protected void onStart() {
-		applyParameters(getIntent());
+		FBActivityUtil.applyParameters(this, getIntent());
 		super.onStart();
 	}
 
 	@Override
+	protected void onResume() {
+		FBActivityUtil.updateLocale(this);
+		super.onResume();
+	}
+
+	@Override
 	protected void onNewIntent(Intent intent) {
-		applyParameters(intent);
+		FBActivityUtil.applyParameters(this, intent);
 		super.onNewIntent(intent);
 	}
 
 	@Override
 	public void startActivity(Intent intent) {
-		super.startActivity(
-			intent
-				.putExtra(FBActivity.ORIENTATION_KEY, getRequestedOrientation())
-		);
+		super.startActivity(FBActivityUtil.updatedIntent(intent, this));
 	}
 
 	@Override
 	public void startActivityForResult(Intent intent, int requestCode) {
-		super.startActivityForResult(
-			intent
-				.putExtra(FBActivity.ORIENTATION_KEY, getRequestedOrientation()),
-			requestCode
-		);
-	}
-
-	protected final void applyParameters(Intent intent) {
-		if (intent == null) {
-			return;
-		}
-		final int orientation = intent.getIntExtra(FBActivity.ORIENTATION_KEY, Integer.MIN_VALUE);
-		if (orientation != Integer.MIN_VALUE) {
-			setRequestedOrientation(orientation);
-		}
+		super.startActivityForResult(FBActivityUtil.updatedIntent(intent, this), requestCode);
 	}
 }
