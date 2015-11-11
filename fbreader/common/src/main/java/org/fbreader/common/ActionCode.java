@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.fbreader.fbreader;
+package org.fbreader.common;
 
 public interface ActionCode {
 	String SHOW_LIBRARY = "library";

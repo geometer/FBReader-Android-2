@@ -351,9 +351,18 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 				0,
 				0
 			),
-			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
+			getVerticalScrollbarWidth(view)
 		);
 		view.paint(context, index);
+	}
+
+	private int getVerticalScrollbarWidth(ZLView view) {
+		switch (view.scrollbarMode()) {
+			case gone:
+				return 0;
+			default:
+				return getVerticalScrollbarWidth();
+		}
 	}
 
 	private void drawFooter(Canvas canvas, AnimationProvider animator) {
@@ -384,7 +393,7 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 				0,
 				getMainAreaHeight()
 			),
-			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
+			getVerticalScrollbarWidth(view)
 		);
 		footer.paint(context);
 		final int voffset = getHeight() - myHDiff - footer.getHeight();
@@ -414,7 +423,7 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 								0,
 								0
 							),
-							view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
+							getVerticalScrollbarWidth(view)
 						);
 						view.preparePage(context, ZLView.PageIndex.next);
 					}
@@ -633,7 +642,7 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 	@Override
 	protected int computeVerticalScrollExtent() {
 		final ZLView view = ZLApplication.Instance().getCurrentView();
-		if (!view.isScrollbarShown()) {
+		if (view.scrollbarMode() == ZLView.ScrollbarMode.gone) {
 			return 0;
 		}
 		final AnimationProvider animator = getAnimationProvider();
@@ -650,7 +659,7 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 	@Override
 	protected int computeVerticalScrollOffset() {
 		final ZLView view = ZLApplication.Instance().getCurrentView();
-		if (!view.isScrollbarShown()) {
+		if (view.scrollbarMode() == ZLView.ScrollbarMode.gone) {
 			return 0;
 		}
 		final AnimationProvider animator = getAnimationProvider();
@@ -667,7 +676,7 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 	@Override
 	protected int computeVerticalScrollRange() {
 		final ZLView view = ZLApplication.Instance().getCurrentView();
-		if (!view.isScrollbarShown()) {
+		if (view.scrollbarMode() == ZLView.ScrollbarMode.gone) {
 			return 0;
 		}
 		return view.getScrollbarFullSize();

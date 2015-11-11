@@ -46,11 +46,12 @@ import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.network.SQLiteCookieDatabase;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidPaintContext;
 
+import org.fbreader.common.ActionCode;
 import org.fbreader.common.options.*;
 
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.bookmodel.FBTextKind;
-import org.geometerplus.fbreader.fbreader.*;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.fbreader.options.*;
 import org.geometerplus.fbreader.network.sync.SyncData;
 import org.geometerplus.fbreader.network.sync.SyncUtil;
@@ -609,8 +610,8 @@ public class PreferenceActivity extends FBSettingsActivity {
 				@Override
 				protected Boolean detectState() {
 					switch (viewOptions.ScrollbarType.getValue()) {
-						case FBView.SCROLLBAR_SHOW_AS_FOOTER:
-						case FBView.SCROLLBAR_SHOW_AS_FOOTER_OLD_STYLE:
+						case ViewOptions.Scrollbar.SHOW_AS_FOOTER:
+						case ViewOptions.Scrollbar.SHOW_AS_FOOTER_OLD_STYLE:
 							return true;
 						default:
 							return false;
@@ -621,8 +622,8 @@ public class PreferenceActivity extends FBSettingsActivity {
 				@Override
 				protected Boolean detectState() {
 					switch (viewOptions.ScrollbarType.getValue()) {
-						case FBView.SCROLLBAR_SHOW_AS_FOOTER:
-						case FBView.SCROLLBAR_SHOW_AS_FOOTER_OLD_STYLE:
+						case ViewOptions.Scrollbar.SHOW_AS_FOOTER:
+						case ViewOptions.Scrollbar.SHOW_AS_FOOTER_OLD_STYLE:
 							return footerOptions.ShowTOCMarks.getValue();
 						default:
 							return false;
@@ -633,7 +634,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 				@Override
 				protected Boolean detectState() {
 					switch (viewOptions.ScrollbarType.getValue()) {
-						case FBView.SCROLLBAR_SHOW_AS_FOOTER_OLD_STYLE:
+						case ViewOptions.Scrollbar.SHOW_AS_FOOTER_OLD_STYLE:
 							return true;
 						default:
 							return false;
@@ -644,7 +645,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 				@Override
 				protected Boolean detectState() {
 					switch (viewOptions.ScrollbarType.getValue()) {
-						case FBView.SCROLLBAR_SHOW_AS_FOOTER:
+						case ViewOptions.Scrollbar.SHOW_AS_FOOTER:
 							return true;
 						default:
 							return false;

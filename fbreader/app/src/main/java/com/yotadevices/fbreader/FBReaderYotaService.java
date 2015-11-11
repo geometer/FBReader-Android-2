@@ -21,6 +21,7 @@ import com.yotadevices.sdk.*;
 import com.yotadevices.sdk.utils.EinkUtils;
 
 import org.fbreader.util.ComparisonUtil;
+import org.fbreader.common.ActionCode;
 
 import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.image.ZLImage;
@@ -33,7 +34,6 @@ import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
 
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
-import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.options.ViewOptions;
 import org.geometerplus.fbreader.formats.PluginCollection;
 

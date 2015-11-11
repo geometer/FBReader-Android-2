@@ -28,6 +28,14 @@ import org.fbreader.common.options.ColorProfile;
 import org.geometerplus.fbreader.fbreader.FBView;
 
 public class ViewOptions {
+	public interface Scrollbar {
+		int HIDE = 0;
+		int SHOW = 1;
+		int SHOW_AS_PROGRESS = 2;
+		int SHOW_AS_FOOTER = 3;
+		int SHOW_AS_FOOTER_OLD_STYLE = 4;
+	}
+ 
 	public final ZLBooleanOption TwoColumnView;
 	public final ZLIntegerRangeOption LeftMargin;
 	public final ZLIntegerRangeOption RightMargin;
@@ -65,7 +73,7 @@ public class ViewOptions {
 		SpaceBetweenColumns =
 			new ZLIntegerRangeOption("Options", "SpaceBetweenColumns", 0, 300, 3 * horMargin);
 		ScrollbarType =
-			new ZLIntegerRangeOption("Options", "ScrollbarType", 0, 4, FBView.SCROLLBAR_SHOW_AS_FOOTER);
+			new ZLIntegerRangeOption("Options", "ScrollbarType", 0, 4, Scrollbar.SHOW_AS_FOOTER);
 		FooterHeight =
 			new ZLIntegerRangeOption("Options", "FooterHeight", 8, dpi / 8, dpi / 20);
 		ColorProfileName =
