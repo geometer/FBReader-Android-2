@@ -59,4 +59,8 @@ public interface ZLViewEnums {
 	public enum Animation {
 		none, curl, slide, slideOldStyle, shift
 	}
+
+	public enum ScrollbarMode {
+		gone, asPosition, asProgress
+	}
 }

@@ -32,6 +32,7 @@ import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
 
+import org.fbreader.common.ActionCode;
 import org.fbreader.common.options.SyncOptions;
 
 import org.geometerplus.fbreader.book.*;

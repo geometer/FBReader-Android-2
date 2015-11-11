@@ -538,17 +538,6 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 	}
 
-	public static final int SCROLLBAR_HIDE = 0;
-	public static final int SCROLLBAR_SHOW = 1;
-	public static final int SCROLLBAR_SHOW_AS_PROGRESS = 2;
-
-	public abstract int scrollbarType();
-
-	@Override
-	public final boolean isScrollbarShown() {
-		return scrollbarType() == SCROLLBAR_SHOW || scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS;
-	}
-
 	protected final synchronized int sizeOfTextBeforeParagraph(int paragraphIndex) {
 		return myModel != null ? myModel.getTextLength(paragraphIndex - 1) : 0;
 	}
@@ -584,12 +573,12 @@ public abstract class ZLTextView extends ZLTextViewBase {
 
 	@Override
 	public final synchronized int getScrollbarThumbPosition(PageIndex pageIndex) {
-		return scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS ? 0 : getCurrentCharNumber(pageIndex, true);
+		return scrollbarMode() == ScrollbarMode.asProgress ? 0 : getCurrentCharNumber(pageIndex, true);
 	}
 
 	@Override
 	public final synchronized int getScrollbarThumbLength(PageIndex pageIndex) {
-		int start = scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS
+		int start = scrollbarMode() == ScrollbarMode.asProgress
 			? 0 : getCurrentCharNumber(pageIndex, true);
 		int end = getCurrentCharNumber(pageIndex, false);
 		return Math.max(1, end - start);

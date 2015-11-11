@@ -76,7 +76,7 @@ abstract public class ZLView implements ZLViewEnums {
 		return false;
 	}
 
-	public abstract boolean isScrollbarShown();
+	public abstract ScrollbarMode scrollbarMode();
 	public abstract int getScrollbarFullSize();
 	public abstract int getScrollbarThumbPosition(PageIndex pageIndex);
 	public abstract int getScrollbarThumbLength(PageIndex pageIndex);

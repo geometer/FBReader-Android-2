@@ -24,8 +24,9 @@ import android.widget.RelativeLayout;
 
 import org.geometerplus.zlibrary.ui.android.R;
 
+import org.fbreader.common.ActionCode;
+
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 final class TextSearchPopup extends PopupPanel implements View.OnClickListener {

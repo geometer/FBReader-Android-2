@@ -41,6 +41,7 @@ import org.fbreader.util.Pair;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 import org.fbreader.common.AbstractReader;
+import org.fbreader.common.ActionCode;
 
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;
@@ -66,7 +67,6 @@ import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 import org.fbreader.common.R;
 
 import org.geometerplus.fbreader.book.*;
-import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.formats.IFormatPluginCollection;
 
 public abstract class MainActivity extends FBActivity {

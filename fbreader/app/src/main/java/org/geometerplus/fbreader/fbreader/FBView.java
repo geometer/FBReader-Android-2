@@ -33,6 +33,7 @@ import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
 import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 
+import org.fbreader.common.ActionCode;
 import org.fbreader.common.options.*;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
@@ -708,7 +709,7 @@ public final class FBView extends ZLTextView {
 	@Override
 	public Footer getFooterArea() {
 		switch (myViewOptions.ScrollbarType.getValue()) {
-			case SCROLLBAR_SHOW_AS_FOOTER:
+			case ViewOptions.Scrollbar.SHOW_AS_FOOTER:
 				if (!(myFooter instanceof FooterNewStyle)) {
 					if (myFooter != null) {
 						myReader.removeTimerTask(myFooter.UpdateTask);
@@ -717,7 +718,7 @@ public final class FBView extends ZLTextView {
 					myReader.addTimerTask(myFooter.UpdateTask, 15000);
 				}
 				break;
-			case SCROLLBAR_SHOW_AS_FOOTER_OLD_STYLE:
+			case ViewOptions.Scrollbar.SHOW_AS_FOOTER_OLD_STYLE:
 				if (!(myFooter instanceof FooterOldStyle)) {
 					if (myFooter != null) {
 						myReader.removeTimerTask(myFooter.UpdateTask);
@@ -763,12 +764,16 @@ public final class FBView extends ZLTextView {
 		return traverser.getCount();
 	}
 
-	public static final int SCROLLBAR_SHOW_AS_FOOTER = 3;
-	public static final int SCROLLBAR_SHOW_AS_FOOTER_OLD_STYLE = 4;
-
 	@Override
-	public int scrollbarType() {
-		return myViewOptions.ScrollbarType.getValue();
+	public ScrollbarMode scrollbarMode() {
+		switch (myViewOptions.ScrollbarType.getValue()) {
+			default:
+				return ScrollbarMode.gone;
+			case ViewOptions.Scrollbar.SHOW:
+				return ScrollbarMode.asPosition;
+			case ViewOptions.Scrollbar.SHOW_AS_PROGRESS:
+				return ScrollbarMode.asProgress;
+		}
 	}
 
 	@Override
