@@ -88,7 +88,3 @@ int FB2Reader::tag(const char *name) {
 		}
 	}
 }
-
-void FB2Reader::collectExternalEntities(std::map<std::string,std::string> &entityMap) {
-	entityMap["FBReaderVersion"] = ZLibrary::Version();
-}
