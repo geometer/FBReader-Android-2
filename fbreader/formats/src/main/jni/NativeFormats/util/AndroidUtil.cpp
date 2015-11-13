@@ -36,7 +36,6 @@ JavaClass AndroidUtil::Class_java_util_List("java/util/List");
 JavaClass AndroidUtil::Class_java_util_Locale("java/util/Locale");
 JavaClass AndroidUtil::Class_java_io_InputStream("java/io/InputStream");
 
-JavaClass AndroidUtil::Class_ZLibrary("org/geometerplus/zlibrary/core/library/ZLibrary");
 JavaClass AndroidUtil::Class_ZLFile("org/geometerplus/zlibrary/core/filesystem/ZLFile");
 JavaClass AndroidUtil::Class_FileInfo("org/geometerplus/zlibrary/core/fonts/FileInfo");
 JavaClass AndroidUtil::Class_FileEncryptionInfo("org/geometerplus/zlibrary/core/drm/FileEncryptionInfo");
@@ -69,9 +68,6 @@ shared_ptr<LongMethod> AndroidUtil::Method_java_io_InputStream_skip;
 shared_ptr<VoidMethod> AndroidUtil::Method_java_io_InputStream_mark;
 shared_ptr<BooleanMethod> AndroidUtil::Method_java_io_InputStream_markSupported;
 shared_ptr<VoidMethod> AndroidUtil::Method_java_io_InputStream_reset;
-
-shared_ptr<StaticObjectMethod> AndroidUtil::StaticMethod_ZLibrary_Instance;
-shared_ptr<StringMethod> AndroidUtil::Method_ZLibrary_getVersionName;
 
 shared_ptr<StaticObjectMethod> AndroidUtil::StaticMethod_NativeFormatPlugin_create;
 shared_ptr<StringMethod> AndroidUtil::Method_NativeFormatPlugin_supportedFileType;
@@ -151,9 +147,6 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	Method_java_io_InputStream_mark = new VoidMethod(Class_java_io_InputStream, "mark", "(I)");
 	Method_java_io_InputStream_markSupported = new BooleanMethod(Class_java_io_InputStream, "markSupported", "()");
 	Method_java_io_InputStream_reset = new VoidMethod(Class_java_io_InputStream, "reset", "()");
-
-	StaticMethod_ZLibrary_Instance = new StaticObjectMethod(Class_ZLibrary, "Instance", Class_ZLibrary, "()");
-	Method_ZLibrary_getVersionName = new StringMethod(Class_ZLibrary, "getVersionName", "()");
 
 	StaticMethod_NativeFormatPlugin_create = new StaticObjectMethod(Class_NativeFormatPlugin, "create", Class_NativeFormatPlugin, "(Lorg/geometerplus/zlibrary/core/util/SystemInfo;Ljava/lang/String;)");
 	Method_NativeFormatPlugin_supportedFileType = new StringMethod(Class_NativeFormatPlugin, "supportedFileType", "()");

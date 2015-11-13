@@ -462,19 +462,15 @@ void XHTMLTagImageAction::doAtStart(XHTMLReader &reader, const char **xmlattribu
 
 	const bool flagParagraphIsOpen = bookReader(reader).paragraphIsOpen();
 	if (flagParagraphIsOpen) {
-		if (reader.myCurrentParagraphIsEmpty) {
-			bookReader(reader).addControl(IMAGE, true);
-		} else {
-			endParagraph(reader);
-		}
+		bookReader(reader).addControl(IMAGE, true);
 	}
 	const std::string imageName = imageFile.name(false);
 	bookReader(reader).addImageReference(imageName, 0, reader.myMarkNextImageAsCover);
 	bookReader(reader).addImage(imageName, new ZLFileImage(imageFile, EMPTY, 0, 0, reader.myEncryptionMap->info(imageFile.path())));
 	reader.myMarkNextImageAsCover = false;
-	if (flagParagraphIsOpen && reader.myCurrentParagraphIsEmpty) {
+	if (flagParagraphIsOpen) {
 		bookReader(reader).addControl(IMAGE, false);
-		endParagraph(reader);
+		reader.myCurrentParagraphIsEmpty = false;
 	}
 }
 
