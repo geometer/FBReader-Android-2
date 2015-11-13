@@ -19,8 +19,8 @@
 		android:layout_height="wrap_content"
 		android:paddingLeft="25dp"
 		android:paddingRight="25dp"
-		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:textSize="15sp"
 		android:scrollbars="vertical"
-		android:fadeScrollbars="false"
+		android:fadeScrollbars="true"
 	/>
 </LinearLayout>

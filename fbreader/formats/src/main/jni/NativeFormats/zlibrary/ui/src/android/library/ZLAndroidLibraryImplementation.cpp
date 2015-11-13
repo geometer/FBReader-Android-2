@@ -49,11 +49,3 @@ std::string ZLibrary::Language() {
 	env->DeleteLocalRef(locale);
 	return lang;
 }
-
-std::string ZLibrary::Version() {
-	JNIEnv *env = AndroidUtil::getEnv();
-	jobject zlibrary = AndroidUtil::StaticMethod_ZLibrary_Instance->call();
-	std::string version = AndroidUtil::Method_ZLibrary_getVersionName->callForCppString(zlibrary);
-	env->DeleteLocalRef(zlibrary);
-	return version;
-}
