@@ -74,7 +74,6 @@ public:
 	static JavaClass Class_java_util_List;
 	static JavaClass Class_java_util_Locale;
 	static JavaClass Class_java_io_InputStream;
-	static JavaClass Class_ZLibrary;
 	static JavaClass Class_ZLFile;
 	static JavaClass Class_FileInfo;
 	static JavaClass Class_FileEncryptionInfo;
@@ -106,9 +105,6 @@ public:
 	static shared_ptr<VoidMethod> Method_java_io_InputStream_mark;
 	static shared_ptr<BooleanMethod> Method_java_io_InputStream_markSupported;
 	static shared_ptr<VoidMethod> Method_java_io_InputStream_reset;
-
-	static shared_ptr<StaticObjectMethod> StaticMethod_ZLibrary_Instance;
-	static shared_ptr<StringMethod> Method_ZLibrary_getVersionName;
 
 	static shared_ptr<StaticObjectMethod> StaticMethod_ZLFile_createFileByPath;
 	static shared_ptr<ObjectMethod> Method_ZLFile_children;

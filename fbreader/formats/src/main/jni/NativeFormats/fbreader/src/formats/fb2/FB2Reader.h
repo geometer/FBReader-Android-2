@@ -40,8 +40,6 @@ private:
 	void startElementHandler(const char *tag, const char **attributes);
 	void endElementHandler(const char *tag);
 
-	void collectExternalEntities(std::map<std::string,std::string> &entityMap);
-
 public:
 	enum TagCode {
 		_P,
