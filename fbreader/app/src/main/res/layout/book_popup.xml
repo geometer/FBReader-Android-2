@@ -5,7 +5,7 @@
 	android:layout_height="480dp"
 	android:id="@+id/book_popup_description"
 	android:padding="15dp"
-	android:textAppearance="?android:attr/textAppearanceMedium"
+	android:textSize="15sp"
 	android:scrollbars="vertical"
-	android:fadeScrollbars="false"
+	android:fadeScrollbars="true"
 />
