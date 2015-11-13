@@ -217,10 +217,9 @@ public class PreferenceActivity extends FBSettingsActivity {
 			final ZLKeyBindings keyBindings = new ZLKeyBindings();
 
 			final ZLAndroidLibrary androidLibrary = FBReaderUtil.getZLibrary(PreferenceActivity.this);
-			// TODO: use user-defined locale, not the default one,
-			// or set user-defined locale as default
-			final String decimalSeparator =
-				String.valueOf(new DecimalFormatSymbols(Locale.getDefault()).getDecimalSeparator());
+			final String decimalSeparator = String.valueOf(
+				new DecimalFormatSymbols(ZLResource.currentLocale()).getDecimalSeparator()
+			);
 
 			final Screen directoriesScreen = createPreferenceScreen("directories");
 			final Runnable libraryUpdater = new Runnable() {
