@@ -19,9 +19,6 @@
 
 package org.fbreader.common.android;
 
-import java.util.Locale;
-import java.util.MissingResourceException;
-
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.Intent;
@@ -34,31 +31,6 @@ abstract class FBActivityUtil {
 	static final String ORIENTATION_KEY = "fbreader.orientation";
 	static final String LANGUAGE_KEY = "fbreader.language";
 
-	static Locale locale(String code) {
-		if (code == null) {
-			return Locale.getDefault();
-		}
-
-		final String split[] = code.split("_");
-		final Locale locale;
-		switch (split.length) {
-			case 1:
-				locale = new Locale(split[0]);
-				break;
-			case 2:
-				locale = new Locale(split[0], split[1]);
-				break;
-			default:
-				return Locale.getDefault();
-		}
-		try {
-			locale.getISO3Language();
-			return locale;
-		} catch (MissingResourceException e) {
-			return Locale.getDefault();
-		}
-	}
-
 	static Intent updatedIntent(Intent intent, MDActivity activity) {
 		return intent
 			.putExtra(LANGUAGE_KEY, ZLResource.getLanguageOption().getValue())
@@ -68,7 +40,7 @@ abstract class FBActivityUtil {
 	static void updateLocale(MDActivity activity) {
 		final Resources res = activity.getBaseContext().getResources();
 		final Configuration config = new Configuration();
-		config.locale = FBActivityUtil.locale(ZLResource.getLanguageOption().getValue());
+		config.locale = ZLResource.currentLocale();
 		res.updateConfiguration(config, res.getDisplayMetrics());
 	}
 
@@ -76,15 +48,15 @@ abstract class FBActivityUtil {
 		if (intent == null) {
 			return;
 		}
-		final String language = intent.getStringExtra(FBActivityUtil.LANGUAGE_KEY);
+		final String language = intent.getStringExtra(LANGUAGE_KEY);
 		if (language != null) {
 			ZLResource.getLanguageOption().setValue(language);
-			intent.removeExtra(FBActivityUtil.LANGUAGE_KEY);
+			intent.removeExtra(LANGUAGE_KEY);
 		}
-		final int orientation = intent.getIntExtra(FBActivityUtil.ORIENTATION_KEY, Integer.MIN_VALUE);
+		final int orientation = intent.getIntExtra(ORIENTATION_KEY, Integer.MIN_VALUE);
 		if (orientation != Integer.MIN_VALUE) {
 			activity.setRequestedOrientation(orientation);
-			intent.removeExtra(FBActivityUtil.ORIENTATION_KEY);
+			intent.removeExtra(ORIENTATION_KEY);
 		}
 	}
 }

@@ -64,8 +64,31 @@ abstract public class ZLResource {
 		return ourLanguageOption;
 	}
 	public static String getLanguage() {
-		final String lang = getLanguageOption().getValue();
-		return Language.SYSTEM_CODE.equals(lang) ? Locale.getDefault().getLanguage() : lang;
+		final String code = getLanguageOption().getValue();
+		return Language.SYSTEM_CODE.equals(code) ? Locale.getDefault().getLanguage() : code;
+	}
+
+	public static Locale currentLocale() {
+		final String code = getLanguageOption().getValue();
+
+		final String split[] = code.split("_");
+		final Locale locale;
+		switch (split.length) {
+			case 1:
+				locale = new Locale(split[0]);
+				break;
+			case 2:
+				locale = new Locale(split[0], split[1]);
+				break;
+			default:
+				return Locale.getDefault();
+		}
+		try {
+			locale.getISO3Language();
+			return locale;
+		} catch (MissingResourceException e) {
+			return Locale.getDefault();
+		}
 	}
 
 	public static ZLResource resource(String key) {
