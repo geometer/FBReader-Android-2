@@ -10,12 +10,6 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-dependencies {
-	compile project(':fbreader/common')
-	compile project(':fbreader/fonts')
-	compile project(':third-party/SuperToasts')
-}
-
 android {
 	compileSdkVersion 23
 	buildToolsVersion '23.0.1'
@@ -30,10 +24,8 @@ android {
 	}
 
 	sourceSets {
-		main.java.srcDirs = ['src/main/java']
-		main.aidl.srcDirs = ['src/main/java']
-		main.res.srcDirs = ['src/main/res']
-		main.manifest.srcFile 'src/main/AndroidManifest.xml'
+		main.java.srcDirs = ['src']
+		main.manifest.srcFile 'AndroidManifest.xml'
 	}
 
 	defaultConfig {

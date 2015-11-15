@@ -513,7 +513,9 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 		return myViewHolder;
 	}
 
-	public abstract DocumentHolder createDocument(Book book);
+	public final DocumentHolder createDocument(Book book) {
+		return ((PluginApplication)getApplication()).createDocument();
+	}
 
 	@Override
 	public void hideDictionarySelection() {

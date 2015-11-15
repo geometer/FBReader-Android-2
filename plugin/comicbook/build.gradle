@@ -8,12 +8,11 @@ buildscript {
 	}
 }
 
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 dependencies {
-	compile project(':fbreader/common')
-	compile project(':fbreader/fonts')
-	compile project(':third-party/SuperToasts')
+	compile project(':plugin/image-formats')
+	compile project(':third-party/junrar')
 }
 
 android {
@@ -36,10 +35,19 @@ android {
 		main.manifest.srcFile 'src/main/AndroidManifest.xml'
 	}
 
+	signingConfigs {
+		release {
+			storeFile file(RELEASE_STORE_FILE)
+			storePassword RELEASE_STORE_PASSWORD
+			keyAlias RELEASE_KEY_ALIAS
+			keyPassword RELEASE_KEY_PASSWORD
+		}
+	}
+
 	defaultConfig {
 		minSdkVersion 11
 		targetSdkVersion 17
-		versionCode 1
-		versionName "1.0"
+		versionCode 20000
+		versionName "2.0"
 	}
 }

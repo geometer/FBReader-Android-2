@@ -25,6 +25,8 @@ import android.os.Process;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
+import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
+
 public abstract class PluginApplication extends ZLAndroidApplication {
 	@Override
 	public void onCreate() {
@@ -43,4 +45,6 @@ public abstract class PluginApplication extends ZLAndroidApplication {
 			//FBReaderIntents.initPremium();
 		}
 	}
+
+	public abstract DocumentHolder createDocument();
 }

@@ -1,6 +1,6 @@
 package org.geometerplus.android.fbreader.formatPlugin;
 
-import org.geometerplus.fbreader.plugin.base.document.DocumentFactory;
+import org.geometerplus.fbreader.plugin.base.PluginApplication;
 import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
 
 import android.app.Service;
@@ -33,7 +33,7 @@ public abstract class CoverService extends Service {
 	private synchronized Bitmap readBitmap(String path, int maxWidth, int maxHeight) {
 		Log.d("METAINFO", "readbitmapstart");
 		try {
-			final DocumentHolder doc = DocumentFactory.createDocument(path);
+			final DocumentHolder doc = ((PluginApplication)getApplication()).createDocument();
 			Log.d("METAINFO", "doccreated");
 			if (!doc.open(path)) {
 				return null;
