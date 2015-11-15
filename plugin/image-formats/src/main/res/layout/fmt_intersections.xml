@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/fmt_root"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:minWidth="300dp"
+	android:orientation="vertical"
+>
+	<include layout="@layout/md_toolbar"/>
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginLeft="12dp"
+		android:layout_marginRight="12dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginBottom="12dp"
+		android:layout_gravity="center"
+	>
+		<org.geometerplus.fbreader.plugin.base.reader.PercentEditor
+			android:id="@+id/fmt_x_edit"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+		/>
+		<org.geometerplus.fbreader.plugin.base.reader.PercentEditor
+			android:id="@+id/fmt_y_edit"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+		/>
+	</LinearLayout>
+</LinearLayout>

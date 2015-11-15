@@ -1,0 +1,21 @@
+<resources>
+    <string name="bookOptions">Настройки книги</string>
+    <string name="crop">Обрезка полей</string>
+    <string name="top">Сверху:</string>
+    <string name="bottom">Снизу:</string>
+    <string name="right">Справа:</string>
+    <string name="left">Слева:</string>
+    <string name="intersections">Пересечения при обходе</string>
+    <string name="x">Горизонтальное:</string>
+    <string name="y">Вертикальное:</string>
+    <string name="zoomMode">Режим увеличения</string>
+    <string name="free">Изменяемое</string>
+    <string name="fixed">Фиксированное:</string>
+    <string name="fitPage">Страница целиком</string>
+    <string name="fitWidth">По ширине</string>
+    <string name="fitHeight">По высоте</string>
+    <string name="screenPercent">Процент от экрана</string>
+    <string name="pagePercent">Процент от страницы</string>
+    <string name="pageWay">Путь обхода страницы</string>
+    <string name="useWallpaper">Использовать фон</string>
+</resources>
