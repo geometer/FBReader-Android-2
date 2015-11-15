@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:minWidth="300dp"
+	android:orientation="vertical"
+>
+	<include layout="@layout/md_toolbar"/>
+	<FrameLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="12dp"
+		android:layout_marginRight="12dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginBottom="12dp"
+		android:layout_gravity="center"
+	>
+		<ScrollView
+			android:id="@+id/fmt_scroll"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+		>
+			<RadioGroup
+				android:id="@+id/fmt_group"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:choiceMode="singleChoice"
+				android:orientation="vertical"
+			>
+				<RadioButton
+					android:id="@+id/fmt_free_zoom"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Free Zoom"
+				/>
+				<TextView
+					android:id="@+id/fmt_fixed_text"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Fixed Zoom:"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+				/>
+				<RadioButton
+					android:id="@+id/fmt_fit_page"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Fit Page"
+				/>
+				<RadioButton
+					android:id="@+id/fmt_fit_width"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Fit Width"
+				/>
+				<RadioButton
+					android:id="@+id/fmt_fit_height"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Fit Height"
+				/>
+				<RadioButton
+					android:id="@+id/fmt_screen_percent"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Percent to screen:"
+				/>
+				<org.geometerplus.fbreader.plugin.base.reader.PercentEditor
+					android:id="@+id/fmt_screen_percent_editor"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:visibility="gone"
+				/>
+				<RadioButton
+					android:id="@+id/fmt_page_percent"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Percent to page:"
+				/>
+				<org.geometerplus.fbreader.plugin.base.reader.PercentEditor
+					android:id="@+id/fmt_page_percent_editor"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:visibility="gone"
+				/>
+			</RadioGroup>
+		</ScrollView>
+	</FrameLayout>
+</LinearLayout>

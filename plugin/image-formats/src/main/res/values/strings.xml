@@ -1,0 +1,21 @@
+<resources>
+    <string name="bookOptions">Book options</string>
+    <string name="crop">Crop</string>
+    <string name="top">Top:</string>
+    <string name="bottom">Bottom:</string>
+    <string name="right">Right:</string>
+    <string name="left">Left:</string>
+    <string name="intersections">In page overlap</string>
+    <string name="x">Horizontal:</string>
+    <string name="y">Vertical:</string>
+    <string name="zoomMode">Zoom mode</string>
+    <string name="free">Variable zoom</string>
+    <string name="fixed">Fixed zoom:</string>
+    <string name="fitPage">Fit page</string>
+    <string name="fitWidth">Fit width</string>
+    <string name="fitHeight">Fit height</string>
+    <string name="screenPercent">Screen percent</string>
+    <string name="pagePercent">Page percent</string>
+    <string name="pageWay">Page way around</string>
+    <string name="useWallpaper">Use wallpaper</string>
+</resources>

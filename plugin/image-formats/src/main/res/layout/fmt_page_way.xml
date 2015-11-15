@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/fmt_root"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:minWidth="300dp"
+	android:orientation="vertical"
+>
+	<include layout="@layout/md_toolbar"/>
+	<RadioGroup
+		android:id="@+id/fmt_group"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:choiceMode="singleChoice"
+		android:orientation="horizontal"
+		android:layout_marginLeft="12dp"
+		android:layout_marginRight="12dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginBottom="12dp"
+		android:layout_gravity="center"
+	>
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="5dp"
+			android:gravity="center_horizontal"
+			android:orientation="vertical"
+		>
+			<ImageView
+				android:id="@+id/fmt_imageView1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/way_horiz"
+			/>
+			<RadioButton
+				android:id="@+id/fmt_horiz_check"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=""
+			/>
+		</LinearLayout>
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="5dp"
+			android:gravity="center_horizontal"
+			android:orientation="vertical"
+		>
+			<ImageView
+				android:id="@+id/fmt_imageView2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/way_vert"
+			/>
+			<RadioButton
+				android:id="@+id/fmt_vert_check"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=""
+			/>
+		</LinearLayout>
+	</RadioGroup>
+</LinearLayout>

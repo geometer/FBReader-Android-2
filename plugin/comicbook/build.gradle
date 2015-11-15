@@ -1,0 +1,53 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'com.android.tools.build:gradle:1.3.0'
+	}
+}
+
+apply plugin: 'com.android.application'
+
+dependencies {
+	compile project(':plugin/image-formats')
+	compile project(':third-party/junrar')
+}
+
+android {
+	compileSdkVersion 23
+	buildToolsVersion '23.0.1'
+
+	lintOptions {
+		abortOnError false
+	}
+
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_7
+		targetCompatibility JavaVersion.VERSION_1_7
+	}
+
+	sourceSets {
+		main.java.srcDirs = ['src/main/java']
+		main.aidl.srcDirs = ['src/main/java']
+		main.res.srcDirs = ['src/main/res']
+		main.manifest.srcFile 'src/main/AndroidManifest.xml'
+	}
+
+	signingConfigs {
+		release {
+			storeFile file(RELEASE_STORE_FILE)
+			storePassword RELEASE_STORE_PASSWORD
+			keyAlias RELEASE_KEY_ALIAS
+			keyPassword RELEASE_KEY_PASSWORD
+		}
+	}
+
+	defaultConfig {
+		minSdkVersion 11
+		targetSdkVersion 17
+		versionCode 20000
+		versionName "2.0"
+	}
+}
