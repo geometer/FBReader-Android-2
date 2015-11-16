@@ -50,4 +50,11 @@ android {
 		versionCode 20000
 		versionName "2.0"
 	}
+
+	buildTypes {
+		release {
+			minifyEnabled false
+			signingConfig signingConfigs.release
+		}
+	}
 }
