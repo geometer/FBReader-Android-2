@@ -22,12 +22,16 @@ package org.geometerplus.fbreader.plugin.base;
 import android.app.ActivityManager;
 import android.os.Process;
 
+import org.geometerplus.fbreader.formats.IFormatPluginCollection;
+
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
 import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
+import org.geometerplus.fbreader.plugin.base.document.DocumentPlugin;
 
-public abstract class PluginApplication extends ZLAndroidApplication {
+public abstract class PluginApplication extends ZLAndroidApplication implements IFormatPluginCollection {
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -47,4 +51,8 @@ public abstract class PluginApplication extends ZLAndroidApplication {
 	}
 
 	public abstract DocumentHolder createDocument();
+
+	public DocumentPlugin getPlugin(ZLFile file) {
+		return new DocumentPlugin();
+	}
 }

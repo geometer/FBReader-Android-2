@@ -5,12 +5,13 @@ import java.util.*;
 import android.graphics.*;
 import android.support.v4.util.LruCache;
 
+import org.fbreader.common.options.ColorProfile;
+
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
 import org.geometerplus.zlibrary.core.util.ZLColor;
 import org.geometerplus.fbreader.book.Bookmark;
 import org.geometerplus.fbreader.book.HighlightingStyle;
-import org.fbreader.common.options.ColorProfile;
 import org.geometerplus.fbreader.plugin.base.SettingsHolder;
 import org.geometerplus.fbreader.plugin.base.document.PageHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
