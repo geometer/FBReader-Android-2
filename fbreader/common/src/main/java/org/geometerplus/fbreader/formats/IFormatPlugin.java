@@ -20,11 +20,8 @@
 package org.geometerplus.fbreader.formats;
 
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.core.image.ZLImage;
 
-public interface IFormatPluginCollection {
-	public interface Holder {
-		IFormatPluginCollection getCollection();
-	}
-
-	IFormatPlugin getPlugin(ZLFile file);
+public interface IFormatPlugin {
+	ZLImage readCover(ZLFile file);
 }

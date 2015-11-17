@@ -31,7 +31,7 @@ import org.geometerplus.zlibrary.core.util.SystemInfo;
 
 import org.geometerplus.fbreader.book.AbstractBook;
 
-public abstract class FormatPlugin {
+public abstract class FormatPlugin implements IFormatPlugin {
 	protected final SystemInfo SystemInfo;
 	private final String myFileType;
 
