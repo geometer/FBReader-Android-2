@@ -12,9 +12,6 @@ apply plugin: 'com.android.library'
 
 dependencies {
 	compile project(':fbreader/common')
-	compile project(':fbreader/resources')
-	compile project(':fbreader/fonts')
-	compile project(':third-party/SuperToasts')
 }
 
 android {
@@ -34,6 +31,7 @@ android {
 		main.java.srcDirs = ['src/main/java']
 		main.aidl.srcDirs = ['src/main/java']
 		main.res.srcDirs = ['src/main/res']
+		main.assets.srcDirs = ['src/main/assets']
 		main.manifest.srcFile 'src/main/AndroidManifest.xml'
 	}
 
@@ -42,5 +40,10 @@ android {
 		targetSdkVersion 17
 		versionCode 1
 		versionName "1.0"
+	}
+
+	buildTypes {
+		release {
+		}
 	}
 }
