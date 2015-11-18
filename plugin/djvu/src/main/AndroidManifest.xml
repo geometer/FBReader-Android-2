@@ -1,0 +1,79 @@
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	package="org.geometerplus.fbreader.plugin.djvu"
+	android:installLocation="auto"
+>
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="fbreader.permission.LIBRARY" />
+	<uses-permission android:name="fbreader.permission.CONFIG" />
+	<uses-permission android:name="fbreader.permission.SYNC" />
+
+	<application
+		android:icon="@drawable/fbreader_djvu"
+		android:name = "org.geometerplus.fbreader.plugin.djvu.DJVUApplication"
+		android:label="@string/app_name"
+		android:largeHeap="true"
+	>
+		<activity
+			android:name=".FBReaderDJVU"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:excludeFromRecents="true"
+			android:label="@string/app_name"
+			android:launchMode="singleTask"
+			android:theme="@style/FBReaderMD.Activity"
+		>
+			<intent-filter>
+				<action android:name="android.fbreader.action.plugin.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.fbreader.action.plugin.KILL" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
+		</activity>
+		<activity
+			android:name=".FBReaderDJVUPremium"
+			android:process=":premium"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:excludeFromRecents="true"
+			android:label="@string/app_name"
+			android:launchMode="singleTask"
+			android:theme="@style/FBReaderMD.Activity"
+		>
+			<intent-filter>
+				<action android:name="com.fbreader.action.plugin.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="com.fbreader.action.plugin.KILL" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+
+			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
+		</activity>
+		<service
+			android:name="org.geometerplus.android.fbreader.formatPlugin.DJVUCoverService"
+			android:process=":metainfo"
+		>
+			<intent-filter>
+				<action android:name="android.fbreader.action.plugin.CONNECT_COVER_SERVICE" />
+			</intent-filter>
+		</service>
+		<service
+			android:name="org.geometerplus.android.fbreader.formatPlugin.DJVUCoverServicePremium"
+			android:process=":metainfo_premium"
+		>
+			<intent-filter>
+				<action android:name="com.fbreader.action.plugin.CONNECT_COVER_SERVICE" />
+			</intent-filter>
+		</service>
+	</application>
+</manifest>
