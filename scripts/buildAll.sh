@@ -25,8 +25,11 @@ done
 ./gradlew zipAlignFatRelease -p fbreader/app
 mv $outdir/apk/fbreader/app-fat-release.apk READY/FBReaderJ_$build.apk
 mv $outdir/mapping/fat/release/mapping.txt mappings/mapping-$version.$build.txt
-./gradlew zipAlignRelease -p plugin/bookshelf
-mv plugin/bookshelf/build/outputs/apk/plugin/bookshelf-release.apk READY/bookshelf.apk
+
+for plugin in bookshelf comicbook djvu pdf; do
+	./gradlew zipAlignRelease -p plugin/$plugin
+	mv plugin/$plugin/build/outputs/apk/plugin/$plugin-release.apk READY/$plugin.apk
+done
 
 build=nst
 git checkout nook
