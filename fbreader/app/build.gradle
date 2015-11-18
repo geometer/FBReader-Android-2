@@ -16,6 +16,7 @@ dependencies {
 	compile project(':fbreader/api')
 	compile project(':fbreader/util')
 	compile project(':fbreader/common')
+	compile project(':fbreader/resources')
 	compile project(':fbreader/fonts')
 	compile project(':fbreader/text-formats')
 	compile project(':fbreader/zip-amse')
