@@ -34,7 +34,7 @@ android {
 	}
 
 	defaultConfig {
-		minSdkVersion 14
+		minSdkVersion 11
 		targetSdkVersion 17
 		versionCode 1
 		versionName "1.0"
@@ -42,9 +42,9 @@ android {
 
 	buildTypes {
 		release {
-			buildConfigField "String", "COMPANY", "${FBREADER_COM_PDF_COMPANY}"
-			buildConfigField "String", "EMAIL", "${FBREADER_COM_PDF_EMAIL}"
-			buildConfigField "String", "KEY", "${FBREADER_COM_PDF_KEY}"
+			buildConfigField "String", "COMPANY", "${PLUGIN_PDF_COMPANY}"
+			buildConfigField "String", "EMAIL", "${PLUGIN_PDF_EMAIL}"
+			buildConfigField "String", "KEY", "${PLUGIN_PDF_KEY}"
 		}
 	}
 }

@@ -10,7 +10,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 public abstract class CoverService extends Service {
-
 	private final CoverReader.Stub binder = new CoverReader.Stub() {
 		@Override
 		public Bitmap readBitmap(String path, int maxWidth, int maxHeight) {
