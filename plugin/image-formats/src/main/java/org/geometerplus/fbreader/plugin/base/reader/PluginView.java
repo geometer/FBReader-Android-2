@@ -42,8 +42,6 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 		return myDocument;
 	}
 
-	public static int ALPHA = 200;
-
 	public class PDFPosition {
 		public final int PageNo;
 		public final float FixedX;

@@ -19,6 +19,8 @@ public abstract class PageHolder {
 	protected final DocumentHolder myDoc;
 	protected final int myPageNo;
 
+	// current drawing screen area size
+	// pixels
 	public final int Width;
 	public final int Height;
 
@@ -37,6 +39,8 @@ public abstract class PageHolder {
 	public abstract int getContainedPageNum();
 	protected abstract void draw(Bitmap canvas, Rect dst, float ratio, float zoom);
 
+	// document page size - cropped area
+	// doc points
 	public abstract float getRealHeight();
 	public abstract float getRealWidth();
 
@@ -140,20 +144,24 @@ public abstract class PageHolder {
 		}
 	}
 
+	// reduced screen drawing area size:
+	//     inside the drawing area, with same ratio as cropped page has
 	public int getBmpHeight() {
-		if (!myDoc.fullyInitialized()) {
+		final float w = getRealWidth();
+		final float h = getRealHeight();
+		if (w == 0 || h == 0) {
 			return Height;
 		}
-		float ratio = Math.max(getRealHeight() / Height, getRealWidth() / Width);
-		return (int)(getRealHeight() / ratio);
+		return Math.min(Height, (int)(h * getAdjustedWidth() / w + .5f));
 	}
 
 	public int getBmpWidth() {
-		if (!myDoc.fullyInitialized()) {
-			return Width;
+		final float w = getRealWidth();
+		final float h = getRealHeight();
+		if (w == 0 || h == 0) {
+			return getAdjustedWidth();
 		}
-		float ratio = Math.max(getRealHeight() / Height, getRealWidth() / Width);
-		return (int)(getRealWidth() / ratio);
+		return Math.min(getAdjustedWidth(), (int)(w * Height / h + .5f));
 	}
 
 	public float getShiftX() {
