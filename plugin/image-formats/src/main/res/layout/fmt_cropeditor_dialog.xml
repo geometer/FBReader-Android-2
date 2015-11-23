@@ -34,7 +34,6 @@
 					<RelativeLayout
 						android:layout_width="wrap_content"
 						android:layout_height="match_parent"
-						android:orientation="vertical"
 					>
 						<org.geometerplus.fbreader.plugin.base.reader.PercentEditor
 							android:id="@+id/fmt_crop_left"
