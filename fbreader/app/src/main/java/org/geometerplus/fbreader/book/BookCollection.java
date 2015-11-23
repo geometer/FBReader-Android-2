@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.geometerplus.zlibrary.core.filesystem.*;
 import org.geometerplus.zlibrary.core.image.ZLImage;
+import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.MiscUtil;
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 
@@ -843,12 +844,13 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 	}
 
 	public List<FormatDescriptor> formats() {
+		final ZLResource root = ZLResource.resource("format");
 		final List<FormatPlugin> plugins = PluginCollection.plugins();
 		final List<FormatDescriptor> descriptors = new ArrayList<FormatDescriptor>(plugins.size());
 		for (FormatPlugin p : plugins) {
 			final FormatDescriptor d = new FormatDescriptor();
 			d.Id = p.supportedFileType();
-			d.Name = p.name();
+			d.Name = root.getResource(d.Id).getValue();
 			d.IsActive = myActiveFormats == null || myActiveFormats.contains(d.Id);
 			descriptors.add(d);
 		}

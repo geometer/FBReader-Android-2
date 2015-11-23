@@ -24,6 +24,7 @@ import java.util.*;
 import android.content.Context;
 
 import org.geometerplus.zlibrary.core.language.Language;
+import org.geometerplus.zlibrary.core.language.LanguageUtil;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
@@ -38,9 +39,9 @@ class BookLanguagePreference extends LanguagePreference implements BookInfoPrefe
 	private static List<Language> languages() {
 		final TreeSet<Language> set = new TreeSet<Language>();
 		for (String code : ZLTextHyphenator.Instance().languageCodes()) {
-			set.add(new Language(code));
+			set.add(LanguageUtil.language(code));
 		}
-		set.add(new Language(Language.OTHER_CODE));
+		set.add(LanguageUtil.language(Language.OTHER_CODE));
 		return new ArrayList<Language>(set);
 	}
 

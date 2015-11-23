@@ -59,7 +59,7 @@ public class NativeFormatPlugin extends BuiltinFormatPlugin {
 			code = readMetainfoNative(book);
 		}
 		if (code != 0) {
-			throw new BookReadingException(
+			BookReadingUtil.throwException(
 				"nativeCodeFailure",
 				BookUtil.fileByBook(book),
 				new String[] { String.valueOf(code), book.getPath() }
@@ -118,7 +118,7 @@ public class NativeFormatPlugin extends BuiltinFormatPlugin {
 					"Cannot write file from native code to " + tempDirectory
 				);
 			default:
-				throw new BookReadingException(
+				BookReadingUtil.throwException(
 					"nativeCodeFailure",
 					BookUtil.fileByBook(model.Book),
 					new String[] { String.valueOf(code), model.Book.getPath() }

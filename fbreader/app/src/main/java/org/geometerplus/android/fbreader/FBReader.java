@@ -40,6 +40,7 @@ import com.yotadevices.fbreader.FBReaderYotaService;
 
 import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.core.language.Language;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
@@ -1020,7 +1021,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow 
 		lastCallOption.setValue(currentTime);
 
 		ZLFile textFile =
-			ZLFile.createFileByPath("data/premium/" + ZLResource.getLanguage() + ".html");
+			ZLFile.createFileByPath("data/premium/" + Language.uiLanguage() + ".html");
 		if (!textFile.exists()) {
 			textFile = ZLFile.createFileByPath("data/premium/en.html");
 		}

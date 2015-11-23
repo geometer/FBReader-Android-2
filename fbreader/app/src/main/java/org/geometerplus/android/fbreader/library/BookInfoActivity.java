@@ -37,6 +37,7 @@ import org.geometerplus.zlibrary.core.filesystem.ZLPhysicalFile;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.core.image.ZLImageProxy;
 import org.geometerplus.zlibrary.core.language.Language;
+import org.geometerplus.zlibrary.core.language.LanguageUtil;
 import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
@@ -221,7 +222,7 @@ public class BookInfoActivity extends FBActivity implements MenuItem.OnMenuItemC
 		if (!ZLLanguageUtil.languageCodes().contains(language)) {
 			language = Language.OTHER_CODE;
 		}
-		setupInfoPair(R.id.book_language, "language", new Language(language).Name);
+		setupInfoPair(R.id.book_language, "language", LanguageUtil.language(language).Name);
 	}
 
 	private void setupAnnotation(Book book, PluginCollection pluginCollection) {

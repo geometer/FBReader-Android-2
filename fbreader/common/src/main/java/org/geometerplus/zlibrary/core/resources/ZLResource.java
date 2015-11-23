@@ -24,7 +24,7 @@ import java.util.*;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.core.language.Language;
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
+import org.geometerplus.zlibrary.core.language.LanguageUtil;
 
 abstract public class ZLResource {
 	public final String Name;
@@ -51,44 +51,11 @@ abstract public class ZLResource {
 		final List<Language> allLanguages = new LinkedList<Language>();
 		final ZLResource resource = ZLResource.resource("language-self");
 		for (String c : languageCodes()) {
-			allLanguages.add(new Language(c, resource));
+			allLanguages.add(LanguageUtil.language(c, resource));
 		}
 		Collections.sort(allLanguages);
-		allLanguages.add(0, new Language(Language.SYSTEM_CODE));
+		allLanguages.add(0, LanguageUtil.language(Language.SYSTEM_CODE));
 		return allLanguages;
-	}
-
-	private static final ZLStringOption ourLanguageOption =
-		new ZLStringOption("LookNFeel", "Language", Language.SYSTEM_CODE);
-	public static ZLStringOption getLanguageOption() {
-		return ourLanguageOption;
-	}
-	public static String getLanguage() {
-		final String code = getLanguageOption().getValue();
-		return Language.SYSTEM_CODE.equals(code) ? Locale.getDefault().getLanguage() : code;
-	}
-
-	public static Locale currentLocale() {
-		final String code = getLanguageOption().getValue();
-
-		final String split[] = code.split("_");
-		final Locale locale;
-		switch (split.length) {
-			case 1:
-				locale = new Locale(split[0]);
-				break;
-			case 2:
-				locale = new Locale(split[0], split[1]);
-				break;
-			default:
-				return Locale.getDefault();
-		}
-		try {
-			locale.getISO3Language();
-			return locale;
-		} catch (MissingResourceException e) {
-			return Locale.getDefault();
-		}
 	}
 
 	public static ZLResource resource(String key) {

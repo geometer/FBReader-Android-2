@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 FBReader.ORG Limited <contact@fbreader.org>
+ * Copyright (C) 2009-2015 FBReader.ORG Limited <contact@fbreader.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,20 +17,17 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.fbreader.formats;
+package org.geometerplus.zlibrary.core.language;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-public final class BookReadingException extends Exception {
-	public final ZLFile File;
-
-	public BookReadingException(String message, ZLFile file) {
-		super(message);
-		File = file;
+public abstract class LanguageUtil {
+	public static Language language(String code) {
+		return language(code, ZLResource.resource("language"));
 	}
 
-	public BookReadingException(String message, Throwable t, ZLFile file) {
-		super(message, t);
-		File = file;
+	public static Language language(String code, ZLResource root) {
+		final ZLResource resource = root.getResource(code);
+		return new Language(code, resource.hasValue() ? resource.getValue() : code);
 	}
 }

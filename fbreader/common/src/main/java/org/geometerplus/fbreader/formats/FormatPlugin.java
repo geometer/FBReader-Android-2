@@ -26,7 +26,6 @@ import org.geometerplus.zlibrary.core.drm.FileEncryptionInfo;
 import org.geometerplus.zlibrary.core.encodings.EncodingCollection;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.image.ZLImage;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 
 import org.geometerplus.fbreader.book.AbstractBook;
@@ -42,10 +41,6 @@ public abstract class FormatPlugin implements IFormatPlugin {
 
 	public final String supportedFileType() {
 		return myFileType;
-	}
-
-	public final String name() {
-		return ZLResource.resource("format").getResource(myFileType).getValue();
 	}
 
 	public ZLFile realBookFile(ZLFile file) throws BookReadingException {

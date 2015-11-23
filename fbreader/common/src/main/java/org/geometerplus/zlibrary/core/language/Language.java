@@ -20,11 +20,13 @@
 package org.geometerplus.zlibrary.core.language;
 
 import java.text.Normalizer;
+import java.util.Locale;
+import java.util.MissingResourceException;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.core.options.ZLStringOption;
 
 public class Language implements Comparable<Language> {
 	public static final String ANY_CODE = "any";
@@ -38,19 +40,46 @@ public class Language implements Comparable<Language> {
 		After
 	}
 
+	private static final ZLStringOption ourUiLanguageOption =
+		new ZLStringOption("LookNFeel", "Language", SYSTEM_CODE);
+	public static ZLStringOption uiLanguageOption() {
+		return ourUiLanguageOption;
+	}
+	public static String uiLanguage() {
+		final String code = uiLanguageOption().getValue();
+		return SYSTEM_CODE.equals(code) ? Locale.getDefault().getLanguage() : code;
+	}
+	public static Locale uiLocale() {
+		final String code = uiLanguageOption().getValue();
+
+		final String split[] = code.split("_");
+		final Locale locale;
+		switch (split.length) {
+			case 1:
+				locale = new Locale(split[0]);
+				break;
+			case 2:
+				locale = new Locale(split[0], split[1]);
+				break;
+			default:
+				return Locale.getDefault();
+		}
+		try {
+			locale.getISO3Language();
+			return locale;
+		} catch (MissingResourceException e) {
+			return Locale.getDefault();
+		}
+	}
+
 	public final String Code;
 	public final String Name;
 	private final String mySortKey;
 	private final Order myOrder;
 
-	public Language(String code) {
-		this(code, ZLResource.resource("language"));
-	}
-
-	public Language(String code, ZLResource root) {
+	Language(String code, String name) {
 		Code = code;
-		final ZLResource resource = root.getResource(code);
-		Name = resource.hasValue() ? resource.getValue() : code;
+		Name = name;
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 			mySortKey = normalize(Name);
@@ -65,6 +94,7 @@ public class Language implements Comparable<Language> {
 			myOrder = Order.Normal;
 		}
 	}
+
 
 	public int compareTo(Language other) {
 		final int diff = myOrder.compareTo(other.myOrder);

@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 
 import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.language.Language;
+import org.geometerplus.zlibrary.core.language.LanguageUtil;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.network.JsonRequest;
 import org.geometerplus.zlibrary.core.options.*;
@@ -218,7 +219,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 			final ZLAndroidLibrary androidLibrary = FBReaderUtil.getZLibrary(PreferenceActivity.this);
 			final String decimalSeparator = String.valueOf(
-				new DecimalFormatSymbols(ZLResource.currentLocale()).getDecimalSeparator()
+				new DecimalFormatSymbols(Language.uiLocale()).getDecimalSeparator()
 			);
 
 			final Screen directoriesScreen = createPreferenceScreen("directories");
@@ -340,12 +341,12 @@ public class PreferenceActivity extends FBSettingsActivity {
 			) {
 				@Override
 				protected String currentValue() {
-					return ZLResource.getLanguageOption().getValue();
+					return Language.uiLanguageOption().getValue();
 				}
 
 				@Override
 				protected void onValueSelected(int index, String code) {
-					final ZLStringOption languageOption = ZLResource.getLanguageOption();
+					final ZLStringOption languageOption = Language.uiLanguageOption();
 					if (!code.equals(languageOption.getValue())) {
 						languageOption.setValue(code);
 						finish();
@@ -778,10 +779,10 @@ public class PreferenceActivity extends FBSettingsActivity {
 			final List<String> langCodes = ZLResource.languageCodes();
 			final ArrayList<Language> languages = new ArrayList<Language>(langCodes.size() + 1);
 			for (String code : langCodes) {
-				languages.add(new Language(code));
+				languages.add(LanguageUtil.language(code));
 			}
 			Collections.sort(languages);
-			languages.add(0, new Language(
+			languages.add(0, LanguageUtil.language(
 				Language.ANY_CODE, dictionaryScreen.Resource.getResource("targetLanguage")
 			));
 			final LanguagePreference targetLanguagePreference = new LanguagePreference(
