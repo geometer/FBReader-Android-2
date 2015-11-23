@@ -974,27 +974,32 @@ void XHTMLReader::endParagraph() {
 	myModelReader.endParagraph();
 }
 
+static shared_ptr<ZLTextStyleEntry> spaceAfterBlocker;
+static shared_ptr<ZLTextStyleEntry> spaceBeforeBlocker;
+
 void XHTMLReader::restartParagraph(bool addEmptyLine) {
 	if (addEmptyLine && myCurrentParagraphIsEmpty) {
 		myModelReader.addFixedHSpace(1);
 	}
 	const unsigned char depth = myTagDataStack.size();
-	ZLTextStyleEntry spaceAfterBlocker(ZLTextStyleEntry::STYLE_OTHER_ENTRY);
-	spaceAfterBlocker.setLength(
-		ZLTextStyleEntry::LENGTH_SPACE_AFTER,
-		0,
-		ZLTextStyleEntry::SIZE_UNIT_PIXEL
-	);
-	addTextStyleEntry(spaceAfterBlocker, depth);
+	if (spaceAfterBlocker.isNull()) {
+		spaceAfterBlocker = new ZLTextStyleEntry(ZLTextStyleEntry::STYLE_OTHER_ENTRY);
+		spaceAfterBlocker->setLength(
+			ZLTextStyleEntry::LENGTH_SPACE_AFTER,
+			0,
+			ZLTextStyleEntry::SIZE_UNIT_PIXEL
+		);
+		spaceBeforeBlocker = new ZLTextStyleEntry(ZLTextStyleEntry::STYLE_OTHER_ENTRY);
+		spaceBeforeBlocker->setLength(
+			ZLTextStyleEntry::LENGTH_SPACE_BEFORE,
+			0,
+			ZLTextStyleEntry::SIZE_UNIT_PIXEL
+		);
+	}
+	addTextStyleEntry(*spaceAfterBlocker, depth);
 	endParagraph();
 	beginParagraph(true);
-	ZLTextStyleEntry spaceBeforeBlocker(ZLTextStyleEntry::STYLE_OTHER_ENTRY);
-	spaceBeforeBlocker.setLength(
-		ZLTextStyleEntry::LENGTH_SPACE_BEFORE,
-		0,
-		ZLTextStyleEntry::SIZE_UNIT_PIXEL
-	);
-	addTextStyleEntry(spaceBeforeBlocker, depth);
+	applySingleEntry(spaceBeforeBlocker);
 }
 
 void XHTMLReader::pushTextKind(FBTextKind kind) {
