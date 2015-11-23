@@ -25,7 +25,7 @@ import android.content.Intent;
 
 import org.fbreader.md.MDActivity;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.core.language.Language;
 
 abstract class FBActivityUtil {
 	static final String ORIENTATION_KEY = "fbreader.orientation";
@@ -33,14 +33,14 @@ abstract class FBActivityUtil {
 
 	static Intent updatedIntent(Intent intent, MDActivity activity) {
 		return intent
-			.putExtra(LANGUAGE_KEY, ZLResource.getLanguageOption().getValue())
+			.putExtra(LANGUAGE_KEY, Language.uiLanguageOption().getValue())
 			.putExtra(ORIENTATION_KEY, activity.getRequestedOrientation());
 	}
 
 	static void updateLocale(MDActivity activity) {
 		final Resources res = activity.getBaseContext().getResources();
 		final Configuration config = new Configuration();
-		config.locale = ZLResource.currentLocale();
+		config.locale = Language.uiLocale();
 		res.updateConfiguration(config, res.getDisplayMetrics());
 	}
 
@@ -50,7 +50,7 @@ abstract class FBActivityUtil {
 		}
 		final String language = intent.getStringExtra(LANGUAGE_KEY);
 		if (language != null) {
-			ZLResource.getLanguageOption().setValue(language);
+			Language.uiLanguageOption().setValue(language);
 			intent.removeExtra(LANGUAGE_KEY);
 		}
 		final int orientation = intent.getIntExtra(ORIENTATION_KEY, Integer.MIN_VALUE);

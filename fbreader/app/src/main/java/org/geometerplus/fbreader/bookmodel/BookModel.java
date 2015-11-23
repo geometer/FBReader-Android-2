@@ -37,9 +37,11 @@ public final class BookModel {
 			return model;
 		}
 
-		throw new BookReadingException(
+		BookReadingUtil.throwException(
 			"unknownPluginType", null, new String[] { String.valueOf(plugin) }
 		);
+		// not reachable
+		return null;
 	}
 
 	public final Book Book;

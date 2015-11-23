@@ -44,8 +44,8 @@ import org.apache.http.protocol.BasicHttpContext;
 
 import org.fbreader.util.ComparisonUtil;
 
+import org.geometerplus.zlibrary.core.language.Language;
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.ZLNetworkUtil;
 
 public class ZLNetworkManager {
@@ -397,7 +397,7 @@ public class ZLNetworkManager {
 				httpRequest.setHeader("X-Accept-Auto-Login", "True");
 			}
 			httpRequest.setHeader("Accept-Encoding", "gzip");
-			httpRequest.setHeader("Accept-Language", ZLResource.getLanguage());
+			httpRequest.setHeader("Accept-Language", Language.uiLanguage());
 			for (Map.Entry<String,String> header : request.Headers.entrySet()) {
 				httpRequest.setHeader(header.getKey(), header.getValue());
 			}

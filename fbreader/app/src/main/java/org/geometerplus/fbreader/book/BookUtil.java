@@ -26,7 +26,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import org.geometerplus.zlibrary.core.filesystem.*;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.core.language.Language;
 
 import org.geometerplus.fbreader.formats.*;
 
@@ -40,7 +40,7 @@ public abstract class BookUtil {
 	}
 
 	public static ZLResourceFile getHelpFile() {
-		final Locale locale = ZLResource.currentLocale();
+		final Locale locale = Language.uiLocale();
 
 		ZLResourceFile file = ZLResourceFile.createResourceFile(
 			"data/intro/intro-" + locale.getLanguage() + "_" + locale.getCountry() + ".epub"

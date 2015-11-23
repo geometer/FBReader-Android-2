@@ -42,6 +42,7 @@ import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.filesystem.ZLPhysicalFile;
 import org.geometerplus.zlibrary.core.filetypes.FileType;
 import org.geometerplus.zlibrary.core.filetypes.FileTypeCollection;
+import org.geometerplus.zlibrary.core.language.Language;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
@@ -99,7 +100,7 @@ public abstract class FBReaderUtil {
 		BufferedReader reader = null;
 		try {
 			final Locale locale = Locale.getDefault();
-			InputStream is = assetsStream(activity, name, ZLResource.getLanguage());
+			InputStream is = assetsStream(activity, name, Language.uiLanguage());
 			if (is == null) {
 				is = assetsStream(activity, name, locale.getLanguage() + "_" + locale.getCountry());
 			}
