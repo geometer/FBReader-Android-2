@@ -371,7 +371,14 @@ public abstract class DictionaryUtil {
 		});
 	}
 
-	public static void onActivityResult(final MainActivity fbreader, int resultCode, final Intent data) {
-		getDictionaryInfo("dictan").onActivityResult(fbreader, resultCode, data);
+	public static void onActivityResult(final MainActivity fbreader, int requestCode, int resultCode, final Intent data) {
+		switch (requestCode) {
+			case MainActivity.REQUEST_DICTIONARY:
+				fbreader.hideDictionarySelection();
+				break;
+			case MainActivity.REQUEST_DICTIONARY_EXTRA:
+				getDictionaryInfo("dictan").onActivityResult(fbreader, resultCode, data);
+				break;
+		}
 	}
 }

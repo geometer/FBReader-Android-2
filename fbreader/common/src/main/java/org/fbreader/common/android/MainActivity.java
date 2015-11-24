@@ -73,6 +73,7 @@ public abstract class MainActivity extends FBActivity {
 	public static final int REQUEST_PREFERENCES = 1;
 	public static final int REQUEST_CANCEL_MENU = 2;
 	public static final int REQUEST_DICTIONARY = 3;
+	public static final int REQUEST_DICTIONARY_EXTRA = 4;
 
 	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
 
@@ -458,7 +459,8 @@ public abstract class MainActivity extends FBActivity {
 				super.onActivityResult(requestCode, resultCode, data);
 				break;
 			case REQUEST_DICTIONARY:
-				DictionaryUtil.onActivityResult(this, resultCode, data);
+			case REQUEST_DICTIONARY_EXTRA:
+				DictionaryUtil.onActivityResult(this, requestCode, resultCode, data);
 				break;
 		}
 	}
