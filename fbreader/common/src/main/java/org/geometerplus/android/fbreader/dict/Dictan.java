@@ -47,7 +47,7 @@ final class Dictan extends DictionaryUtil.PackageInfo {
 		intent.putExtra("article.mode", 20);
 		intent.putExtra("article.text.size.max", MAX_LENGTH_FOR_TOAST);
 		try {
-			fbreader.startActivityForResult(intent, MainActivity.REQUEST_DICTIONARY);
+			fbreader.startActivityForResult(intent, MainActivity.REQUEST_DICTIONARY_EXTRA);
 			fbreader.overridePendingTransition(0, 0);
 			if (outliner != null) {
 				outliner.run();
@@ -102,7 +102,7 @@ final class Dictan extends DictionaryUtil.PackageInfo {
 					try {
 						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 						intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-						fbreader.startActivity(intent);
+						fbreader.startActivityForResult(intent, MainActivity.REQUEST_DICTIONARY);
 						fbreader.overridePendingTransition(0, 0);
 					} catch (ActivityNotFoundException e) {
 						// ignore

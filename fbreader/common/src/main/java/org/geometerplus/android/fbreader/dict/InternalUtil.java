@@ -42,12 +42,12 @@ abstract class InternalUtil {
 		final Intent intent = new Intent(activity, DictionaryNotInstalledActivity.class);
 		intent.putExtra(DictionaryNotInstalledActivity.DICTIONARY_NAME_KEY, info.getTitle());
 		intent.putExtra(DictionaryNotInstalledActivity.PACKAGE_NAME_KEY, info.get("package"));
-		activity.startActivity(intent);
+		activity.startActivityForResult(intent, MainActivity.REQUEST_DICTIONARY);
 	}
 
 	static void startDictionaryActivity(MainActivity fbreader, Intent intent, DictionaryUtil.PackageInfo info) {
 		try {
-			fbreader.startActivity(intent);
+			fbreader.startActivityForResult(intent, MainActivity.REQUEST_DICTIONARY);
 			fbreader.overridePendingTransition(0, 0);
 		} catch (ActivityNotFoundException e) {
 			installDictionaryIfNotInstalled(fbreader, info);
