@@ -998,6 +998,7 @@ void XHTMLReader::restartParagraph(bool addEmptyLine) {
 	}
 	addTextStyleEntry(*spaceAfterBlocker, depth);
 	endParagraph();
+	myModelReader.addStyleCloseEntry();
 	beginParagraph(true);
 	applySingleEntry(spaceBeforeBlocker);
 }
