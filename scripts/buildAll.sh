@@ -26,9 +26,17 @@ done
 mv $outdir/apk/fbreader/app-fat-release.apk READY/FBReaderJ_$build.apk
 mv $outdir/mapping/fat/release/mapping.txt mappings/mapping-$version.$build.txt
 
-for plugin in bookshelf comicbook djvu pdf; do
+for plugin in bookshelf comicbook djvu; do
 	./gradlew zipAlignRelease -p plugin/$plugin
 	mv plugin/$plugin/build/outputs/apk/plugin/$plugin-release.apk READY/$plugin.apk
+done
+for plugin in pdf; do
+	for arch in Arm Armv7a X86 Mips; do
+		./gradlew zipAlign${arch}Release -p fbreader/app
+		lower=`echo $arch | tr '[:upper:]' '[:lower:]'`
+		mv $outdir/apk/fbreader/app-$lower-release.apk READY/FBReaderJ_$build-$lower.apk
+		mv $outdir/mapping/$lower/release/mapping.txt mappings/mapping-$plugin-$version.$build-$lower.txt
+	done
 done
 
 build=nst

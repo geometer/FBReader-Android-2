@@ -47,7 +47,7 @@ android {
 	defaultConfig {
 		minSdkVersion 11
 		targetSdkVersion 17
-		versionCode 150000
+		versionCode 0
 		versionName "1.5"
 	}
 
@@ -57,4 +57,75 @@ android {
 			signingConfig signingConfigs.release
 		}
 	}
+}
+
+android {
+	flavorDimensions 'abi'
+
+	productFlavors {
+		fat {
+			dimension 'abi'
+			ndk {
+				abiFilters 'x86', 'armeabi-v7a', 'armeabi', 'mips'
+				versionCode 0
+			}
+		}
+		arm {
+			dimension 'abi'
+			ndk {
+				abiFilter 'armeabi'
+				versionCode 1
+			}
+		}
+		armv7a {
+			dimension 'abi'
+			ndk {
+				abiFilter 'armeabi-v7a'
+				versionCode 2
+			}
+		}
+		x86 {
+			dimension 'abi'
+			ndk {
+				abiFilter 'x86'
+				versionCode 3
+			}
+		}
+		mips {
+			dimension 'abi'
+			ndk {
+				abiFilter 'mips'
+				versionCode 4
+			}
+		}
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+			signingConfig signingConfigs.release
+		}
+	}
+}
+
+android.applicationVariants.all { variant ->
+	def abiVersion = variant.productFlavors.get(0).versionCode
+
+	def baseCode = 0
+	def version = versionName
+	if (version.matches('\\d*\\.\\d* beta \\d*')) {
+		def parts = version.split('[ .]')
+		baseCode = parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000 - 5000 + parts[3].toInteger() * 100
+	} else if (version.matches('\\d*\\.\\d*\\.\\d*')) {
+		def parts = version.split('\\.')
+		baseCode = parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000 + parts[2].toInteger() * 100
+	} else if (version.matches('\\d*\\.\\d*')) {
+		def parts = version.split('\\.')
+		baseCode = parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000
+	} else {
+		throw new IllegalArgumentException('Unsupported version format: ' + version)
+	}
+
+	variant.mergedFlavor.versionCode = baseCode + abiVersion
 }
