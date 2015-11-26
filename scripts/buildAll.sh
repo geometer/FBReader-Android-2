@@ -32,7 +32,7 @@ for plugin in bookshelf comicbook djvu; do
 done
 for plugin in pdf; do
 	for arch in Fat Arm Armv7a X86 Mips; do
-		./gradlew zipAlign${arch}Release -p fbreader/app
+		./gradlew zipAlign${arch}Release -p plugin/$plugin
 		lower=`echo $arch | tr '[:upper:]' '[:lower:]'`
 		mv plugin/$plugin/build/outputs/apk/plugin/$plugin-$lower-release.apk READY/$plugin-$lower.apk
 		mv plugin/$plugin/build/outputs/mapping/$lower/release/mapping.txt mappings/mapping-$plugin-$version.$build-$lower.txt
