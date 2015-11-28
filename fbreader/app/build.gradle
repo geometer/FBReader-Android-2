@@ -18,6 +18,7 @@ dependencies {
 	compile project(':fbreader/common')
 	compile project(':fbreader/resources')
 	compile project(':fbreader/fonts')
+	compile project(':fbreader/reader')
 	compile project(':fbreader/text-formats')
 	compile project(':fbreader/zip-amse')
 	compile project(':third-party/drag-sort-listview')

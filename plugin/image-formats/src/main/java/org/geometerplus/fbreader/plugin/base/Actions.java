@@ -7,6 +7,7 @@ import android.content.pm.*;
 import android.os.Build;
 import android.widget.Toast;
 
+import org.fbreader.reader.android.GotoPageDialogUtil;
 import org.fbreader.util.Boolean3;
 
 import org.geometerplus.zlibrary.core.library.ZLibrary;
@@ -23,7 +24,6 @@ import org.geometerplus.fbreader.util.FixedTextSnippet;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
-import org.geometerplus.android.util.GotoPageDialogUtil;
 
 public class Actions {
 	static class StartSearchAction extends ViewHolder.Action<ViewHolder> {

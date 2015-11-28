@@ -32,7 +32,7 @@ import org.geometerplus.zlibrary.text.view.ZLTextVideoRegionSoul;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.fbreader.httpd.DataUtil;
-import org.geometerplus.android.util.UIMessageUtil;
+import org.fbreader.reader.android.UIMessageUtil;
 
 class OpenVideoAction extends FBReader.Action<FBReader,FBReaderApp> {
 	OpenVideoAction(FBReader baseActivity) {

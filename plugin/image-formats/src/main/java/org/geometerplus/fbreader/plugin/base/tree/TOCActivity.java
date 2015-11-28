@@ -30,13 +30,13 @@ import org.geometerplus.zlibrary.core.tree.ZLTree;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 
+import org.geometerplus.android.fbreader.ZLTreeAdapter;
+
 import org.fbreader.common.android.FBActivity;
 import org.fbreader.common.android.FBReaderUtil;
-import org.geometerplus.android.fbreader.ZLTreeAdapter;
-import org.geometerplus.android.util.ContextMenuDialog;
-
-import org.fbreader.util.android.ViewUtil;
 import org.fbreader.plugin.format.base.R;
+import org.fbreader.reader.android.ContextMenuDialog;
+import org.fbreader.util.android.ViewUtil;
 
 public class TOCActivity extends FBActivity {
 	private TOCAdapter myAdapter;

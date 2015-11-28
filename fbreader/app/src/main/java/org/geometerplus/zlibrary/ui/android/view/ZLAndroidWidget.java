@@ -43,6 +43,7 @@ import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.animation.*;
 
 import org.fbreader.common.options.PageTurningOptions;
+import org.fbreader.reader.android.MainView;
 
 import org.geometerplus.fbreader.Paths;
 

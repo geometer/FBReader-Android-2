@@ -44,7 +44,7 @@ import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 import org.geometerplus.android.fbreader.image.ImageViewActivity;
 import org.geometerplus.android.fbreader.network.*;
 import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
-import org.geometerplus.android.util.UIMessageUtil;
+import org.fbreader.reader.android.UIMessageUtil;
 
 class ProcessHyperlinkAction extends FBReader.Action<FBReader,FBReaderApp> {
 	ProcessHyperlinkAction(FBReader baseActivity) {

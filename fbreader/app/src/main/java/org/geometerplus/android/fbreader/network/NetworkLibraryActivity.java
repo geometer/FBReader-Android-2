@@ -27,9 +27,10 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
-import org.fbreader.util.Boolean3;
-
 import org.fbreader.md.MDAlertDialogBuilder;
+import org.fbreader.reader.android.ContextMenuDialog;
+import org.fbreader.reader.android.UIMessageUtil;
+import org.fbreader.util.Boolean3;
 
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.network.ZLNetworkManager;
@@ -44,8 +45,6 @@ import org.geometerplus.fbreader.network.tree.*;
 import org.geometerplus.fbreader.network.urlInfo.*;
 import org.geometerplus.fbreader.tree.FBTree;
 
-import org.geometerplus.android.util.ContextMenuDialog;
-import org.geometerplus.android.util.UIMessageUtil;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.fbreader.network.action.*;

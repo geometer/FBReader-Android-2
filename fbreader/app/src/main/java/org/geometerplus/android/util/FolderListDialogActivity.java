@@ -28,6 +28,7 @@ import android.view.*;
 import android.widget.*;
 
 import org.fbreader.md.MDAlertDialogBuilder;
+import org.fbreader.reader.android.UIMessageUtil;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 

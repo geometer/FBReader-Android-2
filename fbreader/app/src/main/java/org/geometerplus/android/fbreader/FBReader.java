@@ -33,8 +33,9 @@ import android.widget.RelativeLayout;
 
 import org.fbreader.util.Boolean3;
 import org.fbreader.common.ActionCode;
-import org.fbreader.common.android.MainActivity;
 import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.reader.android.MainActivity;
+import org.fbreader.reader.android.UIMessageUtil;
 
 import com.yotadevices.fbreader.FBReaderYotaService;
 

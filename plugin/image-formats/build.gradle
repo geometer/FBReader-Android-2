@@ -11,9 +11,7 @@ buildscript {
 apply plugin: 'com.android.library'
 
 dependencies {
-	compile project(':fbreader/common')
-	compile project(':fbreader/resources')
-	compile project(':fbreader/fonts')
+	compile project(':fbreader/reader')
 	compile project(':third-party/SuperToasts')
 }
 
