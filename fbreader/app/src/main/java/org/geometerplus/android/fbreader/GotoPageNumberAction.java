@@ -23,7 +23,7 @@ import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import org.geometerplus.android.util.GotoPageDialogUtil;
+import org.fbreader.reader.android.GotoPageDialogUtil;
 
 public class GotoPageNumberAction extends FBReader.Action<FBReader,FBReaderApp> {
 	GotoPageNumberAction(FBReader baseActivity) {

@@ -43,7 +43,6 @@ import org.geometerplus.zlibrary.core.filesystem.ZLPhysicalFile;
 import org.geometerplus.zlibrary.core.filetypes.FileType;
 import org.geometerplus.zlibrary.core.filetypes.FileTypeCollection;
 import org.geometerplus.zlibrary.core.language.Language;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
@@ -146,7 +145,7 @@ public abstract class FBReaderUtil {
 				return;
 			}
 			final CharSequence sharedFrom =
-				Html.fromHtml(ZLResource.resource("sharing").getResource("sharedFrom").getValue());
+				Html.fromHtml(activity.getResources().getString(R.string.sharing__shared_from));
 			final File origFile = file.javaFile();
 
 			final File shareDir = new File(activity.getCacheDir(), "books");

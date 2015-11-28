@@ -25,8 +25,9 @@ import android.view.*;
 import android.widget.*;
 
 import org.fbreader.common.android.FBActivity;
-import org.fbreader.util.android.ViewUtil;
 import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.reader.android.ContextMenuDialog;
+import org.fbreader.util.android.ViewUtil;
 
 import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.resources.ZLResource;

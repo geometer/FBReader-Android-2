@@ -34,6 +34,7 @@ import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 import org.geometerplus.android.util.*;
 
 import org.fbreader.common.android.FBListActivity;
+import org.fbreader.reader.android.UIMessageUtil;
 import org.geometerplus.zlibrary.ui.android.R;
 
 public abstract class TreeActivity<T extends FBTree> extends FBListActivity implements ListView.OnItemClickListener, ListView.OnItemLongClickListener {

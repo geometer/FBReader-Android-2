@@ -40,14 +40,16 @@ import org.geometerplus.fbreader.formats.PluginCollection;
 import org.geometerplus.fbreader.library.*;
 import org.geometerplus.fbreader.tree.FBTree;
 
-import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.android.util.*;
 import org.geometerplus.android.fbreader.*;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.fbreader.tree.TreeActivity;
 
+import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.md.MDAlertDialogBuilder;
+import org.fbreader.reader.android.ContextMenuDialog;
+import org.fbreader.reader.android.UIMessageUtil;
 
 public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuItem.OnMenuItemClickListener, IBookCollection.Listener<Book> {
 	static final String START_SEARCH_ACTION = "action.fbreader.library.start-search";

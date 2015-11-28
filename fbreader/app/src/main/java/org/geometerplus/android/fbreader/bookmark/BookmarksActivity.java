@@ -35,6 +35,8 @@ import android.widget.*;
 import yuku.ambilwarna.widget.AmbilWarnaPrefWidgetView;
 
 import org.fbreader.common.android.FBActivity;
+import org.fbreader.reader.android.ContextMenuDialog;
+import org.fbreader.reader.android.UIMessageUtil;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
 

@@ -23,14 +23,14 @@ import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 
 public abstract class ZLFileImageProxy extends ZLImageSimpleProxy {
 	protected final ZLFile File;
-	private volatile ZLFileImage myImage;
+	private volatile ZLImage myImage;
 
 	protected ZLFileImageProxy(ZLFile file) {
 		File = file;
 	}
 
 	@Override
-	public final ZLFileImage getRealImage() {
+	public final ZLImage getRealImage() {
 		return myImage;
 	}
 
@@ -57,5 +57,5 @@ public abstract class ZLFileImageProxy extends ZLImageSimpleProxy {
 		return File.getPath();
 	}
 
-	protected abstract ZLFileImage retrieveRealImage();
+	protected abstract ZLImage retrieveRealImage();
 }
