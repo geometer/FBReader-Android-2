@@ -144,6 +144,9 @@ android.applicationVariants.all { variant ->
 	if (version.matches('\\d*\\.\\d* beta \\d*')) {
 		def parts = version.split('[ .]')
 		baseCode = parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000 - 5000 + parts[3].toInteger() * 100
+	} else if (version.matches('\\d*\\.\\d* rc \\d*')) {
+		def parts = version.split('[ .]')
+		baseCode = parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000 - 2500 + parts[3].toInteger() * 100
 	} else if (version.matches('\\d*\\.\\d*\\.\\d*')) {
 		def parts = version.split('\\.')
 		baseCode = parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000 + parts[2].toInteger() * 100
