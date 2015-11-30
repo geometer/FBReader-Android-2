@@ -17,5 +17,16 @@
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:exported="false"
 		/>
+		<provider
+			android:name="android.support.v4.content.FileProvider"
+			android:authorities="@string/file_provider_authority"
+			android:exported="false"
+			android:grantUriPermissions="true"
+		>
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/filepaths"
+			/>
+		</provider>
 	</application>
 </manifest>

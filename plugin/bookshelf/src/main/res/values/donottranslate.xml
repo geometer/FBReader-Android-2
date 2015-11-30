@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="file_provider_authority">org.fbreader.plugin.bookshelf.fileprovider</string>
   <string name="read_progress_small">%s%%</string>
 	<string-array name="view_modes_codes">
 		<item>small_cards</item>
