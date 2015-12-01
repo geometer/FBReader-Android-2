@@ -32,8 +32,8 @@ import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
 
-import org.fbreader.common.ActionCode;
 import org.fbreader.common.options.SyncOptions;
+import org.fbreader.reader.ActionCode;
 
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.bookmodel.*;
@@ -80,30 +80,7 @@ public final class FBReaderApp extends ZLApplication {
 		super(systemInfo);
 
 		Collection = collection;
-
-		collection.addListener(new IBookCollection.Listener<Book>() {
-			public void onBookEvent(BookEvent event, Book book) {
-				switch (event) {
-					case BookmarkStyleChanged:
-					case BookmarksUpdated:
-						if (Model != null && (book == null || collection.sameBook(book, Model.Book))) {
-							if (BookTextView.getModel() != null) {
-								setBookmarkHighlightings(BookTextView, null);
-							}
-							if (FootnoteView.getModel() != null && myFootnoteModelId != null) {
-								setBookmarkHighlightings(FootnoteView, myFootnoteModelId);
-							}
-						}
-						break;
-					case Updated:
-						onBookUpdated(book);
-						break;
-				}
-			}
-
-			public void onBuildEvent(IBookCollection.Status status) {
-			}
-		});
+		collection.addListener(this);
 
 		addAction(ActionCode.INCREASE_FONT, new ChangeFontSizeAction(this, +2));
 		addAction(ActionCode.DECREASE_FONT, new ChangeFontSizeAction(this, -2));
@@ -709,6 +686,25 @@ public final class FBReaderApp extends ZLApplication {
 			clearTextCaches();
 			getViewWidget().repaint();
 			updateTitle();
+		}
+	}
+
+	public void onBookEvent(BookEvent event, Book book) {
+		switch (event) {
+			case BookmarkStyleChanged:
+			case BookmarksUpdated:
+				if (Model != null && (book == null || Collection.sameBook(book, Model.Book))) {
+					if (BookTextView.getModel() != null) {
+						setBookmarkHighlightings(BookTextView, null);
+					}
+					if (FootnoteView.getModel() != null && myFootnoteModelId != null) {
+						setBookmarkHighlightings(FootnoteView, myFootnoteModelId);
+					}
+				}
+				break;
+			case Updated:
+				onBookUpdated(book);
+				break;
 		}
 	}
 }

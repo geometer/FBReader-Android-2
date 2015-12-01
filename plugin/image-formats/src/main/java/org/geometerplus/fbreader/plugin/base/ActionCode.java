@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.plugin.base;
 
-public interface ActionCode extends org.fbreader.common.ActionCode {
+public interface ActionCode extends org.fbreader.reader.ActionCode {
 	String SHOW_MENU = "menu";
 	String SHOW_NAVIGATION = "navigate";
 

@@ -21,8 +21,8 @@ package org.fbreader.reader.android;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.fbreader.common.AbstractReader;
 import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.reader.AbstractReader;
 
 class ShowWhatsNewDialogAction extends MainActivity.Action<MainActivity,AbstractReader> {
 	ShowWhatsNewDialogAction(MainActivity baseActivity) {

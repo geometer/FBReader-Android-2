@@ -5,16 +5,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.*;
 
-import org.fbreader.util.Boolean3;
-import org.fbreader.common.AbstractReader;
 import org.fbreader.common.options.ColorProfile;
+import org.fbreader.reader.AbstractReader;
+import org.fbreader.util.Boolean3;
 
 import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
@@ -32,7 +31,7 @@ import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
-public final class ViewHolder extends AbstractReader implements PluginView.ChangeListener, IBookCollection.Listener<Book> {
+public final class ViewHolder extends AbstractReader implements PluginView.ChangeListener {
 	public static final String BOOKMARK_ID_KEY = "fbreader.bookmark.id";
 
 	private static ViewHolder ourInstance;
@@ -62,7 +61,7 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 	}
 
 	void startActivity(Intent intent) {
-		final Activity activity = getActivity();
+		final FBReaderPluginActivity activity = getActivity();
 		activity.startActivity(intent);
 		activity.overridePendingTransition(0, 0);
 	}
@@ -518,10 +517,19 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		myActivity.onFatalError(force);
 	}
 
+	private void onBookUpdated(Book book) {
+		if (myBook == null || !Collection.sameBook(myBook, book)) {
+			return;
+		}
+		myBook.updateFrom(book);
+		myActivity.updateBookInfo(myBook);
+	}
+
 	// method from IBookCollection.Listener
 	public void onBookEvent(BookEvent event, Book book) {
 		switch (event) {
 			default:
+				onBookUpdated(book);
 				break;
 			case BookmarkStyleChanged:
 			{
@@ -535,11 +543,10 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 					loadBookmarks();
 				}
 				break;
+			case Updated:
+				onBookUpdated(book);
+				break;
 		}
-	}
-
-	// method from IBookCollection.Listener
-	public void onBuildEvent(IBookCollection.Status status) {
 	}
 
 	void onSync(boolean openOtherBook) {

@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
 
-import org.fbreader.common.AbstractReader;
+import org.fbreader.reader.AbstractReader;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 

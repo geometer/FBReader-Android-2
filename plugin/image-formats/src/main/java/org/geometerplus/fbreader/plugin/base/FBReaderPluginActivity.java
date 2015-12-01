@@ -9,8 +9,8 @@ import android.os.*;
 import android.view.*;
 import android.widget.*;
 
-import org.fbreader.common.AbstractReader;
 import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.reader.AbstractReader;
 import org.fbreader.reader.android.MainActivity;
 
 import org.geometerplus.zlibrary.core.options.Config;

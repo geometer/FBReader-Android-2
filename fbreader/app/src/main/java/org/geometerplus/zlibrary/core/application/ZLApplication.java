@@ -21,8 +21,8 @@ package org.geometerplus.zlibrary.core.application;
 
 import java.util.*;
 
+import org.fbreader.reader.AbstractReader;
 import org.fbreader.util.Boolean3;
-import org.fbreader.common.AbstractReader;
 
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 import org.geometerplus.zlibrary.core.view.ZLView;

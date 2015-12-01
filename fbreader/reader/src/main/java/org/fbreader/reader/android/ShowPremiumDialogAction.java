@@ -27,8 +27,8 @@ import android.os.Build;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.android.util.PackageUtil;
 
-import org.fbreader.common.AbstractReader;
 import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.reader.AbstractReader;
 
 class ShowPremiumDialogAction extends MainActivity.Action<MainActivity,AbstractReader> {
 	private final boolean myInstalled;

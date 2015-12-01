@@ -15,9 +15,9 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.*;
 
-import org.fbreader.common.AbstractReader;
 import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.common.options.PageTurningOptions;
+import org.fbreader.reader.AbstractReader;
 import org.fbreader.reader.android.MainView;
 
 import org.geometerplus.zlibrary.core.util.BitmapUtil;

@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.fbreader.common;
+package org.fbreader.reader;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -25,9 +25,10 @@ import java.util.HashMap;
 import org.fbreader.common.options.*;
 import org.fbreader.util.Boolean3;
 
+import org.geometerplus.fbreader.book.IBookCollection;
 import org.geometerplus.fbreader.book.Book;
 
-public abstract class AbstractReader {
+public abstract class AbstractReader implements IBookCollection.Listener<Book> {
 	static abstract public class Action<T extends AbstractReader> {
 		protected final T Reader;
 
@@ -98,4 +99,8 @@ public abstract class AbstractReader {
 	public abstract Book getCurrentBook();
 
 	public abstract void storePosition();
+
+	// method from IBookCollection.Listener
+	public void onBuildEvent(IBookCollection.Status status) {
+	}
 }
