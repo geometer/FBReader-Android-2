@@ -21,8 +21,13 @@ package org.fbreader.md;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.AttributeSet;
 
 public abstract class MDListPreference extends MDBaseDialogPreference {
+	protected MDListPreference(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
 	protected MDListPreference(Context context) {
 		super(context);
 	}
