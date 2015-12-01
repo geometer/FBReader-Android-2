@@ -9,9 +9,10 @@ public class ColorSchemePreference extends ListPreferenceWithSummary {
 	}
 
 	@Override
-	protected void onDialogClosed(boolean positiveResult) {
-		super.onDialogClosed(positiveResult);
-		if (positiveResult) {
+	protected void onValueSelected(int index, String value) {
+		final String old = currentValue();
+		if (!value.equals(old)) {
+			setValue(value);
 			((SettingsActivity)getContext()).applyTheme();
 		}
 	}

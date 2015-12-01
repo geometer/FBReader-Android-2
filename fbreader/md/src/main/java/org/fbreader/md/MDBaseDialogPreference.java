@@ -28,12 +28,12 @@ import android.util.AttributeSet;
 public abstract class MDBaseDialogPreference extends Preference {
 	private volatile AlertDialog myDialog;
 
-	protected MDBaseDialogPreference(Context context) {
-		super(context);
-	}
-
 	protected MDBaseDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
+	}
+
+	protected MDBaseDialogPreference(Context context) {
+		super(context);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:vnt="http://schemas.android.com/apk/res-auto"
+	xmlns:bks="http://schemas.android.com/apk/res-auto"
 >
 	<PreferenceCategory
 		android:title="@string/settings_category_ui"
@@ -9,15 +10,15 @@
 			android:key="color_scheme"
 			android:title="@string/settings_color_scheme"
 			android:defaultValue="@string/color_scheme_default_code"
-			android:entries="@array/color_schemes_readable"
-			android:entryValues="@array/color_schemes_codes"
+			bks:bks_names="@array/color_schemes_readable"
+			bks:bks_values="@array/color_schemes_codes"
 		/>
 		<org.fbreader.plugin.library.prefs.ListPreferenceWithSummary
 			android:key="fbreader.library.view"
 			android:title="@string/settings_view_mode"
 			android:defaultValue="@string/view_mode_default_code"
-			android:entries="@array/view_modes_readable"
-			android:entryValues="@array/view_modes_codes"
+			bks:bks_names="@array/view_modes_readable"
+			bks:bks_values="@array/view_modes_codes"
 		/>
 	</PreferenceCategory>
 	<PreferenceCategory
@@ -60,6 +61,13 @@
 		android:key="shelves_group"
 		android:title="@string/settings_category_shelves"
 	>
+		<org.fbreader.plugin.library.prefs.VisibleShelvesPreference
+			android:key="visible_standard_shelves"
+			android:title="@string/settings_visible_shelves"
+			android:entryValues="@array/shelves_codes"
+			android:entries="@array/shelves_readable"
+			android:defaultValue="@array/shelves_codes"
+		/>
 		<com.vanniktech.vntnumberpickerpreference.VNTNumberPickerPreference
 			android:key="RecentlyAdded:max_books_count"
 			android:title="@string/settings_max_books_count_recently_added"
@@ -74,6 +82,13 @@
 			vnt:maxValue="48"
 			vnt:minValue="1"
 		/>
+		<CheckBoxPreference
+			android:key="show_intro"
+			android:title="@string/settings_show_intro"
+			android:summaryOn="@string/settings_show_intro_always"
+			android:summaryOff="@string/settings_show_intro_never"
+			android:defaultValue="false"
+		/>
 		<!--CheckBoxPreference
 			android:key="Author:group_by_series"
 			android:title="@string/settings_author_group_by_series"
@@ -82,4 +97,8 @@
 			android:defaultValue="false"
 		/-->
 	</PreferenceCategory>
+	<PreferenceCategory
+		android:key="library_group"
+		android:title="@string/settings_category_library"
+	/>
 </PreferenceScreen>
