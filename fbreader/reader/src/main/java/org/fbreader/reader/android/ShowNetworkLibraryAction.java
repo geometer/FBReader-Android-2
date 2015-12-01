@@ -19,7 +19,7 @@
 
 package org.fbreader.reader.android;
 
-import org.fbreader.common.AbstractReader;
+import org.fbreader.reader.AbstractReader;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 

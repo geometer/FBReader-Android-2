@@ -31,11 +31,11 @@ import android.support.v7.app.AlertDialog;
 import android.view.*;
 import android.widget.RelativeLayout;
 
-import org.fbreader.util.Boolean3;
-import org.fbreader.common.ActionCode;
 import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.reader.ActionCode;
 import org.fbreader.reader.android.MainActivity;
 import org.fbreader.reader.android.UIMessageUtil;
+import org.fbreader.util.Boolean3;
 
 import com.yotadevices.fbreader.FBReaderYotaService;
 

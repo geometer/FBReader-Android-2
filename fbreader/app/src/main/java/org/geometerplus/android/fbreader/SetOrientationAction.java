@@ -21,7 +21,6 @@ package org.geometerplus.android.fbreader;
 
 import android.app.Activity;
 
-import org.fbreader.common.AbstractReader;
 import org.fbreader.reader.android.MainActivity;
 import org.fbreader.util.Boolean3;
 

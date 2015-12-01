@@ -19,8 +19,8 @@
 
 package org.fbreader.reader.android;
 
-import org.fbreader.common.AbstractReader;
 import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.reader.AbstractReader;
 
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.fbreader.book.Book;

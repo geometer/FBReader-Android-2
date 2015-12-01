@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import org.fbreader.common.ActionCode;
+import org.fbreader.reader.ActionCode;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;

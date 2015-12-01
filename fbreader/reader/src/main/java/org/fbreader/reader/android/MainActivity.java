@@ -35,14 +35,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.md.MDAlertDialogBuilder;
+import org.fbreader.reader.AbstractReader;
+import org.fbreader.reader.ActionCode;
 import org.fbreader.util.Boolean3;
 import org.fbreader.util.Pair;
 import org.fbreader.util.android.DrawableUtil;
 import org.fbreader.util.android.ViewUtil;
-import org.fbreader.common.AbstractReader;
-import org.fbreader.common.ActionCode;
-import org.fbreader.common.android.FBReaderUtil;
 
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import com.github.johnpersano.supertoasts.SuperToast;

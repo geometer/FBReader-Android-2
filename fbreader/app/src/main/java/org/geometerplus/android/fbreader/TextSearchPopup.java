@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 
 import org.geometerplus.zlibrary.ui.android.R;
 
-import org.fbreader.common.ActionCode;
+import org.fbreader.reader.ActionCode;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;

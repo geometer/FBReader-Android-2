@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.fbreader.common;
+package org.fbreader.reader;
 
 public interface ActionCode {
 	String SHOW_LIBRARY = "library";
