@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="desc_show_book_menu">Показать меню книги</string>
+	<string name="desc_hide_book_menu">Спрятать меню книги</string>
+</resources>

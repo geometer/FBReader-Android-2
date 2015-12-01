@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sharing__shared_from">&lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt; &#47196;&#48512;&#53552; &#44277;&#50976;&#46120;</string>
+  <string name="sharing__shared_from">&lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt; 로부터 공유됨</string>
 </resources>

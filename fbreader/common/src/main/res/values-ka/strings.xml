@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sharing__shared_from">&#4306;&#4304;&#4315;&#4317;&#4306;&#4310;&#4304;&#4309;&#4316;&#4312;&#4314;&#4312;&#4304; &lt;a href="https://ru.fbreader.org/"&gt;FBReader&lt;/a&gt;-&#4307;&#4304;&#4316;</string>
+  <string name="sharing__shared_from">გამოგზავნილია &lt;a href="https://ru.fbreader.org/"&gt;FBReader&lt;/a&gt;-დან</string>
 </resources>

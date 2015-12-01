@@ -50,6 +50,7 @@ public abstract class MDActivity extends ActionBarActivity {
 				onBackPressed();
 			}
 		});
+		myToolbar.setNavigationContentDescription(R.string.desc_back);
 		setupToolbarAppearance(myToolbar, true);
 
 		myProgressIndicator = findViewById(R.id.md_progress_indicator);
