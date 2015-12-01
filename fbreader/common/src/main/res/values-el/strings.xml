@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sharing__shared_from">&#928;&#945;&#961;&#941;&#967;&#949;&#964;&#945;&#953; &#945;&#960;&#972; &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;</string>
+  <string name="sharing__shared_from">Παρέχεται από &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;</string>
 </resources>

@@ -139,7 +139,11 @@ public abstract class MainActivity extends FBActivity {
 			}
 		});
 		myDrawerToggle = new ActionBarDrawerToggle(
-			this, myDrawerLayout, getToolbar(), R.string.empty_string, R.string.empty_string
+			this,
+			myDrawerLayout,
+			getToolbar(),
+			R.string.desc_show_book_menu,
+			R.string.desc_hide_book_menu
 		);
 		myDrawerLayout.setDrawerListener(myDrawerToggle);
 		myDrawerLayout.setDrawerShadow(R.drawable.shadow_right_6dp, GravityCompat.START);

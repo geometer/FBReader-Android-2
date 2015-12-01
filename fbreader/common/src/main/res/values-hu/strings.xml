@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sharing__shared_from">Megosztva az &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;b&#337;l</string>
+  <string name="sharing__shared_from">Megosztva az &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;ből</string>
 </resources>

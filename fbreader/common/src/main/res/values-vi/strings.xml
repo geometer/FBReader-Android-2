@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sharing__shared_from">&#272;&#432;&#7907;c chia s&#7867; t&#7915; &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;</string>
+  <string name="sharing__shared_from">Được chia sẻ từ &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;</string>
 </resources>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sharing__shared_from">&#1055;&#1086;&#1076;&#1077;&#1083;&#1080;&#1086; &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;.</string>
+  <string name="sharing__shared_from">Поделио &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;.</string>
 </resources>

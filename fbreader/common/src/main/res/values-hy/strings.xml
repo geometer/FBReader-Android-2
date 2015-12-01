@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sharing__shared_from">&#1352;&#1410;&#1394;&#1377;&#1408;&#1391;&#1406;&#1381;&#1388; &#1383; &lt;a href="https://ru.fbreader.org/"&gt;FBReader&lt;/a&gt;-&#1387;&#1409;</string>
+  <string name="sharing__shared_from">Ուղարկվել է &lt;a href="https://ru.fbreader.org/"&gt;FBReader&lt;/a&gt;-ից</string>
 </resources>

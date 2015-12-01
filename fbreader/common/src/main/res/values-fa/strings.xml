@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sharing__shared_from">&#1576;&#1607; &#1575;&#1588;&#1578;&#1585;&#1575;&#1705; &#1711;&#1584;&#1575;&#1585;&#1610; &#1588;&#1583;&#1607; &#1578;&#1608;&#1587;&#1591; &lt;a href="https://fbreader.org/"&gt;parsireader&lt;/a&gt;</string>
+  <string name="sharing__shared_from">به اشتراک گذاري شده توسط &lt;a href="https://fbreader.org/"&gt;parsireader&lt;/a&gt;</string>
 </resources>

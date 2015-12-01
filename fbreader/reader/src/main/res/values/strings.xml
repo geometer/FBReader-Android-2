@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="desc_show_book_menu">Show book menu</string>
+	<string name="desc_hide_book_menu">Hide book menu</string>
+</resources>

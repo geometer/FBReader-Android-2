@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="sharing__shared_from">&#20849;&#26377;&#20803;: &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;</string>
+  <string name="sharing__shared_from">共有元: &lt;a href="https://fbreader.org/"&gt;FBReader&lt;/a&gt;</string>
 </resources>
