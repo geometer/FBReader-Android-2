@@ -20,8 +20,8 @@ import android.widget.FrameLayout;
 import com.yotadevices.sdk.*;
 import com.yotadevices.sdk.utils.EinkUtils;
 
+import org.fbreader.reader.ActionCode;
 import org.fbreader.util.ComparisonUtil;
-import org.fbreader.common.ActionCode;
 
 import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.image.ZLImage;
