@@ -8,6 +8,7 @@ import java.util.List;
 import android.graphics.*;
 
 import org.geometerplus.zlibrary.core.util.SystemInfo;
+import org.geometerplus.fbreader.book.AbstractBook;
 import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 public class CBZDocument extends DocumentHolder {
@@ -95,12 +96,11 @@ public class CBZDocument extends DocumentHolder {
 	}
 
 	@Override
-	public String getTitle() {
-		return null;
+	public void readMetainfo(AbstractBook book) {
 	}
 
 	@Override
-	public String getAuthor() {
+	public String readAnnotation() {
 		return null;
 	}
 

@@ -67,10 +67,25 @@ public abstract class AbstractBook extends TitledEntity<AbstractBook> {
 
 	public abstract String getPath();
 
-	public void updateFrom(AbstractBook book) {
+	public abstract void updateFrom(AbstractBook book);
+
+	protected final void updateFrom(AbstractBook book, SaveState state) {
 		if (book == null || myId != book.myId) {
 			return;
 		}
+		switch (state) {
+			case Saved:
+				return;
+			case NotSaved:
+				updateFullyFrom(book);
+				break;
+			case ProgressNotSaved:
+				setProgress(book.getProgress());
+				break;
+		}
+	}
+
+	private void updateFullyFrom(AbstractBook book) {
 		setTitle(book.getTitle());
 		setEncoding(book.myEncoding);
 		setLanguage(book.myLanguage);
@@ -421,6 +436,6 @@ public abstract class AbstractBook extends TitledEntity<AbstractBook> {
 
 	@Override
 	public String toString() {
-		return getClass().getName() + "[" + getPath() + ", " + myId + ", " + getTitle() + "]";
+		return getClass().getName() + "[" + getPath() + ", " + myId + ", " + getTitle() + ", " + mySaveState + "]";
 	}
 }

@@ -1914,10 +1914,6 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 		postInvalidate();
 	}
 
-	public String getTitle() {
-		return myDocument.getTitle();
-	}
-
 	public String getPageStartText() {
 		return myDocument.getPageStartText(myCurrPageNo);
 	}

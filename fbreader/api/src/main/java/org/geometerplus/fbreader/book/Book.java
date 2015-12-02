@@ -36,6 +36,11 @@ public final class Book extends AbstractBook {
 	}
 
 	@Override
+	public void updateFrom(AbstractBook book) {
+		updateFrom(book, SaveState.NotSaved);
+	}
+
+	@Override
 	public int hashCode() {
 		return myPath.hashCode();
 	}

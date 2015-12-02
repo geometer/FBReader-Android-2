@@ -87,7 +87,7 @@ public final class DbBook extends AbstractBook {
 			case ProgressNotSaved:
 				return saveProgress(database) ? WhatIsSaved.Progress : WhatIsSaved.Nothing;
 			default:
-			case NotSaved:	
+			case NotSaved:
 				return saveFull(database) ? WhatIsSaved.Everything : WhatIsSaved.Nothing;
 		}
 	}
@@ -234,6 +234,11 @@ public final class DbBook extends AbstractBook {
 			myUids = other.myUids != null ? new ArrayList<UID>(other.myUids) : null;
 			mySaveState = SaveState.NotSaved;
 		}
+	}
+
+	@Override
+	public void updateFrom(AbstractBook book) {
+		updateFrom(book, book.mySaveState);
 	}
 
 	@Override

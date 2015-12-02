@@ -3,6 +3,7 @@ package org.geometerplus.fbreader.plugin.base.document;
 import java.util.Collections;
 import java.util.List;
 
+import org.geometerplus.fbreader.book.AbstractBook;
 import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 import android.graphics.*;
@@ -38,16 +39,11 @@ public class DummyDocument extends DocumentHolder {
 	}
 
 	@Override
-	public String getTitle() {
-		return getMeta("Title");
+	public void readMetainfo(AbstractBook book) {
 	}
 
 	@Override
-	public String getAuthor() {
-		return getMeta("Author");
-	}
-
-	private String getMeta(String tag) {
+	public String readAnnotation() {
 		return null;
 	}
 
