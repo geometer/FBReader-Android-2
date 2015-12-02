@@ -992,33 +992,10 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow 
 		countOption.setValue(0);
 		lastCallOption.setValue(currentTime);
 
-		ZLFile textFile =
-			ZLFile.createFileByPath("data/premium/" + Language.uiLanguage() + ".html");
-		if (!textFile.exists()) {
-			textFile = ZLFile.createFileByPath("data/premium/en.html");
-		}
-		final StringBuilder buffer = new StringBuilder();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new InputStreamReader(textFile.getInputStream(), "utf-8"));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				buffer.append(line);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		} finally {
-			try {
-				reader.close();
-			} catch (Exception e) {
-				// ignore
-			}
-		}
 		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
 		final AlertDialog.Builder builder = new MDAlertDialogBuilder(this)
 			.setTitle(ZLResource.resource("premium").getValue())
-			.setMessage(Html.fromHtml(buffer.toString()))
+			.setMessage(Html.fromHtml(FBReaderUtil.fromResourceFile(this, "data/premium")))
 			.setIcon(0)
 			.setPositiveButton(
 				buttonResource.getResource("buy").getValue(),

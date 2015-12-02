@@ -93,7 +93,7 @@ public abstract class FBReaderUtil {
 		}
 	}
 
-	private static String fromResourceFile(MDActivity activity, String name) {
+	public static String fromResourceFile(MDActivity activity, String name) {
 		final StringBuffer buffer = new StringBuffer();
 
 		BufferedReader reader = null;
