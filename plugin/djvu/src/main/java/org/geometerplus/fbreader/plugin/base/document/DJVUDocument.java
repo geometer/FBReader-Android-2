@@ -7,6 +7,7 @@ import android.graphics.*;
 import android.util.Log;
 
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
+import org.geometerplus.fbreader.book.AbstractBook;
 import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 public class DJVUDocument extends DocumentHolder {
@@ -120,16 +121,11 @@ public class DJVUDocument extends DocumentHolder {
 	}
 
 	@Override
-	public String getTitle() {
-		return getMeta("Title");
+	public void readMetainfo(AbstractBook book) {
 	}
 
 	@Override
-	public String getAuthor() {
-		return getMeta("Author");
-	}
-
-	private String getMeta(String tag) {
+	public String readAnnotation() {
 		return null;
 	}
 

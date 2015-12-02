@@ -7,6 +7,7 @@ import android.graphics.*;
 
 import com.radaee.pdf.*;
 
+import org.geometerplus.fbreader.book.AbstractBook;
 import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 public class PDFDocument extends DocumentHolder {
@@ -138,13 +139,14 @@ public class PDFDocument extends DocumentHolder {
 	}
 
 	@Override
-	public String getTitle() {
-		return getMeta("Title");
+	public void readMetainfo(AbstractBook book) {
+		book.setTitle(getMeta("Title"));
+		book.addAuthor(getMeta("Author"));
 	}
 
 	@Override
-	public String getAuthor() {
-		return getMeta("Author");
+	public String readAnnotation() {
+		return null;
 	}
 
 	private String getMeta(String tag) {

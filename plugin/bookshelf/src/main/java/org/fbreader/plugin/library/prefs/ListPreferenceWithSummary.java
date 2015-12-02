@@ -20,7 +20,6 @@ public class ListPreferenceWithSummary extends MDListPreference {
 		);
 		final CharSequence[] names = a.getTextArray(R.styleable.BksListPreference_bks_names);
 		final CharSequence[] values = a.getTextArray(R.styleable.BksListPreference_bks_values);
-		System.err.println("ARR LEN = " + a.length());
 		a.recycle();
 		myNames = new String[names.length];
 		for (int i = 0; i < names.length; ++i) {

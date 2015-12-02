@@ -10,8 +10,7 @@ import org.fbreader.common.options.ColorProfile;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
 import org.geometerplus.zlibrary.core.util.ZLColor;
-import org.geometerplus.fbreader.book.Bookmark;
-import org.geometerplus.fbreader.book.HighlightingStyle;
+import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.plugin.base.SettingsHolder;
 import org.geometerplus.fbreader.plugin.base.document.PageHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
@@ -204,8 +203,9 @@ public abstract class DocumentHolder {
 	protected abstract boolean openDocumentInternal(String path);
 	protected abstract void closeInternal();
 	public abstract void initTOC(TOCTree root);
-	public abstract String getTitle();
-	public abstract String getAuthor();
+
+	public abstract void readMetainfo(AbstractBook book);
+	public abstract String readAnnotation();
 
 	public String getPageStartText(int pageNo) {
 		return "<Page " + (pageNo + 1) + ">";

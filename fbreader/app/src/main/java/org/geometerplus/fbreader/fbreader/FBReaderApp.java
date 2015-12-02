@@ -670,22 +670,36 @@ public final class FBReaderApp extends ZLApplication {
 	}
 
 	public void onBookUpdated(Book book) {
-		if (Model == null || Model.Book == null || !Collection.sameBook(Model.Book, book)) {
+		Book current = null;
+		boolean external = false;
+
+		final BookModel model = Model;
+		if (model != null) {
+			current = model.Book;
+		}
+		if (current == null) {
+			current = ExternalBook;
+			external = true;
+		}
+
+		if (current == null || !Collection.sameBook(current, book)) {
 			return;
 		}
 
 		final String newEncoding = book.getEncodingNoDetection();
-		final String oldEncoding = Model.Book.getEncodingNoDetection();
+		final String oldEncoding = current.getEncodingNoDetection();
 
-		Model.Book.updateFrom(book);
+		current.updateFrom(book);
 
-		if (newEncoding != null && !newEncoding.equals(oldEncoding)) {
-			reloadBook();
-		} else {
-			ZLTextHyphenator.Instance().load(Model.Book.getLanguage());
-			clearTextCaches();
-			getViewWidget().repaint();
-			updateTitle();
+		if (!external) {
+			if (newEncoding != null && !newEncoding.equals(oldEncoding)) {
+				reloadBook();
+			} else {
+				ZLTextHyphenator.Instance().load(current.getLanguage());
+				clearTextCaches();
+				getViewWidget().repaint();
+				updateTitle();
+			}
 		}
 	}
 
