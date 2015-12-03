@@ -45,10 +45,6 @@ public class Language implements Comparable<Language> {
 	public static ZLStringOption uiLanguageOption() {
 		return ourUiLanguageOption;
 	}
-	public static String uiLanguage() {
-		final String code = uiLanguageOption().getValue();
-		return SYSTEM_CODE.equals(code) ? Locale.getDefault().getLanguage() : code;
-	}
 	public static Locale uiLocale() {
 		final String code = uiLanguageOption().getValue();
 
