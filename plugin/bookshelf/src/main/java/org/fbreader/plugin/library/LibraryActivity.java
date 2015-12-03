@@ -23,6 +23,7 @@ import android.widget.*;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.md.MDAlertDialogBuilder;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
@@ -480,11 +481,15 @@ public final class LibraryActivity extends FullActivity {
 			showHtmlDialog(
 				R.layout.bks_dialog_about,
 				R.string.app_title,
-				fromResourceFile("about").replace("%s", version)
+				FBReaderUtil.fromResourceFile(this, "about").replace("%s", version)
 			);
 			return true;
 		} else if (itemId == R.id.bks_library_menu_whatsnew) {
-			showHtmlDialog(R.layout.text_dialog, R.string.menu_whatsnew, fromResourceFile("whatsnew"));
+			showHtmlDialog(
+				R.layout.text_dialog,
+				R.string.menu_whatsnew,
+				FBReaderUtil.fromResourceFile(this, "whatsnew")
+			);
 			return true;
 		} else {
 			return super.onOptionsItemSelected(item);
@@ -499,36 +504,6 @@ public final class LibraryActivity extends FullActivity {
 		}
 	}
 
-	private String fromResourceFile(String name) {
-		final StringBuffer buffer = new StringBuffer();
-
-		BufferedReader reader = null;
-		try {
-			final Locale locale = Locale.getDefault();
-			InputStream is = assetsStream(name, locale.getLanguage() + "_" + locale.getCountry());
-			if (is == null) {
-				is = assetsStream(name, locale.getLanguage());
-			}
-			if (is == null) {
-				is = assetsStream(name, "en");
-			}
-			reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
-			for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-				buffer.append(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			// ignore
-		} finally {
-			try {
-				reader.close();
-			} catch (Exception e) {
-			}
-		}
-
-		return buffer.toString();
-	}
-
 	private void showHtmlDialog(int layoutId, int titleId, String html) {
 		final TextView textView = (TextView)getLayoutInflater().inflate(layoutId, null);
 		textView.setText(Html.fromHtml(html));
@@ -541,9 +516,10 @@ public final class LibraryActivity extends FullActivity {
 
 	private void showPremiumDialog() {
 		final TextView textView = (TextView)getLayoutInflater().inflate(R.layout.text_dialog, null);
-		textView.setText(Html.fromHtml(fromResourceFile("premium")));
+		textView.setText(Html.fromHtml(FBReaderUtil.fromResourceFile(this, "premium")));
 		textView.setMovementMethod(new LinkMovementMethod());
 		new MDAlertDialogBuilder(this)
+			.setTitle(R.string.menu_buy_premium)
 			.setView(textView)
 			.setPositiveButton(
 				R.string.button_buy,

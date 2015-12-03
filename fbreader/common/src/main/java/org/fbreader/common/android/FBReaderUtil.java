@@ -93,22 +93,36 @@ public abstract class FBReaderUtil {
 		}
 	}
 
-	private static String fromResourceFile(MDActivity activity, String name) {
+	private static InputStream assetsStream(MDActivity activity, String name, Locale locale) {
+		final InputStream is =
+			assetsStream(activity, name, locale.getLanguage() + "_" + locale.getCountry());
+		return is != null ? is : assetsStream(activity, name, locale.getLanguage());
+	}
+
+	private static InputStream assetsStream(MDActivity activity, String name) {
+		InputStream is = assetsStream(activity, name, Language.uiLocale());
+		if (is == null) {
+			is = assetsStream(activity, name, Locale.getDefault());
+		}
+		return is != null ? is : assetsStream(activity, name, "en");
+	}
+
+	public static boolean resourceFileExists(MDActivity activity, String name) {
+		InputStream is = null;
+		try {
+			is = assetsStream(activity, name);
+			return is != null;
+		} finally {
+			IOUtil.closeQuietly(is);
+		}
+	}
+
+	public static String fromResourceFile(MDActivity activity, String name) {
 		final StringBuffer buffer = new StringBuffer();
 
 		BufferedReader reader = null;
 		try {
-			final Locale locale = Locale.getDefault();
-			InputStream is = assetsStream(activity, name, Language.uiLanguage());
-			if (is == null) {
-				is = assetsStream(activity, name, locale.getLanguage() + "_" + locale.getCountry());
-			}
-			if (is == null) {
-				is = assetsStream(activity, name, locale.getLanguage());
-			}
-			if (is == null) {
-				is = assetsStream(activity, name, "en");
-			}
+			InputStream is = assetsStream(activity, name);
 			reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
 			for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 				buffer.append(line);
