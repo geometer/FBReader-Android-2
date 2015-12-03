@@ -94,6 +94,11 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 		if (myViewHolder == null) {
 			myViewHolder = new ViewHolder(this);
 		}
+		if (FBReaderIntents.Action.PLUGIN_KILL.equals(getIntent().getAction())) {
+			finish();
+			overridePendingTransition(0, 0);
+			return;
+		}
 
 		setupToolbar(getMainView(), myShowActionBarFlag);
 
@@ -128,7 +133,10 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		if (FBReaderIntents.Action.PLUGIN_VIEW.equals(intent.getAction())) {
+		if (FBReaderIntents.Action.PLUGIN_KILL.equals(intent.getAction())) {
+			finish();
+			overridePendingTransition(0, 0);
+		} else if (FBReaderIntents.Action.PLUGIN_VIEW.equals(intent.getAction())) {
 			setIntent(intent);
 			myViewHolder.openFile(intent);
 		} else {
