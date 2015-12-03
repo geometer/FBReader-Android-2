@@ -24,11 +24,14 @@ import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 
 import org.geometerplus.fbreader.Paths;
+import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.formats.*;
 
 import org.geometerplus.android.util.NativeLibraryUtil;
 
 public class FBReaderApplication extends ZLAndroidApplication implements IFormatPluginCollection {
+	volatile Book ExternalBook;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();

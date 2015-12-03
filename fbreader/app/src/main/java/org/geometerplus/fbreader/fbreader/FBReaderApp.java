@@ -44,6 +44,7 @@ import org.geometerplus.fbreader.util.*;
 
 public final class FBReaderApp extends ZLApplication {
 	public interface ExternalFileOpener {
+		public void resetBook();
 		public void openFile(ExternalFormatPlugin plugin, Book book, Bookmark bookmark);
 	}
 
@@ -67,7 +68,6 @@ public final class FBReaderApp extends ZLApplication {
 	private String myFootnoteModelId;
 
 	public volatile BookModel Model;
-	public volatile Book ExternalBook;
 
 	private ZLTextPosition myJumpEndPosition;
 	private Date myJumpTimeStamp;
@@ -296,7 +296,7 @@ public final class FBReaderApp extends ZLApplication {
 		FootnoteView.setModel(null);
 		clearTextCaches();
 		Model = null;
-		ExternalBook = null;
+		myExternalFileOpener.resetBook();
 		System.gc();
 		System.gc();
 
@@ -310,7 +310,6 @@ public final class FBReaderApp extends ZLApplication {
 		}
 
 		if (plugin instanceof ExternalFormatPlugin) {
-			ExternalBook = book;
 			final Bookmark bm;
 			if (bookmark != null) {
 				bm = bookmark;

@@ -49,7 +49,15 @@ class ExternalFileOpener implements FBReaderApp.ExternalFileOpener {
 		myReader = reader;
 	}
 
+	public void resetBook() {
+		final FBReaderApplication app = (FBReaderApplication)myReader.getApplication();
+		app.ExternalBook = null;
+	}
+
 	public void openFile(final ExternalFormatPlugin plugin, final Book book, Bookmark bookmark) {
+		final FBReaderApplication app = (FBReaderApplication)myReader.getApplication();
+		app.ExternalBook = book;
+
 		if (myDialog != null) {
 			myDialog.dismiss();
 			myDialog = null;
