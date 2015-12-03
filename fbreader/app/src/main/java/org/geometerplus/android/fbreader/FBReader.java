@@ -78,7 +78,7 @@ import org.geometerplus.android.util.*;
 
 import org.fbreader.md.MDAlertDialogBuilder;
 
-public final class FBReader extends MainActivity implements ZLApplicationWindow {
+public final class FBReader extends MainActivity implements ZLApplicationWindow, IBookCollection.Listener<Book> {
 	public static final int RESULT_DO_NOTHING = RESULT_FIRST_USER;
 	public static final int RESULT_REPAINT = RESULT_FIRST_USER + 1;
 
@@ -265,7 +265,9 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow 
 
 		myFBReaderApp = (FBReaderApp)FBReaderApp.Instance();
 		if (myFBReaderApp == null) {
-			myFBReaderApp = new FBReaderApp(Paths.systemInfo(this), new BookCollectionShadow());
+			final BookCollectionShadow collection = new BookCollectionShadow();
+			collection.addListener(this);
+			myFBReaderApp = new FBReaderApp(Paths.systemInfo(this), collection);
 		}
 		getCollection().bindToService(this, null);
 		myBook = null;
@@ -1057,5 +1059,20 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow 
 			}
 		};
 		UIUtil.wait("search", runnable, this);
+	}
+
+	// method from IBookCollection.Listener
+	public void onBuildEvent(IBookCollection.Status status) {
+	}
+
+	// method from IBookCollection.Listener
+	public void onBookEvent(BookEvent event, Book book) {
+		if (event == BookEvent.Updated) {
+			final Book current = myFBReaderApp != null ? myFBReaderApp.ExternalBook : null;
+			if (current == null || !getCollection().sameBook(current, book)) {
+				return;
+			}
+			current.updateFrom(book);
+		}
 	}
 }
