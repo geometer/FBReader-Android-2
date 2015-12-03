@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.zlibrary.ui.android.library;
+package org.fbreader.common.android;
 
 import java.io.*;
 
@@ -29,7 +29,7 @@ import android.os.Process;
 import org.geometerplus.zlibrary.ui.android.error.BugReportActivity;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
-public class UncaughtExceptionHandler implements java.lang.Thread.UncaughtExceptionHandler {
+public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 	private final Context myContext;
 
 	public UncaughtExceptionHandler(Context context) {

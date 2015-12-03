@@ -20,6 +20,7 @@
 package org.fbreader.common.android;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import org.fbreader.md.MDActivity;
 
@@ -31,6 +32,12 @@ public abstract class FBActivity extends MDActivity {
 	}
 
 	@Override
+	protected void onCreate(Bundle savedState) {
+		super.onCreate(savedState);
+		FBActivityUtil.setExceptionHandler(this);
+	}
+
+	@Override
 	protected void onStart() {
 		FBActivityUtil.applyParameters(this, getIntent());
 		super.onStart();
@@ -38,6 +45,7 @@ public abstract class FBActivity extends MDActivity {
 
 	@Override
 	protected void onResume() {
+		FBActivityUtil.setExceptionHandler(this);
 		FBActivityUtil.updateLocale(this);
 		super.onResume();
 	}

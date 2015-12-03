@@ -61,10 +61,6 @@ public class ImageViewActivity extends FBActivity {
 			showStatusBar ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN
 		);
 
-		Thread.setDefaultUncaughtExceptionHandler(
-			new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this)
-		);
-
 		final FrameLayout container = (FrameLayout)findViewById(R.id.image_view_container);
 		container.addView(new ImageView());
 

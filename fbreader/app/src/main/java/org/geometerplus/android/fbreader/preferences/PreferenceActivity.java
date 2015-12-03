@@ -942,7 +942,6 @@ public class PreferenceActivity extends FBSettingsActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setTitle(Resource.getValue());
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
 		SQLiteCookieDatabase.init(this);
 	}
 }

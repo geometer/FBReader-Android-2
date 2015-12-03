@@ -80,12 +80,6 @@ public class EditBookInfoActivity extends FBSettingsActivity implements MenuItem
 	}
 
 	@Override
-	protected void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
-	}
-
-	@Override
 	protected void onStart() {
 		super.onStart();
 
