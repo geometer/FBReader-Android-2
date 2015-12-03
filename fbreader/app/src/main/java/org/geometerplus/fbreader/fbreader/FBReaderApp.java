@@ -113,7 +113,7 @@ public final class FBReaderApp extends ZLApplication {
 	@Override
 	public Book getCurrentBook() {
 		final BookModel m = Model;
-		return m != null ? m.Book : ExternalBook;
+		return m != null ? m.Book : null;
 	}
 
 	public void openHelpBook() {
@@ -167,18 +167,6 @@ public final class FBReaderApp extends ZLApplication {
 				openBookInternal(bookToOpen, bookmark, false);
 			}
 		}, postAction);
-	}
-
-	private void reloadBook() {
-		final Book book = getCurrentBook();
-		if (book != null) {
-			final SynchronousExecutor executor = createExecutor("loadingBook");
-			executor.execute(new Runnable() {
-				public void run() {
-					openBookInternal(book, null, true);
-				}
-			}, null);
-		}
 	}
 
 	public ZLKeyBindings keyBindings() {
@@ -693,7 +681,12 @@ public final class FBReaderApp extends ZLApplication {
 
 		if (!external) {
 			if (newEncoding != null && !newEncoding.equals(oldEncoding)) {
-				reloadBook();
+				final SynchronousExecutor executor = createExecutor("loadingBook");
+				executor.execute(new Runnable() {
+					public void run() {
+						openBookInternal(current, null, true);
+					}
+				}, null);
 			} else {
 				ZLTextHyphenator.Instance().load(current.getLanguage());
 				clearTextCaches();
