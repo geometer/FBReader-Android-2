@@ -30,6 +30,11 @@ class ShowWhatsNewDialogAction extends MainActivity.Action<MainActivity,Abstract
 	}
 
 	@Override
+	public boolean isVisible() {
+		return FBReaderUtil.resourceFileExists(BaseActivity, "data/whatsnew");
+	}
+
+	@Override
 	protected void run(Object ... params) {
 		FBReaderUtil.showHtmlDialog(
 			BaseActivity,
