@@ -74,7 +74,6 @@ public class BuyBooksActivity extends SimpleDialogActivity implements NetworkLib
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
 
 		myBookCollection.bindToService(this, null);
 		myLibrary = Util.networkLibrary(this);

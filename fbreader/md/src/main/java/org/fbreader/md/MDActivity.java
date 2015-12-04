@@ -40,6 +40,7 @@ public abstract class MDActivity extends ActionBarActivity {
 	protected void onCreate(Bundle icicle) {
 		onPreCreate();
 		super.onCreate(icicle);
+		setExceptionHandler();
 		setContentView(layoutId());
 
 		myToolbar = (Toolbar)findViewById(R.id.md_toolbar);
@@ -54,6 +55,12 @@ public abstract class MDActivity extends ActionBarActivity {
 		setupToolbarAppearance(myToolbar, true);
 
 		myProgressIndicator = findViewById(R.id.md_progress_indicator);
+	}
+
+	@Override
+	protected void onResume() {
+		setExceptionHandler();
+		super.onResume();
 	}
 
 	protected void setTitleVisible(boolean visible) {
@@ -96,5 +103,16 @@ public abstract class MDActivity extends ActionBarActivity {
 			getTheme().resolveAttribute(R.attr.subtitleTextAppearance, typedValue, true);
 			myToolbar.setSubtitleTextAppearance(this, typedValue.resourceId);
 		}
+	}
+
+	private void setExceptionHandler() {
+		final Thread.UncaughtExceptionHandler handler = exceptionHandler();
+		if (handler != null) {
+			Thread.setDefaultUncaughtExceptionHandler(handler);
+		}
+	}
+
+	protected Thread.UncaughtExceptionHandler exceptionHandler() {
+		return null;
 	}
 }

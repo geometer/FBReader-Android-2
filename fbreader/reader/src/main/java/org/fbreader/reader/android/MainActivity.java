@@ -54,7 +54,6 @@ import org.geometerplus.zlibrary.core.options.*;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
-import org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 
@@ -125,7 +124,6 @@ public abstract class MainActivity extends FBActivity {
 	@Override
 	protected void onCreate(Bundle saved) {
 		super.onCreate(saved);
-		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
 
 		final ListView drawerMenu = (ListView)findViewById(R.id.main_drawer_menu);
 		drawerMenu.setAdapter(myHamburgerMenuAdapter);
@@ -702,5 +700,25 @@ public abstract class MainActivity extends FBActivity {
 				break;
 		}
 		setRequestedOrientation(orientation);
+	}
+
+	protected Thread.UncaughtExceptionHandler exceptionHandler() {
+		return new ReaderExceptionHandler(this);
+	}
+
+	final protected ZLStringOption crashBookPathOption() {
+		return new ZLStringOption("Crash", "Path", "");
+	}
+
+	void saveCrashBookPath() {
+		final AbstractReader reader = getReader();
+		if (reader == null) {
+			return;
+		}
+
+		if (reader.getActionCount() == 0) {
+			final Book book = reader.getCurrentBook();
+			crashBookPathOption().setValue(book != null ? book.getPath() : "");
+		}
 	}
 }

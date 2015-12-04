@@ -54,8 +54,6 @@ public class TOCActivity extends FBActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
-
 		final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
 
 		FBReaderUtil.setBookTitle(this, fbreader.Model.Book);

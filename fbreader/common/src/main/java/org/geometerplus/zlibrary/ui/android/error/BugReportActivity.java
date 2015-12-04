@@ -76,4 +76,8 @@ public class BugReportActivity extends FBActivity implements ErrorKeys {
 			}
 		});
 	}
+
+	protected Thread.UncaughtExceptionHandler exceptionHandler() {
+		return null;
+	}
 }

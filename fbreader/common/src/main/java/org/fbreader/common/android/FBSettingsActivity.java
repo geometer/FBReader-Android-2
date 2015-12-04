@@ -57,4 +57,9 @@ public abstract class FBSettingsActivity extends MDSettingsActivity {
 	public void startActivityForResult(Intent intent, int requestCode) {
 		super.startActivityForResult(FBActivityUtil.updatedIntent(intent, this), requestCode);
 	}
+
+	@Override
+	protected Thread.UncaughtExceptionHandler exceptionHandler() {
+		return new UncaughtExceptionHandler(this);
+	}
 }

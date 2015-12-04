@@ -17,28 +17,18 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.fbreader.reader.android;
 
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.fbreader.common.android.UncaughtExceptionHandler;
 
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
-
-import org.geometerplus.fbreader.Paths;
-import org.geometerplus.fbreader.book.Book;
-import org.geometerplus.fbreader.formats.*;
-
-import org.geometerplus.android.util.NativeLibraryUtil;
-
-public class FBReaderApplication extends ZLAndroidApplication implements IFormatPluginCollection {
-	volatile Book ExternalBook;
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		NativeLibraryUtil.init(this, "NativeFormats-v4");
+public class ReaderExceptionHandler extends UncaughtExceptionHandler {
+	public ReaderExceptionHandler(MainActivity activity) {
+		super(activity);
 	}
 
-	public FormatPlugin getPlugin(ZLFile file) {
-		return PluginCollection.Instance(Paths.systemInfo(this)).getPlugin(file);
+	@Override
+	public void uncaughtException(Thread thread, Throwable exception) {
+		((MainActivity)Activity).saveCrashBookPath();
+		super.uncaughtException(thread, exception);
 	}
 }

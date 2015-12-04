@@ -88,8 +88,6 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		Thread.setDefaultUncaughtExceptionHandler(new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(this));
-
 		setTitle("");
 
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);

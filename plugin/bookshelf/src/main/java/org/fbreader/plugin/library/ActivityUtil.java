@@ -8,9 +8,6 @@ import android.util.TypedValue;
 
 public abstract class ActivityUtil {
 	public static int setup(Activity activity, boolean dialog) {
-		Thread.setDefaultUncaughtExceptionHandler(
-			new org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler(activity)
-		);
 		return selectTheme(activity, dialog);
 	}
 

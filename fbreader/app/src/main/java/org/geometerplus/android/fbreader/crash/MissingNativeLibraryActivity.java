@@ -37,4 +37,8 @@ public class MissingNativeLibraryActivity extends SimpleDialogActivity {
 		okButton().setOnClickListener(finishListener());
 		setButtonTexts("ok", null);
 	}
+
+	protected Thread.UncaughtExceptionHandler exceptionHandler() {
+		return null;
+	}
 }

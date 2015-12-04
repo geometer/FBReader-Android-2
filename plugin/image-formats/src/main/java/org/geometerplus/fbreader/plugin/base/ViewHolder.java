@@ -227,6 +227,7 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 
 	synchronized void openFile(final Intent i) {
 		myRenderedOnce = false;
+		resetActionCount();
 		String message = Util.getResourceString("dialog", "waitMessage", "loadingBook");
 		final ProgressDialog progress = ProgressDialog.show(myActivity, null, message, true, false);
 		new Thread() {

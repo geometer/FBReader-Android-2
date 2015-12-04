@@ -65,6 +65,8 @@ public abstract class AbstractReader implements IBookCollection.Listener<Book> {
 	public final PageTurningOptions PageTurningOptions = new PageTurningOptions();
 	public final SyncOptions SyncOptions = new SyncOptions();
 
+	private int myActionCount = 0;
+
 	public final void addAction(String actionId, Action action) {
 		myIdToActionMap.put(actionId, action);
 	}
@@ -74,11 +76,14 @@ public abstract class AbstractReader implements IBookCollection.Listener<Book> {
 	}
 
 	public final boolean runAction(String actionId, Object ... params) {
-		if (actionId == null) {
+		final Action action = actionId != null ? myIdToActionMap.get(actionId) : null;
+		if (action == null) {
 			return false;
 		}
-		final Action action = myIdToActionMap.get(actionId);
-		return action != null ? action.checkAndRun(params) : false;
+
+		action.checkAndRun(params);
+		++myActionCount;
+		return true;
 	}
 
 	public final boolean isActionVisible(String actionId) {
@@ -99,6 +104,14 @@ public abstract class AbstractReader implements IBookCollection.Listener<Book> {
 	public abstract Book getCurrentBook();
 
 	public abstract void storePosition();
+
+	protected final void resetActionCount() {
+		myActionCount = 0;
+	}
+
+	public final int getActionCount() {
+		return myActionCount;
+	}
 
 	// method from IBookCollection.Listener
 	public void onBuildEvent(IBookCollection.Status status) {
