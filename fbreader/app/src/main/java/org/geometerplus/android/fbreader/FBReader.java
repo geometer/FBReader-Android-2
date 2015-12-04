@@ -366,19 +366,22 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 			myFBReaderApp.runAction(data.getEncodedSchemeSpecificPart(), data.getFragment());
 		} else if (Intent.ACTION_VIEW.equals(action) || FBReaderIntents.Action.VIEW.equals(action)) {
 			myOpenBookIntent = intent;
-			if (myFBReaderApp.Model == null && app().ExternalBook != null) {
-				final BookCollectionShadow collection = getCollection();
-				final Book b = FBReaderIntents.getBookExtra(intent, collection);
-				if (!collection.sameBook(b, app().ExternalBook)) {
-					try {
-						final ExternalFormatPlugin plugin =
-							(ExternalFormatPlugin)BookUtil.getPlugin(
-								PluginCollection.Instance(Paths.systemInfo(this)),
-								app().ExternalBook
-							);
-						startActivity(PluginUtil.createIntent(plugin, FBReaderIntents.Action.PLUGIN_KILL));
-					} catch (Exception e) {
-						e.printStackTrace();
+			if (myFBReaderApp.Model == null) {
+				final Book external = app().ExternalBook();
+				if (external != null) {
+					final BookCollectionShadow collection = getCollection();
+					final Book b = FBReaderIntents.getBookExtra(intent, collection);
+					if (!collection.sameBook(b, external)) {
+						try {
+							final ExternalFormatPlugin plugin =
+								(ExternalFormatPlugin)BookUtil.getPlugin(
+									PluginCollection.Instance(Paths.systemInfo(this)),
+									external
+								);
+							startActivity(PluginUtil.createIntent(plugin, FBReaderIntents.Action.PLUGIN_KILL));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
