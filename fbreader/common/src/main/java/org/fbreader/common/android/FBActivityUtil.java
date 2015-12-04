@@ -59,8 +59,4 @@ abstract class FBActivityUtil {
 			intent.removeExtra(ORIENTATION_KEY);
 		}
 	}
-
-	static void setExceptionHandler(MDActivity activity) {
-		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(activity));
-	}
 }
