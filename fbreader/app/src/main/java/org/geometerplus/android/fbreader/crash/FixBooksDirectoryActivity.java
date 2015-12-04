@@ -107,4 +107,8 @@ public class FixBooksDirectoryActivity extends FBActivity {
 			myDirectoryView.setText(FileChooserUtil.folderPathFromData(data));
 		}
 	}
+
+	protected Thread.UncaughtExceptionHandler exceptionHandler() {
+		return null;
+	}
 }

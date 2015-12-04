@@ -21,19 +21,21 @@ package org.fbreader.common.android;
 
 import java.io.*;
 
-import android.app.Activity;
-import android.content.*;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Process;
+
+import org.fbreader.md.MDActivity;
 
 import org.geometerplus.zlibrary.ui.android.error.BugReportActivity;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-	private final Context myContext;
+	protected final MDActivity Activity;
 
-	public UncaughtExceptionHandler(Context context) {
-		myContext = context;
+	public UncaughtExceptionHandler(MDActivity activity) {
+		Activity = activity;
 	}
 
 	@Override
@@ -48,16 +50,14 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 		);
 		intent.setPackage(FBReaderIntents.DEFAULT_PACKAGE);
 		try {
-			myContext.startActivity(intent);
+			Activity.startActivity(intent);
 		} catch (ActivityNotFoundException e) {
-			intent = new Intent(myContext, BugReportActivity.class);
+			intent = new Intent(Activity, BugReportActivity.class);
 			intent.putExtra(BugReportActivity.STACKTRACE, stackTrace.toString());
-			myContext.startActivity(intent);
+			Activity.startActivity(intent);
 		}
 
-		if (myContext instanceof Activity) {
-			((Activity)myContext).finish();
-		}
+		Activity.finish();
 
 		Process.killProcess(Process.myPid());
 		System.exit(10);

@@ -701,4 +701,30 @@ public abstract class MainActivity extends FBActivity {
 		}
 		setRequestedOrientation(orientation);
 	}
+
+	protected Thread.UncaughtExceptionHandler exceptionHandler() {
+		return new ReaderExceptionHandler(this);
+	}
+
+	private SharedPreferences crashPreferences() {
+		return getApplication().getSharedPreferences("crash", MODE_PRIVATE);
+	}
+
+	void saveCrashBookPath() {
+		final AbstractReader reader = getReader();
+		final Book book = reader != null ? reader.getCurrentBook() : null;
+		if (book != null) {
+			crashPreferences().edit().putString("path", book.getPath()).commit();
+		} else {
+			crashPreferences().edit().remove("path").commit();
+		}
+	}
+
+	final protected void clearCrashBookPath() {
+		crashPreferences().edit().remove("path").commit();
+	}
+
+	final protected String crashBookPath() {
+		return crashPreferences().getString("path", null);
+	}
 }

@@ -17,28 +17,18 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader.crash;
+package org.fbreader.reader.android;
 
-import android.os.Bundle;
+import org.fbreader.common.android.UncaughtExceptionHandler;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-
-import org.geometerplus.android.fbreader.util.SimpleDialogActivity;
-
-public class MissingNativeLibraryActivity extends SimpleDialogActivity {
-	@Override
-	protected void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
-
-		final ZLResource resource = ZLResource.resource("crash").getResource("missingNativeLibrary");
-
-		setTitle(resource.getResource("title").getValue());
-		textView().setText(resource.getResource("text").getValue());
-		okButton().setOnClickListener(finishListener());
-		setButtonTexts("ok", null);
+public class ReaderExceptionHandler extends UncaughtExceptionHandler {
+	public ReaderExceptionHandler(MainActivity activity) {
+		super(activity);
 	}
 
-	protected Thread.UncaughtExceptionHandler exceptionHandler() {
-		return null;
+	@Override
+	public void uncaughtException(Thread thread, Throwable exception) {
+		((MainActivity)Activity).saveCrashBookPath();
+		super.uncaughtException(thread, exception);
 	}
 }
