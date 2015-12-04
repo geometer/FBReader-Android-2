@@ -706,25 +706,19 @@ public abstract class MainActivity extends FBActivity {
 		return new ReaderExceptionHandler(this);
 	}
 
-	private SharedPreferences crashPreferences() {
-		return getApplication().getSharedPreferences("crash", MODE_PRIVATE);
+	final protected ZLStringOption crashBookPathOption() {
+		return new ZLStringOption("Crash", "Path", "");
 	}
 
 	void saveCrashBookPath() {
 		final AbstractReader reader = getReader();
-		final Book book = reader != null ? reader.getCurrentBook() : null;
-		if (book != null) {
-			crashPreferences().edit().putString("path", book.getPath()).commit();
-		} else {
-			crashPreferences().edit().remove("path").commit();
+		if (reader == null) {
+			return;
 		}
-	}
 
-	final protected void clearCrashBookPath() {
-		crashPreferences().edit().remove("path").commit();
-	}
-
-	final protected String crashBookPath() {
-		return crashPreferences().getString("path", null);
+		if (reader.getActionCount() == 0) {
+			final Book book = reader.getCurrentBook();
+			crashBookPathOption().setValue(book != null ? book.getPath() : "");
+		}
 	}
 }
