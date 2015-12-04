@@ -343,7 +343,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 				myCancelIntent = intent;
 				myOpenBookIntent = null;
 			} else if (FBReaderIntents.Action.PLUGIN_CRASH.equals(action)) {
-				app().ExternalBook = null;
+				setExternalBook(null);
 				myOpenBookIntent = null;
 				getCollection().bindToService(this, new Runnable() {
 					public void run() {
@@ -367,7 +367,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 		} else if (Intent.ACTION_VIEW.equals(action) || FBReaderIntents.Action.VIEW.equals(action)) {
 			myOpenBookIntent = intent;
 			if (myFBReaderApp.Model == null) {
-				final Book external = app().ExternalBook();
+				final Book external = getExternalBook();
 				if (external != null) {
 					final BookCollectionShadow collection = getCollection();
 					final Book b = FBReaderIntents.getBookExtra(intent, collection);
@@ -392,7 +392,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 			myOpenBookIntent = null;
 		} else if (FBReaderIntents.Action.PLUGIN_CRASH.equals(intent.getAction())) {
 			final Book book = FBReaderIntents.getBookExtra(intent, myFBReaderApp.Collection);
-			app().ExternalBook = null;
+			setExternalBook(null);
 			myOpenBookIntent = null;
 			getCollection().bindToService(this, new Runnable() {
 				public void run() {
@@ -564,10 +564,10 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 					myFBReaderApp.useSyncInfo(true, myNotifier);
 				}
 			});
-		} else if (myFBReaderApp.Model == null && app().ExternalBook != null) {
+		} else if (myFBReaderApp.Model == null && getExternalBook() != null) {
 			getCollection().bindToService(this, new Runnable() {
 				public void run() {
-					myFBReaderApp.openBook(app().ExternalBook, null, null, myNotifier);
+					myFBReaderApp.openBook(getExternalBook(), null, null, myNotifier);
 				}
 			});
 		} else {
@@ -1071,15 +1071,18 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 	// method from IBookCollection.Listener
 	public void onBookEvent(BookEvent event, Book book) {
 		if (event == BookEvent.Updated) {
-			final Book current = app().ExternalBook;
-			if (current == null || !getCollection().sameBook(current, book)) {
-				return;
+			final Book external = getExternalBook();
+			if (external != null && getCollection().sameBook(external, book)) {
+				external.updateFrom(book);
 			}
-			current.updateFrom(book);
 		}
 	}
 
-	private final FBReaderApplication app() {
-		return (FBReaderApplication)getApplication();
+	private final Book getExternalBook() {
+		return ((FBReaderApplication)getApplication()).ExternalBook;
+	}
+
+	void setExternalBook(Book book) {
+		((FBReaderApplication)getApplication()).ExternalBook = book;
 	}
 }
