@@ -8,7 +8,6 @@
 	<uses-permission android:name="fbreader.permission.LIBRARY" />
 	<uses-permission android:name="fbreader.permission.CONFIG" />
 	<uses-permission android:name="fbreader.permission.SYNC" />
-
 	<application
 		android:icon="@drawable/fbreader_djvu"
 		android:name = "org.geometerplus.fbreader.plugin.djvu.DJVUApplication"
@@ -56,7 +55,6 @@
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
 			</intent-filter>
-
 			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
 		</activity>
 		<service
