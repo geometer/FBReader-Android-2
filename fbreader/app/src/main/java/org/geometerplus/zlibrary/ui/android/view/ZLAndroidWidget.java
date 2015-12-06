@@ -35,8 +35,7 @@ import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.SystemInfo;
-import org.geometerplus.zlibrary.core.view.ZLView;
-import org.geometerplus.zlibrary.core.view.ZLViewWidget;
+import org.geometerplus.zlibrary.core.view.*;
 
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
@@ -205,11 +204,15 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 		});
 	}
 
+	protected final BitmapManager getBitmapManager() {
+		return myBitmapManager;
+	}
+
 	private AnimationProvider myAnimationProvider;
 	private ZLView.Animation myAnimationType;
 	private int myStoredLayerType = -1;
 	private AnimationProvider getAnimationProvider() {
-		final ZLView.Animation type = ZLApplication.Instance().getCurrentView().getAnimationType();
+		final ZLViewEnums.Animation type = ZLApplication.Instance().getCurrentView().getAnimationType();
 		if (myAnimationProvider == null || myAnimationType != type) {
 			myAnimationType = type;
 			if (myStoredLayerType != -1) {
@@ -217,21 +220,21 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 			}
 			switch (type) {
 				case none:
-					myAnimationProvider = new NoneAnimationProvider(myBitmapManager);
+					myAnimationProvider = new NoneAnimationProvider(getBitmapManager());
 					break;
 				case curl:
 					myStoredLayerType = getLayerType();
-					myAnimationProvider = new CurlAnimationProvider(myBitmapManager);
+					myAnimationProvider = new CurlAnimationProvider(getBitmapManager());
 					setLayerType(LAYER_TYPE_SOFTWARE, null);
 					break;
 				case slide:
-					myAnimationProvider = new SlideAnimationProvider(myBitmapManager);
+					myAnimationProvider = new SlideAnimationProvider(getBitmapManager());
 					break;
 				case slideOldStyle:
-					myAnimationProvider = new SlideOldStyleAnimationProvider(myBitmapManager);
+					myAnimationProvider = new SlideOldStyleAnimationProvider(getBitmapManager());
 					break;
 				case shift:
-					myAnimationProvider = new ShiftAnimationProvider(myBitmapManager);
+					myAnimationProvider = new ShiftAnimationProvider(getBitmapManager());
 					break;
 			}
 		}

@@ -1619,6 +1619,10 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	private void onFingerDoubleTap(int x, int y) {
 	}
 
+	protected final BitmapManager getBitmapManager() {
+		return this;
+	}
+
 	private int myStoredLayerType = -1;
 	private AnimationProvider getAnimationProvider() {
 		final ZLViewEnums.Animation type = getReader().PageTurningOptions.Animation.getValue();
@@ -1627,25 +1631,23 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 			if (myStoredLayerType != -1) {
 				setLayerType(myStoredLayerType, null);
 			}
-			switch (myAnimationType) {
+			switch (type) {
+				case none:
+					myAnimationProvider = new NoneAnimationProvider(getBitmapManager());
+					break;
 				case curl:
 					myStoredLayerType = getLayerType();
-					myAnimationProvider = new CurlAnimationProvider(this);
+					myAnimationProvider = new CurlAnimationProvider(getBitmapManager());
 					setLayerType(LAYER_TYPE_SOFTWARE, null);
 					break;
-				case none:
-					myAnimationProvider = new NoneAnimationProvider(this);
-					break;
-				case shift:
-					myAnimationProvider = new ShiftAnimationProvider(this);
-					break;
 				case slide:
-					myAnimationProvider = new SlideAnimationProvider(this);
+					myAnimationProvider = new SlideAnimationProvider(getBitmapManager());
 					break;
 				case slideOldStyle:
-					myAnimationProvider = new SlideOldStyleAnimationProvider(this);
+					myAnimationProvider = new SlideOldStyleAnimationProvider(getBitmapManager());
 					break;
-				default:
+				case shift:
+					myAnimationProvider = new ShiftAnimationProvider(getBitmapManager());
 					break;
 			}
 		}
