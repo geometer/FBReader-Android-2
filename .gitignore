@@ -10,5 +10,4 @@ READY/
 .gradle
 .classpath
 .settings
-*.so
 *~

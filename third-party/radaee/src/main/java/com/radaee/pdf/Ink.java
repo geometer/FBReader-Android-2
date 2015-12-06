@@ -45,11 +45,14 @@ public class Ink
 	 */
 	public final void Destroy()
 	{
-		destroy( hand );
-		hand = 0;
-        m_path.reset();
-        m_path_append.reset();
-        path_idx = 0;
+        if(hand != 0)
+        {
+            destroy(hand);
+            hand = 0;
+            m_path.reset();
+            m_path_append.reset();
+            path_idx = 0;
+        }
 	}
 	/**
 	 * call when click down

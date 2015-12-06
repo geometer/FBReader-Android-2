@@ -1619,13 +1619,19 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	private void onFingerDoubleTap(int x, int y) {
 	}
 
+	private int myStoredLayerType = -1;
 	private AnimationProvider getAnimationProvider() {
 		final ZLViewEnums.Animation type = getReader().PageTurningOptions.Animation.getValue();
 		if (myAnimationProvider == null || myAnimationType != type) {
 			myAnimationType = type;
+			if (myStoredLayerType != -1) {
+				setLayerType(myStoredLayerType, null);
+			}
 			switch (myAnimationType) {
 				case curl:
+					myStoredLayerType = getLayerType();
 					myAnimationProvider = new CurlAnimationProvider(this);
+					setLayerType(LAYER_TYPE_SOFTWARE, null);
 					break;
 				case none:
 					myAnimationProvider = new NoneAnimationProvider(this);

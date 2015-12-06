@@ -241,10 +241,10 @@ public class Document
 	protected long hand_val = 0;
 	private int page_count = 0;
 	private static native long create( String path );
-	private static native long createForStream( PDFStream stream );
-	private static native long open( String path, String password );
-	private static native long openMem( byte[] data, String password );
-	private static native long openStream( PDFStream stream, String password );
+	private static native long createForStream( PDFStream stream ) throws Exception;
+	private static native long open( String path, String password ) throws Exception;
+	private static native long openMem( byte[] data, String password ) throws Exception;
+	private static native long openStream( PDFStream stream, String password ) throws Exception;
 	private static native boolean setCache( long hand, String path );
     private static native boolean runJS(long hand, String js, PDFJSDelegate del) throws Exception;
 	private static native void setFontDel( long hand, PDFFontDelegate del );
@@ -273,13 +273,13 @@ public class Document
 	private static native boolean setMeta( long hand, String tag, String value );
     private static native String getXMP(long hand);
 	private static native boolean canSave( long hand );
-	private static native boolean save( long hand );
-	private static native boolean saveAs( long hand, String dst, boolean rem_sec );//remove security info and save to another file.
-	private static native boolean encryptAs( long hand, String dst, String upswd, String opswd, int perm, int method, byte[] id);
+	private static native boolean save( long hand ) throws Exception;
+	private static native boolean saveAs( long hand, String dst, boolean rem_sec ) throws Exception;//remove security info and save to another file.
+	private static native boolean encryptAs( long hand, String dst, String upswd, String opswd, int perm, int method, byte[] id) throws Exception;
 	private static native boolean isEncrypted( long hand );
 
 	private static native long importStart( long hand, long hand_src );
-	private static native boolean importPage( long hand, long ctx, int srcno, int dstno );
+	private static native boolean importPage( long hand, long ctx, int srcno, int dstno ) throws Exception;
 	private static native void importEnd( long hand, long ctx );
 	private static native long newPage( long hand, int pageno, float w, float h );
 	private static native boolean removePage( long hand, int pageno );
@@ -601,7 +601,7 @@ public class Document
 	 * @param stream stream to create
 	 * @return 0 or less than 0 means failed, same as Open.
 	 */
-	public int CreateForStream( PDFStream stream )
+	public int CreateForStream( PDFStream stream ) throws Exception
 	{
 		if( hand_val == 0 )
 		{
@@ -657,7 +657,14 @@ public class Document
 		if( hand_val == 0 )
 		{
 			int ret = 0;
-			hand_val = open( path, password );
+            try {
+                hand_val = open(path, password);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                hand_val = -10;
+            }
 			if( hand_val <= 0 && hand_val >= -10 )//error
 			{
 				ret = (int)hand_val;
@@ -688,7 +695,14 @@ public class Document
 		if( hand_val == 0 )
 		{
 			int ret = 0;
-			hand_val = openMem( data, password );
+            try {
+                hand_val = openMem(data, password);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                hand_val = -10;
+            }
 			if( hand_val <= 0 && hand_val >= -10 )//error
 			{
 				ret = (int)hand_val;
@@ -719,7 +733,12 @@ public class Document
 		if( hand_val == 0 )
 		{
 			int ret = 0;
-			hand_val = openStream( stream, password );
+            try {
+                hand_val = openStream(stream, password);
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
 			if( hand_val <= 0 && hand_val >= -10 )//error
 			{
 				ret = (int)hand_val;
@@ -909,7 +928,14 @@ public class Document
 	 */
 	public boolean Save()
 	{
-		return save( hand_val );
+        try {
+            return save(hand_val);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();;
+            return false;
+        }
 	}
 	/**
 	 * save as the document to another file.<br/>
@@ -920,7 +946,14 @@ public class Document
 	 */
 	public boolean SaveAs( String path, boolean rem_sec )
 	{
-		return saveAs( hand_val, path, rem_sec );
+        try {
+            return saveAs(hand_val, path, rem_sec);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	/**
 	 * encrypt document and save as the document to another file.<br/>
@@ -940,7 +973,14 @@ public class Document
 	 */
 	public boolean EncryptAs( String dst, String upswd, String opswd, int perm, int method, byte[] id)
 	{
-		return encryptAs( hand_val, dst, upswd, opswd, perm, method, id);
+        try {
+            return encryptAs(hand_val, dst, upswd, opswd, perm, method, id);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	/**
 	 * check if document is encrypted.
@@ -988,7 +1028,14 @@ public class Document
 	public boolean ImportPage( ImportContext ctx, int srcno, int dstno )
 	{
 		if( ctx == null ) return false;
-		return importPage( hand_val, ctx.hand, srcno, dstno );
+        try {
+            return importPage(hand_val, ctx.hand, srcno, dstno);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	/**
 	 * insert a page to Document<br/>
