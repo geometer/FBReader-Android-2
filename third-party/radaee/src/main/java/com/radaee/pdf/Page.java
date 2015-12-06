@@ -1,9 +1,13 @@
 package com.radaee.pdf;
 
-import com.radaee.pdf.Document.*;
-import com.radaee.pdf.adv.*;
 import android.graphics.Bitmap;
 import android.util.Log;
+
+import com.radaee.pdf.Document.DocFont;
+import com.radaee.pdf.Document.DocForm;
+import com.radaee.pdf.Document.DocGState;
+import com.radaee.pdf.Document.DocImage;
+import com.radaee.pdf.adv.Ref;
 
 /**
 class for PDF Page.
@@ -107,15 +111,25 @@ public class Page
         {
             return Page.getAnnotFieldFlag(page.hand, hand);
         }
-		/**
-		 * get name of the annotation.<br/>
-		 * this method valid in premium version
-		 * @return null if it is not field, or name of the annotation, example: "EditBox1[0]".
-		 */
+        /**
+         * get name of the annotation without NO. a fields group with same name "field#0","field#1"，got to "field".<br/>
+         * this method valid in premium version
+         * @return null if it is not field, or name of the annotation, example: "EditBox1[0]".
+         */
         final public String GetFieldName()
 		{
-			return Page.getAnnotFieldName(page.hand, hand);
+			return Page.getAnnotFieldNameWithoutNO(page.hand, hand);
 		}
+
+        /**
+         * get name of the annotation.<br/>
+         * this method valid in premium version
+         * @return null if it is not field, or name of the annotation, example: "EditBox1[0]".
+         */
+        final public String GetFieldNameWithNO()
+        {
+            return Page.getAnnotFieldName(page.hand, hand);
+        }
 		/**
 		 * get name of the annotation.<br/>
 		 * this method valid in premium version
@@ -1133,13 +1147,13 @@ public class Page
 	static private native float[] getMediaBox( long hand );
 	static private native void close( long hand );
 	static private native void renderPrepare( long hand, long dib );
-	static private native boolean render( long hand, long dib, long matrix, int quality );
-	static private native boolean renderToBmp( long hand, Bitmap bitmap, long matrix, int quality );
-	static private native boolean renderToBuf( long hand, int[] data, int w, int h, long matrix, int quality);
+	static private native boolean render( long hand, long dib, long matrix, int quality ) throws Exception;
+	static private native boolean renderToBmp( long hand, Bitmap bitmap, long matrix, int quality ) throws Exception;
+	static private native boolean renderToBuf( long hand, int[] data, int w, int h, long matrix, int quality) throws Exception;
 	static private native void renderCancel(long hand);
-	static private native boolean renderThumb(long hand, Bitmap bmp);
-	static private native boolean renderThumbToDIB( long hand, long dib);
-	static private native boolean renderThumbToBuf( long hand, int[] data, int w, int h);
+	static private native boolean renderThumb(long hand, Bitmap bmp) throws Exception;
+	static private native boolean renderThumbToDIB( long hand, long dib) throws Exception;
+	static private native boolean renderThumbToBuf( long hand, int[] data, int w, int h) throws Exception;
 	static private native boolean renderIsFinished(long hand);
 	static private native float reflowStart( long hand, float width, float scale, boolean enable_images );
 	static private native boolean reflow( long hand, long dib, float orgx, float orgy );
@@ -1181,6 +1195,7 @@ public class Page
 	static private native int getAnnotFieldType( long hand, long annot );
     static private native int getAnnotFieldFlag( long hand, long annot );
 	static private native String getAnnotFieldName( long hand, long annot );
+    static private native String getAnnotFieldNameWithoutNO( long hand, long annot );
 	static private native String getAnnotFieldFullName( long hand, long annot );
 	static private native String getAnnotFieldFullName2( long hand, long annot );
 	static private native int getAnnotType( long hand, long annot );
@@ -1368,8 +1383,14 @@ public class Page
     final public boolean Render( DIB dib, Matrix mat )
 	{
         if(dib == null || mat == null) return  false;
-		boolean ret = render( hand, dib.hand, mat.hand, Global.render_mode );
-		return ret;
+        try {
+            return render(hand, dib.hand, mat.hand, Global.render_mode);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	/**
 	 * render page to Bitmap object directly. this function returned for cancelled or finished.<br/>
@@ -1381,7 +1402,14 @@ public class Page
     final public boolean RenderToBmp( Bitmap bitmap, Matrix mat )
 	{
         if(bitmap == null || mat == null) return  false;
-		return renderToBmp( hand, bitmap, mat.hand, Global.render_mode );
+        try {
+            return renderToBmp(hand, bitmap, mat.hand, Global.render_mode);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	/**
 	 * render page to int array directly. this function returned for cancelled or finished.<br/>
@@ -1395,7 +1423,13 @@ public class Page
     final public boolean RenderToBuf( int[] data, int w, int h, Matrix mat )
 	{
         if(data == null || mat == null) return  false;
-		return renderToBuf( hand, data, w, h, mat.hand, Global.render_mode );
+        try {
+            return renderToBuf(hand, data, w, h, mat.hand, Global.render_mode);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	/**
 	 * render to page in normal quality
@@ -1405,7 +1439,13 @@ public class Page
     final public boolean Render_Normal( DIB dib, Matrix mat )
 	{
         if(dib == null || mat == null) return false;
-		return render( hand, dib.hand, mat.hand, 1 );
+        try {
+            return render(hand, dib.hand, mat.hand, 1);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	/**
 	 * set page status to cancelled and cancel render function.
@@ -1422,12 +1462,26 @@ public class Page
 	 */
     final public boolean RenderThumb(Bitmap bmp)
 	{
-		return renderThumb(hand, bmp);
+        try {
+            return renderThumb(hand, bmp);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
     final public boolean RenderThumbToDIB(DIB dib)
 	{
         if(dib == null) return false;
-		return renderThumbToDIB(hand, dib.hand);
+        try {
+            return renderThumbToDIB(hand, dib.hand);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	/**
 	 * render thumb image to int array object.<br/>
@@ -1439,7 +1493,14 @@ public class Page
 	 */
     final public boolean RenderThumbToBuf(int []data, int w, int h)
 	{
-		return renderThumbToBuf(hand, data, w, h);
+        try {
+            return renderThumbToBuf(hand, data, w, h);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	/**
 	 * check if page rendering is finished.
