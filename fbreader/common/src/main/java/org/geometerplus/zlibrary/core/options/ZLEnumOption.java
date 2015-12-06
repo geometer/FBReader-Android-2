@@ -29,7 +29,7 @@ public final class ZLEnumOption<T extends Enum<T>> extends ZLOption {
 		myEnumClass = defaultValue.getDeclaringClass();
 	}
 
-	public T getValue() {
+	public synchronized T getValue() {
 		final String stringValue = getConfigValue();
 		if (!stringValue.equals(myStringValue)) {
 			myStringValue = stringValue;
@@ -41,7 +41,7 @@ public final class ZLEnumOption<T extends Enum<T>> extends ZLOption {
 		return myValue;
 	}
 
-	public void setValue(T value) {
+	public synchronized void setValue(T value) {
 		if (value == null) {
 			return;
 		}
