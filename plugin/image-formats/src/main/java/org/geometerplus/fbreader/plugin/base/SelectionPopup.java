@@ -43,8 +43,7 @@ class SelectionPopup extends FBReaderPluginActivity.PopupPanel {
 		final ZLResource resource = ZLResource.resource("selectionPopup");
 		setupButton(R.id.selection_panel_copy, resource.getResource("copyToClipboard").getValue());
 		setupButton(R.id.selection_panel_share, resource.getResource("share").getValue());
-		myWindow.findViewById(R.id.selection_panel_translate).setVisibility(View.GONE);
-		//setupButton(R.id.selection_panel_translate, resource.getResource("translate").getValue());
+		setupButton(R.id.selection_panel_translate, resource.getResource("translate").getValue());
 		setupButton(R.id.selection_panel_bookmark, resource.getResource("bookmark").getValue());
 		setupButton(R.id.selection_panel_close, resource.getResource("close").getValue());
 	}
@@ -94,8 +93,8 @@ class SelectionPopup extends FBReaderPluginActivity.PopupPanel {
 			activity.getReader().runAction(ActionCode.SELECTION_COPY_TO_CLIPBOARD);
 		} else if (viewId == R.id.selection_panel_share) {
 			activity.getReader().runAction(ActionCode.SELECTION_SHARE);
-		//} else if (viewId == R.id.selection_panel_translate) {
-		//	activity.getReader().runAction(ActionCode.SELECTION_TRANSLATE);
+		} else if (viewId == R.id.selection_panel_translate) {
+			activity.getReader().runAction(ActionCode.SELECTION_TRANSLATE);
 		} else if (viewId == R.id.selection_panel_bookmark) {
 			activity.getReader().runAction(ActionCode.SELECTION_BOOKMARK);
 		} else if (viewId == R.id.selection_panel_close) {
