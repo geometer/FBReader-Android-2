@@ -88,7 +88,7 @@ public class DJVUDocument extends DocumentHolder {
 		});
 
 		if (realCanvas != canvas) {
-			new Canvas(canvas).drawBitmap(realCanvas, dst.left, dst.top, new Paint());
+			new Canvas(canvas).drawBitmap(realCanvas, dst.left, dst.top, createPaint(inverted));
 		}
 	}
 
