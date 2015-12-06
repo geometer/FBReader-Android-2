@@ -4,7 +4,6 @@ import java.util.*;
 
 import android.content.ContextWrapper;
 import android.graphics.*;
-import android.util.Log;
 
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
 import org.geometerplus.fbreader.book.AbstractBook;
@@ -152,16 +151,17 @@ public class DJVUDocument extends DocumentHolder {
 	String getTextInternal(int pageNo, int is, int ie) {
 		checkPage(pageNo);
 		if (ie != -1) {
-			int start = Math.min(ie, is);
-			int end = Math.max(ie, is) + 1;
-			String res = "";
-			for (int i = start; i < end && i < myPageCache.get(pageNo).Words.size(); ++i) {
-				if (i > start && myPageCache.get(pageNo).Rects.get(i - 1).bottom >= myPageCache.get(pageNo).Rects.get(i).top) {
-					res += "\n";
+			final StringBuilder buffer = new StringBuilder();
+			final PageInfo page = myPageCache.get(pageNo);
+			final int start = Math.min(ie, is);
+			final int end = Math.min(Math.max(ie, is) + 1, page.Words.size());
+			for (int i = start; i < end; ++i) {
+				if (i > start && page.Rects.get(i - 1).bottom >= page.Rects.get(i).top) {
+					buffer.append("\n");
 				}
-				res += myPageCache.get(pageNo).Words.get(i) + " ";
+				buffer.append(page.Words.get(i)).append(" ");
 			}
-			return res;
+			return buffer.toString();
 		}
 		return null;
 	}
@@ -184,13 +184,12 @@ public class DJVUDocument extends DocumentHolder {
 	private HashMap<Integer, PageInfo> myPageCache = new HashMap<Integer, PageInfo>();
 
 	private void cachePage(int pageNo) {
-		Log.e("THREAD", "cachePage: start");
 		if (myPageCache.containsKey(pageNo)) {
 			return;
 		}
-		PageInfo p = new PageInfo();
-		int num = createTextNative(pageNo);
-		Log.e("THREAD", "cachePage: text created");
+		final PageInfo p = new PageInfo();
+		// TODO: replace with single native call
+		final int num = createTextNative(pageNo);
 		for (int i = 0; i < num; ++i) {
 			p.Rects.add(new RectF(
 				getWordCoordNative(i, 0),
@@ -198,13 +197,10 @@ public class DJVUDocument extends DocumentHolder {
 				getWordCoordNative(i, 2),
 				getWordCoordNative(i, 1)
 			));
-		}
-		Log.e("THREAD", "cachePage: text processed");
-		for (int i = 0; i < num; ++i) {
 			p.Words.add(getWordTextNative(i));
 		}
+		// end of TODO
 		myPageCache.put(pageNo, p);
-		Log.e("THREAD", "cachePage: end");
 	}
 
 	private void checkPage(int pageNo) {
