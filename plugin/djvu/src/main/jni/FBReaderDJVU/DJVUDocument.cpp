@@ -106,7 +106,16 @@ static std::string get_miniexp_str(miniexp_t t, std::string indent) {
 
 extern "C"
 JNIEXPORT jboolean Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_openDocumentNative(JNIEnv *env, jobject thiz, jstring path) {
-	const char * fileName = env->GetStringUTFChars(path, 0);
+	if (root) {
+		delete root;
+		root = 0;
+	}
+	if (doc) {
+		ddjvu_document_release(doc);
+		doc = 0;
+	}
+
+	const char *fileName = env->GetStringUTFChars(path, 0);
 	doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
 	int count = 0;
 	while (!ddjvu_document_decoding_done(doc)) {
