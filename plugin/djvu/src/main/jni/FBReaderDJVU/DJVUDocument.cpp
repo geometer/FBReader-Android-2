@@ -70,11 +70,11 @@ JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument
 	ddjvu_page_t* page = ddjvu_page_create_by_pageno(doc, pageNum);
 	int count = 0;
 	while (!ddjvu_page_decoding_done(page)) {
-		usleep(50000);
 		if (++count > 400) {
 			ddjvu_page_release(page);
 			return 0;
 		}
+		usleep(50000);
 	}
 	return (long)page;
 }
@@ -119,12 +119,12 @@ JNIEXPORT jboolean Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocum
 	doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
 	int count = 0;
 	while (!ddjvu_document_decoding_done(doc)) {
-		usleep(50000);
 		if (++count > 400) {
 			ddjvu_document_release(doc);
 			doc = 0;
 			break;
 		}
+		usleep(50000);
 	}
 	return doc ? 1 : 0;
 }
@@ -150,10 +150,10 @@ JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument
 		ddjvu_pageinfo_t info;
 		int count = 0;
 		while ((r = ddjvu_document_get_pageinfo(doc, pageNum, &info)) < DDJVU_JOB_OK) {
-			usleep(5000);
 			if (++count > 400) {
 				return -1;
 			}
+			usleep(5000);
 //			handle_ddjvu_messages(context, TRUE);
 		}
 //		if (r >= DDJVU_JOB_FAILED)
@@ -285,10 +285,10 @@ JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument
 		miniexp_t t;
 		int count = 0;
 		while ((t=ddjvu_document_get_outline(doc))==miniexp_dummy) {
-			usleep(5000);
 			if (++count > 400) {
 				return 0;
 			}
+			usleep(5000);
 		}
 		if (t == miniexp_dummy || t == NULL) {
 			return 0;
@@ -358,10 +358,10 @@ JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_
 		miniexp_t t;
 		int count = 0;
 		while ((t=ddjvu_document_get_pagetext(doc,pageNum,0))==miniexp_dummy) {
-			usleep(5000);
 			if (++count > 400) {
 				return 0;
 			}
+			usleep(5000);
 		}
 		if (t == miniexp_dummy || t == NULL) {
 			return 0;
