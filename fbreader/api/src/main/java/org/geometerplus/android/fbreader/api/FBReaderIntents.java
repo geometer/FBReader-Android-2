@@ -19,55 +19,57 @@
 
 package org.geometerplus.android.fbreader.api;
 
+import java.lang.reflect.Field;
+
 import android.content.Intent;
 
 import org.geometerplus.fbreader.book.*;
 
 public abstract class FBReaderIntents {
-	public static final String DEFAULT_PACKAGE = "org.geometerplus.zlibrary.ui.android";
+	public static String DEFAULT_PACKAGE = "org.geometerplus.zlibrary.ui.android";
 
-	public interface Action {
-		String API                              = "android.fbreader.action.API";
-		String API_CALLBACK                     = "android.fbreader.action.API_CALLBACK";
-		String VIEW                             = "android.fbreader.action.VIEW";
-		String CANCEL_MENU                      = "android.fbreader.action.CANCEL_MENU";
-		String CONFIG_SERVICE                   = "android.fbreader.action.CONFIG_SERVICE";
-		String LIBRARY_SERVICE                  = "android.fbreader.action.LIBRARY_SERVICE";
-		String BOOK_INFO                        = "android.fbreader.action.BOOK_INFO";
-		String LIBRARY                          = "android.fbreader.action.LIBRARY";
-		String EXTERNAL_LIBRARY                 = "android.fbreader.action.EXTERNAL_LIBRARY";
-		String BOOKMARKS                        = "android.fbreader.action.BOOKMARKS";
-		String EXTERNAL_BOOKMARKS               = "android.fbreader.action.EXTERNAL_BOOKMARKS";
-		String PREFERENCES                      = "android.fbreader.action.PREFERENCES";
-		String NETWORK_LIBRARY                  = "android.fbreader.action.NETWORK_LIBRARY";
-		String OPEN_NETWORK_CATALOG             = "android.fbreader.action.OPEN_NETWORK_CATALOG";
-		String ERROR                            = "android.fbreader.action.ERROR";
-		String CRASH                            = "android.fbreader.action.CRASH";
-		String PLUGIN                           = "android.fbreader.action.PLUGIN";
-		String CLOSE                            = "android.fbreader.action.CLOSE";
-		String PLUGIN_CRASH                     = "android.fbreader.action.PLUGIN_CRASH";
-		String EDIT_STYLES                      = "android.fbreader.action.EDIT_STYLES";
-		String EDIT_BOOKMARK                    = "android.fbreader.action.EDIT_BOOKMARK";
-		String SWITCH_YOTA_SCREEN               = "android.fbreader.action.SWITCH_YOTA_SCREEN";
+	public abstract static class Action {
+		public static String API                              = "android.fbreader.action.API";
+		public static String API_CALLBACK                     = "android.fbreader.action.API_CALLBACK";
+		public static String VIEW                             = "android.fbreader.action.VIEW";
+		public static String CANCEL_MENU                      = "android.fbreader.action.CANCEL_MENU";
+		public static String CONFIG_SERVICE                   = "android.fbreader.action.CONFIG_SERVICE";
+		public static String LIBRARY_SERVICE                  = "android.fbreader.action.LIBRARY_SERVICE";
+		public static String BOOK_INFO                        = "android.fbreader.action.BOOK_INFO";
+		public static String LIBRARY                          = "android.fbreader.action.LIBRARY";
+		public static String EXTERNAL_LIBRARY                 = "android.fbreader.action.EXTERNAL_LIBRARY";
+		public static String BOOKMARKS                        = "android.fbreader.action.BOOKMARKS";
+		public static String EXTERNAL_BOOKMARKS               = "android.fbreader.action.EXTERNAL_BOOKMARKS";
+		public static String PREFERENCES                      = "android.fbreader.action.PREFERENCES";
+		public static String NETWORK_LIBRARY                  = "android.fbreader.action.NETWORK_LIBRARY";
+		public static String OPEN_NETWORK_CATALOG             = "android.fbreader.action.OPEN_NETWORK_CATALOG";
+		public static String ERROR                            = "android.fbreader.action.ERROR";
+		public static String CRASH                            = "android.fbreader.action.CRASH";
+		public static String PLUGIN                           = "android.fbreader.action.PLUGIN";
+		public static String CLOSE                            = "android.fbreader.action.CLOSE";
+		public static String PLUGIN_CRASH                     = "android.fbreader.action.PLUGIN_CRASH";
+		public static String EDIT_STYLES                      = "android.fbreader.action.EDIT_STYLES";
+		public static String EDIT_BOOKMARK                    = "android.fbreader.action.EDIT_BOOKMARK";
+		public static String SWITCH_YOTA_SCREEN               = "android.fbreader.action.SWITCH_YOTA_SCREEN";
 
-		String SYNC_START                       = "android.fbreader.action.sync.START";
-		String SYNC_STOP                        = "android.fbreader.action.sync.STOP";
-		String SYNC_SYNC                        = "android.fbreader.action.sync.SYNC";
-		String SYNC_QUICK_SYNC                  = "android.fbreader.action.sync.QUICK_SYNC";
+		public static String SYNC_START                       = "android.fbreader.action.sync.START";
+		public static String SYNC_STOP                        = "android.fbreader.action.sync.STOP";
+		public static String SYNC_SYNC                        = "android.fbreader.action.sync.SYNC";
+		public static String SYNC_QUICK_SYNC                  = "android.fbreader.action.sync.QUICK_SYNC";
 
-		String PLUGIN_VIEW                      = "android.fbreader.action.plugin.VIEW";
-		String PLUGIN_KILL                      = "android.fbreader.action.plugin.KILL";
-		String PLUGIN_CONNECT_COVER_SERVICE     = "android.fbreader.action.plugin.CONNECT_COVER_SERVICE";
+		public static String PLUGIN_VIEW                      = "android.fbreader.action.plugin.VIEW";
+		public static String PLUGIN_KILL                      = "android.fbreader.action.plugin.KILL";
+		public static String PLUGIN_CONNECT_COVER_SERVICE     = "android.fbreader.action.plugin.CONNECT_COVER_SERVICE";
 	}
 
-	public interface Event {
-		String CONFIG_OPTION_CHANGE             = "fbreader.config_service.option_change_event";
+	public abstract static class Event {
+		public static String CONFIG_OPTION_CHANGE             = "fbreader.config_service.option_change_event";
 
-		String LIBRARY_BOOK                     = "fbreader.library_service.book_event";
-		String LIBRARY_BUILD                    = "fbreader.library_service.build_event";
-		String LIBRARY_COVER_READY              = "fbreader.library_service.cover_ready";
+		public static String LIBRARY_BOOK                     = "fbreader.library_service.book_event";
+		public static String LIBRARY_BUILD                    = "fbreader.library_service.build_event";
+		public static String LIBRARY_COVER_READY              = "fbreader.library_service.cover_ready";
 
-		String SYNC_UPDATED                     = "android.fbreader.event.sync.UPDATED";
+		public static String SYNC_UPDATED                     = "android.fbreader.event.sync.UPDATED";
 	}
 
 	public interface Key {
@@ -75,6 +77,25 @@ public abstract class FBReaderIntents {
 		String BOOKMARK                         = "fbreader.bookmark";
 		String PLUGIN                           = "fbreader.plugin";
 		String TYPE                             = "fbreader.type";
+	}
+
+	public static void initPremium() {
+		DEFAULT_PACKAGE = FBReaderIntentsPremium.DEFAULT_PACKAGE;
+		try {
+			for (Field field : Action.class.getFields()) {
+				field.set(
+					null, FBReaderIntentsPremium.Action.class.getField(field.getName()).get(null)
+				);
+			}
+			for (Field field : Event.class.getFields()) {
+				field.set(
+					null, FBReaderIntentsPremium.Event.class.getField(field.getName()).get(null)
+				);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static Intent defaultInternalIntent(String action) {

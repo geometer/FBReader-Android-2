@@ -40,9 +40,14 @@ public abstract class ZLAndroidApplication extends Application {
 		} catch (Throwable t) {
 		}
 
+		initIntents();
+
 		myConfig = new ConfigShadow(this);
 		new ZLAndroidImageManager();
 		myLibrary = new ZLAndroidLibrary(this);
+	}
+
+	protected void initIntents() {
 	}
 
 	public final ZLAndroidLibrary library() {

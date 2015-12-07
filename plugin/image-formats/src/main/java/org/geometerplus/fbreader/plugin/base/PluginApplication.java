@@ -19,37 +19,15 @@
 
 package org.geometerplus.fbreader.plugin.base;
 
-import android.app.ActivityManager;
-import android.os.Process;
-
 import org.geometerplus.fbreader.formats.IFormatPluginCollection;
 
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
-import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
 import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
 import org.geometerplus.fbreader.plugin.base.document.DocumentPlugin;
 
 public abstract class PluginApplication extends ZLAndroidApplication implements IFormatPluginCollection {
-	@Override
-	public void onCreate() {
-		super.onCreate();
-
-		final int pid = Process.myPid();
-		String processName = null;
-		final ActivityManager aManager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
-		for (ActivityManager.RunningAppProcessInfo info : aManager.getRunningAppProcesses()) {
-			if (pid == info.pid) {
-				processName = info.processName;
-				break;
-			}
-		}
-		if (processName.endsWith("premium")) {
-			//FBReaderIntents.initPremium();
-		}
-	}
-
 	public abstract DocumentHolder createDocument();
 
 	public DocumentPlugin getPlugin(ZLFile file) {
