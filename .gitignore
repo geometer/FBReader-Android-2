@@ -11,3 +11,6 @@ READY/
 .classpath
 .settings
 *~
+project.properties
+.project
+bin/
