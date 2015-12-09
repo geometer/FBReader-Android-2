@@ -37,6 +37,7 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 	private static ViewHolder ourInstance;
 
 	public static ViewHolder getInstance() {
+		Log.e("VIEWHOLDER", ourInstance == null ? "null" : ourInstance.toString());
 		return ourInstance;
 	}
 
@@ -56,8 +57,12 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 
 	private volatile BookSettingsDB myDB;
 
-	BookSettingsDB getDB() {
+	private BookSettingsDB getDB() {
 		return myDB;
+	}
+	
+	public void storeAll() {
+		myDB.storeAll(this);
 	}
 
 	void startActivity(Intent intent) {

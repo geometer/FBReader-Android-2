@@ -14,7 +14,6 @@ import org.fbreader.reader.AbstractReader;
 import org.fbreader.reader.android.MainActivity;
 
 import org.geometerplus.zlibrary.core.options.Config;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.android.fbreader.*;
@@ -26,10 +25,6 @@ import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 import org.fbreader.plugin.format.base.R;
 
 public abstract class FBReaderPluginActivity extends MainActivity {
-	public static final int REQUEST_CROP = 10;
-	public static final int REQUEST_ZOOM_MODE = 11;
-	public static final int REQUEST_INTERSECTION = 12;
-	public static final int REQUEST_PAGE_WAY = 13;
 
 	static abstract class PopupPanel implements View.OnClickListener {
 		protected volatile SimplePopupWindow myWindow;
@@ -290,34 +285,6 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 					finish();
 				}
 				break;
-			case REQUEST_CROP:
-				getPluginView().setDrawBorders(false);
-				myViewHolder.getDB().storeAll(myViewHolder);
-				break;
-			case REQUEST_ZOOM_MODE:
-				if (resultCode == RESULT_OK) {
-					int mode = data.getIntExtra("mode", PluginView.ZoomMode.FREE_ZOOM);
-					int zoom = data.getIntExtra("zoom", 100);
-					getPluginView().setZoomMode(new PluginView.ZoomMode(mode, zoom));
-					myViewHolder.getDB().storeAll(myViewHolder);
-				}
-				break;
-			case REQUEST_INTERSECTION:
-				if (resultCode != RESULT_CANCELED) {
-					int x = data.getIntExtra("x", 10);
-					int y = data.getIntExtra("y", 10);
-					getPluginView().setIntersections(new PluginView.IntersectionsHolder(x, y));
-					getPluginView().setDrawIntersections(false);
-					myViewHolder.getDB().storeAll(myViewHolder);
-				}
-				break;
-			case REQUEST_PAGE_WAY:
-				if (resultCode != RESULT_CANCELED) {
-					boolean h = data.getBooleanExtra("horiz", true);
-					getPluginView().setHorizontalFirst(h);
-					myViewHolder.getDB().storeAll(myViewHolder);
-				}
-				break;
 		}
 	}
 
@@ -330,7 +297,7 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 		if (getZLibrary().DisableButtonLightsOption.getValue()) {
 			setButtonLight(true);
 		}
-		myViewHolder.getDB().storeAll(myViewHolder);
+		myViewHolder.storeAll();
 		super.onPause();
 	}
 

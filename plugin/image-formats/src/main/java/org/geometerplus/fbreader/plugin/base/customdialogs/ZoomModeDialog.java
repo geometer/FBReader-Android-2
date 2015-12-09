@@ -1,31 +1,32 @@
-package org.geometerplus.fbreader.plugin.base.customactivities;
+package org.geometerplus.fbreader.plugin.base.customdialogs;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.*;
-
-import org.fbreader.common.android.FBActivity;
-
+import org.fbreader.plugin.format.base.R;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 
-import org.fbreader.plugin.format.base.R;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
-public class ZoomModeActivity extends FBActivity implements PercentEditor.ChangeListener {
+public class ZoomModeDialog extends Dialog implements PercentEditor.ChangeListener {
 	private PercentEditor myPageEdit;
 	private PercentEditor myScreenEdit;
-
-	// see TODO comment in onCreate
 	private PluginView myPluginView;
 
 	private int myZoomMode;
 	private int myZoomPercent;
-
-	@Override
-	protected int layoutId() {
-		return R.layout.fmt_zoom_mode;
+	
+	private Intent myIntent;
+	
+	public ZoomModeDialog(Context context, int themeResId, Intent i) {
+		super(context, themeResId);
+		myIntent = i;
 	}
 
 	@Override
@@ -33,8 +34,9 @@ public class ZoomModeActivity extends FBActivity implements PercentEditor.Change
 		super.onCreate(savedInstanceState);
 
 		setTitle(R.string.zoomMode);
+		setContentView(R.layout.fmt_zoom_mode);
 
-		// TODO: send data in intent instead
+
 		myPluginView = ViewHolder.getInstance().getView();
 
 		myPageEdit = (PercentEditor)findViewById(R.id.fmt_page_percent_editor);
@@ -86,20 +88,19 @@ public class ZoomModeActivity extends FBActivity implements PercentEditor.Change
 					myPageEdit.setValue(myZoomPercent);
 					myPluginView.setZoomMode(new PluginView.ZoomMode(myZoomMode, myZoomPercent));
 				}
-				updateResult();
 			}
 		});
 
-		((RadioButton)findViewById(R.id.fmt_free_zoom)).setText(getResources().getString(R.string.free));
-		((TextView)findViewById(R.id.fmt_fixed_text)).setText(getResources().getString(R.string.fixed));
-		((RadioButton)findViewById(R.id.fmt_fit_page)).setText(getResources().getString(R.string.fitPage));
-		((RadioButton)findViewById(R.id.fmt_fit_width)).setText(getResources().getString(R.string.fitWidth));
-		((RadioButton)findViewById(R.id.fmt_fit_height)).setText(getResources().getString(R.string.fitHeight));
-		((RadioButton)findViewById(R.id.fmt_screen_percent)).setText(getResources().getString(R.string.screenPercent));
-		((RadioButton)findViewById(R.id.fmt_page_percent)).setText(getResources().getString(R.string.pagePercent));
+		((RadioButton)findViewById(R.id.fmt_free_zoom)).setText(getContext().getResources().getString(R.string.free));
+		((TextView)findViewById(R.id.fmt_fixed_text)).setText(getContext().getResources().getString(R.string.fixed));
+		((RadioButton)findViewById(R.id.fmt_fit_page)).setText(getContext().getResources().getString(R.string.fitPage));
+		((RadioButton)findViewById(R.id.fmt_fit_width)).setText(getContext().getResources().getString(R.string.fitWidth));
+		((RadioButton)findViewById(R.id.fmt_fit_height)).setText(getContext().getResources().getString(R.string.fitHeight));
+		((RadioButton)findViewById(R.id.fmt_screen_percent)).setText(getContext().getResources().getString(R.string.screenPercent));
+		((RadioButton)findViewById(R.id.fmt_page_percent)).setText(getContext().getResources().getString(R.string.pagePercent));
 
-		myZoomMode = getIntent().getIntExtra("mode", PluginView.ZoomMode.FREE_ZOOM);
-		myZoomPercent = getIntent().getIntExtra("zoom", 100);
+		myZoomMode = myIntent.getIntExtra("mode", PluginView.ZoomMode.FREE_ZOOM);
+		myZoomPercent = myIntent.getIntExtra("zoom", 100);
 
 		switch (myZoomMode) {
 			case PluginView.ZoomMode.FREE_ZOOM:
@@ -124,6 +125,13 @@ public class ZoomModeActivity extends FBActivity implements PercentEditor.Change
 				break;
 		}
 	}
+	
+	@Override
+	protected void onStop() {
+		onPercentChanged();
+		ViewHolder.getInstance().storeAll();
+		super.onStop();
+	}
 
 	@Override
 	public void onPercentChanged() {
@@ -139,15 +147,6 @@ public class ZoomModeActivity extends FBActivity implements PercentEditor.Change
 			default:
 				break;
 		}
-		updateResult();
 	}
 
-	private void updateResult() {
-		setResult(
-			RESULT_OK,
-			new Intent()
-				.putExtra("mode", myZoomMode)
-				.putExtra("zoom", myZoomPercent)
-		);
-	}
 }
