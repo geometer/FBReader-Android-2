@@ -53,7 +53,6 @@ public class CropDialog extends Dialog implements PercentEditor.ChangeListener {
 		final PercentEditor editor = (PercentEditor)findViewById(id);
 		getContext().getResources();
 		getContext().getResources().getString(resourceId);
-		editor.getAlpha();
 		editor.init(getContext().getResources().getString(resourceId), value, 0, 49);
 		editor.setListener(this);
 		return editor;
