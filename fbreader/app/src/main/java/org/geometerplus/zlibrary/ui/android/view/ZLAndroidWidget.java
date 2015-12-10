@@ -149,7 +149,7 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 			return;
 		}
 
-		final ZLAndroidLibrary library = getZLibrary();
+		final ZLAndroidLibrary library = ((FBReader)context).getZLibrary();
 		final ZLIntegerOption stageOption = library.ScreenHintStageOption;
 		if (!library.OldShowActionBarOption.getValue()) {
 			stageOption.setValue(3);
