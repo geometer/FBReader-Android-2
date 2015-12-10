@@ -14,22 +14,22 @@ public class DJVUDocument extends DocumentHolder {
 	private static native void initNative();
 	private static native void destroyNative();
 	private native int openDocumentNative(String path);
-	private native int getPageCountNative(int doc_id);
-	private native long getPageSizeNative(int doc_id, int pageNo);
-	private native void closeNative(int doc_id);
-	private native void renderNative(int doc_id, Bitmap canvas, int left, int top, int right, int bottom, long ptr);
-	private native long getOutlineRootNative(int doc_id);
+	private native int getPageCountNative(int docId);
+	private native long getPageSizeNative(int docId, int pageNo);
+	private native void closeNative(int docId);
+	private native void renderNative(int docId, Bitmap canvas, int left, int top, int right, int bottom, long ptr);
+	private native long getOutlineRootNative(int docId);
 	private native long clearOutlineRootNative(long ptrr);
 	private native long getOutlineNextNative(long cur);
 	private native long getOutlineChildNative(long cur);
 	private native String getOutlineTextNative(long cur);
 	private native int getOutlinePageNative(long cur);
-	private native int createTextNative(int doc_id, int pageNo);
-	private native int getWordCoordNative(int doc_id, int no, int type);
-	private native String getWordTextNative(int doc_id, int no);
-	private native long createPageNative(int doc_id, int pageNo);
+	private native int createTextNative(int docId, int pageNo);
+	private native int getWordCoordNative(int docId, int no, int type);
+	private native String getWordTextNative(int docId, int no);
+	private native long createPageNative(int docId, int pageNo);
 	private native void freePageNative(long p);
-	
+
 	private int myDocId = 0;
 
 	public static synchronized void init(ContextWrapper c) {
@@ -113,7 +113,6 @@ public class DJVUDocument extends DocumentHolder {
 			createTOCTree(nroot, root, true);
 			clearOutlineRootNative(nroot);
 		}
-		
 	}
 
 	private synchronized void createTOCTree(long n, TOCTree parent, boolean fistChild) {
