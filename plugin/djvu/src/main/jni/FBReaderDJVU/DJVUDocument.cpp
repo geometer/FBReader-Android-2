@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <map>
 
 #include <unistd.h>
 
@@ -14,7 +15,45 @@
 	( std::ostringstream() << std::dec << x ) ).str()
 
 static ddjvu_context_t *context = NULL;
-static ddjvu_document_t *doc = NULL;
+
+static std::map<int, ddjvu_document_t *> ourDocs;
+
+static ddjvu_document_t * getDoc(int id) {
+	__android_log_print(ANDROID_LOG_ERROR, "DJVU", "getdoc");
+	__android_log_print(ANDROID_LOG_ERROR, "DJVU", "%s", SSTR(id).c_str());
+	std::map<int, ddjvu_document_t *>::iterator it = ourDocs.find(id);
+	if (it != ourDocs.end()) {
+		__android_log_print(ANDROID_LOG_ERROR, "DJVU", "got");
+		return it->second;
+	} else {
+		__android_log_print(ANDROID_LOG_ERROR, "DJVU", "not");
+		return 0;
+	}
+}
+
+static int saveDoc(ddjvu_document_t *doc) {
+	int i = 1;
+	while (true) {
+		std::map<int, ddjvu_document_t *>::iterator it = ourDocs.find(i);
+		if (it == ourDocs.end()) {
+			ourDocs[i] = doc;
+			__android_log_print(ANDROID_LOG_ERROR, "DJVU", "savedoc");
+			__android_log_print(ANDROID_LOG_ERROR, "DJVU", "%s", SSTR(i).c_str());
+			return i;
+		}
+		++i;
+	}
+}
+
+static void deleteDoc(int id) {
+	__android_log_print(ANDROID_LOG_ERROR, "DJVU", "deletedoc");
+	__android_log_print(ANDROID_LOG_ERROR, "DJVU", "%s", SSTR(id).c_str());
+	ddjvu_document_t *doc = getDoc(id);
+	if (doc) {
+		ddjvu_document_release(doc);
+	}
+	ourDocs.erase(id);
+}
 
 struct outline {
 	int page;
@@ -35,31 +74,35 @@ struct word {
 	int y2;
 };
 
-static outline* root;
-
 static std::vector<word> page_text;
 
 extern "C"
 JNIEXPORT void Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_initNative(JNIEnv *env, jclass cl) {
-	context = ddjvu_context_create("FBReaderDJVU");
-}
-
-extern "C"
-JNIEXPORT void Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_destroyNative(JNIEnv *env, jclass cl) {
 	if (context) {
-		if (doc) {
-			ddjvu_document_release(doc);
-			doc = NULL;
-			if (root) {
-				delete root;
-			}
-		}
-		ddjvu_context_release(context);
+		return;
 	}
+	context = ddjvu_context_create("FBReaderDJVU");
+	__android_log_print(ANDROID_LOG_ERROR, "DJVU", "Init");
 }
 
 extern "C"
-JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_createPageNative(JNIEnv *env, jclass cl, jint pageNum) {
+JNIEXPORT void Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_destroyNative(JNIEnv *env, jclass cl) {// Currently never used (?)
+//	__android_log_print(ANDROID_LOG_ERROR, "DJVU", "Destroy");
+//	if (context) {
+//		if (doc) {
+//			ddjvu_document_release(doc);
+//			doc = NULL;
+//			if (root) {
+//				delete root;
+//			}
+//		}
+//		ddjvu_context_release(context);
+//	}
+}
+
+extern "C"
+JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_createPageNative(JNIEnv *env, jclass cl, jint doc_id, jint pageNum) {
+	ddjvu_document_t * doc = getDoc(doc_id);
 	if (!doc) {
 		return 0;
 	}
@@ -105,18 +148,11 @@ static std::string get_miniexp_str(miniexp_t t, std::string indent) {
 }
 
 extern "C"
-JNIEXPORT jboolean Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_openDocumentNative(JNIEnv *env, jobject thiz, jstring path) {
-	if (root) {
-		delete root;
-		root = 0;
-	}
-	if (doc) {
-		ddjvu_document_release(doc);
-		doc = 0;
-	}
+JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_openDocumentNative(JNIEnv *env, jobject thiz, jstring path) {
+	__android_log_print(ANDROID_LOG_ERROR, "DJVU", "Open");
 
 	const char *fileName = env->GetStringUTFChars(path, 0);
-	doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
+	ddjvu_document_t *doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
 	int count = 0;
 	while (!ddjvu_document_decoding_done(doc)) {
 		if (++count > 400) {
@@ -126,17 +162,21 @@ JNIEXPORT jboolean Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocum
 		}
 		usleep(50000);
 	}
-	return doc ? 1 : 0;
+	if (doc) {
+		return saveDoc(doc);
+	}
+	return 0;
 }
 
 extern "C"
-JNIEXPORT void Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_closeNative(JNIEnv *env, jobject thiz) {
-	ddjvu_document_release(doc);
-	doc = NULL;
+JNIEXPORT void Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_closeNative(JNIEnv *env, jobject thiz, jint doc_id) {
+	deleteDoc(doc_id);
+	__android_log_print(ANDROID_LOG_ERROR, "DJVU", "Close");
 }
 
 extern "C"
-JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getPageCountNative(JNIEnv *env, jobject thiz) {
+JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getPageCountNative(JNIEnv *env, jobject thiz, jint doc_id) {
+	ddjvu_document_t * doc = getDoc(doc_id);
 	if (doc) {
 		return ddjvu_document_get_pagenum(doc);
 	}
@@ -144,7 +184,8 @@ JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_
 }
 
 extern "C"
-JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getPageSizeNative(JNIEnv *env, jobject thiz, jint pageNum) {
+JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getPageSizeNative(JNIEnv *env, jobject thiz, jint doc_id, jint pageNum) {
+	ddjvu_document_t * doc = getDoc(doc_id);
 	if (doc) {
 		ddjvu_status_t r;
 		ddjvu_pageinfo_t info;
@@ -167,7 +208,8 @@ JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument
 }
 
 extern "C"
-JNIEXPORT void Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_renderNative(JNIEnv *env, jclass clz, jobject canvas, jint left, jint top, jint right, jint bottom, jlong ptr) {
+JNIEXPORT void Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_renderNative(JNIEnv *env, jclass clz, jint doc_id, jobject canvas, jint left, jint top, jint right, jint bottom, jlong ptr) {
+	ddjvu_document_t * doc = getDoc(doc_id);
 	if (!doc || ptr == 0) {
 		return;
 	}
@@ -280,7 +322,8 @@ static outline* init_outlines_recursive(miniexp_t m) {
 }
 
 extern "C"
-JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getOutlineRootNative(JNIEnv *env, jobject thiz) {
+JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getOutlineRootNative(JNIEnv *env, jobject thiz, jint doc_id) {
+	ddjvu_document_t * doc = getDoc(doc_id);
 	if (doc) {
 		miniexp_t t;
 		int count = 0;
@@ -296,13 +339,18 @@ JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument
 		if (!miniexp_consp(t) || miniexp_car(t) != miniexp_symbol("bookmarks")) {
 			return 0;
 		}
-		
 		miniexp_t res = miniexp_cdr(t);
-		root = init_outlines_recursive(res);
+		outline* root = init_outlines_recursive(res);
 		ddjvu_miniexp_release(doc, t);
 		return (long)(outline*)root;
 	}
 	return 0;
+}
+
+extern "C"
+JNIEXPORT jlong Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_clearOutlineRootNative(JNIEnv *env, jobject thiz, jlong ptr) {
+	outline* root = (outline*) (long)ptr;
+	delete root;
 }
 
 extern "C"
@@ -324,7 +372,7 @@ JNIEXPORT jstring Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocume
 }
 
 extern "C"
-JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getOutlinePage(JNIEnv *env, jobject thiz, jlong cur) {
+JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getOutlinePageNative(JNIEnv *env, jobject thiz, jlong cur) {
 	outline* mcur = (outline*) (long)cur;
 	return mcur->page;
 }
@@ -353,7 +401,8 @@ static void create_word_recursive(miniexp_t t) {
 
 
 extern "C"
-JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_createTextNative(JNIEnv *env, jobject thiz, jint pageNum) {
+JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_createTextNative(JNIEnv *env, jobject thiz, jint doc_id, jint pageNum) {
+	ddjvu_document_t * doc = getDoc(doc_id);
 	if (doc) {
 		miniexp_t t;
 		int count = 0;
@@ -378,7 +427,8 @@ JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_
 }
 
 extern "C"
-JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getWordCoordNative(JNIEnv *env, jobject thiz, jint no, jint type) {
+JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getWordCoordNative(JNIEnv *env, jobject thiz, jint doc_id, jint no, jint type) {
+	ddjvu_document_t * doc = getDoc(doc_id);
 	if (doc && no < page_text.size()) {
 		word w = page_text[no];
 		if (type == 0) {
@@ -398,7 +448,8 @@ JNIEXPORT jint Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_
 }
 
 extern "C"
-JNIEXPORT jstring Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getWordTextNative(JNIEnv *env, jobject thiz, jint no) {
+JNIEXPORT jstring Java_org_geometerplus_fbreader_plugin_base_document_DJVUDocument_getWordTextNative(JNIEnv *env, jobject thiz, jint doc_id, jint no) {
+	ddjvu_document_t * doc = getDoc(doc_id);
 	if (doc && no < page_text.size()) {
 		word w = page_text[no];
 		return env->NewStringUTF(w.text.c_str());

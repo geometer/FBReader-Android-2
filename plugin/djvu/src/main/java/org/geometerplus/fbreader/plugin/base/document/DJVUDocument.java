@@ -4,6 +4,7 @@ import java.util.*;
 
 import android.content.ContextWrapper;
 import android.graphics.*;
+import android.util.Log;
 
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
 import org.geometerplus.fbreader.book.AbstractBook;
@@ -12,45 +13,67 @@ import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 public class DJVUDocument extends DocumentHolder {
 	private static native void initNative();
 	private static native void destroyNative();
-	private native boolean openDocumentNative(String path);
-	private native int getPageCountNative();
-	private native long getPageSizeNative(int pageNo);
-	private native void closeNative();
-	private native void renderNative(Bitmap canvas, int left, int top, int right, int bottom, long ptr);
-	private native long getOutlineRootNative();
+	private native int openDocumentNative(String path);
+	private native int getPageCountNative(int docId);
+	private native long getPageSizeNative(int docId, int pageNo);
+	private native void closeNative(int docId);
+	private native void renderNative(int docId, Bitmap canvas, int left, int top, int right, int bottom, long ptr);
+	private native long getOutlineRootNative(int docId);
+	private native long clearOutlineRootNative(long ptrr);
 	private native long getOutlineNextNative(long cur);
 	private native long getOutlineChildNative(long cur);
 	private native String getOutlineTextNative(long cur);
 	private native int getOutlinePageNative(long cur);
-	private native int createTextNative(int pageNo);
-	private native int getWordCoordNative(int no, int type);
-	private native String getWordTextNative(int no);
-	private native long createPageNative(int pageNo);
+	private native int createTextNative(int docId, int pageNo);
+	private native int getWordCoordNative(int docId, int no, int type);
+	private native String getWordTextNative(int docId, int no);
+	private native long createPageNative(int docId, int pageNo);
 	private native void freePageNative(long p);
 
-	public static synchronized void init(ContextWrapper c) {
+	private static final Object ourNativeLock = new Object();
+
+	private volatile int myDocId = 0;
+
+	public static void init(ContextWrapper c) {
 		System.loadLibrary("DjVuLibre");
-		initNative();
+		synchronized (ourNativeLock) {
+			initNative();
+		}
 	}
 
-	public static synchronized void destroy() {
-		destroyNative();
+	public static void destroy() {
+		synchronized (ourNativeLock) {
+			destroyNative();
+		}
 	}
 
 	@Override
-	protected synchronized boolean openDocumentInternal(String path) {
+	protected boolean openDocumentInternal(String path) {
 		myPageCache.clear();
-		return openDocumentNative(path);
+		final int id;
+		synchronized (ourNativeLock) {
+			id = openDocumentNative(path);
+			if (id > 0) {
+				myDocId = id;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
-	protected synchronized int getPageCountInternal() {
-		return getPageCountNative();
+	protected int getPageCountInternal() {
+		synchronized (ourNativeLock) {
+			return getPageCountNative(myDocId);
+		}
 	}
 
 	@Override
-	public synchronized Size getPageSizeInternal(int pageNo) {
-		final long size = getPageSizeNative(pageNo);
+	public Size getPageSizeInternal(int pageNo) {
+		final long size;
+		synchronized (ourNativeLock) {
+			size = getPageSizeNative(myDocId, pageNo);
+		}
 		if (size == -1L) {
 			return null;
 		}
@@ -58,7 +81,7 @@ public class DJVUDocument extends DocumentHolder {
 	}
 
 	@Override
-	protected synchronized void renderPageInternal(Bitmap canvas, final int pageNo, final Rect src, Rect dst, boolean inverted) {
+	protected void renderPageInternal(Bitmap canvas, final int pageNo, final Rect src, Rect dst, boolean inverted) {
 		final Bitmap realCanvas;
 		if (dst.left != 0 ||
 			dst.top != 0 ||
@@ -80,7 +103,13 @@ public class DJVUDocument extends DocumentHolder {
 				final PageCache pc = getOrCreatePage(pageNo);
 				if (pc instanceof DJVUCache) {
 					final DJVUCache djvc = (DJVUCache)pc;
-					renderNative(realCanvas, src.left, src.top, src.right, src.bottom, djvc.myObject);
+					synchronized (ourNativeLock) {
+						renderNative(
+							myDocId, realCanvas,
+							src.left, src.top, src.right, src.bottom,
+							djvc.myObject
+						);
+					}
 				}
 				freeIfNotCached(pageNo, pc);
 			}
@@ -92,30 +121,38 @@ public class DJVUDocument extends DocumentHolder {
 	}
 
 	@Override
-	public synchronized void closeInternal() {
-		closeNative();
+	public void closeInternal() {
+		synchronized (ourNativeLock) {
+			closeNative(myDocId);
+			myDocId = 0;
+		}
 	}
 
 	@Override
-	public synchronized void initTOC(TOCTree root) {
-		long nroot = getOutlineRootNative();
-		if (nroot != 0) {
-			createTOCTree(nroot, root, true);
+	public void initTOC(TOCTree root) {
+		synchronized (ourNativeLock) {
+			final long nroot = getOutlineRootNative(myDocId);
+			if (nroot != 0) {
+				createTOCTree(nroot, root, true);
+				clearOutlineRootNative(nroot);
+			}
 		}
 	}
 
-	private synchronized void createTOCTree(long n, TOCTree parent, boolean fistChild) {
-		TOCTree t = new TOCTree(parent);
-		t.setText(getOutlineTextNative(n));
-		t.setReference(getOutlinePageNative(n));
-		long nextnum = getOutlineNextNative(n);
-		while (fistChild && nextnum != 0) {
-			createTOCTree(nextnum, parent, false);
-			nextnum = getOutlineNextNative(nextnum);
-		}
-		long childnum = getOutlineChildNative(n);
-		if (childnum != 0) {
-			createTOCTree(childnum, t, true);
+	private void createTOCTree(long n, TOCTree parent, boolean fistChild) {
+		synchronized (ourNativeLock) {
+			final TOCTree t = new TOCTree(parent);
+			t.setText(getOutlineTextNative(n));
+			t.setReference(getOutlinePageNative(n));
+			long nextnum = getOutlineNextNative(n);
+			while (fistChild && nextnum != 0) {
+				createTOCTree(nextnum, parent, false);
+				nextnum = getOutlineNextNative(nextnum);
+			}
+			final long childnum = getOutlineChildNative(n);
+			if (childnum != 0) {
+				createTOCTree(childnum, t, true);
+			}
 		}
 	}
 
@@ -189,15 +226,15 @@ public class DJVUDocument extends DocumentHolder {
 		}
 		final PageInfo p = new PageInfo();
 		// TODO: replace with single native call
-		final int num = createTextNative(pageNo);
+		final int num = createTextNative(myDocId, pageNo);
 		for (int i = 0; i < num; ++i) {
 			p.Rects.add(new RectF(
-				getWordCoordNative(i, 0),
-				getWordCoordNative(i, 3),
-				getWordCoordNative(i, 2),
-				getWordCoordNative(i, 1)
+				getWordCoordNative(myDocId, i, 0),
+				getWordCoordNative(myDocId, i, 3),
+				getWordCoordNative(myDocId, i, 2),
+				getWordCoordNative(myDocId, i, 1)
 			));
-			p.Words.add(getWordTextNative(i));
+			p.Words.add(getWordTextNative(myDocId, i));
 		}
 		// end of TODO
 		myPageCache.put(pageNo, p);
@@ -238,9 +275,11 @@ public class DJVUDocument extends DocumentHolder {
 		}
 
 		@Override
-		protected synchronized void recycle() {
+		protected void recycle() {
 			if (myObject != 0) {
-				freePageNative(myObject);
+				synchronized (ourNativeLock) {
+					freePageNative(myObject);
+				}
 			}
 			myObject = 0;
 		}
@@ -252,8 +291,10 @@ public class DJVUDocument extends DocumentHolder {
 	}
 
 	@Override
-	protected synchronized PageCache createPage(int no) {
-		return new DJVUCache(createPageNative(no));
+	protected PageCache createPage(int no) {
+		synchronized (ourNativeLock) {
+			return new DJVUCache(createPageNative(myDocId, no));
+		}
 	}
 
 	public Bitmap getCover(int maxWidth, int maxHeight) {
