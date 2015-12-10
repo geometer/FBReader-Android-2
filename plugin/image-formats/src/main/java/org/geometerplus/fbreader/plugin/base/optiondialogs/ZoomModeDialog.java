@@ -5,7 +5,6 @@ import org.geometerplus.fbreader.plugin.base.ViewHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,8 +21,8 @@ public class ZoomModeDialog extends OptionDialog {
 	private int myZoomMode;
 	private int myZoomPercent;
 	
-	public ZoomModeDialog(Context context, int themeResId, Intent i) {
-		super(context, themeResId, i);
+	public ZoomModeDialog(Context context, Intent i) {
+		super(context, i);
 	}
 	
 	protected int layoutId() {

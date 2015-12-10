@@ -556,7 +556,7 @@ public class Actions {
 			i.putExtra("bottom", cropInfo.BottomPercent);
 			i.putExtra("left", cropInfo.LeftPercent);
 			i.putExtra("right", cropInfo.RightPercent);
-			final CropDialog d = new CropDialog(Reader.getActivity(), R.style.FBReaderMD_Dialog_Translucent, i);
+			final CropDialog d = new CropDialog(Reader.getActivity(), i);
 			d.show();
 		}
 	}
@@ -573,7 +573,7 @@ public class Actions {
 			final Intent i = new Intent();
 			i.putExtra("mode", zoomMode.Mode);
 			i.putExtra("zoom", zoomMode.Percent);
-			final ZoomModeDialog d = new ZoomModeDialog(Reader.getActivity(), R.style.FBReaderMD_Dialog_Translucent, i);
+			final ZoomModeDialog d = new ZoomModeDialog(Reader.getActivity(), i);
 			d.show();
 			
 		}
@@ -592,7 +592,7 @@ public class Actions {
 			i.putExtra("x", intersections.XPercent);
 			i.putExtra("y", intersections.YPercent);
 			
-			final IntersectionDialog d = new IntersectionDialog(Reader.getActivity(), R.style.FBReaderMD_Dialog_Translucent, i);
+			final IntersectionDialog d = new IntersectionDialog(Reader.getActivity(), i);
 			d.show();
 		}
 	}
@@ -606,7 +606,7 @@ public class Actions {
 		protected void run(Object... params) {
 			final Intent i = new Intent();
 			i.putExtra("horiz", Reader.getActivity().getPluginView().isHorizontalFirst());
-			final PageWayDialog d = new PageWayDialog(Reader.getActivity(), R.style.FBReaderMD_Dialog_Translucent, i);
+			final PageWayDialog d = new PageWayDialog(Reader.getActivity(), i);
 			d.show();
 		}
 	}

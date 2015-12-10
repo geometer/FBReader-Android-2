@@ -1,5 +1,6 @@
 package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
+import org.fbreader.plugin.format.base.R;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
 
@@ -13,8 +14,8 @@ public abstract class OptionDialog extends Dialog implements PercentEditor.Chang
 
 	protected Intent myIntent;
 	
-	public OptionDialog(Context context, int themeResId, Intent i) {
-		super(context, themeResId);
+	public OptionDialog(Context context, Intent i) {
+		super(context, R.style.FBReaderMD_Dialog_Translucent);
 		myIntent = i;
 	}
 	

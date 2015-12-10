@@ -3,7 +3,6 @@ package org.geometerplus.fbreader.plugin.base.optiondialogs;
 import org.fbreader.plugin.format.base.R;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +13,8 @@ public class PageWayDialog extends OptionDialog {
 	private RadioButton myHButton;
 	private RadioButton myVButton;
 	
-	public PageWayDialog(Context context, int themeResId, Intent i) {
-		super(context, themeResId, i);
+	public PageWayDialog(Context context, Intent i) {
+		super(context, i);
 	}
 	
 	protected int layoutId() {

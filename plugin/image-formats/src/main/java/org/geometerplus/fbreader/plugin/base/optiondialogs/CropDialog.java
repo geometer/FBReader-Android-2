@@ -4,7 +4,6 @@ import org.fbreader.plugin.format.base.R;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,8 +17,8 @@ public class CropDialog extends OptionDialog {
 	private PercentEditor myRightEdit;
 	
 	
-	public CropDialog(Context context, int themeResId, Intent i) {
-		super(context, themeResId, i);
+	public CropDialog(Context context, Intent i) {
+		super(context, i);
 	}
 	
 	protected int layoutId() {
