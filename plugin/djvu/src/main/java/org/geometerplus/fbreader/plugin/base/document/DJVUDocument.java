@@ -30,36 +30,50 @@ public class DJVUDocument extends DocumentHolder {
 	private native long createPageNative(int docId, int pageNo);
 	private native void freePageNative(long p);
 
-	private int myDocId = 0;
+	private static final Object ourNativeLock = new Object();
 
-	public static synchronized void init(ContextWrapper c) {
+	private volatile int myDocId = 0;
+
+	public static void init(ContextWrapper c) {
 		System.loadLibrary("DjVuLibre");
-		initNative();
+		synchronized (ourNativeLock) {
+			initNative();
+		}
 	}
 
-	public static synchronized void destroy() {
-		destroyNative();
+	public static void destroy() {
+		synchronized (ourNativeLock) {
+			destroyNative();
+		}
 	}
 
 	@Override
-	protected synchronized boolean openDocumentInternal(String path) {
+	protected boolean openDocumentInternal(String path) {
 		myPageCache.clear();
-		int id = openDocumentNative(path);
-		if (id > 0) {
-			myDocId = id;
-			return true;
+		final int id;
+		synchronized (ourNativeLock) {
+			id = openDocumentNative(path);
+			if (id > 0) {
+				myDocId = id;
+				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
-	protected synchronized int getPageCountInternal() {
-		return getPageCountNative(myDocId);
+	protected int getPageCountInternal() {
+		synchronized (ourNativeLock) {
+			return getPageCountNative(myDocId);
+		}
 	}
 
 	@Override
-	public synchronized Size getPageSizeInternal(int pageNo) {
-		final long size = getPageSizeNative(myDocId, pageNo);
+	public Size getPageSizeInternal(int pageNo) {
+		final long size;
+		synchronized (ourNativeLock) {
+			size = getPageSizeNative(myDocId, pageNo);
+		}
 		if (size == -1L) {
 			return null;
 		}
@@ -67,7 +81,7 @@ public class DJVUDocument extends DocumentHolder {
 	}
 
 	@Override
-	protected synchronized void renderPageInternal(Bitmap canvas, final int pageNo, final Rect src, Rect dst, boolean inverted) {
+	protected void renderPageInternal(Bitmap canvas, final int pageNo, final Rect src, Rect dst, boolean inverted) {
 		final Bitmap realCanvas;
 		if (dst.left != 0 ||
 			dst.top != 0 ||
@@ -89,7 +103,13 @@ public class DJVUDocument extends DocumentHolder {
 				final PageCache pc = getOrCreatePage(pageNo);
 				if (pc instanceof DJVUCache) {
 					final DJVUCache djvc = (DJVUCache)pc;
-					renderNative(myDocId, realCanvas, src.left, src.top, src.right, src.bottom, djvc.myObject);
+					synchronized (ourNativeLock) {
+						renderNative(
+							myDocId, realCanvas,
+							src.left, src.top, src.right, src.bottom,
+							djvc.myObject
+						);
+					}
 				}
 				freeIfNotCached(pageNo, pc);
 			}
@@ -101,32 +121,38 @@ public class DJVUDocument extends DocumentHolder {
 	}
 
 	@Override
-	public synchronized void closeInternal() {
-		closeNative(myDocId);
-		myDocId = 0;
+	public void closeInternal() {
+		synchronized (ourNativeLock) {
+			closeNative(myDocId);
+			myDocId = 0;
+		}
 	}
 
 	@Override
-	public synchronized void initTOC(TOCTree root) {
-		long nroot = getOutlineRootNative(myDocId);
-		if (nroot != 0) {
-			createTOCTree(nroot, root, true);
-			clearOutlineRootNative(nroot);
+	public void initTOC(TOCTree root) {
+		synchronized (ourNativeLock) {
+			final long nroot = getOutlineRootNative(myDocId);
+			if (nroot != 0) {
+				createTOCTree(nroot, root, true);
+				clearOutlineRootNative(nroot);
+			}
 		}
 	}
 
-	private synchronized void createTOCTree(long n, TOCTree parent, boolean fistChild) {
-		TOCTree t = new TOCTree(parent);
-		t.setText(getOutlineTextNative(n));
-		t.setReference(getOutlinePageNative(n));
-		long nextnum = getOutlineNextNative(n);
-		while (fistChild && nextnum != 0) {
-			createTOCTree(nextnum, parent, false);
-			nextnum = getOutlineNextNative(nextnum);
-		}
-		long childnum = getOutlineChildNative(n);
-		if (childnum != 0) {
-			createTOCTree(childnum, t, true);
+	private void createTOCTree(long n, TOCTree parent, boolean fistChild) {
+		synchronized (ourNativeLock) {
+			final TOCTree t = new TOCTree(parent);
+			t.setText(getOutlineTextNative(n));
+			t.setReference(getOutlinePageNative(n));
+			long nextnum = getOutlineNextNative(n);
+			while (fistChild && nextnum != 0) {
+				createTOCTree(nextnum, parent, false);
+				nextnum = getOutlineNextNative(nextnum);
+			}
+			final long childnum = getOutlineChildNative(n);
+			if (childnum != 0) {
+				createTOCTree(childnum, t, true);
+			}
 		}
 	}
 
@@ -249,9 +275,11 @@ public class DJVUDocument extends DocumentHolder {
 		}
 
 		@Override
-		protected synchronized void recycle() {
+		protected void recycle() {
 			if (myObject != 0) {
-				freePageNative(myObject);
+				synchronized (ourNativeLock) {
+					freePageNative(myObject);
+				}
 			}
 			myObject = 0;
 		}
@@ -263,8 +291,10 @@ public class DJVUDocument extends DocumentHolder {
 	}
 
 	@Override
-	protected synchronized PageCache createPage(int no) {
-		return new DJVUCache(createPageNative(myDocId, no));
+	protected PageCache createPage(int no) {
+		synchronized (ourNativeLock) {
+			return new DJVUCache(createPageNative(myDocId, no));
+		}
 	}
 
 	public Bitmap getCover(int maxWidth, int maxHeight) {
