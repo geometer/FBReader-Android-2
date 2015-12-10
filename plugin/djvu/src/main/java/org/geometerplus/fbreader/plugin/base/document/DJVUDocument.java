@@ -32,6 +32,8 @@ public class DJVUDocument extends DocumentHolder {
 	
 	private int myDocId = 0;
 
+	private int myDocId = 0;
+
 	public static synchronized void init(ContextWrapper c) {
 		System.loadLibrary("DjVuLibre");
 		initNative();
