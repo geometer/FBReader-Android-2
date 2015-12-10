@@ -54,7 +54,11 @@ public abstract class MainView extends View {
 	/* ++++ INFO ++++ */
 	protected final void showInfo(final String text) {
 		if (myInfoView == null) {
-			myInfoView = (TextView)getActivity().findViewById(R.id.main_view_info);
+			final MainActivity activity = getActivity();
+			if (activity == null) {
+				return;
+			}
+			myInfoView = (TextView)activity.findViewById(R.id.main_view_info);
 		}
 		if (myInfoView == null) {
 			return;
@@ -97,6 +101,9 @@ public abstract class MainView extends View {
 		}
 
 		final MainActivity activity = getActivity();
+		if (activity == null) {
+			return;
+		}
 
 		final float level;
 		final Integer oldColorLevel = myColorLevel;
@@ -125,7 +132,11 @@ public abstract class MainView extends View {
 			return (myColorLevel - 0x60) * 25 / (0xFF - 0x60);
 		}
 
-		final float level = getActivity().getScreenBrightnessSystem();
+		final MainActivity activity = getActivity();
+		if (activity == null) {
+			return 50;
+		}
+		final float level = activity.getScreenBrightnessSystem();
 		// level = .01f + (percent - 25) * .99f / 75;
 		return 25 + (int)((level - .01f) * 75 / .99f);
 	}
@@ -153,11 +164,7 @@ public abstract class MainView extends View {
 			}
 			context = ((ContextWrapper)context).getBaseContext();
 		}
-		throw new RuntimeException("MainView outside of MainActivity");
-	}
-
-	public ZLAndroidLibrary getZLibrary() {
-		return getActivity().getZLibrary();
+		return null;
 	}
 
 	public abstract void setPreserveSize(boolean preserve);
