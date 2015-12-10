@@ -1,4 +1,4 @@
-package org.geometerplus.fbreader.plugin.base.customdialogs;
+package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
 import org.fbreader.plugin.format.base.R;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
@@ -14,7 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class ZoomModeDialog extends Dialog implements PercentEditor.ChangeListener {
+public class ZoomModeDialog extends OptionDialog {
 	private PercentEditor myPageEdit;
 	private PercentEditor myScreenEdit;
 	private PluginView myPluginView;
@@ -22,20 +22,20 @@ public class ZoomModeDialog extends Dialog implements PercentEditor.ChangeListen
 	private int myZoomMode;
 	private int myZoomPercent;
 	
-	private Intent myIntent;
-	
 	public ZoomModeDialog(Context context, int themeResId, Intent i) {
-		super(context, themeResId);
-		myIntent = i;
+		super(context, themeResId, i);
+	}
+	
+	protected int layoutId() {
+		return R.layout.fmt_zoom_mode;
+	}
+	protected int titleId() {
+		return R.string.zoomMode;
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setTitle(R.string.zoomMode);
-		setContentView(R.layout.fmt_zoom_mode);
-
 
 		myPluginView = ViewHolder.getInstance().getView();
 
@@ -64,30 +64,26 @@ public class ZoomModeDialog extends Dialog implements PercentEditor.ChangeListen
 				if (checkedId == R.id.fmt_free_zoom) {
 					myZoomMode = PluginView.ZoomMode.FREE_ZOOM;
 					myZoomPercent = (int)(myPluginView.getPosition().Zoom * 100);
-					myPluginView.setZoomMode(new PluginView.ZoomMode(myZoomMode, myZoomPercent));
 				} else if (checkedId == R.id.fmt_fit_page) {
 					myZoomMode = PluginView.ZoomMode.FIT_PAGE;
 					myZoomPercent = 0;
-					myPluginView.setZoomMode(new PluginView.ZoomMode(myZoomMode, myZoomPercent));
 				} else if (checkedId == R.id.fmt_fit_width) {
 					myZoomMode = PluginView.ZoomMode.FIT_WIDTH;
 					myZoomPercent = 0;
-					myPluginView.setZoomMode(new PluginView.ZoomMode(myZoomMode, myZoomPercent));
 				} else if (checkedId == R.id.fmt_fit_height) {
 					myZoomMode = PluginView.ZoomMode.FIT_HEIGHT;
 					myZoomPercent = 0;
-					myPluginView.setZoomMode(new PluginView.ZoomMode(myZoomMode, myZoomPercent));
 				} else if (checkedId == R.id.fmt_screen_percent) {
 					myZoomMode = PluginView.ZoomMode.SCREEN_ZOOM;
 					myZoomPercent = (int)(myPluginView.getPosition().Zoom * 100);
 					myScreenEdit.setValue(myZoomPercent);
-					myPluginView.setZoomMode(new PluginView.ZoomMode(myZoomMode, myZoomPercent));
 				} else if (checkedId == R.id.fmt_page_percent) {
 					myZoomMode = PluginView.ZoomMode.PAGE_ZOOM;
 					myZoomPercent = (int)(myPluginView.getPosition().PageZoom * 100);
 					myPageEdit.setValue(myZoomPercent);
-					myPluginView.setZoomMode(new PluginView.ZoomMode(myZoomMode, myZoomPercent));
 				}
+				myPluginView.setZoomMode(new PluginView.ZoomMode(myZoomMode, myZoomPercent));
+
 			}
 		});
 
@@ -126,13 +122,6 @@ public class ZoomModeDialog extends Dialog implements PercentEditor.ChangeListen
 		}
 	}
 	
-	@Override
-	protected void onStop() {
-		onPercentChanged();
-		ViewHolder.getInstance().storeAll();
-		super.onStop();
-	}
-
 	@Override
 	public void onPercentChanged() {
 		switch (myZoomMode) {

@@ -1,4 +1,4 @@
-package org.geometerplus.fbreader.plugin.base.customdialogs;
+package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
 import org.fbreader.plugin.format.base.R;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
@@ -10,25 +10,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class IntersectionDialog extends Dialog implements PercentEditor.ChangeListener {
+public class IntersectionDialog extends OptionDialog {
 	
 	private PercentEditor myXEdit;
 	private PercentEditor myYEdit;
 	
-	private Intent myIntent;
-	
 	public IntersectionDialog(Context context, int themeResId, Intent i) {
-		super(context, themeResId);
-		myIntent = i;
+		super(context, themeResId, i);
+	}
+	
+	protected int layoutId() {
+		return R.layout.fmt_intersections;
+	}
+	protected int titleId() {
+		return R.string.intersections;
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setTitle(R.string.intersections);
-		setContentView(R.layout.fmt_intersections);
-
 
 		myXEdit = initPercentEditor(R.id.fmt_x_edit, R.string.x, "x");
 		myYEdit = initPercentEditor(R.id.fmt_y_edit, R.string.y, "y");
@@ -38,9 +38,7 @@ public class IntersectionDialog extends Dialog implements PercentEditor.ChangeLi
 	
 	@Override
 	protected void onStop() {
-		onPercentChanged();
 		ViewHolder.getInstance().getView().setDrawIntersections(false);
-		ViewHolder.getInstance().storeAll();
 		super.onStop();
 	}
 

@@ -17,8 +17,8 @@ import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
 
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.book.Bookmark;
-import org.geometerplus.fbreader.plugin.base.customdialogs.*;
 import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
+import org.geometerplus.fbreader.plugin.base.optiondialogs.*;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
 import org.geometerplus.fbreader.plugin.base.tree.TOCTree;

@@ -1,4 +1,4 @@
-package org.geometerplus.fbreader.plugin.base.customdialogs;
+package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
 import org.fbreader.plugin.format.base.R;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
@@ -10,27 +10,29 @@ import android.content.Intent;
 import android.os.Bundle;
 
 
-public class CropDialog extends Dialog implements PercentEditor.ChangeListener {
+public class CropDialog extends OptionDialog {
 
 	private PercentEditor myTopEdit;
 	private PercentEditor myBottomEdit;
 	private PercentEditor myLeftEdit;
 	private PercentEditor myRightEdit;
 	
-	private Intent myIntent;
 	
 	public CropDialog(Context context, int themeResId, Intent i) {
-		super(context, themeResId);
-		myIntent = i;
+		super(context, themeResId, i);
+	}
+	
+	protected int layoutId() {
+		return R.layout.fmt_cropeditor_dialog;
+	}
+	protected int titleId() {
+		return R.string.crop;
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setTitle(R.string.crop);
-		setContentView(R.layout.fmt_cropeditor_dialog);
-		
 		myTopEdit = initPercentEditor(R.id.fmt_crop_top, R.string.top, "top");
 		myBottomEdit = initPercentEditor(R.id.fmt_crop_bottom, R.string.bottom, "bottom");
 		myLeftEdit = initPercentEditor(R.id.fmt_crop_left, R.string.left, "left");
@@ -42,9 +44,7 @@ public class CropDialog extends Dialog implements PercentEditor.ChangeListener {
 
 	@Override
 	protected void onStop() {
-		onPercentChanged();
 		ViewHolder.getInstance().getView().setDrawBorders(false);
-		ViewHolder.getInstance().storeAll();
 		super.onStop();
 	}
 
