@@ -30,6 +30,8 @@ public class DJVUDocument extends DocumentHolder {
 	private native long createPageNative(int docId, int pageNo);
 	private native void freePageNative(long p);
 
+	private static final Object ourNativeLock = new Object();
+
 	private volatile int myDocId = 0;
 
 	public static void init(ContextWrapper c) {
