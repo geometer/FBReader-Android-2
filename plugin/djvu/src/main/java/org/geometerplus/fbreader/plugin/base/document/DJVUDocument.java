@@ -137,7 +137,6 @@ public class DJVUDocument extends DocumentHolder {
 				clearOutlineRootNative(nroot);
 			}
 		}
-		
 	}
 
 	private void createTOCTree(long n, TOCTree parent, boolean fistChild) {
