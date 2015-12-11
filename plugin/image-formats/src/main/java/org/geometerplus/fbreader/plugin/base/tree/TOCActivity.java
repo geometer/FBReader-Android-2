@@ -77,9 +77,7 @@ public class TOCActivity extends FBActivity {
 		String title = getIntent().getStringExtra(TITLE_KEY);
 //		FBReaderUtil.setBookTitle(this, holder.getCurrentBook());TODO
 
-		final TOCTree root = (TOCTree) getIntent().getSerializableExtra(TOCTREE_KEY);
-		Log.d("WTF", root.getText());
-		Log.d("WTF", "" + root.hasChildren());
+		final TOCTree root = TOCTree.readFromBundle(getIntent().getBundleExtra(TOCTREE_KEY));
 		myAdapter = new TOCAdapter((ListView)findViewById(R.id.toc_list), root);
 		int pageNo = getIntent().getIntExtra(PAGENO_KEY, 0);
 		TOCTree treeToSelect = getCurrentTOCElement(pageNo, root);

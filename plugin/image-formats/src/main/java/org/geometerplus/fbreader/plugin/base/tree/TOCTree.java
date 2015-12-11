@@ -19,15 +19,12 @@
 
 package org.geometerplus.fbreader.plugin.base.tree;
 
-import java.io.Serializable;
-
 import org.geometerplus.zlibrary.core.tree.ZLTree;
 
-public class TOCTree extends ZLTree<TOCTree> implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7039615644378181025L;
+import android.os.Bundle;
+import android.util.Log;
+
+public class TOCTree extends ZLTree<TOCTree>  {
 	private String myText;
 	private Reference myReference;
 
@@ -59,15 +56,73 @@ public class TOCTree extends ZLTree<TOCTree> implements Serializable {
 		myReference = new Reference(reference);
 	}
 
-	public static class Reference implements Serializable {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 5325145061002706496L;
+	public static class Reference {
 		public final int PageNum;
 
 		public Reference(final int pageNum) {
 			PageNum = pageNum;
 		}
 	}
+	
+	public static final String TREE_KEY = "TrEe";
+	public static final String TEXT_KEY = "TeXt";
+	public static final String POSITION_KEY = "PoSiTiOn";
+	public static final String NEXT_KEY = "NeXt";
+	public static final String CHILD_KEY = "ChIlD";
+	
+	public static void writeToBundle(Bundle b, TOCTree t) {
+		if (t != null) {
+			b.putInt(TREE_KEY + "root", t.hashCode());
+			writeToBundle(b, t, null);
+		}
+	}
+	
+	private static void writeToBundle(Bundle b, TOCTree t, TOCTree next) {
+		String key = TREE_KEY + t.hashCode() + "/";
+		Log.e("BUNDLE", "writing: " + key);
+		Log.e("BUNDLE", "title: " + ((t.myText != null) ? t.myText : "null"));
+		b.putInt(key + POSITION_KEY, t.myReference != null ? t.myReference.PageNum : -1);
+		b.putString(key + TEXT_KEY, t.myText != null ? t.myText : "null");
+		if (next != null) {
+			b.putInt(key + NEXT_KEY, next.hashCode());
+			Log.e("BUNDLE", "nextkey: " + key + NEXT_KEY);
+			Log.e("BUNDLE", "nextkey: " + next.hashCode());
+		}
+		if (t.hasChildren()) {
+			b.putInt(key + CHILD_KEY, t.subtrees().get(0).hashCode());
+			for (int i = 0; i < t.subtrees().size(); ++i) {
+				writeToBundle(b, t.subtrees().get(i), i < (t.subtrees().size() - 1) ? t.subtrees().get(i + 1) : null);
+			}
+		}
+	}
+	
+	public static TOCTree readFromBundle(Bundle b) {
+		TOCTree root = new TOCTree(null);
+		int hashcode = b.getInt(TREE_KEY + "root");
+		readFromBundle(b, hashcode, root);
+		return root;
+	}
+	
+	private static void readFromBundle(Bundle b, int hashcode, TOCTree parent) {
+		String key = TREE_KEY + hashcode + "/";
+		Log.e("BUNDLE", "reading: " + key);
+		final TOCTree t = new TOCTree(parent);
+		t.setText(b.getString(key + TEXT_KEY));
+		Log.e("BUNDLE", "title: " + ((t.myText != null) ? t.myText : "null"));
+		t.setReference(b.getInt(key + POSITION_KEY));
+		String nkey = key + NEXT_KEY;
+		boolean hasNext = b.containsKey(nkey);
+		while (hasNext) {
+			readFromBundle(b, b.getInt(nkey), parent);
+			String tkey = TREE_KEY + b.getInt(nkey) + "/";
+			nkey = tkey + NEXT_KEY;
+			hasNext = b.containsKey(nkey + NEXT_KEY);
+		}
+		boolean hasChild = b.containsKey(key + CHILD_KEY);
+		if (hasChild) {
+			readFromBundle(b, b.getInt(key + CHILD_KEY), t);
+		}
+	}
+	
+	
 }
