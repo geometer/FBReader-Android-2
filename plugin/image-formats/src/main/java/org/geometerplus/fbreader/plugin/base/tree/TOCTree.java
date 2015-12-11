@@ -100,7 +100,7 @@ public class TOCTree extends ZLTree<TOCTree>  {
 		TOCTree root = new TOCTree(null);
 		int hashcode = b.getInt(TREE_KEY + "root");
 		readFromBundle(b, hashcode, root);
-		return root;
+		return root.subtrees().get(0);
 	}
 	
 	private static void readFromBundle(Bundle b, int hashcode, TOCTree parent) {
