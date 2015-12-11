@@ -6,14 +6,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.*;
 
 import org.fbreader.common.options.ColorProfile;
 import org.fbreader.reader.AbstractReader;
-import org.fbreader.util.Boolean3;
 
 import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
@@ -21,13 +19,11 @@ import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.util.RationalNumber;
 import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
-import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.fbreader.TapZoneMap;
 import org.geometerplus.fbreader.network.sync.SyncData;
 import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
 import org.geometerplus.fbreader.plugin.base.reader.*;
-import org.fbreader.common.android.FBReaderUtil;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
@@ -57,10 +53,6 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 
 	private volatile BookSettingsDB myDB;
 
-	private BookSettingsDB getDB() {
-		return myDB;
-	}
-	
 	public void storeAll() {
 		myDB.storeAll(this);
 	}
@@ -199,12 +191,12 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		addAction(ActionCode.USE_BACKGROUND, new Actions.UseBackgroundAction(this));
 		addAction(ActionCode.GOTO_PAGE_NUMBER, new Actions.GotoPageNumberAction(this));
 
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_SYSTEM));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_SENSOR, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_SENSOR));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_PORTRAIT));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_LANDSCAPE));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_SYSTEM));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_SENSOR, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_SENSOR));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_PORTRAIT));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_LANDSCAPE));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
 	}
 
 	private boolean myNeedToOpen;
@@ -260,15 +252,6 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		}.start();
 	}
 
-	private String getTempFilePath(String path) {
-		if (path.contains(":")) {
-			int p1 = path.lastIndexOf(":");
-			String filename = path.substring(p1 + 1);
-			path = Paths.systemInfo(myActivity).tempDirectory() + "/" + filename;
-		}
-		return path;
-	}
-
 	private boolean openFileInternal(Intent i) {
 		if (i == null) {
 			return false;
@@ -298,7 +281,6 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 				return true;
 			}
 		}
-		String path = getTempFilePath(myBookInfo.Path);
 		if (!view.open(myBook)) {
 			onFatalError(true);
 			return false;

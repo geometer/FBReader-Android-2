@@ -5,19 +5,15 @@ import android.app.*;
 import android.content.*;
 import android.content.pm.*;
 import android.os.Build;
-import android.util.Log;
 import android.widget.Toast;
 
-import org.fbreader.plugin.format.base.R;
 import org.fbreader.reader.android.GotoPageDialogUtil;
 import org.fbreader.util.Boolean3;
 
-import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
 
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.book.Bookmark;
-import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
 import org.geometerplus.fbreader.plugin.base.optiondialogs.*;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
@@ -518,12 +514,10 @@ public class Actions {
 	}
 
 	static class SetScreenOrientationAction extends ViewHolder.Action<ViewHolder> {
-		private final SettingsHolder mySettings;
 		private final String myValue;
 
-		protected SetScreenOrientationAction(ViewHolder viewHolder, SettingsHolder settings, String value) {
+		protected SetScreenOrientationAction(ViewHolder viewHolder, String value) {
 			super(viewHolder);
-			mySettings = settings;
 			myValue = value;
 		}
 
