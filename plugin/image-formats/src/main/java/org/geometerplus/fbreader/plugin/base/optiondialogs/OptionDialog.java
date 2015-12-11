@@ -8,6 +8,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 public abstract class OptionDialog extends Dialog implements PercentEditor.ChangeListener {
 	protected Intent myIntent;
@@ -23,8 +25,16 @@ public abstract class OptionDialog extends Dialog implements PercentEditor.Chang
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle(titleId());
 		setContentView(layoutId());
+		final Toolbar toolbar = (Toolbar)findViewById(R.id.md_toolbar);
+		toolbar.setTitle(titleId());
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				cancel();
+			}
+		});
+		toolbar.setNavigationContentDescription(android.R.string.cancel);
 	}
 
 	@Override

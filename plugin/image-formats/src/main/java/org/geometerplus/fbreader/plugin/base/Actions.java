@@ -549,15 +549,9 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			final DocumentHolder.CropInfo cropInfo =
-				Reader.getActivity().getPluginView().getDocument().getCropInfo();
-			final Intent i = new Intent();
-			i.putExtra("top", cropInfo.TopPercent);
-			i.putExtra("bottom", cropInfo.BottomPercent);
-			i.putExtra("left", cropInfo.LeftPercent);
-			i.putExtra("right", cropInfo.RightPercent);
-			final CropDialog d = new CropDialog(Reader.getActivity(), i);
-			d.show();
+			final FBReaderPluginActivity activity = Reader.getActivity();
+			activity.hideBars();
+			new CropDialog(activity, activity.getPluginView().getDocument().getCropInfo()).show();
 		}
 	}
 
@@ -575,7 +569,6 @@ public class Actions {
 			i.putExtra("zoom", zoomMode.Percent);
 			final ZoomModeDialog d = new ZoomModeDialog(Reader.getActivity(), i);
 			d.show();
-			
 		}
 	}
 
@@ -586,14 +579,9 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			final PluginView.IntersectionsHolder intersections =
-				Reader.getActivity().getPluginView().getIntersections();
-			final Intent i = new Intent();
-			i.putExtra("x", intersections.XPercent);
-			i.putExtra("y", intersections.YPercent);
-			
-			final IntersectionDialog d = new IntersectionDialog(Reader.getActivity(), i);
-			d.show();
+			final FBReaderPluginActivity activity = Reader.getActivity();
+			activity.hideBars();
+			new IntersectionDialog(activity, activity.getPluginView().getIntersections()).show();
 		}
 	}
 
