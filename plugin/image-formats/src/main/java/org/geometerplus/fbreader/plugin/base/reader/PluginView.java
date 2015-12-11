@@ -30,6 +30,7 @@ import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.plugin.base.*;
 import org.geometerplus.fbreader.plugin.base.document.*;
 import org.geometerplus.fbreader.plugin.base.reader.Footers.*;
+import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
 import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
@@ -113,28 +114,11 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	private AnimationProvider myAnimationProvider;
 
 	public TOCTree getCurrentTOCElement() {
-		return getCurrentTOCElement(myCurrPageNo);
+		return TOCActivity.getCurrentTOCElement(myCurrPageNo, getTOCTree());
 	}
-
+	
 	public TOCTree getCurrentTOCElement(int pageNo) {
-		final TOCTree root = myDocument.getTOCTree();
-		if (root == null || !root.hasChildren()) {
-			return root;
-		} else {
-			int num = pageNo;
-			TOCTree treeToSelect = null;
-			for (TOCTree tree : root) {
-				final TOCTree.Reference reference = tree.getReference();
-				if (reference == null) {
-					continue;
-				}
-				if (reference.PageNum > num) {
-					break;
-				}
-				treeToSelect = tree;
-			}
-			return treeToSelect;
-		}
+		return TOCActivity.getCurrentTOCElement(pageNo, getTOCTree());
 	}
 
 	public TOCTree getTOCTree() {

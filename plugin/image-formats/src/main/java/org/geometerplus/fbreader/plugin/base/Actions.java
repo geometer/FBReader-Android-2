@@ -1,20 +1,9 @@
 package org.geometerplus.fbreader.plugin.base;
 
-import android.annotation.TargetApi;
-import android.app.*;
-import android.content.*;
-import android.content.pm.*;
-import android.os.Build;
-import android.util.Log;
-import android.widget.Toast;
-
-import org.fbreader.plugin.format.base.R;
 import org.fbreader.reader.android.GotoPageDialogUtil;
 import org.fbreader.util.Boolean3;
-
-import org.geometerplus.zlibrary.core.library.ZLibrary;
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
-
+import org.geometerplus.android.fbreader.api.FBReaderIntents;
+import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.book.Bookmark;
 import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
@@ -23,9 +12,15 @@ import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
 import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 import org.geometerplus.fbreader.util.FixedTextSnippet;
+import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
 
-import org.geometerplus.android.fbreader.api.FBReaderIntents;
-import org.geometerplus.android.fbreader.dict.DictionaryUtil;
+import android.annotation.TargetApi;
+import android.app.Application;
+import android.app.ProgressDialog;
+import android.content.*;
+import android.content.pm.*;
+import android.os.Build;
+import android.widget.Toast;
 
 public class Actions {
 	static class StartSearchAction extends ViewHolder.Action<ViewHolder> {
@@ -392,7 +387,10 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			Reader.getActivity().startActivity(new Intent(Reader.getActivity(), TOCActivity.class));
+			Intent i = new Intent(Reader.getActivity(), TOCActivity.class);
+			i.putExtra(TOCActivity.TOCTREE_KEY,  Reader.getView().getTOCTree());
+			i.putExtra(TOCActivity.PAGENO_KEY, Reader.getView().getCurPageNo());
+			Reader.getActivity().startActivityForResult(i, FBReaderPluginActivity.REQUEST_TOC);
 		}
 	}
 

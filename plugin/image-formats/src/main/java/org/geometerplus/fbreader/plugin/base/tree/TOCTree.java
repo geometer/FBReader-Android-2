@@ -19,9 +19,15 @@
 
 package org.geometerplus.fbreader.plugin.base.tree;
 
+import java.io.Serializable;
+
 import org.geometerplus.zlibrary.core.tree.ZLTree;
 
-public class TOCTree extends ZLTree<TOCTree> {
+public class TOCTree extends ZLTree<TOCTree> implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7039615644378181025L;
 	private String myText;
 	private Reference myReference;
 
@@ -53,7 +59,11 @@ public class TOCTree extends ZLTree<TOCTree> {
 		myReference = new Reference(reference);
 	}
 
-	public static class Reference {
+	public static class Reference implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 5325145061002706496L;
 		public final int PageNum;
 
 		public Reference(final int pageNum) {
