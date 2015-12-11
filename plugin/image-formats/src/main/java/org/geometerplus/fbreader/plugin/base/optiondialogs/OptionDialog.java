@@ -9,9 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-
 public abstract class OptionDialog extends Dialog implements PercentEditor.ChangeListener {
-
 	protected Intent myIntent;
 	
 	public OptionDialog(Context context, Intent i) {
@@ -35,7 +33,4 @@ public abstract class OptionDialog extends Dialog implements PercentEditor.Chang
 		ViewHolder.getInstance().storeAll();
 		super.onStop();
 	}
-
-
-
 }
