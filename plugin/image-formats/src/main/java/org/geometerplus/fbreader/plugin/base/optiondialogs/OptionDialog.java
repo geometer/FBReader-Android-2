@@ -12,11 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 public abstract class OptionDialog extends Dialog implements PercentEditor.ChangeListener {
-	protected Intent myIntent;
 	
-	public OptionDialog(Context context, Intent i) {
+	public OptionDialog(Context context) {
 		super(context, R.style.FBReaderMD_Dialog_Translucent);
-		myIntent = i;
 	}
 	
 	protected abstract int layoutId();

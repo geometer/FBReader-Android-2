@@ -15,7 +15,7 @@ public class IntersectionDialog extends OptionDialog {
 	private PercentEditor myYEdit;
 	
 	public IntersectionDialog(Context context, PluginView.IntersectionsHolder intersections) {
-		super(context, null);
+		super(context);
 		myIntersections = intersections;
 	}
 	

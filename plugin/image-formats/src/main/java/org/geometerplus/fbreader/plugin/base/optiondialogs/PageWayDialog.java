@@ -13,8 +13,11 @@ public class PageWayDialog extends OptionDialog {
 	private RadioButton myHButton;
 	private RadioButton myVButton;
 	
-	public PageWayDialog(Context context, Intent i) {
-		super(context, i);
+	private boolean myHorizontal;
+	
+	public PageWayDialog(Context context, boolean horizontal) {
+		super(context);
+		myHorizontal = horizontal;
 	}
 	
 	protected int layoutId() {
@@ -31,7 +34,7 @@ public class PageWayDialog extends OptionDialog {
 		myHButton = (RadioButton)findViewById(R.id.fmt_horiz_check);
 		myVButton = (RadioButton)findViewById(R.id.fmt_vert_check);
 
-		setState(myIntent.getBooleanExtra("horiz", true));
+		setState(myHorizontal);
 
 		final View.OnClickListener listener = new View.OnClickListener() {
 			@Override
@@ -45,11 +48,12 @@ public class PageWayDialog extends OptionDialog {
 	
 	@Override
 	protected void onStop() {
-		ViewHolder.getInstance().getView().setHorizontalFirst(myHButton.isChecked());
+		ViewHolder.getInstance().getView().setHorizontalFirst(myHorizontal);
 		super.onStop();
 	}
 
 	private void setState(boolean horizontal) {
+		myHorizontal = horizontal;
 		myHButton.setChecked(horizontal);
 		myVButton.setChecked(!horizontal);
 	}

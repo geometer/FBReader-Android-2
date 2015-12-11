@@ -17,7 +17,7 @@ public class CropDialog extends OptionDialog {
 	private PercentEditor myRightEdit;
 	
 	public CropDialog(Context context, DocumentHolder.CropInfo cropInfo) {
-		super(context, null);
+		super(context);
 		myCropInfo = cropInfo;
 	}
 	

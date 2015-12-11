@@ -21,8 +21,10 @@ public class ZoomModeDialog extends OptionDialog {
 	private int myZoomMode;
 	private int myZoomPercent;
 	
-	public ZoomModeDialog(Context context, Intent i) {
-		super(context, i);
+	public ZoomModeDialog(Context context, PluginView.ZoomMode mode) {
+		super(context);
+		myZoomMode = mode.Mode;
+		myZoomPercent = mode.Percent;
 	}
 	
 	protected int layoutId() {
@@ -93,9 +95,6 @@ public class ZoomModeDialog extends OptionDialog {
 		((RadioButton)findViewById(R.id.fmt_fit_height)).setText(getContext().getResources().getString(R.string.fitHeight));
 		((RadioButton)findViewById(R.id.fmt_screen_percent)).setText(getContext().getResources().getString(R.string.screenPercent));
 		((RadioButton)findViewById(R.id.fmt_page_percent)).setText(getContext().getResources().getString(R.string.pagePercent));
-
-		myZoomMode = myIntent.getIntExtra("mode", PluginView.ZoomMode.FREE_ZOOM);
-		myZoomPercent = myIntent.getIntExtra("zoom", 100);
 
 		switch (myZoomMode) {
 			case PluginView.ZoomMode.FREE_ZOOM:

@@ -562,13 +562,9 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			Reader.getActivity().hideBars();
-			final PluginView.ZoomMode zoomMode = Reader.getActivity().getPluginView().getZoomMode();
-			final Intent i = new Intent();
-			i.putExtra("mode", zoomMode.Mode);
-			i.putExtra("zoom", zoomMode.Percent);
-			final ZoomModeDialog d = new ZoomModeDialog(Reader.getActivity(), i);
-			d.show();
+			final FBReaderPluginActivity activity = Reader.getActivity();
+			activity.hideBars();
+			new ZoomModeDialog(activity, activity.getPluginView().getZoomMode()).show();
 		}
 	}
 
@@ -592,10 +588,9 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			final Intent i = new Intent();
-			i.putExtra("horiz", Reader.getActivity().getPluginView().isHorizontalFirst());
-			final PageWayDialog d = new PageWayDialog(Reader.getActivity(), i);
-			d.show();
+			final FBReaderPluginActivity activity = Reader.getActivity();
+			activity.hideBars();
+			new PageWayDialog(activity, activity.getPluginView().isHorizontalFirst()).show();
 		}
 	}
 
