@@ -398,6 +398,31 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 		return myDatabase.listLabels();
 	}
 
+	public void deleteBookLabelByUuid(String uuid) {
+		final long bookId = myDatabase.bookIdByLabelUuid(uuid);
+		if (bookId == -1) {
+			return;
+		}
+		final DbBook book = getBookById(bookId);
+		if (book == null) {
+			return;
+		}
+		for (Label label : book.labels()) {
+			if (uuid.equals(label.Uid)) {
+				book.removeLabel(label);
+				break;
+			}
+		}
+	}
+
+	public List<String> deletedBookLabelUids(int limit, int page) {
+		return myDatabase.deletedBookLabelUids(limit, page);
+	}
+
+	public void purgeBookLabels(List<String> uids) {
+		myDatabase.purgeBookLabels(uids);
+	}
+
 	public boolean hasSeries() {
 		synchronized (myBooksByFile) {
 			for (DbBook book : myBooksByFile.values()) {
