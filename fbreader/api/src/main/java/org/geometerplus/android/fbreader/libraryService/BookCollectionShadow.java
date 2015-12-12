@@ -348,6 +348,32 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 		});
 	}
 
+	public synchronized void deleteBookLabelByUuid(String uuid) {
+		if (myInterface != null) {
+			try {
+				myInterface.deleteBookLabelByUuid(uuid);
+			} catch (RemoteException e) {
+			}
+		}
+	}
+
+	public synchronized List<String> deletedBookLabelUids(final int limit, final int page) {
+		return listCall(new ListCallable<String>() {
+			public List<String> call() throws RemoteException {
+				return myInterface.deletedBookLabelUids(limit, page);
+			}
+		});
+	}
+
+	public void purgeBookLabels(List<String> uids) {
+		if (myInterface != null) {
+			try {
+				myInterface.purgeBookLabels(uids);
+			} catch (RemoteException e) {
+			}
+		}
+	}
+
 	public String getHash(Book book, boolean force) {
 		if (myInterface == null) {
 			return null;

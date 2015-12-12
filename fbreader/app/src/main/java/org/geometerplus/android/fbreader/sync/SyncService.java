@@ -79,6 +79,8 @@ public class SyncService extends Service implements IBookCollection.Listener<Boo
 		new SyncNetworkContext(this, mySyncOptions, mySyncOptions.Positions);
 	private final SyncNetworkContext mySyncBookmarksContext =
 		new SyncNetworkContext(this, mySyncOptions, mySyncOptions.Bookmarks);
+	private final SyncNetworkContext mySyncShelvesContext =
+		new SyncNetworkContext(this, mySyncOptions, mySyncOptions.CustomShelves);
 
 	private static volatile Thread ourSynchronizationThread;
 	private static volatile Thread ourQuickSynchronizationThread;
@@ -290,8 +292,8 @@ public class SyncService extends Service implements IBookCollection.Listener<Boo
 					public void run() {
 						try {
 							syncPositions();
-							syncCustomShelves();
 							BookmarkSyncUtil.sync(mySyncBookmarksContext, myCollection);
+							ShelvesSyncUtil.sync(mySyncShelvesContext, myCollection);
 						} finally {
 							ourQuickSynchronizationThread = null;
 						}
@@ -457,9 +459,6 @@ public class SyncService extends Service implements IBookCollection.Listener<Boo
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-	}
-
-	private void syncCustomShelves() {
 	}
 
 	@Override

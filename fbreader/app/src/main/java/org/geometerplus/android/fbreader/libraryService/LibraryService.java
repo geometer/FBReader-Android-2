@@ -266,6 +266,18 @@ public class LibraryService extends Service {
 			return myCollection.labels();
 		}
 
+		public void deleteBookLabelByUuid(String uuid) {
+			myCollection.deleteBookLabelByUuid(uuid);
+		}
+
+		public List<String> deletedBookLabelUids(int limit, int page) {
+			return myCollection.deletedBookLabelUids(limit, page);
+		}
+
+		public void purgeBookLabels(List<String> uids) {
+			myCollection.purgeBookLabels(uids);
+		}
+
 		public PositionWithTimestamp getStoredPosition(long bookId) {
 			final ZLTextPosition position = myCollection.getStoredPosition(bookId);
 			return position != null ? new PositionWithTimestamp(position) : null;

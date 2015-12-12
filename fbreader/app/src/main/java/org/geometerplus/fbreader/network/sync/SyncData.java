@@ -195,12 +195,10 @@ public class SyncData {
 			}
 		}
 
-		System.err.println("DATA = " + map);
 		return map;
 	}
 
 	public boolean updateFromServer(Map<String,Object> data) {
-		System.err.println("RESPONSE = " + data);
 		myGeneration.setValue((int)(long)(Long)data.get("generation"));
 
 		final List<Map> positions = (List<Map>)data.get("positions");
