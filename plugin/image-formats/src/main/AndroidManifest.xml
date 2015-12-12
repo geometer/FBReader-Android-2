@@ -9,29 +9,5 @@
 			android:process=":formats"
 			android:theme="@style/FBReaderMD.Activity"
 		/>
-		<activity
-			android:name="org.geometerplus.fbreader.plugin.base.customactivities.CropActivity"
-			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:process=":formats"
-			android:theme="@style/FBReaderMD.Dialog.Translucent"
-		/>
-		<activity
-			android:name="org.geometerplus.fbreader.plugin.base.customactivities.ZoomModeActivity"
-			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:process=":formats"
-			android:theme="@style/FBReaderMD.Dialog.Translucent"
-		/>
-		<activity
-			android:name="org.geometerplus.fbreader.plugin.base.customactivities.IntersectionActivity"
-			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:process=":formats"
-			android:theme="@style/FBReaderMD.Dialog.Translucent"
-		/>
-		<activity
-			android:name="org.geometerplus.fbreader.plugin.base.customactivities.PageWayActivity"
-			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:process=":formats"
-			android:theme="@style/FBReaderMD.Dialog.Translucent"
-		/>
 	</application>
 </manifest>

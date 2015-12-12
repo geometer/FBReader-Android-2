@@ -1,34 +1,39 @@
-package org.geometerplus.fbreader.plugin.base.customactivities;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RadioButton;
-
-import org.fbreader.common.android.FBActivity;
+package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
 import org.fbreader.plugin.format.base.R;
+import org.geometerplus.fbreader.plugin.base.ViewHolder;
 
-public class PageWayActivity extends FBActivity {
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.RadioButton;
+
+public class PageWayDialog extends OptionDialog {
 	private RadioButton myHButton;
 	private RadioButton myVButton;
 
-	@Override
+	private boolean myHorizontal;
+
+	public PageWayDialog(Context context, boolean horizontal) {
+		super(context);
+		myHorizontal = horizontal;
+	}
+
 	protected int layoutId() {
 		return R.layout.fmt_page_way;
+	}
+	protected int titleId() {
+		return R.string.pageWay;
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setTitle(R.string.pageWay);
-
 		myHButton = (RadioButton)findViewById(R.id.fmt_horiz_check);
 		myVButton = (RadioButton)findViewById(R.id.fmt_vert_check);
 
-		setState(getIntent().getBooleanExtra("horiz", true));
+		setState(myHorizontal);
 
 		final View.OnClickListener listener = new View.OnClickListener() {
 			@Override
@@ -40,9 +45,15 @@ public class PageWayActivity extends FBActivity {
 		myVButton.setOnClickListener(listener);
 	}
 
+	@Override
+	protected void onStop() {
+		ViewHolder.getInstance().getView().setHorizontalFirst(myHorizontal);
+		super.onStop();
+	}
+
 	private void setState(boolean horizontal) {
+		myHorizontal = horizontal;
 		myHButton.setChecked(horizontal);
 		myVButton.setChecked(!horizontal);
-		setResult(RESULT_OK, new Intent().putExtra("horiz", horizontal));
 	}
 }

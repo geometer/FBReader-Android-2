@@ -10,13 +10,11 @@ import android.widget.Toast;
 import org.fbreader.reader.android.GotoPageDialogUtil;
 import org.fbreader.util.Boolean3;
 
-import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
 
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.book.Bookmark;
-import org.geometerplus.fbreader.plugin.base.customactivities.*;
-import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
+import org.geometerplus.fbreader.plugin.base.optiondialogs.*;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
 import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
@@ -545,14 +543,9 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			final DocumentHolder.CropInfo cropInfo =
-				Reader.getActivity().getPluginView().getDocument().getCropInfo();
-			final Intent i = new Intent(Reader.getActivity(), CropActivity.class);
-			i.putExtra("top", cropInfo.TopPercent);
-			i.putExtra("bottom", cropInfo.BottomPercent);
-			i.putExtra("left", cropInfo.LeftPercent);
-			i.putExtra("right", cropInfo.RightPercent);
-			Reader.getActivity().startActivityForResult(i, FBReaderPluginActivity.REQUEST_CROP);
+			final FBReaderPluginActivity activity = Reader.getActivity();
+			activity.hideBars();
+			new CropDialog(activity, activity.getPluginView().getDocument().getCropInfo()).show();
 		}
 	}
 
@@ -563,14 +556,9 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			Reader.getActivity().hideBars();
-			final PluginView.ZoomMode zoomMode = Reader.getActivity().getPluginView().getZoomMode();
-			Reader.getActivity().startActivityForResult(
-				new Intent(Reader.getActivity(), ZoomModeActivity.class)
-					.putExtra("mode", zoomMode.Mode)
-					.putExtra("zoom", zoomMode.Percent),
-				FBReaderPluginActivity.REQUEST_ZOOM_MODE
-			);
+			final FBReaderPluginActivity activity = Reader.getActivity();
+			activity.hideBars();
+			new ZoomModeDialog(activity, activity.getPluginView().getZoomMode()).show();
 		}
 	}
 
@@ -581,12 +569,9 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			final PluginView.IntersectionsHolder intersections =
-				Reader.getActivity().getPluginView().getIntersections();
-			final Intent i = new Intent(Reader.getActivity(), IntersectionActivity.class);
-			i.putExtra("x", intersections.XPercent);
-			i.putExtra("y", intersections.YPercent);
-			Reader.getActivity().startActivityForResult(i, FBReaderPluginActivity.REQUEST_INTERSECTION);
+			final FBReaderPluginActivity activity = Reader.getActivity();
+			activity.hideBars();
+			new IntersectionDialog(activity, activity.getPluginView().getIntersections()).show();
 		}
 	}
 
@@ -597,9 +582,9 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			final Intent i = new Intent(Reader.getActivity(), PageWayActivity.class);
-			i.putExtra("horiz", Reader.getActivity().getPluginView().isHorizontalFirst());
-			Reader.getActivity().startActivityForResult(i, FBReaderPluginActivity.REQUEST_PAGE_WAY);
+			final FBReaderPluginActivity activity = Reader.getActivity();
+			activity.hideBars();
+			new PageWayDialog(activity, activity.getPluginView().isHorizontalFirst()).show();
 		}
 	}
 
