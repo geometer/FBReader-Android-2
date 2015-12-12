@@ -333,6 +333,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 			syncPreferences.add(syncScreen.addOption(syncOptions.ChangeCurrentBook, "changeCurrentBook"));
 			//syncPreferences.add(syncScreen.addOption(syncOptions.Metainfo, "metainfo", "values"));
 			syncPreferences.add(syncScreen.addOption(syncOptions.Bookmarks, "bookmarks", "values"));
+			syncPreferences.add(syncScreen.addOption(syncOptions.CustomShelves, "customShelves", "values"));
 			syncPreferences.run();
 
 			final Screen appearanceScreen = createPreferenceScreen("appearance");
