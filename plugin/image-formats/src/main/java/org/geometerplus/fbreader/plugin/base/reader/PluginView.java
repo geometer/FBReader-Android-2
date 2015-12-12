@@ -116,7 +116,7 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	public TOCTree getCurrentTOCElement() {
 		return TOCActivity.getCurrentTOCElement(myCurrPageNo, getTOCTree());
 	}
-	
+
 	public TOCTree getCurrentTOCElement(int pageNo) {
 		return TOCActivity.getCurrentTOCElement(pageNo, getTOCTree());
 	}
@@ -1104,14 +1104,14 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 
 		SelectionCursor.draw(
 			context,
-			SelectionCursor.Which.Left, 
+			SelectionCursor.Which.Left,
 			(int)(.5f + myZoomInfo.xBmpToScreen(myDocument.getFirstSelectionCursorX(), page) + dx),
 			(int)(.5f + myZoomInfo.yBmpToScreen(myDocument.getFirstSelectionCursorY(), page) + dy),
 			color
 		);
 		SelectionCursor.draw(
 			context,
-			SelectionCursor.Which.Right, 
+			SelectionCursor.Which.Right,
 			(int)(.5f + myZoomInfo.xBmpToScreen(myDocument.getLastSelectionCursorX(), page) + dx),
 			(int)(.5f + myZoomInfo.yBmpToScreen(myDocument.getLastSelectionCursorY(), page) + dy),
 			color

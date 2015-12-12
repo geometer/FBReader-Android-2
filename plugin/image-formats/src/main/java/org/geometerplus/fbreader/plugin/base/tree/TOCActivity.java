@@ -19,28 +19,28 @@
 
 package org.geometerplus.fbreader.plugin.base.tree;
 
-import org.fbreader.common.android.FBActivity;
-import org.fbreader.plugin.format.base.R;
-import org.fbreader.reader.android.ContextMenuDialog;
-import org.fbreader.util.android.ViewUtil;
-import org.geometerplus.android.fbreader.ZLTreeAdapter;
-import org.geometerplus.fbreader.plugin.base.FBReaderPluginActivity;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.tree.ZLTree;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.fbreader.common.android.FBActivity;
+import org.fbreader.plugin.format.base.R;
+import org.fbreader.reader.android.ContextMenuDialog;
+import org.fbreader.util.android.ViewUtil;
+
+import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.core.tree.ZLTree;
+
+import org.geometerplus.fbreader.plugin.base.FBReaderPluginActivity;
+import org.geometerplus.android.fbreader.ZLTreeAdapter;
+
 public class TOCActivity extends FBActivity {
-	
 	public static final String TOCTREE_KEY = "tocTree";
 	public static final String PAGENO_KEY = "pageNo";
 	public static final String TITLE_KEY = "title";
-	
+
 	private TOCAdapter myAdapter;
 	private ZLTree<?> mySelectedItem;
 
