@@ -6,25 +6,24 @@ import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.widget.*;
 
-public class ZoomModeDialog extends OptionDialog {
+public class ZoomModeDialog extends OptionDialog implements PercentEditor.ChangeListener {
 	private PercentEditor myPageEdit;
 	private PercentEditor myScreenEdit;
 	private PluginView myPluginView;
 
 	private int myZoomMode;
 	private int myZoomPercent;
-	
-	public ZoomModeDialog(Context context, Intent i) {
-		super(context, i);
+
+	public ZoomModeDialog(Context context, PluginView.ZoomMode mode) {
+		super(context);
+		myZoomMode = mode.Mode;
+		myZoomPercent = mode.Percent;
 	}
-	
+
 	protected int layoutId() {
 		return R.layout.fmt_zoom_mode;
 	}
@@ -94,9 +93,6 @@ public class ZoomModeDialog extends OptionDialog {
 		((RadioButton)findViewById(R.id.fmt_screen_percent)).setText(getContext().getResources().getString(R.string.screenPercent));
 		((RadioButton)findViewById(R.id.fmt_page_percent)).setText(getContext().getResources().getString(R.string.pagePercent));
 
-		myZoomMode = myIntent.getIntExtra("mode", PluginView.ZoomMode.FREE_ZOOM);
-		myZoomPercent = myIntent.getIntExtra("zoom", 100);
-
 		switch (myZoomMode) {
 			case PluginView.ZoomMode.FREE_ZOOM:
 				group.check(R.id.fmt_free_zoom);
@@ -120,7 +116,13 @@ public class ZoomModeDialog extends OptionDialog {
 				break;
 		}
 	}
-	
+
+	@Override
+	protected void onStop() {
+		onPercentChanged();
+		super.onStop();
+	}
+
 	@Override
 	public void onPercentChanged() {
 		switch (myZoomMode) {
@@ -136,5 +138,4 @@ public class ZoomModeDialog extends OptionDialog {
 				break;
 		}
 	}
-
 }

@@ -1,6 +1,8 @@
 default.properties
 build.properties
 local.properties
+project.properties
+.project
 build/
 scripts/resources/*.diff
 obj/
@@ -11,6 +13,3 @@ READY/
 .classpath
 .settings
 *~
-project.properties
-.project
-bin/

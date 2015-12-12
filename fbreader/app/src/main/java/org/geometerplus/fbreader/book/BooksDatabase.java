@@ -64,6 +64,7 @@ public abstract class BooksDatabase {
 	protected abstract void deleteBook(long bookId);
 
 	protected abstract List<String> listLabels();
+	protected abstract long bookIdByLabelUuid(String uuid);
 
 	protected abstract List<Author> listAuthors(long bookId);
 	protected abstract List<Tag> listTags(long bookId);
@@ -102,6 +103,8 @@ public abstract class BooksDatabase {
 
 	protected abstract void addLabel(long bookId, Label label);
 	protected abstract void removeLabel(long bookId, Label label);
+	protected abstract List<String> deletedBookLabelUids(int label, int page);
+	protected abstract void purgeBookLabels(List<String> uids);
 
 	protected Bookmark createBookmark(
 		long id, String uid, String versionUid,

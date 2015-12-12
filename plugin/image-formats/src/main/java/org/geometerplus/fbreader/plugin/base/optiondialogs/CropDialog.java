@@ -2,25 +2,25 @@ package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
 import org.fbreader.plugin.format.base.R;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
+import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
-
-public class CropDialog extends OptionDialog {
+public class CropDialog extends OptionDialog implements PercentEditor.ChangeListener {
+	private final DocumentHolder.CropInfo myCropInfo;
 
 	private PercentEditor myTopEdit;
 	private PercentEditor myBottomEdit;
 	private PercentEditor myLeftEdit;
 	private PercentEditor myRightEdit;
-	
-	
-	public CropDialog(Context context, Intent i) {
-		super(context, i);
+
+	public CropDialog(Context context, DocumentHolder.CropInfo cropInfo) {
+		super(context);
+		myCropInfo = cropInfo;
 	}
-	
+
 	protected int layoutId() {
 		return R.layout.fmt_cropeditor_dialog;
 	}
@@ -32,23 +32,22 @@ public class CropDialog extends OptionDialog {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		myTopEdit = initPercentEditor(R.id.fmt_crop_top, R.string.top, "top");
-		myBottomEdit = initPercentEditor(R.id.fmt_crop_bottom, R.string.bottom, "bottom");
-		myLeftEdit = initPercentEditor(R.id.fmt_crop_left, R.string.left, "left");
-		myRightEdit = initPercentEditor(R.id.fmt_crop_right, R.string.right, "right");
+		myTopEdit = initPercentEditor(R.id.fmt_crop_top, R.string.top, myCropInfo.TopPercent);
+		myBottomEdit = initPercentEditor(R.id.fmt_crop_bottom, R.string.bottom, myCropInfo.BottomPercent);
+		myLeftEdit = initPercentEditor(R.id.fmt_crop_left, R.string.left, myCropInfo.LeftPercent);
+		myRightEdit = initPercentEditor(R.id.fmt_crop_right, R.string.right, myCropInfo.RightPercent);
 
 		ViewHolder.getInstance().getView().setDrawBorders(true);
-		
 	}
 
 	@Override
 	protected void onStop() {
+		onPercentChanged();
 		ViewHolder.getInstance().getView().setDrawBorders(false);
 		super.onStop();
 	}
 
-	private PercentEditor initPercentEditor(int id, int resourceId, String key) {
-		final int value = myIntent.getIntExtra(key, 0);
+	private PercentEditor initPercentEditor(int id, int resourceId, int value) {
 		final PercentEditor editor = (PercentEditor)findViewById(id);
 		getContext().getResources();
 		getContext().getResources().getString(resourceId);
@@ -60,12 +59,10 @@ public class CropDialog extends OptionDialog {
 	@Override
 	public void onPercentChanged() {
 		ViewHolder.getInstance().getView().getDocument().setCropInfo(
-				myTopEdit.getValue(),
-				myBottomEdit.getValue(),
-				myLeftEdit.getValue(),
-				myRightEdit.getValue()
-				);
+			myTopEdit.getValue(),
+			myBottomEdit.getValue(),
+			myLeftEdit.getValue(),
+			myRightEdit.getValue()
+		);
 	}
-
-
 }
