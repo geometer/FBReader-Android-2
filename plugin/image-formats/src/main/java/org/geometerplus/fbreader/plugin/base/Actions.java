@@ -516,12 +516,10 @@ public class Actions {
 	}
 
 	static class SetScreenOrientationAction extends ViewHolder.Action<ViewHolder> {
-		private final SettingsHolder mySettings;
 		private final String myValue;
 
-		protected SetScreenOrientationAction(ViewHolder viewHolder, SettingsHolder settings, String value) {
+		protected SetScreenOrientationAction(ViewHolder viewHolder, String value) {
 			super(viewHolder);
-			mySettings = settings;
 			myValue = value;
 		}
 
