@@ -8,19 +8,19 @@ import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
 import android.content.Context;
 import android.os.Bundle;
 
-public class CropDialog extends OptionDialog {
+public class CropDialog extends OptionDialog implements PercentEditor.ChangeListener {
 	private final DocumentHolder.CropInfo myCropInfo;
 
 	private PercentEditor myTopEdit;
 	private PercentEditor myBottomEdit;
 	private PercentEditor myLeftEdit;
 	private PercentEditor myRightEdit;
-	
+
 	public CropDialog(Context context, DocumentHolder.CropInfo cropInfo) {
 		super(context);
 		myCropInfo = cropInfo;
 	}
-	
+
 	protected int layoutId() {
 		return R.layout.fmt_cropeditor_dialog;
 	}
@@ -42,6 +42,7 @@ public class CropDialog extends OptionDialog {
 
 	@Override
 	protected void onStop() {
+		onPercentChanged();
 		ViewHolder.getInstance().getView().setDrawBorders(false);
 		super.onStop();
 	}

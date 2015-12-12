@@ -8,17 +8,17 @@ import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 import android.content.Context;
 import android.os.Bundle;
 
-public class IntersectionDialog extends OptionDialog {
+public class IntersectionDialog extends OptionDialog implements PercentEditor.ChangeListener {
 	private volatile PluginView.IntersectionsHolder myIntersections;
 
 	private PercentEditor myXEdit;
 	private PercentEditor myYEdit;
-	
+
 	public IntersectionDialog(Context context, PluginView.IntersectionsHolder intersections) {
 		super(context);
 		myIntersections = intersections;
 	}
-	
+
 	protected int layoutId() {
 		return R.layout.fmt_intersections;
 	}
@@ -35,9 +35,10 @@ public class IntersectionDialog extends OptionDialog {
 
 		ViewHolder.getInstance().getView().setDrawIntersections(true);
 	}
-	
+
 	@Override
 	protected void onStop() {
+		onPercentChanged();
 		ViewHolder.getInstance().getView().setDrawIntersections(false);
 		super.onStop();
 	}

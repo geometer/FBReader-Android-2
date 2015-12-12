@@ -10,20 +10,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
-public class ZoomModeDialog extends OptionDialog {
+public class ZoomModeDialog extends OptionDialog implements PercentEditor.ChangeListener {
 	private PercentEditor myPageEdit;
 	private PercentEditor myScreenEdit;
 	private PluginView myPluginView;
 
 	private int myZoomMode;
 	private int myZoomPercent;
-	
+
 	public ZoomModeDialog(Context context, PluginView.ZoomMode mode) {
 		super(context);
 		myZoomMode = mode.Mode;
 		myZoomPercent = mode.Percent;
 	}
-	
+
 	protected int layoutId() {
 		return R.layout.fmt_zoom_mode;
 	}
@@ -116,7 +116,13 @@ public class ZoomModeDialog extends OptionDialog {
 				break;
 		}
 	}
-	
+
+	@Override
+	protected void onStop() {
+		onPercentChanged();
+		super.onStop();
+	}
+
 	@Override
 	public void onPercentChanged() {
 		switch (myZoomMode) {
@@ -132,5 +138,4 @@ public class ZoomModeDialog extends OptionDialog {
 				break;
 		}
 	}
-
 }

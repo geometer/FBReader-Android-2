@@ -11,14 +11,14 @@ import android.widget.RadioButton;
 public class PageWayDialog extends OptionDialog {
 	private RadioButton myHButton;
 	private RadioButton myVButton;
-	
+
 	private boolean myHorizontal;
-	
+
 	public PageWayDialog(Context context, boolean horizontal) {
 		super(context);
 		myHorizontal = horizontal;
 	}
-	
+
 	protected int layoutId() {
 		return R.layout.fmt_page_way;
 	}
@@ -44,7 +44,7 @@ public class PageWayDialog extends OptionDialog {
 		myHButton.setOnClickListener(listener);
 		myVButton.setOnClickListener(listener);
 	}
-	
+
 	@Override
 	protected void onStop() {
 		ViewHolder.getInstance().getView().setHorizontalFirst(myHorizontal);
@@ -55,9 +55,5 @@ public class PageWayDialog extends OptionDialog {
 		myHorizontal = horizontal;
 		myHButton.setChecked(horizontal);
 		myVButton.setChecked(!horizontal);
-	}
-
-	@Override
-	public void onPercentChanged() {
 	}
 }

@@ -10,8 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public abstract class OptionDialog extends Dialog implements PercentEditor.ChangeListener {
-	
+public abstract class OptionDialog extends Dialog {
 	public OptionDialog(Context context) {
 		super(context, R.style.FBReaderMD_Dialog_Translucent);
 	}
@@ -36,7 +35,6 @@ public abstract class OptionDialog extends Dialog implements PercentEditor.Chang
 
 	@Override
 	protected void onStop() {
-		onPercentChanged();
 		ViewHolder.getInstance().storeAll();
 		super.onStop();
 	}
