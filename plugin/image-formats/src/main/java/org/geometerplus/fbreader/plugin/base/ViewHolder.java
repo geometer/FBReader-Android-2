@@ -33,7 +33,6 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 	private static ViewHolder ourInstance;
 
 	public static ViewHolder getInstance() {
-		Log.e("VIEWHOLDER", ourInstance == null ? "null" : ourInstance.toString());
 		return ourInstance;
 	}
 
