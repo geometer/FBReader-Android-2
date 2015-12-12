@@ -194,12 +194,12 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		addAction(ActionCode.USE_BACKGROUND, new Actions.UseBackgroundAction(this));
 		addAction(ActionCode.GOTO_PAGE_NUMBER, new Actions.GotoPageNumberAction(this));
 
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_SYSTEM));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_SENSOR, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_SENSOR));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_PORTRAIT));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_LANDSCAPE));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
-		addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new Actions.SetScreenOrientationAction(this, myActivity.getSettings(), ZLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_SYSTEM));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_SENSOR, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_SENSOR));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_PORTRAIT, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_PORTRAIT));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_LANDSCAPE, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_LANDSCAPE));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_PORTRAIT, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_REVERSE_PORTRAIT));
+		addAction(ActionCode.SET_SCREEN_ORIENTATION_REVERSE_LANDSCAPE, new Actions.SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_REVERSE_LANDSCAPE));
 	}
 
 	private boolean myNeedToOpen;
