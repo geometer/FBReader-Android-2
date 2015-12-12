@@ -82,4 +82,8 @@ interface LibraryInterface {
 
 	int getDefaultHighlightingStyleId();
 	void setDefaultHighlightingStyleId(in int styleId);
+
+	List<String> deletedBookLabelUids(in int limit, in int page);
+	void purgeBookLabels(in List<String> uids);
+	void deleteBookLabelByUuid(in String uuid);
 }

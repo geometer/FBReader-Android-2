@@ -339,7 +339,11 @@ public abstract class AbstractBook extends TitledEntity<AbstractBook> {
 	}
 
 	public void removeLabel(String label) {
-		if (myLabels != null && myLabels.remove(new Label(label))) {
+		removeLabel(new Label(label));
+	}
+
+	public void removeLabel(Label label) {
+		if (myLabels != null && myLabels.remove(label)) {
 			mySaveState = SaveState.NotSaved;
 		}
 	}
