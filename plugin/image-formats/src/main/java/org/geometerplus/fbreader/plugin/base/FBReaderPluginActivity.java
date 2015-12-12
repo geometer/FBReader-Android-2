@@ -1,6 +1,6 @@
 package org.geometerplus.fbreader.plugin.base;
 
-import java.util.*;
+import java.util.HashMap;
 
 import android.app.*;
 import android.content.*;
