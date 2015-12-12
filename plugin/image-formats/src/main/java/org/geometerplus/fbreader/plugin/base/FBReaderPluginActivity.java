@@ -267,7 +267,7 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 		finish();
 	}
 	*/
-	
+
 	public static final int REQUEST_TOC = 901;
 	public static final String PAGE_NO = "pageNo";
 

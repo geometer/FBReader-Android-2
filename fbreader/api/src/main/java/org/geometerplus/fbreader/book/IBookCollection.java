@@ -66,6 +66,9 @@ public interface IBookCollection<B extends AbstractBook> extends AbstractSeriali
 	B getBookByHash(String hash);
 
 	List<String> labels();
+	void deleteBookLabelByUuid(String uuid);
+	List<String> deletedBookLabelUids(int limit, int page);
+	void purgeBookLabels(List<String> uids);
 	List<Author> authors();
 	boolean hasSeries();
 	List<String> series();

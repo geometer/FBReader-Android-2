@@ -19,8 +19,9 @@
 
 package org.geometerplus.android.fbreader.libraryService;
 
-import java.util.*;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.util.*;
 
 import android.content.Context;
 import android.database.sqlite.*;
@@ -75,7 +76,7 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 
 	private void migrate() {
 		final int version = myDatabase.getVersion();
-		final int currentVersion = 40;
+		final int currentVersion = 41;
 		if (version >= currentVersion) {
 			return;
 		}
@@ -163,6 +164,8 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 				updateTables38();
 			case 39:
 				updateTables39();
+			case 40:
+				updateTables40();
 		}
 		myDatabase.setTransactionSuccessful();
 		myDatabase.setVersion(currentVersion);
@@ -852,7 +855,10 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 
 	@Override
 	protected void addLabel(long bookId, Label label) {
-		myDatabase.execSQL("INSERT OR IGNORE INTO Labels (name) VALUES (?)", new Object[] { label.Name });
+		myDatabase.execSQL(
+			"INSERT OR IGNORE INTO Labels (name,uid) VALUES (?,?)",
+			new Object[] { label.Name, uuidByString(label.Name) }
+		);
 		final SQLiteStatement statement = get(
 			"INSERT OR IGNORE INTO BookLabel(label_id,book_id,uid,timestamp)" +
 			" SELECT label_id,?,?,? FROM Labels WHERE name=?"
@@ -863,6 +869,17 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 			statement.bindLong(3, System.currentTimeMillis());
 			statement.bindString(4, label.Name);
 			statement.execute();
+		}
+	}
+
+	@Override
+	protected long bookIdByLabelUuid(String uuid) {
+		final SQLiteStatement statement = get(
+			"SELECT book_id FROM BookLabel WHERE uid=?"
+		);
+		synchronized (statement) {
+			statement.bindString(1, uuid);
+			return statement.simpleQueryForLong();
 		}
 	}
 
@@ -880,6 +897,30 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 			);
 			synchronized (statement) {
 				statement.bindString(1, label.Uid);
+				statement.execute();
+			}
+		}
+	}
+
+	@Override
+	protected List<String> deletedBookLabelUids(int limit, int page) {
+		final List<String> uids = new ArrayList<String>(limit);
+		final Cursor cursor = myDatabase.rawQuery(
+			"SELECT uid FROM DeletedBookLabelIds LIMIT " + limit * page + "," + limit, null
+		);
+		while (cursor.moveToNext()) {
+			uids.add(cursor.getString(0));
+		}
+		cursor.close();
+		return uids;
+	}
+
+	@Override
+	protected void purgeBookLabels(List<String> uids) {
+		final SQLiteStatement statement = get("DELETE FROM DeletedBookLabelIds WHERE uid=?");
+		synchronized (statement) {
+			for (String u : uids) {
+				statement.bindString(1, u);
 				statement.execute();
 			}
 		}
@@ -1865,6 +1906,28 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 		myDatabase.execSQL("CREATE TABLE IF NOT EXISTS DeletedBookLabelIds(uid TEXT(36) PRIMARY KEY)");
 	}
 
+	private void updateTables40() {
+		myDatabase.execSQL("ALTER TABLE Labels RENAME TO Labels_Obsolete");
+		myDatabase.execSQL(
+			"CREATE TABLE IF NOT EXISTS Labels(" +
+				"label_id INTEGER PRIMARY KEY," +
+				"uid TEXT(36) NOT NULL UNIQUE," +
+				"name TEXT NOT NULL UNIQUE)"
+		);
+		final Cursor cursor = myDatabase.rawQuery("SELECT label_id,name FROM Labels_Obsolete", null);
+		final SQLiteStatement statement = get("INSERT INTO Labels (label_id,uid,name) VALUES (?,?,?)");
+		while (cursor.moveToNext()) {
+			final String name = cursor.getString(1);
+			final String uuid = uuidByString(name);
+			statement.bindLong(1, cursor.getLong(0));
+			statement.bindString(2, uuid);
+			statement.bindString(3, name);
+			statement.execute();
+		}
+		cursor.close();
+		myDatabase.execSQL("DROP TABLE IF EXISTS Labels_Obsolete");
+	}
+
 	private SQLiteStatement get(String sql) {
 		SQLiteStatement statement = myStatements.get(sql);
 		if (statement == null) {
@@ -1872,5 +1935,13 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 			myStatements.put(sql, statement);
 		}
 		return statement;
+	}
+
+	private String uuidByString(String str) {
+		try {
+			return UUID.nameUUIDFromBytes(str.getBytes("utf-8")).toString();
+		} catch (UnsupportedEncodingException e) {
+			return UUID.nameUUIDFromBytes(str.getBytes()).toString();
+		}
 	}
 }
