@@ -1,7 +1,8 @@
 package org.geometerplus.fbreader.plugin.base;
 
 import android.annotation.TargetApi;
-import android.app.*;
+import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.*;
 import android.content.pm.*;
 import android.os.Build;
