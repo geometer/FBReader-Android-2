@@ -1,19 +1,5 @@
 package org.geometerplus.fbreader.plugin.base;
 
-import org.fbreader.reader.android.GotoPageDialogUtil;
-import org.fbreader.util.Boolean3;
-import org.geometerplus.android.fbreader.api.FBReaderIntents;
-import org.geometerplus.android.fbreader.dict.DictionaryUtil;
-import org.geometerplus.fbreader.book.Book;
-import org.geometerplus.fbreader.book.Bookmark;
-import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
-import org.geometerplus.fbreader.plugin.base.optiondialogs.*;
-import org.geometerplus.fbreader.plugin.base.reader.PluginView;
-import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
-import org.geometerplus.fbreader.util.FixedTextSnippet;
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
-
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.app.ProgressDialog;
@@ -22,6 +8,23 @@ import android.content.pm.*;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import org.fbreader.reader.android.GotoPageDialogUtil;
+import org.fbreader.util.Boolean3;
+
+import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
+
+import org.geometerplus.fbreader.book.Book;
+import org.geometerplus.fbreader.book.Bookmark;
+import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
+import org.geometerplus.fbreader.plugin.base.optiondialogs.*;
+import org.geometerplus.fbreader.plugin.base.reader.PluginView;
+import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
+import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
+import org.geometerplus.fbreader.util.FixedTextSnippet;
+
+import org.geometerplus.android.fbreader.api.FBReaderIntents;
+import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 
 public class Actions {
 	static class StartSearchAction extends ViewHolder.Action<ViewHolder> {
