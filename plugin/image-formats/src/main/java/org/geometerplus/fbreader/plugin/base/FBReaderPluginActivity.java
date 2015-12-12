@@ -2,19 +2,6 @@ package org.geometerplus.fbreader.plugin.base;
 
 import java.util.HashMap;
 
-import org.fbreader.common.android.FBReaderUtil;
-import org.fbreader.plugin.format.base.R;
-import org.fbreader.reader.AbstractReader;
-import org.fbreader.reader.android.MainActivity;
-import org.geometerplus.android.fbreader.SimplePopupWindow;
-import org.geometerplus.android.fbreader.api.FBReaderIntents;
-import org.geometerplus.android.fbreader.dict.DictionaryUtil;
-import org.geometerplus.fbreader.book.Book;
-import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
-import org.geometerplus.fbreader.plugin.base.reader.PluginView;
-import org.geometerplus.zlibrary.core.options.Config;
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
-
 import android.app.ProgressDialog;
 import android.content.*;
 import android.content.res.Configuration;
@@ -22,6 +9,22 @@ import android.os.*;
 import android.view.*;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.plugin.format.base.R;
+import org.fbreader.reader.AbstractReader;
+import org.fbreader.reader.android.MainActivity;
+
+import org.geometerplus.zlibrary.core.options.Config;
+import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
+
+import org.geometerplus.fbreader.book.Book;
+import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
+import org.geometerplus.fbreader.plugin.base.reader.PluginView;
+
+import org.geometerplus.android.fbreader.SimplePopupWindow;
+import org.geometerplus.android.fbreader.api.FBReaderIntents;
+import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 
 public abstract class FBReaderPluginActivity extends MainActivity {
 
