@@ -22,14 +22,11 @@ package org.geometerplus.fbreader.plugin.base.tree;
 import org.fbreader.reader.TOCTreeBase;
 
 public class TOCTree extends TOCTreeBase<TOCTree> {
-	public final Integer Reference;
-
 	public TOCTree() {
 		this(null, null, null);
 	}
 
 	public TOCTree(TOCTree parent, String text, Integer reference) {
-		super(parent, text);
-		Reference = reference;
+		super(parent, text, reference);
 	}
 }
