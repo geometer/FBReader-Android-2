@@ -138,9 +138,9 @@ final class NavigationPopup implements ThumbnailView.PageChangeListener {
 		builder.append("/");
 		builder.append(pagesNumber);
 		final TOCTree tocElement = myPDFReader.getCurrentTOCElement(page - 1);
-		if (tocElement != null && tocElement.getText() != null) {
+		if (tocElement != null && tocElement.Text != null) {
 			builder.append("  ");
-			builder.append(tocElement.getText());
+			builder.append(tocElement.Text);
 		}
 		return builder.toString();
 	}

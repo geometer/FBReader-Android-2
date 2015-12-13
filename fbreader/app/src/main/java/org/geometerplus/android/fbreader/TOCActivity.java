@@ -84,7 +84,7 @@ public class TOCActivity extends FBActivity {
 			final ContextMenuDialog dialog = new ContextMenuDialog() {
 				@Override
 				protected String getTitle() {
-					return tree.getText();
+					return tree.Text;
 				}
 
 				@Override
@@ -114,11 +114,10 @@ public class TOCActivity extends FBActivity {
 			final TOCTree tree = (TOCTree)getItem(position);
 			view.setBackgroundColor(tree == mySelectedItem ? 0xff808080 : 0);
 			setIcon(ViewUtil.findImageView(view, R.id.toc_tree_item_icon), tree);
-			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.getText());
-			final TOCTree.Reference reference = tree.getReference();
-			if (reference != null) {
+			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.Text);
+			if (tree.Reference != null) {
 				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
-				final int page = fbreader.BookTextView.pageNoFromParagraph(reference.ParagraphIndex);
+				final int page = fbreader.BookTextView.pageNoFromParagraph(tree.Reference);
 				ViewUtil.setSubviewText(view, R.id.toc_tree_item_pageno, String.valueOf(page));
 			} else {
 				ViewUtil.setSubviewText(view, R.id.toc_tree_item_pageno, "");
@@ -127,12 +126,11 @@ public class TOCActivity extends FBActivity {
 		}
 
 		void openBookText(TOCTree tree) {
-			final TOCTree.Reference reference = tree.getReference();
-			if (reference != null) {
+			if (tree.Reference != null) {
 				finish();
 				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
 				fbreader.addInvisibleBookmark();
-				fbreader.BookTextView.gotoPosition(reference.ParagraphIndex, 0, 0);
+				fbreader.BookTextView.gotoPosition(tree.Reference, 0, 0);
 				fbreader.showBookTextView();
 				fbreader.storePosition();
 			}

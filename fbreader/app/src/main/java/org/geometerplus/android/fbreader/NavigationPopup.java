@@ -142,9 +142,9 @@ final class NavigationPopup {
 		builder.append("/");
 		builder.append(pagesNumber);
 		final TOCTree tocElement = myFBReader.getCurrentTOCElement();
-		if (tocElement != null) {
+		if (tocElement != null && tocElement.Text != null) {
 			builder.append("  ");
-			builder.append(tocElement.getText());
+			builder.append(tocElement.Text);
 		}
 		return builder.toString();
 	}

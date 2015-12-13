@@ -122,8 +122,7 @@ public class PDFDocument extends DocumentHolder {
 	}
 
 	private void createTOCTree(final Document.Outline n, TOCTree parent, boolean firstChild) {
-		final TOCTree t = new TOCTree(parent);
-		t.setText(n.GetTitle());
+		final TOCTree t = new TOCTree(parent, n.GetTitle());
 		t.setReference(n.GetDest());
 
 		Document.Outline nextnum = n.GetNext();

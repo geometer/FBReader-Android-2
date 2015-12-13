@@ -359,7 +359,7 @@ public abstract class DocumentHolder {
 		}
 		mySizes.clear();
 		myPageCount = -1;
-		myTOCTree = new TOCTree(null);
+		myTOCTree = new TOCTree();
 		initTOC(myTOCTree);
 		myDocInitialized = true;
 		return true;

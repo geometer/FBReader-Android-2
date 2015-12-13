@@ -24,7 +24,6 @@ import java.util.*;
 public abstract class ZLTree<T extends ZLTree<T>> implements Iterable<T> {
 	private int mySize = 1;
 	public final T Parent;
-	public final int Level;
 	private volatile List<T> mySubtrees;
 
 	protected ZLTree() {
@@ -44,10 +43,7 @@ public abstract class ZLTree<T extends ZLTree<T>> implements Iterable<T> {
 		}
 		Parent = parent;
 		if (parent != null) {
-			Level = parent.Level + 1;
 			parent.addSubtree((T)this, position);
-		} else {
-			Level = 0;
 		}
 	}
 
@@ -66,29 +62,6 @@ public abstract class ZLTree<T extends ZLTree<T>> implements Iterable<T> {
 		synchronized (mySubtrees) {
 			return new ArrayList<T>(mySubtrees);
 		}
-	}
-
-	public synchronized final T getTreeByParagraphNumber(int index) {
-		if (index < 0 || index >= mySize) {
-			// TODO: throw an exception?
-			return null;
-		}
-		if (index == 0) {
-			return (T)this;
-		}
-		--index;
-		if (mySubtrees != null) {
-			synchronized (mySubtrees) {
-				for (T subtree : mySubtrees) {
-					if (((ZLTree<?>)subtree).mySize <= index) {
-						index -= ((ZLTree<?>)subtree).mySize;
-					} else {
-						return (T)subtree.getTreeByParagraphNumber(index);
-					}
-				}
-			}
-		}
-		throw new RuntimeException("That's impossible!!!");
 	}
 
 	synchronized final void addSubtree(T subtree, int position) {
@@ -144,25 +117,12 @@ public abstract class ZLTree<T extends ZLTree<T>> implements Iterable<T> {
 	}
 
 	public final TreeIterator iterator() {
-		return new TreeIterator(Integer.MAX_VALUE);
-	}
-
-	public final Iterable<T> allSubtrees(final int maxLevel) {
-		return new Iterable<T>() {
-			public TreeIterator iterator() {
-				return new TreeIterator(maxLevel);
-			}
-		};
+		return new TreeIterator();
 	}
 
 	private class TreeIterator implements Iterator<T> {
 		private T myCurrentElement = (T)ZLTree.this;
 		private final LinkedList<Integer> myIndexStack = new LinkedList<Integer>();
-		private final int myMaxLevel;
-
-		TreeIterator(int maxLevel) {
-			myMaxLevel = maxLevel;
-		}
 
 		public boolean hasNext() {
 			return myCurrentElement != null;
@@ -170,7 +130,7 @@ public abstract class ZLTree<T extends ZLTree<T>> implements Iterable<T> {
 
 		public T next() {
 			final T element = myCurrentElement;
-			if (element.hasChildren() && element.Level < myMaxLevel) {
+			if (element.hasChildren()) {
 				myCurrentElement = (T)((ZLTree<?>)element).mySubtrees.get(0);
 				myIndexStack.add(0);
 			} else {

@@ -25,27 +25,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class TOCTree extends TOCTreeBase<TOCTree> {
-	private String myText;
 	private Reference myReference;
 
-	protected TOCTree() {
-		super();
+	public TOCTree() {
+		this(null, null);
 	}
 
-	public TOCTree(TOCTree parent) {
-		super(parent);
-	}
-
-	public final String getText() {
-		return myText;
-	}
-
-	public final void setText(String text) {
-		if (text != null) {
-			myText = text.trim().replaceAll("[\t ]+", " ");
-		} else {
-			myText = null;
-		}
+	public TOCTree(TOCTree parent, String text) {
+		super(parent, text);
 	}
 
 	public Reference getReference() {
@@ -80,9 +67,9 @@ public class TOCTree extends TOCTreeBase<TOCTree> {
 	private static void writeToBundle(Bundle b, TOCTree t, TOCTree next) {
 		String key = TREE_KEY + t.hashCode() + "/";
 		Log.e("BUNDLE", "writing: " + key);
-		Log.e("BUNDLE", "title: " + ((t.myText != null) ? t.myText : "null"));
+		Log.e("BUNDLE", "title: " + ((t.Text != null) ? t.Text : "null"));
 		b.putInt(key + POSITION_KEY, t.myReference != null ? t.myReference.PageNum : -1);
-		b.putString(key + TEXT_KEY, t.myText != null ? t.myText : "null");
+		b.putString(key + TEXT_KEY, t.Text != null ? t.Text : "null");
 		if (next != null) {
 			b.putInt(key + NEXT_KEY, next.hashCode());
 			Log.e("BUNDLE", "nextkey: " + key + NEXT_KEY);
@@ -97,7 +84,7 @@ public class TOCTree extends TOCTreeBase<TOCTree> {
 	}
 	
 	public static TOCTree readFromBundle(Bundle b) {
-		TOCTree root = new TOCTree(null);
+		TOCTree root = new TOCTree();
 		int hashcode = b.getInt(TREE_KEY + "root");
 		readFromBundle(b, hashcode, root);
 		return root.subtrees().get(0);
@@ -106,9 +93,8 @@ public class TOCTree extends TOCTreeBase<TOCTree> {
 	private static void readFromBundle(Bundle b, int hashcode, TOCTree parent) {
 		String key = TREE_KEY + hashcode + "/";
 		Log.e("BUNDLE", "reading: " + key);
-		final TOCTree t = new TOCTree(parent);
-		t.setText(b.getString(key + TEXT_KEY));
-		Log.e("BUNDLE", "title: " + ((t.myText != null) ? t.myText : "null"));
+		final TOCTree t = new TOCTree(parent, b.getString(key + TEXT_KEY));
+		Log.e("BUNDLE", "title: " + (t.Text != null ? t.Text : "null"));
 		t.setReference(b.getInt(key + POSITION_KEY));
 		String nkey = key + NEXT_KEY;
 		boolean hasNext = b.containsKey(nkey);

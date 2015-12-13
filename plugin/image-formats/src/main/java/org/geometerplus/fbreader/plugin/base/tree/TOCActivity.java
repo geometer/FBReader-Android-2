@@ -103,7 +103,7 @@ public class TOCActivity extends FBActivity {
 			final ContextMenuDialog dialog = new ContextMenuDialog() {
 				@Override
 				protected String getTitle() {
-					return tree.getText();
+					return tree.Text;
 				}
 
 				@Override
@@ -140,7 +140,7 @@ public class TOCActivity extends FBActivity {
 			final TOCTree tree = (TOCTree)getItem(position);
 			view.setBackgroundColor(tree == mySelectedItem ? 0xff808080 : 0);
 			setIcon(ViewUtil.findImageView(view, R.id.toc_tree_item_icon), tree);
-			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.getText());
+			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.Text);
 			final TOCTree.Reference reference = tree.getReference();
 			final int pageNo = reference != null ? reference.PageNum : -1;
 			ViewUtil.setSubviewText(
