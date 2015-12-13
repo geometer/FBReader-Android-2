@@ -19,11 +19,11 @@
 
 package org.geometerplus.fbreader.bookmodel;
 
-import org.geometerplus.zlibrary.core.tree.ZLTree;
+import org.fbreader.reader.TOCTreeBase;
 
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 
-public class TOCTree extends ZLTree<TOCTree> {
+public class TOCTree extends TOCTreeBase<TOCTree> {
 	private String myText;
 	private Reference myReference;
 

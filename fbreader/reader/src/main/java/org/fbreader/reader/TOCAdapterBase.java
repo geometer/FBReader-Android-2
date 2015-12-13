@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.fbreader.reader;
 
 import java.util.HashSet;
 
@@ -29,20 +29,16 @@ import android.widget.*;
 
 import org.fbreader.util.android.DrawableUtil;
 
-import org.geometerplus.zlibrary.core.tree.ZLTree;
-
-import org.fbreader.common.R;
-
-public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public abstract class TOCAdapterBase extends BaseAdapter implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 	private final ListView myParent;
-	private final ZLTree<?> Root;
-	private ZLTree<?>[] myItems;
-	private final HashSet<ZLTree<?>> myOpenItems = new HashSet<ZLTree<?>>();
+	private final TOCTreeBase<?> Root;
+	private TOCTreeBase<?>[] myItems;
+	private final HashSet<TOCTreeBase<?>> myOpenItems = new HashSet<TOCTreeBase<?>>();
 
-	protected ZLTreeAdapter(ListView parent, ZLTree<?> root) {
+	protected TOCAdapterBase(ListView parent, TOCTreeBase<?> root) {
 		myParent = parent;
 		Root = root;
-		myItems = new ZLTree[root.getSize() - 1];
+		myItems = new TOCTreeBase[root.getSize() - 1];
 		myOpenItems.add(root);
 
 		parent.setAdapter(this);
@@ -50,7 +46,7 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 		parent.setOnItemLongClickListener(this);
 	}
 
-	protected final void openTree(ZLTree<?> tree) {
+	protected final void openTree(TOCTreeBase<?> tree) {
 		if (tree == null) {
 			return;
 		}
@@ -60,7 +56,7 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 		}
 	}
 
-	public final void expandOrCollapseTree(ZLTree<?> tree) {
+	public final void expandOrCollapseTree(TOCTreeBase<?> tree) {
 		if (!tree.hasChildren()) {
 			return;
 		}
@@ -74,22 +70,22 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 		notifyDataSetChanged();
 	}
 
-	public final boolean isOpen(ZLTree<?> tree) {
+	public final boolean isOpen(TOCTreeBase<?> tree) {
 		return myOpenItems.contains(tree);
 	}
 
-	public final void selectItem(ZLTree<?> tree) {
+	public final void selectItem(TOCTreeBase<?> tree) {
 		if (tree == null) {
 			return;
 		}
 		openTree(tree.Parent);
 		int index = 0;
 		while (true) {
-			ZLTree<?> parent = tree.Parent;
+			TOCTreeBase<?> parent = tree.Parent;
 			if (parent == null) {
 				break;
 			}
-			for (ZLTree<?> sibling : parent.subtrees()) {
+			for (TOCTreeBase<?> sibling : parent.subtrees()) {
 				if (sibling == tree) {
 					break;
 				}
@@ -104,10 +100,10 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 		myParent.invalidateViews();
 	}
 
-	private int getCount(ZLTree<?> tree) {
+	private int getCount(TOCTreeBase<?> tree) {
 		int count = 1;
 		if (isOpen(tree)) {
-			for (ZLTree<?> subtree : tree.subtrees()) {
+			for (TOCTreeBase<?> subtree : tree.subtrees()) {
 				count += getCount(subtree);
 			}
 		}
@@ -118,13 +114,13 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 		return getCount(Root) - 1;
 	}
 
-	private final int indexByPosition(int position, ZLTree<?> tree) {
+	private final int indexByPosition(int position, TOCTreeBase<?> tree) {
 		if (position == 0) {
 			return 0;
 		}
 		--position;
 		int index = 1;
-		for (ZLTree<?> subtree : tree.subtrees()) {
+		for (TOCTreeBase<?> subtree : tree.subtrees()) {
 			int count = getCount(subtree);
 			if (count <= position) {
 				position -= count;
@@ -136,9 +132,9 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 		throw new RuntimeException("That's impossible!!!");
 	}
 
-	public final ZLTree<?> getItem(int position) {
+	public final TOCTreeBase<?> getItem(int position) {
 		final int index = indexByPosition(position + 1, Root) - 1;
-		ZLTree<?> item = myItems[index];
+		TOCTreeBase<?> item = myItems[index];
 		if (item == null) {
 			item = Root.getTreeByParagraphNumber(index + 1);
 			myItems[index] = item;
@@ -158,7 +154,7 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 		return indexByPosition(position + 1, Root);
 	}
 
-	protected boolean runTreeItem(ZLTree<?> tree) {
+	protected boolean runTreeItem(TOCTreeBase<?> tree) {
 		if (!tree.hasChildren()) {
 			return false;
 		}
@@ -170,7 +166,7 @@ public abstract class ZLTreeAdapter extends BaseAdapter implements AdapterView.O
 		runTreeItem(getItem(position));
 	}
 
-	protected final void setIcon(ImageView imageView, ZLTree<?> tree) {
+	protected final void setIcon(ImageView imageView, TOCTreeBase<?> tree) {
 		final Context context = myParent.getContext();
 		if (tree.hasChildren()) {
 			imageView.setImageDrawable(DrawableUtil.tintedDrawable(

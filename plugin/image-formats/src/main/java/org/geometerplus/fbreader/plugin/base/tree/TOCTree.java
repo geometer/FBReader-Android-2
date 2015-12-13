@@ -19,9 +19,9 @@
 
 package org.geometerplus.fbreader.plugin.base.tree;
 
-import org.geometerplus.zlibrary.core.tree.ZLTree;
+import org.fbreader.reader.TOCTreeBase;
 
-public class TOCTree extends ZLTree<TOCTree> {
+public class TOCTree extends TOCTreeBase<TOCTree> {
 	private String myText;
 	private Reference myReference;
 
