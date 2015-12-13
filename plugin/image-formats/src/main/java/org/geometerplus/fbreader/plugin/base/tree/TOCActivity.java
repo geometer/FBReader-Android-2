@@ -48,14 +48,12 @@ public class TOCActivity extends FBActivity {
 		if (root == null || !root.hasChildren()) {
 			return root;
 		} else {
-			int num = pageNo;
 			TOCTree treeToSelect = null;
 			for (TOCTree tree : root) {
-				final TOCTree.Reference reference = tree.getReference();
-				if (reference == null) {
+				if (tree.Reference == null || tree.Reference == -1) {
 					continue;
 				}
-				if (reference.PageNum > num) {
+				if (tree.Reference > pageNo) {
 					break;
 				}
 				treeToSelect = tree;
@@ -125,8 +123,7 @@ public class TOCActivity extends FBActivity {
 				resource,
 				isOpen(tree) ? "collapseTree" : "expandTree"
 			);
-			final TOCTree.Reference reference = tree.getReference();
-			if (reference != null && reference.PageNum != -1) {
+			if (tree.Reference != null && tree.Reference != -1) {
 				dialog.addItem(READ_BOOK_ITEM_ID, resource, "readText");
 			}
 			dialog.show(TOCActivity.this);
@@ -141,8 +138,7 @@ public class TOCActivity extends FBActivity {
 			view.setBackgroundColor(tree == mySelectedItem ? 0xff808080 : 0);
 			setIcon(ViewUtil.findImageView(view, R.id.toc_tree_item_icon), tree);
 			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.Text);
-			final TOCTree.Reference reference = tree.getReference();
-			final int pageNo = reference != null ? reference.PageNum : -1;
+			final int pageNo = tree.Reference != null ? tree.Reference : -1;
 			ViewUtil.setSubviewText(
 				view,
 				R.id.toc_tree_item_pageno,
@@ -152,10 +148,9 @@ public class TOCActivity extends FBActivity {
 		}
 
 		void openBookText(TOCTree tree) {
-			final TOCTree.Reference reference = tree.getReference();
-			if (reference != null && reference.PageNum != -1) {
+			if (tree.Reference != null && tree.Reference != -1) {
 				Intent i = new Intent();
-				i.putExtra(FBReaderPluginActivity.PAGE_NO, reference.PageNum);
+				i.putExtra(FBReaderPluginActivity.PAGE_NO, tree.Reference);
 				setResult(RESULT_OK, i);
 				finish();
 			}

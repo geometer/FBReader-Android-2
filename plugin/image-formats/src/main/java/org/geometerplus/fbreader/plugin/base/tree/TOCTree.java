@@ -25,30 +25,15 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class TOCTree extends TOCTreeBase<TOCTree> {
-	private Reference myReference;
+	public final Integer Reference;
 
 	public TOCTree() {
-		this(null, null);
+		this(null, null, null);
 	}
 
-	public TOCTree(TOCTree parent, String text) {
+	public TOCTree(TOCTree parent, String text, Integer reference) {
 		super(parent, text);
-	}
-
-	public Reference getReference() {
-		return myReference;
-	}
-
-	public void setReference(int reference) {
-		myReference = new Reference(reference);
-	}
-
-	public static class Reference {
-		public final int PageNum;
-
-		public Reference(final int pageNum) {
-			PageNum = pageNum;
-		}
+		Reference = reference;
 	}
 	
 	public static final String TREE_KEY = "TrEe";

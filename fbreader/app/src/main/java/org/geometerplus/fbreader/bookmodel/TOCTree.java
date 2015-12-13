@@ -22,7 +22,7 @@ package org.geometerplus.fbreader.bookmodel;
 import org.fbreader.reader.TOCTreeBase;
 
 public class TOCTree extends TOCTreeBase<TOCTree> {
-	public Integer Reference;
+	public final Integer Reference;
 
 	protected TOCTree() {
 		this(null, null, null);
