@@ -179,7 +179,13 @@ class XMLSerializer extends AbstractSerializer {
 			"xmlns:calibre", XMLNamespaces.CalibreMetadata
 		);
 
-		appendTagWithContent(buffer, "id", book.getId());
+		appendTag(
+			buffer, "id", false,
+			"state", String.valueOf(book.mySaveState)
+		);
+		buffer.append(String.valueOf(book.getId()));
+		closeTag(buffer, "id");
+
 		appendTagWithContent(buffer, "title", book.getTitle());
 		appendTagWithContent(buffer, "dc:language", book.getLanguage());
 		appendTagWithContent(buffer, "dc:encoding", book.getEncodingNoDetection());
@@ -625,6 +631,7 @@ class XMLSerializer extends AbstractSerializer {
 				case READ_ENTRY:
 					if ("id".equals(localName)) {
 						myState = State.READ_ID;
+						mySaveState = AbstractBook.SaveState.valueOf(attributes.getValue("state"));
 					} else if ("title".equals(localName)) {
 						myState = State.READ_TITLE;
 					} else if ("identifier".equals(localName) && XMLNamespaces.DublinCore.equals(uri)) {
@@ -670,7 +677,7 @@ class XMLSerializer extends AbstractSerializer {
 							parseLong(attributes.getValue("denominator"))
 						);
 					} else {
-						throw new SAXException("Unexpected tag " + localName);
+						//throw new SAXException("Unexpected tag " + localName);
 					}
 					break;
 				case READ_AUTHOR:
@@ -679,7 +686,7 @@ class XMLSerializer extends AbstractSerializer {
 					} else if ("name".equals(localName)) {
 						myState = State.READ_AUTHOR_NAME;
 					} else {
-						throw new SAXException("Unexpected tag " + localName);
+						//throw new SAXException("Unexpected tag " + localName);
 					}
 					break;
 			}
@@ -848,7 +855,7 @@ class XMLSerializer extends AbstractSerializer {
 					myFilterStack.add(null);
 					myStateStack.add(State.READ_FILTER_OR);
 				} else {
-					throw new SAXException("Unexpected tag " + localName);
+					//throw new SAXException("Unexpected tag " + localName);
 				}
 			}
 		}
@@ -1061,12 +1068,13 @@ class XMLSerializer extends AbstractSerializer {
 					} else if ("style".equals(localName)) {
 						myStyle = parseInt(attributes.getValue("id"));
 					} else {
-						throw new SAXException("Unexpected tag " + localName);
+						//throw new SAXException("Unexpected tag " + localName);
 					}
 					break;
 				case READ_TEXT:
 				case READ_ORIGINAL_TEXT:
-					throw new SAXException("Unexpected tag " + localName);
+					//throw new SAXException("Unexpected tag " + localName);
+					break;
 			}
 		}
 
