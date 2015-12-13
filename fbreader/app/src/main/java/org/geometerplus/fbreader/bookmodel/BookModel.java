@@ -21,6 +21,8 @@ package org.geometerplus.fbreader.bookmodel;
 
 import java.util.*;
 
+import org.fbreader.reader.TOCTree;
+
 import org.geometerplus.zlibrary.core.fonts.*;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.text.model.*;
@@ -143,9 +145,7 @@ public final class BookModel {
 	private TOCTree myCurrentTree = TOCTree;
 
 	public void addTOCItem(String text, int reference) {
-		myCurrentTree = new TOCTree(myCurrentTree);
-		myCurrentTree.setText(text);
-		myCurrentTree.setReference(myBookTextModel, reference);
+		myCurrentTree = new TOCTree(myCurrentTree, text, reference);
 	}
 
 	public void leaveTOCItem() {

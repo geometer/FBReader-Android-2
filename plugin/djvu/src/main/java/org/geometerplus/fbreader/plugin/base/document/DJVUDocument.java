@@ -6,9 +6,10 @@ import android.content.ContextWrapper;
 import android.graphics.*;
 import android.util.Log;
 
+import org.fbreader.reader.TOCTree;
+
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
 import org.geometerplus.fbreader.book.AbstractBook;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 public class DJVUDocument extends DocumentHolder {
 	private static native void initNative();
@@ -141,9 +142,7 @@ public class DJVUDocument extends DocumentHolder {
 
 	private void createTOCTree(long n, TOCTree parent, boolean fistChild) {
 		synchronized (ourNativeLock) {
-			final TOCTree t = new TOCTree(parent);
-			t.setText(getOutlineTextNative(n));
-			t.setReference(getOutlinePageNative(n));
+			final TOCTree t = new TOCTree(parent, getOutlineTextNative(n), getOutlinePageNative(n));
 			long nextnum = getOutlineNextNative(n);
 			while (fistChild && nextnum != 0) {
 				createTOCTree(nextnum, parent, false);

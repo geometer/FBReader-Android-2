@@ -35,10 +35,10 @@ import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 
 import org.fbreader.common.options.*;
 import org.fbreader.reader.ActionCode;
+import org.fbreader.reader.TOCTree;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.FBHyperlinkType;
-import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.options.*;
 import org.geometerplus.fbreader.util.FixedTextSnippet;
 import org.geometerplus.fbreader.util.TextSnippet;
@@ -636,9 +636,8 @@ public final class FBView extends ZLTextView {
 				updateTOCMarks(model, footerOptions.MaxTOCMarks.getValue());
 				final int fullLength = sizeOfFullText();
 				for (TOCTree tocItem : myTOCMarks) {
-					TOCTree.Reference reference = tocItem.getReference();
-					if (reference != null) {
-						final int refCoord = sizeOfTextBeforeParagraph(reference.ParagraphIndex);
+					if (tocItem.Reference != null) {
+						final int refCoord = sizeOfTextBeforeParagraph(tocItem.Reference);
 						final int xCoord =
 							left + 2 * lineWidth + (int)(1.0 * gaugeWidth * refCoord / fullLength);
 						context.drawLine(xCoord, height - lineWidth, xCoord, lineWidth);
@@ -699,9 +698,8 @@ public final class FBView extends ZLTextView {
 				updateTOCMarks(model, footerOptions.MaxTOCMarks.getValue());
 				final int fullLength = sizeOfFullText();
 				for (TOCTree tocItem : myTOCMarks) {
-					TOCTree.Reference reference = tocItem.getReference();
-					if (reference != null) {
-						final int refCoord = sizeOfTextBeforeParagraph(reference.ParagraphIndex);
+					if (tocItem.Reference != null) {
+						final int refCoord = sizeOfTextBeforeParagraph(tocItem.Reference);
 						labels.add(left + (int)(1.0 * (gaugeRight - left) * refCoord / fullLength + 0.5));
 					}
 				}

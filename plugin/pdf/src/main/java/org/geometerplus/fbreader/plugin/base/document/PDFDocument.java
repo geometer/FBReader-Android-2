@@ -7,8 +7,9 @@ import android.graphics.*;
 
 import com.radaee.pdf.*;
 
+import org.fbreader.reader.TOCTree;
+
 import org.geometerplus.fbreader.book.AbstractBook;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 public class PDFDocument extends DocumentHolder {
 	private final Object myDocumentLock = new Object();
@@ -122,9 +123,7 @@ public class PDFDocument extends DocumentHolder {
 	}
 
 	private void createTOCTree(final Document.Outline n, TOCTree parent, boolean firstChild) {
-		final TOCTree t = new TOCTree(parent);
-		t.setText(n.GetTitle());
-		t.setReference(n.GetDest());
+		final TOCTree t = new TOCTree(parent, n.GetTitle(), n.GetDest());
 
 		Document.Outline nextnum = n.GetNext();
 		while (firstChild && nextnum != null) {

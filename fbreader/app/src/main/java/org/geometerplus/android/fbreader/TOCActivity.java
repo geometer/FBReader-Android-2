@@ -26,7 +26,7 @@ import android.widget.*;
 
 import org.fbreader.common.android.FBActivity;
 import org.fbreader.common.android.FBReaderUtil;
-import org.fbreader.reader.TOCTreeBase;
+import org.fbreader.reader.TOCTree;
 import org.fbreader.reader.TOCAdapterBase;
 import org.fbreader.reader.android.ContextMenuDialog;
 import org.fbreader.util.android.ViewUtil;
@@ -35,7 +35,6 @@ import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
-import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.util.*;
@@ -44,7 +43,7 @@ import org.geometerplus.zlibrary.ui.android.R;
 
 public class TOCActivity extends FBActivity {
 	private TOCAdapter myAdapter;
-	private TOCTreeBase<?> mySelectedItem;
+	private TOCTree mySelectedItem;
 
 	@Override
 	protected int layoutId() {
@@ -76,7 +75,7 @@ public class TOCActivity extends FBActivity {
 
 		@Override
 		public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
-			final TOCTree tree = (TOCTree)getItem(position);
+			final TOCTree tree = getItem(position);
 			if (!tree.hasChildren()) {
 				return false;
 			}
@@ -84,7 +83,7 @@ public class TOCActivity extends FBActivity {
 			final ContextMenuDialog dialog = new ContextMenuDialog() {
 				@Override
 				protected String getTitle() {
-					return tree.getText();
+					return tree.Text;
 				}
 
 				@Override
@@ -111,14 +110,13 @@ public class TOCActivity extends FBActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final View view = (convertView != null) ? convertView :
 				LayoutInflater.from(parent.getContext()).inflate(R.layout.toc_tree_item, parent, false);
-			final TOCTree tree = (TOCTree)getItem(position);
+			final TOCTree tree = getItem(position);
 			view.setBackgroundColor(tree == mySelectedItem ? 0xff808080 : 0);
 			setIcon(ViewUtil.findImageView(view, R.id.toc_tree_item_icon), tree);
-			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.getText());
-			final TOCTree.Reference reference = tree.getReference();
-			if (reference != null) {
+			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.Text);
+			if (tree.Reference != null) {
 				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
-				final int page = fbreader.BookTextView.pageNoFromParagraph(reference.ParagraphIndex);
+				final int page = fbreader.BookTextView.pageNoFromParagraph(tree.Reference);
 				ViewUtil.setSubviewText(view, R.id.toc_tree_item_pageno, String.valueOf(page));
 			} else {
 				ViewUtil.setSubviewText(view, R.id.toc_tree_item_pageno, "");
@@ -127,23 +125,22 @@ public class TOCActivity extends FBActivity {
 		}
 
 		void openBookText(TOCTree tree) {
-			final TOCTree.Reference reference = tree.getReference();
-			if (reference != null) {
+			if (tree.Reference != null) {
 				finish();
 				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
 				fbreader.addInvisibleBookmark();
-				fbreader.BookTextView.gotoPosition(reference.ParagraphIndex, 0, 0);
+				fbreader.BookTextView.gotoPosition(tree.Reference, 0, 0);
 				fbreader.showBookTextView();
 				fbreader.storePosition();
 			}
 		}
 
 		@Override
-		protected boolean runTreeItem(TOCTreeBase<?> tree) {
+		protected boolean runTreeItem(TOCTree tree) {
 			if (super.runTreeItem(tree)) {
 				return true;
 			}
-			openBookText((TOCTree)tree);
+			openBookText(tree);
 			return true;
 		}
 	}

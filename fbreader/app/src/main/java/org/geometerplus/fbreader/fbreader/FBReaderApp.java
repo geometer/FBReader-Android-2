@@ -21,6 +21,7 @@ package org.geometerplus.fbreader.fbreader;
 
 import java.util.*;
 
+import org.fbreader.reader.TOCTree;
 import org.fbreader.util.ComparisonUtil;
 
 import org.geometerplus.zlibrary.core.application.*;
@@ -644,11 +645,10 @@ public final class FBReaderApp extends ZLApplication {
 		}
 		TOCTree treeToSelect = null;
 		for (TOCTree tree : Model.TOCTree) {
-			final TOCTree.Reference reference = tree.getReference();
-			if (reference == null) {
+			if (tree.Reference == null) {
 				continue;
 			}
-			if (reference.ParagraphIndex > index) {
+			if (tree.Reference > index) {
 				break;
 			}
 			treeToSelect = tree;

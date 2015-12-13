@@ -3,10 +3,11 @@ package org.geometerplus.fbreader.plugin.base.document;
 import java.util.Collections;
 import java.util.List;
 
-import org.geometerplus.fbreader.book.AbstractBook;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
-
 import android.graphics.*;
+
+import org.fbreader.reader.TOCTree;
+
+import org.geometerplus.fbreader.book.AbstractBook;
 
 public class DummyDocument extends DocumentHolder {
 	//Just a workaround for NPE in PluginView

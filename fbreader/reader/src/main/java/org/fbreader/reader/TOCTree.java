@@ -21,34 +21,29 @@ package org.fbreader.reader;
 
 import java.util.*;
 
-public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<T> {
+public final class TOCTree implements Iterable<TOCTree> {
 	private int mySize = 1;
-	public final T Parent;
+	public final TOCTree Parent;
 	public final int Level;
-	private volatile List<T> mySubtrees;
+	private volatile List<TOCTree> mySubtrees;
 
-	protected TOCTreeBase() {
-		this(null);
+	public final String Text;
+	public final Integer Reference;
+
+	public TOCTree() {
+		this(null, null, null);
 	}
 
-	protected TOCTreeBase(T parent) {
-		this(parent, -1);
-	}
-
-	protected TOCTreeBase(T parent, int position) {
-		if (position == -1) {
-			position = parent == null ? 0 : parent.subtrees().size();
-		}
-		if (parent != null && (position < 0 || position > parent.subtrees().size())) {
-			throw new IndexOutOfBoundsException("`position` value equals " + position + " but must be in range [0; " + parent.subtrees().size() + "]");
-		}
+	public TOCTree(TOCTree parent, String text, Integer reference) {
 		Parent = parent;
 		if (parent != null) {
 			Level = parent.Level + 1;
-			parent.addSubtree((T)this, position);
+			parent.addSubtree(this);
 		} else {
 			Level = 0;
 		}
+		Text = text != null ? trim(text) : null;
+		Reference = reference;
 	}
 
 	public final int getSize() {
@@ -59,31 +54,31 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 		return mySubtrees != null && !mySubtrees.isEmpty();
 	}
 
-	public List<T> subtrees() {
+	public List<TOCTree> subtrees() {
 		if (mySubtrees == null) {
 			return Collections.emptyList();
 		}
 		synchronized (mySubtrees) {
-			return new ArrayList<T>(mySubtrees);
+			return new ArrayList<TOCTree>(mySubtrees);
 		}
 	}
 
-	public synchronized final T getTreeByParagraphNumber(int index) {
+	public synchronized final TOCTree getTreeByParagraphNumber(int index) {
 		if (index < 0 || index >= mySize) {
 			// TODO: throw an exception?
 			return null;
 		}
 		if (index == 0) {
-			return (T)this;
+			return this;
 		}
 		--index;
 		if (mySubtrees != null) {
 			synchronized (mySubtrees) {
-				for (T subtree : mySubtrees) {
-					if (((TOCTreeBase<?>)subtree).mySize <= index) {
-						index -= ((TOCTreeBase<?>)subtree).mySize;
+				for (TOCTree subtree : mySubtrees) {
+					if (subtree.mySize <= index) {
+						index -= subtree.mySize;
 					} else {
-						return (T)subtree.getTreeByParagraphNumber(index);
+						return subtree.getTreeByParagraphNumber(index);
 					}
 				}
 			}
@@ -91,54 +86,14 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 		throw new RuntimeException("That's impossible!!!");
 	}
 
-	synchronized final void addSubtree(T subtree, int position) {
+	synchronized final void addSubtree(TOCTree subtree) {
 		if (mySubtrees == null) {
-			mySubtrees = Collections.synchronizedList(new ArrayList<T>());
+			mySubtrees = Collections.synchronizedList(new ArrayList<TOCTree>());
 		}
-		final int subtreeSize = subtree.getSize();
 		synchronized (mySubtrees) {
-			final int thisSubtreesSize = mySubtrees.size();
-			while (position < thisSubtreesSize) {
-				subtree = mySubtrees.set(position++, subtree);
-			}
 			mySubtrees.add(subtree);
-			for (TOCTreeBase<?> parent = this; parent != null; parent = parent.Parent) {
-				parent.mySize += subtreeSize;
-			}
-		}
-	}
-
-	synchronized public final void moveSubtree(T subtree, int index) {
-		if (mySubtrees == null || !mySubtrees.contains(subtree)) {
-			return;
-		}
-		if (index < 0 || index >= mySubtrees.size()) {
-			return;
-		}
-		mySubtrees.remove(subtree);
-		mySubtrees.add(index, subtree);
-	}
-
-	public void removeSelf() {
-		final int subtreeSize = getSize();
-		TOCTreeBase<?> parent = Parent;
-		if (parent != null) {
-			parent.mySubtrees.remove(this);
-			for (; parent != null; parent = parent.Parent) {
-				parent.mySize -= subtreeSize;
-			}
-		}
-	}
-
-	public final void clear() {
-		final int subtreesSize = mySize - 1;
-		if (mySubtrees != null) {
-			mySubtrees.clear();
-		}
-		mySize = 1;
-		if (subtreesSize > 0) {
-			for (TOCTreeBase<?> parent = Parent; parent != null; parent = parent.Parent) {
-				parent.mySize -= subtreesSize;
+			for (TOCTree parent = this; parent != null; parent = parent.Parent) {
+				parent.mySize += 1;
 			}
 		}
 	}
@@ -147,16 +102,16 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 		return new TreeIterator(Integer.MAX_VALUE);
 	}
 
-	public final Iterable<T> allSubtrees(final int maxLevel) {
-		return new Iterable<T>() {
+	public final Iterable<TOCTree> allSubtrees(final int maxLevel) {
+		return new Iterable<TOCTree>() {
 			public TreeIterator iterator() {
 				return new TreeIterator(maxLevel);
 			}
 		};
 	}
 
-	private class TreeIterator implements Iterator<T> {
-		private T myCurrentElement = (T)TOCTreeBase.this;
+	private class TreeIterator implements Iterator<TOCTree> {
+		private TOCTree myCurrentElement = TOCTree.this;
 		private final LinkedList<Integer> myIndexStack = new LinkedList<Integer>();
 		private final int myMaxLevel;
 
@@ -168,13 +123,13 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 			return myCurrentElement != null;
 		}
 
-		public T next() {
-			final T element = myCurrentElement;
+		public TOCTree next() {
+			final TOCTree element = myCurrentElement;
 			if (element.hasChildren() && element.Level < myMaxLevel) {
-				myCurrentElement = (T)((TOCTreeBase<?>)element).mySubtrees.get(0);
+				myCurrentElement = element.mySubtrees.get(0);
 				myIndexStack.add(0);
 			} else {
-				TOCTreeBase<T> parent = element;
+				TOCTree parent = element;
 				while (!myIndexStack.isEmpty()) {
 					final int index = myIndexStack.removeLast() + 1;
 					parent = parent.Parent;
@@ -196,5 +151,44 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
+	}
+
+	// faster replacement for
+	// return text.trim().replaceAll("[\t ]+", " ");
+	private static String trim(String text) {
+		final char[] data = text.toCharArray();
+		int count = 0;
+		int shift = 0;
+		boolean changed = false;
+		char space = ' ';
+		for (int i = 0; i < data.length; ++i) {
+			final char ch = data[i];
+			if (ch == ' ' || ch == '\t') {
+				++count;
+				space = ch;
+			} else {
+				if (count > 0) {
+					if (count == i) {
+						shift += count;
+						changed = true;
+					} else {
+						shift += count - 1;
+						if (shift > 0 || space == '\t') {
+							data[i - shift - 1] = ' ';
+							changed = true;
+						}
+					}
+					count = 0;
+				}
+				if (shift > 0) {
+					data[i - shift] = data[i];
+				}
+			}
+		}
+		if (count > 0) {
+			changed = true;
+			shift += count;
+		}
+		return changed ? new String(data, 0, data.length - shift) : text;
 	}
 }

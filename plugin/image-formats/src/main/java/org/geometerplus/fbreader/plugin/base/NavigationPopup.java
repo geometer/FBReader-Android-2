@@ -23,10 +23,10 @@ import android.view.View;
 import android.widget.*;
 
 import org.fbreader.md.widget.Slider;
+import org.fbreader.reader.TOCTree;
 
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 import org.geometerplus.fbreader.plugin.base.reader.ThumbnailView;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 import org.fbreader.plugin.format.base.R;
 
@@ -138,9 +138,9 @@ final class NavigationPopup implements ThumbnailView.PageChangeListener {
 		builder.append("/");
 		builder.append(pagesNumber);
 		final TOCTree tocElement = myPDFReader.getCurrentTOCElement(page - 1);
-		if (tocElement != null && tocElement.getText() != null) {
+		if (tocElement != null && tocElement.Text != null) {
 			builder.append("  ");
-			builder.append(tocElement.getText());
+			builder.append(tocElement.Text);
 		}
 		return builder.toString();
 	}

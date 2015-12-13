@@ -6,6 +6,7 @@ import android.graphics.*;
 import android.support.v4.util.LruCache;
 
 import org.fbreader.common.options.ColorProfile;
+import org.fbreader.reader.TOCTree;
 
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
@@ -14,7 +15,6 @@ import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.plugin.base.SettingsHolder;
 import org.geometerplus.fbreader.plugin.base.document.PageHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 public abstract class DocumentHolder {
 	public static final class CropInfo {
@@ -359,7 +359,7 @@ public abstract class DocumentHolder {
 		}
 		mySizes.clear();
 		myPageCount = -1;
-		myTOCTree = new TOCTree(null);
+		myTOCTree = new TOCTree();
 		initTOC(myTOCTree);
 		myDocInitialized = true;
 		return true;

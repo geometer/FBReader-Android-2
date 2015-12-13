@@ -28,7 +28,7 @@ import android.widget.ListView;
 import org.fbreader.common.android.FBActivity;
 import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.plugin.format.base.R;
-import org.fbreader.reader.TOCTreeBase;
+import org.fbreader.reader.TOCTree;
 import org.fbreader.reader.TOCAdapterBase;
 import org.fbreader.reader.android.ContextMenuDialog;
 import org.fbreader.util.android.ViewUtil;
@@ -40,7 +40,7 @@ import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 
 public class TOCActivity extends FBActivity {
 	private TOCAdapter myAdapter;
-	private TOCTreeBase<?> mySelectedItem;
+	private TOCTree mySelectedItem;
 
 	// see TODO comment in onCreate
 	private PluginView myPluginView;
@@ -76,8 +76,8 @@ public class TOCActivity extends FBActivity {
 		}
 
 		@Override
-		public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
-			final TOCTree tree = (TOCTree)getItem(position);
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+			final TOCTree tree = getItem(position);
 			if (!tree.hasChildren()) {
 				return false;
 			}
@@ -85,7 +85,7 @@ public class TOCActivity extends FBActivity {
 			final ContextMenuDialog dialog = new ContextMenuDialog() {
 				@Override
 				protected String getTitle() {
-					return tree.getText();
+					return tree.Text;
 				}
 
 				@Override
@@ -107,8 +107,7 @@ public class TOCActivity extends FBActivity {
 				resource,
 				isOpen(tree) ? "collapseTree" : "expandTree"
 			);
-			final TOCTree.Reference reference = tree.getReference();
-			if (reference != null && reference.PageNum != -1) {
+			if (tree.Reference != null && tree.Reference != -1) {
 				dialog.addItem(READ_BOOK_ITEM_ID, resource, "readText");
 			}
 			dialog.show(TOCActivity.this);
@@ -119,12 +118,11 @@ public class TOCActivity extends FBActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final View view = (convertView != null) ? convertView :
 				LayoutInflater.from(parent.getContext()).inflate(R.layout.toc_tree_item, parent, false);
-			final TOCTree tree = (TOCTree)getItem(position);
+			final TOCTree tree = getItem(position);
 			view.setBackgroundColor(tree == mySelectedItem ? 0xff808080 : 0);
 			setIcon(ViewUtil.findImageView(view, R.id.toc_tree_item_icon), tree);
-			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.getText());
-			final TOCTree.Reference reference = tree.getReference();
-			final int pageNo = reference != null ? reference.PageNum : -1;
+			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.Text);
+			final int pageNo = tree.Reference != null ? tree.Reference : -1;
 			ViewUtil.setSubviewText(
 				view,
 				R.id.toc_tree_item_pageno,
@@ -134,19 +132,18 @@ public class TOCActivity extends FBActivity {
 		}
 
 		void openBookText(TOCTree tree) {
-			final TOCTree.Reference reference = tree.getReference();
-			if (reference != null && reference.PageNum != -1) {
+			if (tree.Reference != null && tree.Reference != -1) {
 				finish();
-				myPluginView.gotoPage(reference.PageNum, false);
+				myPluginView.gotoPage(tree.Reference, false);
 			}
 		}
 
 		@Override
-		protected boolean runTreeItem(TOCTreeBase<?> tree) {
+		protected boolean runTreeItem(TOCTree tree) {
 			if (super.runTreeItem(tree)) {
 				return true;
 			}
-			openBookText((TOCTree)tree);
+			openBookText(tree);
 			return true;
 		}
 	}
