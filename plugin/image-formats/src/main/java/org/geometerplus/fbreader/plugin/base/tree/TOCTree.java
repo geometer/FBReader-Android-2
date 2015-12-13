@@ -53,7 +53,7 @@ public class TOCTree extends TOCTreeBase<TOCTree> {
 		String key = TREE_KEY + t.hashCode() + "/";
 		Log.e("BUNDLE", "writing: " + key);
 		Log.e("BUNDLE", "title: " + ((t.Text != null) ? t.Text : "null"));
-		b.putInt(key + POSITION_KEY, t.myReference != null ? t.myReference.PageNum : -1);
+		b.putInt(key + POSITION_KEY, t.Reference != null ? t.Reference : -1);
 		b.putString(key + TEXT_KEY, t.Text != null ? t.Text : "null");
 		if (next != null) {
 			b.putInt(key + NEXT_KEY, next.hashCode());
@@ -78,9 +78,8 @@ public class TOCTree extends TOCTreeBase<TOCTree> {
 	private static void readFromBundle(Bundle b, int hashcode, TOCTree parent) {
 		String key = TREE_KEY + hashcode + "/";
 		Log.e("BUNDLE", "reading: " + key);
-		final TOCTree t = new TOCTree(parent, b.getString(key + TEXT_KEY));
+		final TOCTree t = new TOCTree(parent, b.getString(key + TEXT_KEY), b.getInt(key + POSITION_KEY));
 		Log.e("BUNDLE", "title: " + (t.Text != null ? t.Text : "null"));
-		t.setReference(b.getInt(key + POSITION_KEY));
 		String nkey = key + NEXT_KEY;
 		boolean hasNext = b.containsKey(nkey);
 		while (hasNext) {
