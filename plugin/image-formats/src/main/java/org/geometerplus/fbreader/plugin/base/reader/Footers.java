@@ -177,9 +177,8 @@ class Footers {
 				}
 				final int fullLength = myPluginView.getPagesNum();
 				for (TOCTree tocItem : myTOCMarks) {
-					TOCTree.Reference reference = tocItem.getReference();
-					if (reference != null) {
-						final int refCoord = reference.PageNum;
+					if (tocItem.Reference != null && tocItem.Reference != -1) {
+						final int refCoord = tocItem.Reference;
 						final int xCoord =
 							left + 2 * lineWidth + (int)(1.0 * gaugeWidth * refCoord / fullLength);
 						context.drawLine(xCoord, height - lineWidth, xCoord, lineWidth);
@@ -238,10 +237,8 @@ class Footers {
 				}
 				final int fullLength = myPluginView.getPagesNum();
 				for (TOCTree tocItem : myTOCMarks) {
-					TOCTree.Reference reference = tocItem.getReference();
-					if (reference != null) {
-						final int refCoord = reference.PageNum;
-						labels.add(left + (int)(1.0 * (gaugeRight - left) * refCoord / fullLength + 0.5));
+					if (tocItem.Reference != null && tocItem.Reference != -1) {
+						labels.add(left + (int)(1.0 * (gaugeRight - left) * tocItem.Reference / fullLength + 0.5));
 					}
 				}
 				for (int l : labels) {

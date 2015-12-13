@@ -124,11 +124,10 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 			int num = pageNo;
 			TOCTree treeToSelect = null;
 			for (TOCTree tree : root) {
-				final TOCTree.Reference reference = tree.getReference();
-				if (reference == null) {
+				if (tree.Reference == null) {
 					continue;
 				}
-				if (reference.PageNum > num) {
+				if (tree.Reference > num) {
 					break;
 				}
 				treeToSelect = tree;
