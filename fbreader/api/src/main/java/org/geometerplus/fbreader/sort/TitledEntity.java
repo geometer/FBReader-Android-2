@@ -42,6 +42,11 @@ public abstract class TitledEntity<T extends TitledEntity<T>> implements Compara
 		return myTitle != null ? myTitle : "";
 	}
 
+	public void clearTitle() {
+		myTitle = null;
+		mySortKey = null;
+	}
+
 	public boolean isTitleEmpty() {
 		return myTitle == null || "".equals(myTitle);
 	}

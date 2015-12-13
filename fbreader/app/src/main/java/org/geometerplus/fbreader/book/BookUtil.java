@@ -135,7 +135,7 @@ public abstract class BookUtil {
 	static void readMetainfo(AbstractBook book, FormatPlugin plugin) throws BookReadingException {
 		book.myEncoding = null;
 		book.myLanguage = null;
-		book.setTitle(null);
+		book.clearTitle();
 		book.myAuthors = null;
 		book.myTags = null;
 		book.mySeriesInfo = null;
