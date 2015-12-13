@@ -194,7 +194,7 @@ public final class TOCTree implements Iterable<TOCTree> {
 		}
 		return changed ? new String(data, 0, data.length - shift) : text;
 	}
-	
+
 	public static final String TREE_KEY = "TrEe";
 	public static final String TEXT_KEY = "TeXt";
 	public static final String POSITION_KEY = "PoSiTiOn";
@@ -207,7 +207,7 @@ public final class TOCTree implements Iterable<TOCTree> {
 			writeToBundle(b, t, null);
 		}
 	}
-	
+
 	private static void writeToBundle(Bundle b, TOCTree t, TOCTree next) {
 		String key = TREE_KEY + t.hashCode() + "/";
 		Log.e("BUNDLE", "writing: " + key);
@@ -226,14 +226,14 @@ public final class TOCTree implements Iterable<TOCTree> {
 			}
 		}
 	}
-	
+
 	public static TOCTree readFromBundle(Bundle b) {
 		TOCTree root = new TOCTree();
 		int hashcode = b.getInt(TREE_KEY + "root");
 		readFromBundle(b, hashcode, root);
 		return root.subtrees().get(0);
 	}
-	
+
 	private static void readFromBundle(Bundle b, int hashcode, TOCTree parent) {
 		String key = TREE_KEY + hashcode + "/";
 		Log.e("BUNDLE", "reading: " + key);
