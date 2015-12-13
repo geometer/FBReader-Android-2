@@ -19,12 +19,12 @@
 
 package org.geometerplus.fbreader.plugin.base.tree;
 
-import org.geometerplus.zlibrary.core.tree.ZLTree;
+import org.fbreader.reader.TOCTreeBase;
 
 import android.os.Bundle;
 import android.util.Log;
 
-public class TOCTree extends ZLTree<TOCTree>  {
+public class TOCTree extends TOCTreeBase<TOCTree> {
 	private String myText;
 	private Reference myReference;
 

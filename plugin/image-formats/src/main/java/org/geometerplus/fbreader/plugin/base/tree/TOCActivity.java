@@ -27,14 +27,14 @@ import android.widget.ListView;
 
 import org.fbreader.common.android.FBActivity;
 import org.fbreader.plugin.format.base.R;
+import org.fbreader.reader.TOCTreeBase;
+import org.fbreader.reader.TOCAdapterBase;
 import org.fbreader.reader.android.ContextMenuDialog;
 import org.fbreader.util.android.ViewUtil;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.tree.ZLTree;
 
 import org.geometerplus.fbreader.plugin.base.FBReaderPluginActivity;
-import org.geometerplus.android.fbreader.ZLTreeAdapter;
 
 public class TOCActivity extends FBActivity {
 	public static final String TOCTREE_KEY = "tocTree";
@@ -42,7 +42,7 @@ public class TOCActivity extends FBActivity {
 	public static final String TITLE_KEY = "title";
 
 	private TOCAdapter myAdapter;
-	private ZLTree<?> mySelectedItem;
+	private TOCTreeBase<?> mySelectedItem;
 
 	public static TOCTree getCurrentTOCElement(int pageNo, TOCTree root) {
 		if (root == null || !root.hasChildren()) {
@@ -88,7 +88,7 @@ public class TOCActivity extends FBActivity {
 	private static final int PROCESS_TREE_ITEM_ID = 0;
 	private static final int READ_BOOK_ITEM_ID = 1;
 
-	private final class TOCAdapter extends ZLTreeAdapter {
+	private final class TOCAdapter extends TOCAdapterBase {
 		TOCAdapter(ListView view, TOCTree root) {
 			super(view, root);
 		}
@@ -162,7 +162,7 @@ public class TOCActivity extends FBActivity {
 		}
 
 		@Override
-		protected boolean runTreeItem(ZLTree<?> tree) {
+		protected boolean runTreeItem(TOCTreeBase<?> tree) {
 			if (super.runTreeItem(tree)) {
 				return true;
 			}
