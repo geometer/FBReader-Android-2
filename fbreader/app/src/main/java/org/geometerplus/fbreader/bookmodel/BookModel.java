@@ -143,9 +143,7 @@ public final class BookModel {
 	private TOCTree myCurrentTree = TOCTree;
 
 	public void addTOCItem(String text, int reference) {
-		myCurrentTree = new TOCTree(myCurrentTree);
-		myCurrentTree.setText(text);
-		myCurrentTree.setReference(myBookTextModel, reference);
+		myCurrentTree = new TOCTree(myCurrentTree, text, reference);
 	}
 
 	public void leaveTOCItem() {

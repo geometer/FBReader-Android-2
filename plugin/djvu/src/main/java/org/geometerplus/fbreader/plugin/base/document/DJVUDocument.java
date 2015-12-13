@@ -141,8 +141,7 @@ public class DJVUDocument extends DocumentHolder {
 
 	private void createTOCTree(long n, TOCTree parent, boolean fistChild) {
 		synchronized (ourNativeLock) {
-			final TOCTree t = new TOCTree(parent);
-			t.setText(getOutlineTextNative(n));
+			final TOCTree t = new TOCTree(parent, getOutlineTextNative(n));
 			t.setReference(getOutlinePageNative(n));
 			long nextnum = getOutlineNextNative(n);
 			while (fistChild && nextnum != 0) {
