@@ -21,6 +21,7 @@ package org.geometerplus.fbreader.fbreader;
 
 import java.util.*;
 
+import org.fbreader.reader.TOCTree;
 import org.fbreader.util.ComparisonUtil;
 
 import org.geometerplus.zlibrary.core.application.*;

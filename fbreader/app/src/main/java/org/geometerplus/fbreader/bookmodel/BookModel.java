@@ -21,6 +21,8 @@ package org.geometerplus.fbreader.bookmodel;
 
 import java.util.*;
 
+import org.fbreader.reader.TOCTree;
+
 import org.geometerplus.zlibrary.core.fonts.*;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.text.model.*;

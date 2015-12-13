@@ -4,11 +4,12 @@ import java.util.*;
 
 import android.text.format.DateFormat;
 
+import org.fbreader.reader.TOCTree;
+
 import org.geometerplus.zlibrary.core.fonts.FontEntry;
 import org.geometerplus.zlibrary.core.util.ZLColor;
 import org.geometerplus.zlibrary.core.view.ZLPaintContext;
 import org.geometerplus.fbreader.plugin.base.SettingsHolder;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 class Footers {
 	abstract public interface FooterArea {

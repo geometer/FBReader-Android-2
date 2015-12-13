@@ -7,8 +7,9 @@ import android.graphics.*;
 
 import com.radaee.pdf.*;
 
+import org.fbreader.reader.TOCTree;
+
 import org.geometerplus.fbreader.book.AbstractBook;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 public class PDFDocument extends DocumentHolder {
 	private final Object myDocumentLock = new Object();

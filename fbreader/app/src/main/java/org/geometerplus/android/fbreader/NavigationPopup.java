@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.*;
 
 import org.fbreader.md.widget.Slider;
+import org.fbreader.reader.TOCTree;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
@@ -31,7 +32,6 @@ import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
 
 import org.geometerplus.zlibrary.ui.android.R;
 
-import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 final class NavigationPopup {

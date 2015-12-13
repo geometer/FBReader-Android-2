@@ -6,9 +6,10 @@ import android.content.ContextWrapper;
 import android.graphics.*;
 import android.util.Log;
 
+import org.fbreader.reader.TOCTree;
+
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
 import org.geometerplus.fbreader.book.AbstractBook;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 public class DJVUDocument extends DocumentHolder {
 	private static native void initNative();
