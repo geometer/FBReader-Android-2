@@ -28,8 +28,9 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 	private volatile List<T> mySubtrees;
 
 	public final String Text;
+	public final Integer Reference;
 
-	protected TOCTreeBase(T parent, String text) {
+	protected TOCTreeBase(T parent, String text, Integer reference) {
 		Parent = parent;
 		if (parent != null) {
 			Level = parent.Level + 1;
@@ -38,6 +39,7 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 			Level = 0;
 		}
 		Text = text != null ? trim(text) : null;
+		Reference = reference;
 	}
 
 	public final int getSize() {
