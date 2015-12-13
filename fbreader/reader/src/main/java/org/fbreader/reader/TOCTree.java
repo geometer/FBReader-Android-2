@@ -21,20 +21,24 @@ package org.fbreader.reader;
 
 import java.util.*;
 
-public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<T> {
+public final class TOCTree implements Iterable<TOCTree> {
 	private int mySize = 1;
-	public final T Parent;
+	public final TOCTree Parent;
 	public final int Level;
-	private volatile List<T> mySubtrees;
+	private volatile List<TOCTree> mySubtrees;
 
 	public final String Text;
 	public final Integer Reference;
 
-	protected TOCTreeBase(T parent, String text, Integer reference) {
+	public TOCTree() {
+		this(null, null, null);
+	}
+
+	public TOCTree(TOCTree parent, String text, Integer reference) {
 		Parent = parent;
 		if (parent != null) {
 			Level = parent.Level + 1;
-			parent.addSubtree((T)this);
+			parent.addSubtree(this);
 		} else {
 			Level = 0;
 		}
@@ -50,31 +54,31 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 		return mySubtrees != null && !mySubtrees.isEmpty();
 	}
 
-	public List<T> subtrees() {
+	public List<TOCTree> subtrees() {
 		if (mySubtrees == null) {
 			return Collections.emptyList();
 		}
 		synchronized (mySubtrees) {
-			return new ArrayList<T>(mySubtrees);
+			return new ArrayList<TOCTree>(mySubtrees);
 		}
 	}
 
-	public synchronized final T getTreeByParagraphNumber(int index) {
+	public synchronized final TOCTree getTreeByParagraphNumber(int index) {
 		if (index < 0 || index >= mySize) {
 			// TODO: throw an exception?
 			return null;
 		}
 		if (index == 0) {
-			return (T)this;
+			return this;
 		}
 		--index;
 		if (mySubtrees != null) {
 			synchronized (mySubtrees) {
-				for (T subtree : mySubtrees) {
-					if (((TOCTreeBase<?>)subtree).mySize <= index) {
-						index -= ((TOCTreeBase<?>)subtree).mySize;
+				for (TOCTree subtree : mySubtrees) {
+					if (subtree.mySize <= index) {
+						index -= subtree.mySize;
 					} else {
-						return (T)subtree.getTreeByParagraphNumber(index);
+						return subtree.getTreeByParagraphNumber(index);
 					}
 				}
 			}
@@ -82,13 +86,13 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 		throw new RuntimeException("That's impossible!!!");
 	}
 
-	synchronized final void addSubtree(T subtree) {
+	synchronized final void addSubtree(TOCTree subtree) {
 		if (mySubtrees == null) {
-			mySubtrees = Collections.synchronizedList(new ArrayList<T>());
+			mySubtrees = Collections.synchronizedList(new ArrayList<TOCTree>());
 		}
 		synchronized (mySubtrees) {
 			mySubtrees.add(subtree);
-			for (TOCTreeBase<?> parent = this; parent != null; parent = parent.Parent) {
+			for (TOCTree parent = this; parent != null; parent = parent.Parent) {
 				parent.mySize += 1;
 			}
 		}
@@ -98,16 +102,16 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 		return new TreeIterator(Integer.MAX_VALUE);
 	}
 
-	public final Iterable<T> allSubtrees(final int maxLevel) {
-		return new Iterable<T>() {
+	public final Iterable<TOCTree> allSubtrees(final int maxLevel) {
+		return new Iterable<TOCTree>() {
 			public TreeIterator iterator() {
 				return new TreeIterator(maxLevel);
 			}
 		};
 	}
 
-	private class TreeIterator implements Iterator<T> {
-		private T myCurrentElement = (T)TOCTreeBase.this;
+	private class TreeIterator implements Iterator<TOCTree> {
+		private TOCTree myCurrentElement = TOCTree.this;
 		private final LinkedList<Integer> myIndexStack = new LinkedList<Integer>();
 		private final int myMaxLevel;
 
@@ -119,13 +123,13 @@ public abstract class TOCTreeBase<T extends TOCTreeBase<T>> implements Iterable<
 			return myCurrentElement != null;
 		}
 
-		public T next() {
-			final T element = myCurrentElement;
+		public TOCTree next() {
+			final TOCTree element = myCurrentElement;
 			if (element.hasChildren() && element.Level < myMaxLevel) {
-				myCurrentElement = (T)((TOCTreeBase<?>)element).mySubtrees.get(0);
+				myCurrentElement = element.mySubtrees.get(0);
 				myIndexStack.add(0);
 			} else {
-				TOCTreeBase<T> parent = element;
+				TOCTree parent = element;
 				while (!myIndexStack.isEmpty()) {
 					final int index = myIndexStack.removeLast() + 1;
 					parent = parent.Parent;

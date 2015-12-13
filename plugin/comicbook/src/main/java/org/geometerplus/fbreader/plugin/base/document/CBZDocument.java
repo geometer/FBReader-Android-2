@@ -7,9 +7,10 @@ import java.util.List;
 
 import android.graphics.*;
 
+import org.fbreader.reader.TOCTree;
+
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 import org.geometerplus.fbreader.book.AbstractBook;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 public class CBZDocument extends DocumentHolder {
 	private final SystemInfo mySystemInfo;

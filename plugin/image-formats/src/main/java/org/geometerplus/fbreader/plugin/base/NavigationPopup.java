@@ -23,10 +23,10 @@ import android.view.View;
 import android.widget.*;
 
 import org.fbreader.md.widget.Slider;
+import org.fbreader.reader.TOCTree;
 
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 import org.geometerplus.fbreader.plugin.base.reader.ThumbnailView;
-import org.geometerplus.fbreader.plugin.base.tree.TOCTree;
 
 import org.fbreader.plugin.format.base.R;
 

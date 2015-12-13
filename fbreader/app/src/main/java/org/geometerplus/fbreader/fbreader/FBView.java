@@ -35,10 +35,10 @@ import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 
 import org.fbreader.common.options.*;
 import org.fbreader.reader.ActionCode;
+import org.fbreader.reader.TOCTree;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.bookmodel.FBHyperlinkType;
-import org.geometerplus.fbreader.bookmodel.TOCTree;
 import org.geometerplus.fbreader.fbreader.options.*;
 import org.geometerplus.fbreader.util.FixedTextSnippet;
 import org.geometerplus.fbreader.util.TextSnippet;
