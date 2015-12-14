@@ -19,6 +19,8 @@
 
 package org.geometerplus.fbreader.plugin.base.tree;
 
+import java.util.Map;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
@@ -28,6 +30,7 @@ import android.widget.ListView;
 import org.fbreader.common.android.FBActivity;
 import org.fbreader.plugin.format.base.R;
 import org.fbreader.reader.TOCTree;
+import org.fbreader.reader.TOCTreeUtil;
 import org.fbreader.reader.android.ContextMenuDialog;
 import org.fbreader.reader.android.TOCAdapterBase;
 import org.fbreader.util.android.ViewUtil;
@@ -72,10 +75,19 @@ public class TOCActivity extends FBActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
+		final Intent intent = getIntent();
+
 		String title = getIntent().getStringExtra(TITLE_KEY);
 //		FBReaderUtil.setBookTitle(this, holder.getCurrentBook());TODO
 
-		final TOCTree root = TOCTree.readFromBundle(getIntent().getBundleExtra(TOCTREE_KEY));
+		final Map<String,Object> treeData =
+			(Map<String,Object>)intent.getSerializableExtra(TOCTREE_KEY);
+		if (treeData == null) {
+			finish();
+			return;
+		}
+
+		final TOCTree root = TOCTreeUtil.fromJSONObject(treeData);
 		myAdapter = new TOCAdapter((ListView)findViewById(R.id.toc_list), root);
 		int pageNo = getIntent().getIntExtra(PAGENO_KEY, 0);
 		TOCTree treeToSelect = getCurrentTOCElement(pageNo, root);

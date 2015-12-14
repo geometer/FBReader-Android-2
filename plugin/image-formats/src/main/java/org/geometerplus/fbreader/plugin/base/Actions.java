@@ -6,10 +6,10 @@ import android.app.ProgressDialog;
 import android.content.*;
 import android.content.pm.*;
 import android.os.Build;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import org.fbreader.reader.TOCTree;
+import org.fbreader.reader.TOCTreeUtil;
 import org.fbreader.reader.android.GotoPageDialogUtil;
 import org.fbreader.util.Boolean3;
 
@@ -391,9 +391,9 @@ public class Actions {
 		@Override
 		protected void run(Object... params) {
 			Intent i = new Intent(Reader.getActivity(), TOCActivity.class);
-			Bundle b = new Bundle();
-			TOCTree.writeToBundle(b, Reader.getView().getTOCTree());
-			i.putExtra(TOCActivity.TOCTREE_KEY,  b);
+			i.putExtra(
+				TOCActivity.TOCTREE_KEY, TOCTreeUtil.toJSONObject(Reader.getView().getTOCTree())
+			);
 			i.putExtra(TOCActivity.PAGENO_KEY, Reader.getView().getCurPageNo());
 			Reader.getActivity().startActivityForResult(i, FBReaderPluginActivity.REQUEST_TOC);
 		}
