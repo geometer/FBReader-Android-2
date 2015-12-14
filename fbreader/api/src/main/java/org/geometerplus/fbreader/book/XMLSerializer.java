@@ -233,7 +233,6 @@ class XMLSerializer extends AbstractSerializer {
 		if (book.HasBookmark) {
 			appendTag(buffer, "has-bookmark", true);
 		}
-		appendTag(buffer, "save-state", true, "state", String.valueOf(book.mySaveState));
 
 		// TODO: serialize description (?)
 		// TODO: serialize cover (?)
@@ -672,8 +671,6 @@ class XMLSerializer extends AbstractSerializer {
 						myState = State.READ_SERIES_INDEX;
 					} else if ("has-bookmark".equals(localName)) {
 						myHasBookmark = true;
-					} else if ("save-state".equals(localName)) {
-						mySaveState = AbstractBook.SaveState.valueOf(attributes.getValue("state"));
 					} else if ("link".equals(localName)) {
 						// TODO: use "rel" attribute
 						myUrl = attributes.getValue("href");
