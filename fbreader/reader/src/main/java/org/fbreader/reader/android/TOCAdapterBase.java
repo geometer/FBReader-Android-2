@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.fbreader.reader;
+package org.fbreader.reader.android;
 
 import java.util.HashSet;
 
@@ -27,6 +27,8 @@ import android.util.TypedValue;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.reader.R;
+import org.fbreader.reader.TOCTree;
 import org.fbreader.util.android.DrawableUtil;
 
 public abstract class TOCAdapterBase extends BaseAdapter implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {

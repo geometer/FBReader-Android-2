@@ -28,8 +28,8 @@ import android.widget.ListView;
 import org.fbreader.common.android.FBActivity;
 import org.fbreader.plugin.format.base.R;
 import org.fbreader.reader.TOCTree;
-import org.fbreader.reader.TOCAdapterBase;
 import org.fbreader.reader.android.ContextMenuDialog;
+import org.fbreader.reader.android.TOCAdapterBase;
 import org.fbreader.util.android.ViewUtil;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
