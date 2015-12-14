@@ -295,6 +295,7 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 						myViewHolder.getView().gotoPage(pageNo, false);
 					}
 				}
+				break;
 		}
 	}
 
