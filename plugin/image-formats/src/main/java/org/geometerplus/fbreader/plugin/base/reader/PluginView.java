@@ -17,8 +17,7 @@ import android.view.*;
 
 import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.common.options.PageTurningOptions;
-import org.fbreader.reader.AbstractReader;
-import org.fbreader.reader.TOCTree;
+import org.fbreader.reader.*;
 import org.fbreader.reader.android.MainView;
 
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
@@ -113,12 +112,8 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 
 	private AnimationProvider myAnimationProvider;
 
-	public TOCTree getCurrentTOCElement() {
-		return TOCActivity.getCurrentTOCElement(myCurrPageNo, getTOCTree());
-	}
-
 	public TOCTree getCurrentTOCElement(int pageNo) {
-		return TOCActivity.getCurrentTOCElement(pageNo, getTOCTree());
+		return TOCTreeUtil.findTreeByReference(getTOCTree(), pageNo);
 	}
 
 	public TOCTree getTOCTree() {

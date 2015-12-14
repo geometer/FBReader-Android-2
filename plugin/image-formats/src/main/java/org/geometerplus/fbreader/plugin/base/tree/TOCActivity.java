@@ -52,24 +52,6 @@ public class TOCActivity extends FBActivity {
 	private TOCAdapter myAdapter;
 	private TOCTree mySelectedItem;
 
-	public static TOCTree getCurrentTOCElement(int pageNo, TOCTree root) {
-		if (root == null || !root.hasChildren()) {
-			return root;
-		} else {
-			TOCTree treeToSelect = null;
-			for (TOCTree tree : root) {
-				if (tree.Reference == null || tree.Reference == -1) {
-					continue;
-				}
-				if (tree.Reference > pageNo) {
-					break;
-				}
-				treeToSelect = tree;
-			}
-			return treeToSelect;
-		}
-	}
-
 	@Override
 	protected int layoutId() {
 		return R.layout.toc;
@@ -90,11 +72,12 @@ public class TOCActivity extends FBActivity {
 		}
 
 		FBReaderUtil.setBookTitle(this, book);
-
 		final TOCTree root = TOCTreeUtil.fromJSONObject(treeData);
+
 		myAdapter = new TOCAdapter((ListView)findViewById(R.id.toc_list), root);
-		int pageNo = intent.getIntExtra(PAGENO_KEY, 0);
-		TOCTree treeToSelect = getCurrentTOCElement(pageNo, root);
+		final int pageNo = intent.getIntExtra(PAGENO_KEY, -1);
+		final TOCTree treeToSelect =
+			pageNo != -1 ? TOCTreeUtil.findTreeByReference(root, pageNo) : null;
 		myAdapter.selectItem(treeToSelect);
 		mySelectedItem = treeToSelect;
 	}
