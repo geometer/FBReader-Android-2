@@ -21,6 +21,7 @@ import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
+import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
 
 import org.geometerplus.android.fbreader.SimplePopupWindow;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
@@ -271,9 +272,6 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 	}
 	*/
 
-	public static final int REQUEST_TOC = 901;
-	public static final String PAGE_NO = "pageNo";
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
@@ -292,8 +290,10 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 				break;
 			case REQUEST_TOC:
 				if (resultCode != RESULT_CANCELED) {
-					int pageNo = data.getIntExtra(PAGE_NO, 0);
-					myViewHolder.getView().gotoPage(pageNo, false);
+					final int pageNo = data.getIntExtra(TOCActivity.PAGENO_KEY, -1);
+					if (pageNo != -1) {
+						myViewHolder.getView().gotoPage(pageNo, false);
+					}
 				}
 		}
 	}

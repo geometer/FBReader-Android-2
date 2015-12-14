@@ -74,6 +74,7 @@ public abstract class MainActivity extends FBActivity {
 	public static final int REQUEST_CANCEL_MENU = 2;
 	public static final int REQUEST_DICTIONARY = 3;
 	public static final int REQUEST_DICTIONARY_EXTRA = 4;
+	public static final int REQUEST_TOC = 5;
 
 	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
 

@@ -393,7 +393,7 @@ public class Actions {
 			final Intent intent = new Intent(Reader.getActivity(), TOCActivity.class);
 			FBReaderIntents.putBookExtra(intent, Reader.getCurrentBook());
 			intent.putExtra(
-				TOCActivity.TOCTREE_KEY, TOCTreeUtil.toJSONObject(Reader.getView().getTOCTree())
+				TOCActivity.TREE_KEY, TOCTreeUtil.toJSONObject(Reader.getView().getTOCTree())
 			);
 			intent.putExtra(TOCActivity.PAGENO_KEY, Reader.getView().getCurPageNo());
 			Reader.getActivity().startActivityForResult(intent, FBReaderPluginActivity.REQUEST_TOC);

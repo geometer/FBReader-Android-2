@@ -39,14 +39,13 @@ import org.fbreader.util.android.ViewUtil;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.fbreader.book.Book;
-import org.geometerplus.fbreader.plugin.base.FBReaderPluginActivity;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
 public class TOCActivity extends FBActivity {
-	public static final String TOCTREE_KEY = "tocTree";
-	public static final String PAGENO_KEY = "pageNo";
+	public static final String TREE_KEY = "fbreader:toc:tree";
+	public static final String PAGENO_KEY = "fbreader:toc:pageno";
 
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 
@@ -84,7 +83,7 @@ public class TOCActivity extends FBActivity {
 
 		final Book book = FBReaderIntents.getBookExtra(intent, myCollection);
 		final Map<String,Object> treeData =
-			(Map<String,Object>)intent.getSerializableExtra(TOCTREE_KEY);
+			(Map<String,Object>)intent.getSerializableExtra(TREE_KEY);
 		if (book == null || treeData == null) {
 			finish();
 			return;
@@ -166,9 +165,9 @@ public class TOCActivity extends FBActivity {
 
 		void openBookText(TOCTree tree) {
 			if (tree.Reference != null && tree.Reference != -1) {
-				Intent i = new Intent();
-				i.putExtra(FBReaderPluginActivity.PAGE_NO, tree.Reference);
-				setResult(RESULT_OK, i);
+				final Intent intent = new Intent();
+				intent.putExtra(PAGENO_KEY, tree.Reference);
+				setResult(RESULT_OK, intent);
 				finish();
 			}
 		}
