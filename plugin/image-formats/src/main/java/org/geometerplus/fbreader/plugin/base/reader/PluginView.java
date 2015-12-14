@@ -17,8 +17,7 @@ import android.view.*;
 
 import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.common.options.PageTurningOptions;
-import org.fbreader.reader.AbstractReader;
-import org.fbreader.reader.TOCTree;
+import org.fbreader.reader.*;
 import org.fbreader.reader.android.MainView;
 
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
@@ -31,6 +30,7 @@ import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.plugin.base.*;
 import org.geometerplus.fbreader.plugin.base.document.*;
 import org.geometerplus.fbreader.plugin.base.reader.Footers.*;
+import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
 public class PluginView extends MainView implements View.OnLongClickListener, BitmapManager {
@@ -112,27 +112,8 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 
 	private AnimationProvider myAnimationProvider;
 
-	public TOCTree getCurrentTOCElement() {
-		return getCurrentTOCElement(myCurrPageNo);
-	}
-
 	public TOCTree getCurrentTOCElement(int pageNo) {
-		final TOCTree root = myDocument.getTOCTree();
-		if (root == null || !root.hasChildren()) {
-			return root;
-		} else {
-			TOCTree treeToSelect = null;
-			for (TOCTree tree : root) {
-				if (tree.Reference == null || tree.Reference == -1) {
-					continue;
-				}
-				if (tree.Reference > pageNo) {
-					break;
-				}
-				treeToSelect = tree;
-			}
-			return treeToSelect;
-		}
+		return TOCTreeUtil.findTreeByReference(getTOCTree(), pageNo);
 	}
 
 	public TOCTree getTOCTree() {

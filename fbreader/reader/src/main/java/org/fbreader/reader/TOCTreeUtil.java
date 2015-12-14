@@ -24,6 +24,24 @@ import java.util.*;
 import org.json.simple.JSONValue;
 
 public abstract class TOCTreeUtil {
+	public static TOCTree findTreeByReference(TOCTree tree, int reference) {
+		if (tree == null || !tree.hasChildren()) {
+			return tree;
+		} else {
+			TOCTree found = null;
+			for (TOCTree candidate : tree) {
+				if (candidate.Reference == null || candidate.Reference == -1) {
+					continue;
+				}
+				if (candidate.Reference > reference) {
+					break;
+				}
+				found = candidate;
+			}
+			return found;
+		}
+	}
+
 	public static String toJSONString(TOCTree tree) {
 		return JSONValue.toJSONString(toJSONObject(tree));
 	}

@@ -19,7 +19,7 @@
 
 package org.fbreader.reader.android;
 
-import java.util.HashSet;
+import java.util.*;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -34,13 +34,21 @@ import org.fbreader.util.android.DrawableUtil;
 public abstract class TOCAdapterBase extends BaseAdapter implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 	private final ListView myParent;
 	private final TOCTree Root;
-	private TOCTree[] myItems;
+	private final List<TOCTree> myItems;
 	private final HashSet<TOCTree> myOpenItems = new HashSet<TOCTree>();
 
 	protected TOCAdapterBase(ListView parent, TOCTree root) {
 		myParent = parent;
 		Root = root;
-		myItems = new TOCTree[root.getSize() - 1];
+		myItems = new ArrayList<TOCTree>(root.getSize() - 1);
+		boolean skip = true;
+		for (TOCTree tree : root) {
+			if (skip) {
+				skip = false;
+			} else {
+				myItems.add(tree);
+			}
+		}
 		myOpenItems.add(root);
 
 		parent.setAdapter(this);
@@ -135,13 +143,7 @@ public abstract class TOCAdapterBase extends BaseAdapter implements AdapterView.
 	}
 
 	public final TOCTree getItem(int position) {
-		final int index = indexByPosition(position + 1, Root) - 1;
-		TOCTree item = myItems[index];
-		if (item == null) {
-			item = Root.getTreeByParagraphNumber(index + 1);
-			myItems[index] = item;
-		}
-		return item;
+		return myItems.get(indexByPosition(position + 1, Root) - 1);
 	}
 
 	public final boolean areAllItemsEnabled() {

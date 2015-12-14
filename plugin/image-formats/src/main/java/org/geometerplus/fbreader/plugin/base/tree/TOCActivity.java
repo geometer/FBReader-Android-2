@@ -19,6 +19,8 @@
 
 package org.geometerplus.fbreader.plugin.base.tree;
 
+import java.util.Map;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
@@ -29,21 +31,26 @@ import org.fbreader.common.android.FBActivity;
 import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.plugin.format.base.R;
 import org.fbreader.reader.TOCTree;
+import org.fbreader.reader.TOCTreeUtil;
 import org.fbreader.reader.android.ContextMenuDialog;
 import org.fbreader.reader.android.TOCAdapterBase;
 import org.fbreader.util.android.ViewUtil;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
-import org.geometerplus.fbreader.plugin.base.ViewHolder;
-import org.geometerplus.fbreader.plugin.base.reader.PluginView;
+import org.geometerplus.fbreader.book.Book;
+
+import org.geometerplus.android.fbreader.api.FBReaderIntents;
+import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
 public class TOCActivity extends FBActivity {
+	public static final String TREE_KEY = "fbreader:toc:tree";
+	public static final String PAGENO_KEY = "fbreader:toc:pageno";
+
+	private final BookCollectionShadow myCollection = new BookCollectionShadow();
+
 	private TOCAdapter myAdapter;
 	private TOCTree mySelectedItem;
-
-	// see TODO comment in onCreate
-	private PluginView myPluginView;
 
 	@Override
 	protected int layoutId() {
@@ -54,15 +61,23 @@ public class TOCActivity extends FBActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		// TODO: send data in intent instead
-		final ViewHolder holder = ViewHolder.getInstance();
-		myPluginView = holder.getView();
+		final Intent intent = getIntent();
 
-		FBReaderUtil.setBookTitle(this, holder.getCurrentBook());
+		final Book book = FBReaderIntents.getBookExtra(intent, myCollection);
+		final Map<String,Object> treeData =
+			(Map<String,Object>)intent.getSerializableExtra(TREE_KEY);
+		if (book == null || treeData == null) {
+			finish();
+			return;
+		}
 
-		final TOCTree root = myPluginView.getTOCTree();
+		FBReaderUtil.setBookTitle(this, book);
+		final TOCTree root = TOCTreeUtil.fromJSONObject(treeData);
+
 		myAdapter = new TOCAdapter((ListView)findViewById(R.id.toc_list), root);
-		TOCTree treeToSelect = myPluginView.getCurrentTOCElement();
+		final int pageNo = intent.getIntExtra(PAGENO_KEY, -1);
+		final TOCTree treeToSelect =
+			pageNo != -1 ? TOCTreeUtil.findTreeByReference(root, pageNo) : null;
 		myAdapter.selectItem(treeToSelect);
 		mySelectedItem = treeToSelect;
 	}
@@ -133,8 +148,10 @@ public class TOCActivity extends FBActivity {
 
 		void openBookText(TOCTree tree) {
 			if (tree.Reference != null && tree.Reference != -1) {
+				final Intent intent = new Intent();
+				intent.putExtra(PAGENO_KEY, tree.Reference);
+				setResult(RESULT_OK, intent);
 				finish();
-				myPluginView.gotoPage(tree.Reference, false);
 			}
 		}
 

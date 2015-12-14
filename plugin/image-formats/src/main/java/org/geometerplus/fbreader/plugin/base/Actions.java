@@ -9,6 +9,7 @@ import android.os.Build;
 import android.widget.Toast;
 
 import org.fbreader.reader.TOCTree;
+import org.fbreader.reader.TOCTreeUtil;
 import org.fbreader.reader.android.GotoPageDialogUtil;
 import org.fbreader.util.Boolean3;
 
@@ -389,7 +390,13 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			Reader.getActivity().startActivity(new Intent(Reader.getActivity(), TOCActivity.class));
+			final Intent intent = new Intent(Reader.getActivity(), TOCActivity.class);
+			FBReaderIntents.putBookExtra(intent, Reader.getCurrentBook());
+			intent.putExtra(
+				TOCActivity.TREE_KEY, TOCTreeUtil.toJSONObject(Reader.getView().getTOCTree())
+			);
+			intent.putExtra(TOCActivity.PAGENO_KEY, Reader.getView().getCurPageNo());
+			Reader.getActivity().startActivityForResult(intent, FBReaderPluginActivity.REQUEST_TOC);
 		}
 	}
 
