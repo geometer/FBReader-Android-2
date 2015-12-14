@@ -74,7 +74,7 @@ public class TOCActivity extends FBActivity {
 		}
 
 		@Override
-		public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			final TOCTree tree = getItem(position);
 			if (!tree.hasChildren()) {
 				return false;
