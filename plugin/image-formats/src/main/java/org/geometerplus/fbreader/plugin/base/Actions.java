@@ -390,12 +390,13 @@ public class Actions {
 
 		@Override
 		protected void run(Object... params) {
-			Intent i = new Intent(Reader.getActivity(), TOCActivity.class);
-			i.putExtra(
+			final Intent intent = new Intent(Reader.getActivity(), TOCActivity.class);
+			FBReaderIntents.putBookExtra(intent, Reader.getCurrentBook());
+			intent.putExtra(
 				TOCActivity.TOCTREE_KEY, TOCTreeUtil.toJSONObject(Reader.getView().getTOCTree())
 			);
-			i.putExtra(TOCActivity.PAGENO_KEY, Reader.getView().getCurPageNo());
-			Reader.getActivity().startActivityForResult(i, FBReaderPluginActivity.REQUEST_TOC);
+			intent.putExtra(TOCActivity.PAGENO_KEY, Reader.getView().getCurPageNo());
+			Reader.getActivity().startActivityForResult(intent, FBReaderPluginActivity.REQUEST_TOC);
 		}
 	}
 

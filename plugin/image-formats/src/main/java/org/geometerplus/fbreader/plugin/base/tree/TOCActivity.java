@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.fbreader.common.android.FBActivity;
+import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.plugin.format.base.R;
 import org.fbreader.reader.TOCTree;
 import org.fbreader.reader.TOCTreeUtil;
@@ -37,12 +38,17 @@ import org.fbreader.util.android.ViewUtil;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
+import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.plugin.base.FBReaderPluginActivity;
+
+import org.geometerplus.android.fbreader.api.FBReaderIntents;
+import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
 public class TOCActivity extends FBActivity {
 	public static final String TOCTREE_KEY = "tocTree";
 	public static final String PAGENO_KEY = "pageNo";
-	public static final String TITLE_KEY = "title";
+
+	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 
 	private TOCAdapter myAdapter;
 	private TOCTree mySelectedItem;
@@ -65,7 +71,6 @@ public class TOCActivity extends FBActivity {
 		}
 	}
 
-
 	@Override
 	protected int layoutId() {
 		return R.layout.toc;
@@ -77,19 +82,19 @@ public class TOCActivity extends FBActivity {
 
 		final Intent intent = getIntent();
 
-		String title = getIntent().getStringExtra(TITLE_KEY);
-//		FBReaderUtil.setBookTitle(this, holder.getCurrentBook());TODO
-
+		final Book book = FBReaderIntents.getBookExtra(intent, myCollection);
 		final Map<String,Object> treeData =
 			(Map<String,Object>)intent.getSerializableExtra(TOCTREE_KEY);
-		if (treeData == null) {
+		if (book == null || treeData == null) {
 			finish();
 			return;
 		}
 
+		FBReaderUtil.setBookTitle(this, book);
+
 		final TOCTree root = TOCTreeUtil.fromJSONObject(treeData);
 		myAdapter = new TOCAdapter((ListView)findViewById(R.id.toc_list), root);
-		int pageNo = getIntent().getIntExtra(PAGENO_KEY, 0);
+		int pageNo = intent.getIntExtra(PAGENO_KEY, 0);
 		TOCTree treeToSelect = getCurrentTOCElement(pageNo, root);
 		myAdapter.selectItem(treeToSelect);
 		mySelectedItem = treeToSelect;
