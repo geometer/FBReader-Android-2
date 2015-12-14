@@ -630,7 +630,13 @@ class XMLSerializer extends AbstractSerializer {
 				case READ_ENTRY:
 					if ("id".equals(localName)) {
 						myState = State.READ_ID;
-						mySaveState = AbstractBook.SaveState.valueOf(attributes.getValue("state"));
+						try {
+							mySaveState =
+								AbstractBook.SaveState.valueOf(attributes.getValue("state"));
+						} catch (Throwable t) {
+							// communicate with old version of plugin, ignore
+							mySaveState = AbstractBook.SaveState.NotSaved;
+						}
 					} else if ("title".equals(localName)) {
 						myState = State.READ_TITLE;
 					} else if ("identifier".equals(localName) && XMLNamespaces.DublinCore.equals(uri)) {
