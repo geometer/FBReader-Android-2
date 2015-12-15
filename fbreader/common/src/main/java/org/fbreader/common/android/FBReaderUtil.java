@@ -158,8 +158,6 @@ public abstract class FBReaderUtil {
 			if (file == null) {
 				return;
 			}
-			final CharSequence sharedFrom =
-				Html.fromHtml(activity.getResources().getString(R.string.sharing__shared_from));
 			final File origFile = file.javaFile();
 
 			final File shareDir = new File(activity.getCacheDir(), "books");
@@ -181,6 +179,8 @@ public abstract class FBReaderUtil {
 			final Uri uri = FileProvider.getUriForFile(
 				activity, activity.getString(R.string.file_provider_authority), toShare
 			);
+			final CharSequence sharedFrom =
+				Html.fromHtml(activity.getResources().getString(R.string.sharing__shared_from));
 			activity.startActivity(
 				new Intent(Intent.ACTION_SEND)
 					.setType(FileTypeCollection.Instance.rawMimeType(file).Name)
