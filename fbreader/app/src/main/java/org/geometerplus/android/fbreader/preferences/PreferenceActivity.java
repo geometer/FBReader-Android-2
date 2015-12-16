@@ -252,7 +252,8 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 					languageOption.setValue(code);
 					finish();
 					startActivity(new Intent(
-						Intent.ACTION_VIEW, Uri.parse("fbreader-action:preferences#appearance")
+						Intent.ACTION_VIEW, Uri.parse("fbreader-preferences:appearance"),
+						PreferenceActivity.this, PreferenceActivity.class
 					));
 				}
 			}
