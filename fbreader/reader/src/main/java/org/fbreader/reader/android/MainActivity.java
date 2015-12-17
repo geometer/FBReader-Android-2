@@ -678,6 +678,8 @@ public abstract class MainActivity extends FBActivity {
 		showToast(toast);
 	}
 
+	protected abstract void hideBars();
+
 	public final void setOrientation(String optionValue) {
 		final int orientation;
 		switch (optionValue) {

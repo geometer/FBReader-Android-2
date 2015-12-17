@@ -86,9 +86,13 @@ public abstract class MDActivity extends ActionBarActivity {
 		}
 	}
 
-	protected final void showProgressIndicator(boolean show) {
+	public final void showProgressIndicator(final boolean show) {
 		if (myProgressIndicator != null) {
-			myProgressIndicator.setVisibility(show ? View.VISIBLE : View.GONE);
+			myProgressIndicator.post(new Runnable() {
+				public void run() {
+					myProgressIndicator.setVisibility(show ? View.VISIBLE : View.GONE);
+				}
+			});
 		} 
 	}
 

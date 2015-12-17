@@ -148,50 +148,65 @@ public abstract class FBReaderUtil {
 			.create().show();
 	}
 
-	public static void shareBook(Activity activity, Book book) {
+	public static void shareBook(final MDActivity activity, final Book book) {
 		if (book == null) {
 			return;
 		}
 
-		try {
-			final ZLPhysicalFile file = ZLFile.createFileByPath(book.getPath()).getPhysicalFile();
-			if (file == null) {
-				return;
-			}
-			final File origFile = file.javaFile();
+		new Thread() {
+			public void run() {
+				final ZLPhysicalFile file = ZLFile.createFileByPath(book.getPath()).getPhysicalFile();
+				if (file == null) {
+					return;
+				}
 
-			final File shareDir = new File(activity.getCacheDir(), "books");
-			shareDir.mkdirs();
+				try {
+					activity.showProgressIndicator(true);
 
-			String name = null;
-			final MimeType mime = FileTypeCollection.Instance.mimeType(file);
-			if (mime != null) {
-				final FileType type = FileTypeCollection.Instance.typeForMime(mime);
-				if (type != null) {
-					name = book.getTitle() + "." + type.defaultExtension(mime);
+					final File origFile = file.javaFile();
+					final File shareDir = new File(activity.getCacheDir(), "books");
+					shareDir.mkdirs();
+
+					String name = null;
+					final MimeType mime = FileTypeCollection.Instance.mimeType(file);
+					if (mime != null) {
+						final FileType type = FileTypeCollection.Instance.typeForMime(mime);
+						if (type != null) {
+							name = book.getTitle() + "." + type.defaultExtension(mime);
+						}
+					}
+
+					final File toShare = IOUtil.copyToDir(file.javaFile(), shareDir, name);
+					if (toShare == null) {
+						// TODO: show toast
+						return;
+					}
+					activity.runOnUiThread(new Runnable() {
+						public void run() {
+							final Uri uri = FileProvider.getUriForFile(
+								activity, activity.getString(R.string.file_provider_authority), toShare
+							);
+							final CharSequence sharedFrom =
+								Html.fromHtml(activity.getResources().getString(R.string.sharing__shared_from));
+							try {
+								activity.startActivity(
+									new Intent(Intent.ACTION_SEND)
+										.setType(FileTypeCollection.Instance.rawMimeType(file).Name)
+										.putExtra(Intent.EXTRA_SUBJECT, book.getTitle())
+										.putExtra(Intent.EXTRA_TEXT, sharedFrom)
+										.putExtra(Intent.EXTRA_STREAM, uri)
+										.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+								);
+							} catch (ActivityNotFoundException e) {
+								// TODO: show toast
+							}
+						}
+					});
+				} finally {
+					activity.showProgressIndicator(false);
 				}
 			}
-			final File toShare = IOUtil.copyToDir(file.javaFile(), shareDir, name);
-			if (toShare == null) {
-				// TODO: show toast
-				return;
-			}
-			final Uri uri = FileProvider.getUriForFile(
-				activity, activity.getString(R.string.file_provider_authority), toShare
-			);
-			final CharSequence sharedFrom =
-				Html.fromHtml(activity.getResources().getString(R.string.sharing__shared_from));
-			activity.startActivity(
-				new Intent(Intent.ACTION_SEND)
-					.setType(FileTypeCollection.Instance.rawMimeType(file).Name)
-					.putExtra(Intent.EXTRA_SUBJECT, book.getTitle())
-					.putExtra(Intent.EXTRA_TEXT, sharedFrom)
-					.putExtra(Intent.EXTRA_STREAM, uri)
-					.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-			);
-		} catch (ActivityNotFoundException e) {
-			// TODO: show toast
-		}
+		}.start();
 	}
 
 	public static Intent premiumIntent() {
