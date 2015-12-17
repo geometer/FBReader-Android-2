@@ -768,7 +768,8 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 		return myNavigationPopup != null;
 	}
 
-	void hideBars() {
+	@Override
+	protected final void hideBars() {
 		closeDrawer();
 
 		if (myNavigationPopup != null) {

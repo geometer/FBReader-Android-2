@@ -38,6 +38,7 @@ class ShareBookAction extends MainActivity.Action<MainActivity,AbstractReader> {
 
 	@Override
 	protected void run(Object ... params) {
+		BaseActivity.hideBars();
 		FBReaderUtil.shareBook(BaseActivity, BaseActivity.getReader().getCurrentBook());
 	}
 }
