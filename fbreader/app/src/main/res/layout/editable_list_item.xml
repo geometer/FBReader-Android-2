@@ -5,7 +5,7 @@
 	android:layout_width="match_parent"
 	android:paddingLeft="12dp"
 	android:paddingRight="12dp"
-	android:minHeight="?android:attr/listPreferredItemHeightSmall"
+	android:minHeight="?attr/listPreferredItemHeightSmall"
 	android:foreground="?android:attr/selectableItemBackground"
 >
 	<TextView
