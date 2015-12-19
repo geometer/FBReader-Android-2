@@ -19,6 +19,8 @@
 
 package org.fbreader.common.android;
 
+import java.util.Locale;
+
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.Intent;
@@ -38,10 +40,13 @@ abstract class FBActivityUtil {
 	}
 
 	static void updateLocale(MDActivity activity) {
-		final Resources res = activity.getBaseContext().getResources();
-		final Configuration config = new Configuration();
-		config.locale = Language.uiLocale();
-		res.updateConfiguration(config, res.getDisplayMetrics());
+		final Locale locale = Language.uiLocale(null);
+		if (locale != null) {
+			final Resources res = activity.getBaseContext().getResources();
+			final Configuration config = new Configuration();
+			config.locale = locale;
+			res.updateConfiguration(config, res.getDisplayMetrics());
+		}
 	}
 
 	static void applyParameters(MDActivity activity, Intent intent) {

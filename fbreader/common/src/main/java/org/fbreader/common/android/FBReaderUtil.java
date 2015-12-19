@@ -94,13 +94,31 @@ public abstract class FBReaderUtil {
 	}
 
 	private static InputStream assetsStream(MDActivity activity, String name, Locale locale) {
+		if (locale == null) {
+			return null;
+		}
+
 		final InputStream is =
 			assetsStream(activity, name, locale.getLanguage() + "_" + locale.getCountry());
 		return is != null ? is : assetsStream(activity, name, locale.getLanguage());
 	}
 
+	public static Locale activityLocale(MDActivity activity) {
+		try {
+			final Locale locale = activity.getResources().getConfiguration().locale;
+			return locale != null ? locale : Locale.getDefault();
+		} catch (Throwable t) {
+			return Locale.getDefault();
+		}
+	}
+
 	private static InputStream assetsStream(MDActivity activity, String name) {
-		InputStream is = assetsStream(activity, name, Language.uiLocale());
+		final Locale defaultLocale = activityLocale(activity);
+
+		InputStream is = assetsStream(activity, name, Language.uiLocale(defaultLocale));
+		if (is == null) {
+			is = assetsStream(activity, name, defaultLocale);
+		}
 		if (is == null) {
 			is = assetsStream(activity, name, Locale.getDefault());
 		}

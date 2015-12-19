@@ -45,8 +45,18 @@ public class Language implements Comparable<Language> {
 	public static ZLStringOption uiLanguageOption() {
 		return ourUiLanguageOption;
 	}
-	public static Locale uiLocale() {
+	public static Locale uiLocale(Locale defaultLocale) {
 		final String code = uiLanguageOption().getValue();
+
+		switch (code) {
+			default:
+				break;
+			case ANY_CODE:
+			case OTHER_CODE:
+			case MULTI_CODE:
+			case SYSTEM_CODE:
+				return defaultLocale;
+		}
 
 		final String split[] = code.split("_");
 		final Locale locale;
@@ -58,13 +68,13 @@ public class Language implements Comparable<Language> {
 				locale = new Locale(split[0], split[1]);
 				break;
 			default:
-				return Locale.getDefault();
+				return defaultLocale;
 		}
 		try {
 			locale.getISO3Language();
 			return locale;
 		} catch (MissingResourceException e) {
-			return Locale.getDefault();
+			return defaultLocale;
 		}
 	}
 
