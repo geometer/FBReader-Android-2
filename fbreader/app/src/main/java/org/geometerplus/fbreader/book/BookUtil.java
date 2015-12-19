@@ -40,7 +40,7 @@ public abstract class BookUtil {
 	}
 
 	public static ZLResourceFile getHelpFile() {
-		final Locale locale = Language.uiLocale();
+		final Locale locale = Language.uiLocale(Locale.getDefault());
 
 		ZLResourceFile file = ZLResourceFile.createResourceFile(
 			"data/intro/intro-" + locale.getLanguage() + "_" + locale.getCountry() + ".epub"

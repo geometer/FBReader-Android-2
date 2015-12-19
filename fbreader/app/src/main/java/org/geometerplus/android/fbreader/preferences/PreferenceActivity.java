@@ -218,8 +218,10 @@ public class PreferenceActivity extends FBSettingsActivity {
 			final ZLKeyBindings keyBindings = new ZLKeyBindings();
 
 			final ZLAndroidLibrary androidLibrary = FBReaderUtil.getZLibrary(PreferenceActivity.this);
+			final Locale uiLocale =
+				Language.uiLocale(FBReaderUtil.activityLocale(PreferenceActivity.this));
 			final String decimalSeparator = String.valueOf(
-				new DecimalFormatSymbols(Language.uiLocale()).getDecimalSeparator()
+				new DecimalFormatSymbols(uiLocale).getDecimalSeparator()
 			);
 
 			final Screen directoriesScreen = createPreferenceScreen("directories");

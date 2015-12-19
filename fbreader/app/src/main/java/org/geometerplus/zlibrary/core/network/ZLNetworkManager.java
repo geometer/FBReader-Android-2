@@ -397,7 +397,7 @@ public class ZLNetworkManager {
 				httpRequest.setHeader("X-Accept-Auto-Login", "True");
 			}
 			httpRequest.setHeader("Accept-Encoding", "gzip");
-			httpRequest.setHeader("Accept-Language", Language.uiLocale().getLanguage());
+			httpRequest.setHeader("Accept-Language", Language.uiLocale(Locale.getDefault()).getLanguage());
 			for (Map.Entry<String,String> header : request.Headers.entrySet()) {
 				httpRequest.setHeader(header.getKey(), header.getValue());
 			}
