@@ -151,7 +151,7 @@ public class ZLTextNGStyle extends ZLTextDecoratedStyle {
 	}
 
 	@Override
-	public byte getAlignment() {
+	protected byte getAlignmentInternal() {
 		final byte defined = myDescription.getAlignment();
 		if (defined != ZLTextAlignmentType.ALIGN_UNDEFINED) {
 			return defined;
