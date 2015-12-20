@@ -36,6 +36,7 @@ public abstract class ZLTextDecoratedStyle extends ZLTextStyle {
 	private boolean myIsUnderline;
 	private boolean myIsStrikeThrough;
 	private int myLineSpacePercent;
+	private byte myAlignment;
 
 	private boolean myIsNotCached = true;
 
@@ -65,6 +66,7 @@ public abstract class ZLTextDecoratedStyle extends ZLTextStyle {
 		myIsUnderline = isUnderlineInternal();
 		myIsStrikeThrough = isStrikeThroughInternal();
 		myLineSpacePercent = getLineSpacePercentInternal();
+		myAlignment = getAlignmentInternal();
 
 		myIsNotCached = false;
 	}
@@ -153,6 +155,15 @@ public abstract class ZLTextDecoratedStyle extends ZLTextStyle {
 		return myIsStrikeThrough;
 	}
 	protected abstract boolean isStrikeThroughInternal();
+
+	@Override
+	public final byte getAlignment() {
+		if (myIsNotCached) {
+			initCache();
+		}
+		return myAlignment;
+	}
+	protected abstract byte getAlignmentInternal();
 
 	@Override
 	public final int getVerticalAlign(ZLTextMetrics metrics) {
