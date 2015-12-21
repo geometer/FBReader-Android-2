@@ -309,8 +309,8 @@ public class ZLTextExplicitlyDecoratedStyle extends ZLTextDecoratedStyle impleme
 				? myEntry.getAlignmentType()
 				: Parent.getAlignment();
 	}
-
-	public boolean allowHyphenations() {
+	@Override
+	protected boolean allowHyphenationsInternal() {
 		// TODO: implement
 		return Parent.allowHyphenations();
 	}
