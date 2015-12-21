@@ -160,7 +160,7 @@ public class ZLTextNGStyle extends ZLTextDecoratedStyle {
 	}
 
 	@Override
-	public boolean allowHyphenations() {
+	protected boolean allowHyphenationsInternal() {
 		switch (myDescription.allowHyphenations()) {
 			case TRUE:
 				return true;
