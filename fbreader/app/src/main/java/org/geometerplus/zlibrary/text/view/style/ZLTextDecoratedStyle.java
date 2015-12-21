@@ -37,6 +37,7 @@ public abstract class ZLTextDecoratedStyle extends ZLTextStyle {
 	private boolean myIsStrikeThrough;
 	private int myLineSpacePercent;
 	private byte myAlignment;
+	private boolean myAllowHyphenations;
 
 	private boolean myIsNotCached = true;
 
@@ -67,6 +68,7 @@ public abstract class ZLTextDecoratedStyle extends ZLTextStyle {
 		myIsStrikeThrough = isStrikeThroughInternal();
 		myLineSpacePercent = getLineSpacePercentInternal();
 		myAlignment = getAlignmentInternal();
+		myAllowHyphenations = allowHyphenations();
 
 		myIsNotCached = false;
 	}
@@ -164,6 +166,15 @@ public abstract class ZLTextDecoratedStyle extends ZLTextStyle {
 		return myAlignment;
 	}
 	protected abstract byte getAlignmentInternal();
+
+	@Override
+	public final boolean allowHyphenations() {
+		if (myIsNotCached) {
+			initCache();
+		}
+		return myAllowHyphenations;
+	}
+	protected abstract boolean allowHyphenationsInternal();
 
 	@Override
 	public final int getVerticalAlign(ZLTextMetrics metrics) {
