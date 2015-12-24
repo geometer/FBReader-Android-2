@@ -68,7 +68,7 @@ public abstract class ZLTextDecoratedStyle extends ZLTextStyle {
 		myIsStrikeThrough = isStrikeThroughInternal();
 		myLineSpacePercent = getLineSpacePercentInternal();
 		myAlignment = getAlignmentInternal();
-		myAllowHyphenations = allowHyphenations();
+		myAllowHyphenations = allowHyphenationsInternal();
 
 		myIsNotCached = false;
 	}
