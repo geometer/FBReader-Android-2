@@ -14,7 +14,7 @@ dependencies {
 	compile project(':fbreader/resources')
 	compile project(':fbreader/fonts')
 	compile files('libs/LingvoIntegration_2.5.2.12.jar')
-	compile files('libs/open-dictionary-api-1.2.1.jar')
+	compile files('libs/open-dictionary-api-1.2.3.jar')
 }
 
 android {
