@@ -63,29 +63,6 @@ public final class TOCTree implements Iterable<TOCTree> {
 		}
 	}
 
-	public synchronized final TOCTree getTreeByParagraphNumber(int index) {
-		if (index < 0 || index >= mySize) {
-			// TODO: throw an exception?
-			return null;
-		}
-		if (index == 0) {
-			return this;
-		}
-		--index;
-		if (mySubtrees != null) {
-			synchronized (mySubtrees) {
-				for (TOCTree subtree : mySubtrees) {
-					if (subtree.mySize <= index) {
-						index -= subtree.mySize;
-					} else {
-						return subtree.getTreeByParagraphNumber(index);
-					}
-				}
-			}
-		}
-		throw new RuntimeException("That's impossible!!!");
-	}
-
 	synchronized final void addSubtree(TOCTree subtree) {
 		if (mySubtrees == null) {
 			mySubtrees = Collections.synchronizedList(new ArrayList<TOCTree>());
