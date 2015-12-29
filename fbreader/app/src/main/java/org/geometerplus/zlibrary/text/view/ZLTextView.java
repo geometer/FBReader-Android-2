@@ -1075,6 +1075,32 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		int internalSpaceCounter = 0;
 		boolean removeLastSpace = false;
 
+		class WordInfo {
+			final ZLTextWord Word;
+			final int ElementIndex;
+			final int StartCharIndex;
+
+			final int Width;
+			final int Height;
+			final int Descent;
+
+			final int SpaceCounter;
+
+			final ZLTextStyle Style;
+
+			WordInfo(ZLTextWord word, int elementIndex, int startCharIndex, int width, int height, int descent, int spaceCounter, ZLTextStyle style) {
+				Word = word;
+				ElementIndex = elementIndex;
+				StartCharIndex = startCharIndex;
+				Width = width;
+				Height = height;
+				Descent = descent;
+				SpaceCounter = spaceCounter;
+				Style = style;
+			}
+		}
+		final ArrayList<WordInfo> words = new ArrayList<WordInfo>();
+
 		do {
 			ZLTextElement element = paragraphCursor.getElement(currentElementIndex);
 			newWidth += getElementWidth(element, currentCharIndex);
@@ -1083,12 +1109,14 @@ public abstract class ZLTextView extends ZLTextViewBase {
 			if (element == ZLTextElement.HSpace) {
 				if (wordOccurred) {
 					wordOccurred = false;
-					internalSpaceCounter++;
+					++internalSpaceCounter;
 					lastSpaceWidth = context.getSpaceWidth();
 					newWidth += lastSpaceWidth;
 				}
 			} else if (element == ZLTextElement.NBSpace) {
 				wordOccurred = true;
+				++internalSpaceCounter;
+				newWidth += context.getSpaceWidth();
 			} else if (element instanceof ZLTextWord) {
 				wordOccurred = true;
 				isVisible = true;
@@ -1109,7 +1137,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
 					break;
 				}
 			}
-			ZLTextElement previousElement = element;
+			final ZLTextElement previousElement = element;
+			final int previousStartCharIndex = currentCharIndex;
 			++currentElementIndex;
 			currentCharIndex = 0;
 			boolean allowBreak = currentElementIndex == endIndex;
@@ -1123,6 +1152,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 					!(element instanceof ZLTextControlElement);
 			}
 			if (allowBreak) {
+				words.clear();
 				info.IsVisible = isVisible;
 				info.Width = newWidth;
 				if (info.Height < newHeight) {
@@ -1135,20 +1165,28 @@ public abstract class ZLTextView extends ZLTextViewBase {
 				info.EndCharIndex = currentCharIndex;
 				info.SpaceCounter = internalSpaceCounter;
 				storedStyle = getTextStyle();
-				removeLastSpace = !wordOccurred && (internalSpaceCounter > 0);
+				removeLastSpace = !wordOccurred && internalSpaceCounter > 0;
+			} else if (previousElement instanceof ZLTextWord) {
+				words.add(new WordInfo(
+					(ZLTextWord)previousElement,
+					currentElementIndex - 1, previousStartCharIndex,
+					newWidth, newHeight, newDescent,
+					internalSpaceCounter, getTextStyle()
+				));
 			}
 		} while (currentElementIndex != endIndex);
 
 		if (currentElementIndex != endIndex &&
 			(isHyphenationPossible() || info.EndElementIndex == startIndex)) {
-			ZLTextElement element = paragraphCursor.getElement(currentElementIndex);
+			final ZLTextElement element = paragraphCursor.getElement(currentElementIndex);
+			boolean hyphenated = false;
 			if (element instanceof ZLTextWord) {
 				final ZLTextWord word = (ZLTextWord)element;
 				newWidth -= getWordWidth(word, currentCharIndex);
 				int spaceLeft = maxWidth - newWidth;
 				if ((word.Length > 3 && spaceLeft > 2 * context.getSpaceWidth())
 					|| info.EndElementIndex == startIndex) {
-					ZLTextHyphenationInfo hyphenationInfo = getHyphenationInfo(word);
+					final ZLTextHyphenationInfo hyphenationInfo = getHyphenationInfo(word);
 					int hyphenationPosition = currentCharIndex;
 					int subwordWidth = 0;
 					for (int right = word.Length - 1, left = currentCharIndex; right > left; ) {
@@ -1197,6 +1235,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 						hyphenationPosition = right;
 					}
 					if (hyphenationPosition > currentCharIndex) {
+						hyphenated = true;
 						info.IsVisible = true;
 						info.Width = newWidth + subwordWidth;
 						if (info.Height < newHeight) {
@@ -1210,6 +1249,46 @@ public abstract class ZLTextView extends ZLTextViewBase {
 						info.SpaceCounter = internalSpaceCounter;
 						storedStyle = getTextStyle();
 						removeLastSpace = false;
+					}
+				}
+			}
+
+			if (!hyphenated) {
+				for (int i = words.size() - 1; i >= 0; --i) {
+					final WordInfo wi = words.get(i);
+					final ZLTextWord word = wi.Word;
+					if (word.Length <= 3) {
+						continue;
+					}
+					final ZLTextHyphenationInfo hyphenationInfo = getHyphenationInfo(word);
+					int pos = word.Length - 1;
+					for (; pos > wi.StartCharIndex; --pos) {
+						if (hyphenationInfo.isHyphenationPossible(pos)) {
+							break;
+						}
+					}
+					if (pos > wi.StartCharIndex) {
+						final int subwordWidth = getWordWidth(
+							word,
+							wi.StartCharIndex,
+							pos - wi.StartCharIndex,
+							word.Data[word.Offset + pos - 1] != '-'
+						);
+						info.IsVisible = true;
+						info.Width =
+							wi.Width - getWordWidth(word, wi.StartCharIndex) + subwordWidth;
+						if (info.Height < wi.Height) {
+							info.Height = wi.Height;
+						}
+						if (info.Descent < wi.Descent) {
+							info.Descent = wi.Descent;
+						}
+						info.EndElementIndex = wi.ElementIndex;
+						info.EndCharIndex = pos;
+						info.SpaceCounter = wi.SpaceCounter;
+						storedStyle = wi.Style;
+						removeLastSpace = false;
+						break;
 					}
 				}
 			}
@@ -1283,7 +1362,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		for (int wordIndex = info.RealStartElementIndex; wordIndex != endElementIndex; ++wordIndex, charIndex = 0) {
 			final ZLTextElement element = paragraph.getElement(wordIndex);
 			final int width = getElementWidth(element, charIndex);
-			if (element == ZLTextElement.HSpace) {
+			if (element == ZLTextElement.HSpace || element == ZLTextElement.NBSpace) {
 				if (wordOccurred && spaceCounter > 0) {
 					final int correction = fullCorrection / spaceCounter;
 					final int spaceLength = context.getSpaceWidth() + correction;
