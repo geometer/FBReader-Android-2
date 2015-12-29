@@ -19,9 +19,6 @@
 
 package org.geometerplus.android.fbreader.book;
 
-import java.util.List;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.*;
 import android.view.Menu;
@@ -39,44 +36,24 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
 public class EditBookInfoActivity extends FBSettingsActivity implements MenuItem.OnMenuItemClickListener, IBookCollection.Listener<Book> {
-	private class EditBookInfoFragment extends PreferenceFragment {
-		@Override
-		public void onCreate(Bundle bundle) {
-			super.onCreate(bundle);
-
-			myScreen = getPreferenceManager().createPreferenceScreen(EditBookInfoActivity.this);
-			setPreferenceScreen(myScreen);
-
-			Book = FBReaderIntents.getBookExtra(getIntent(), myCollection);
-
-			if (Book == null) {
-				finish();
-				return;
-			}
-
-			FBReaderUtil.setBookTitle(EditBookInfoActivity.this, Book);
-			addPreference(new BookTitlePreference(EditBookInfoActivity.this, Resource, "title", Book));
-			addPreference(new EditAuthorsPreference(EditBookInfoActivity.this, Resource, "authors"));
-			addPreference(new EditTagsPreference(EditBookInfoActivity.this, Resource, "tags"));
-			addPreference(new BookLanguagePreference(EditBookInfoActivity.this, Resource.getResource("language"), Book));
-			addPreference(new EncodingPreference(EditBookInfoActivity.this, Resource.getResource("encoding"), Book));
-		}
-	}
-
-	private PreferenceScreen myScreen;
-	final ZLResource Resource = ZLResource.resource("BookInfo");
-
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 
-	Book Book;
-
-	public void addPreference(Preference preference) {
-		myScreen.addPreference(preference);
-	}
+	volatile PreferenceScreen Screen;
+	volatile Book Book;
 
 	@Override
 	protected PreferenceFragment preferenceFragment() {
 		return new EditBookInfoFragment();
+	}
+
+	@Override
+	protected void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+
+		Book = FBReaderIntents.getBookExtra(getIntent(), myCollection);
+		if (Book == null) {
+			finish();
+		}
 	}
 
 	@Override
@@ -137,8 +114,8 @@ public class EditBookInfoActivity extends FBSettingsActivity implements MenuItem
 
 		Book.updateFrom(book);
 		FBReaderUtil.setBookTitle(EditBookInfoActivity.this, Book);
-		for (int i = myScreen.getPreferenceCount() - 1; i >= 0; --i) {
-			final Preference pref = myScreen.getPreference(i);
+		for (int i = Screen.getPreferenceCount() - 1; i >= 0; --i) {
+			final Preference pref = Screen.getPreference(i);
 			if (pref instanceof BookInfoPreference) {
 				((BookInfoPreference)pref).updateView();
 			}

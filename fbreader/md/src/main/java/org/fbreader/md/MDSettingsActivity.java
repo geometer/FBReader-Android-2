@@ -31,8 +31,8 @@ public abstract class MDSettingsActivity extends MDActivity {
 	protected abstract PreferenceFragment preferenceFragment();
 
 	@Override
-	protected void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
+	protected void onPostCreate(Bundle bundle) {
+		super.onPostCreate(bundle);
 		getFragmentManager()
 			.beginTransaction()
 			.replace(R.id.md_settings_content, preferenceFragment())
