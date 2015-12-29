@@ -184,7 +184,7 @@ void RtfReader::fillKeywordMap() {
 		addAction("bullet",	new RtfCharCommand("\xE2\x80\xA2"));		 // &bullet;
 		addAction("endash",	new RtfCharCommand("\xE2\x80\x93"));		 // &ndash;
 		addAction("emdash",	new RtfCharCommand("\xE2\x80\x94"));		 // &mdash;
-		addAction("~",	new RtfCharCommand("\xC0\xA0"));					// &nbsp;
+		addAction("~",	new RtfCharCommand("\xC2\xA0"));					// &nbsp;
 		addAction("enspace",	new RtfCharCommand("\xE2\x80\x82"));		// &emsp;
 		addAction("emspace",	new RtfCharCommand("\xE2\x80\x83"));		// &ensp;
 		addAction("lquote",	new RtfCharCommand("\xE2\x80\x98"));		 // &lsquo;
