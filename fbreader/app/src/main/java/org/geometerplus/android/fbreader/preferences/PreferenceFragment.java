@@ -402,6 +402,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			appearanceScreen.addOption(androidLibrary.EnableFullscreenModeOption, "fullscreenMode");
 		}
 		appearanceScreen.addOption(androidLibrary.DisableButtonLightsOption, "disableButtonLights");
+		appearanceScreen.addOption(miscOptions.EnableBookMenuSwipeGesture, "enableBookMenuSwipeGesture");
 
 		if (DeviceType.Instance().isEInk()) {
 			final EInkOptions einkOptions = new EInkOptions();

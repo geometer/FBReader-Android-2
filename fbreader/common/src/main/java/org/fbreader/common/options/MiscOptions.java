@@ -25,6 +25,8 @@ import org.fbreader.common.DurationEnum;
 public class MiscOptions {
 	public final ZLBooleanOption AllowScreenBrightnessAdjustment =
 		new ZLBooleanOption("LookNFeel", "AllowScreenBrightnessAdjustment", true);
+	public final ZLBooleanOption EnableBookMenuSwipeGesture =
+		new ZLBooleanOption("LookNFeel", "EnableBookMenuSwipeGesture", false);
 
 	public final ZLBooleanOption EnableDoubleTap =
 		new ZLBooleanOption("Options", "EnableDoubleTap", false);
