@@ -10,6 +10,6 @@
 		android:id="@+id/picker_preference_central"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:descendantFocusability="blocksDescendants"
+		android:descendantFocusability="beforeDescendants"
 	/>
 </LinearLayout>
