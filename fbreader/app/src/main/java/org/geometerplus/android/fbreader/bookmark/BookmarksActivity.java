@@ -69,11 +69,9 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 	private volatile Book myBook;
 	private volatile Bookmark myBookmark;
 
-	private final Comparator<Bookmark> myComparator = new Bookmark.ByTimeComparator();
-
-	private volatile BookmarksFragment myThisBookFragment = new BookmarksFragment(true);
-	private volatile BookmarksFragment myAllBooksFragment = new BookmarksFragment(false);
-	private volatile BookmarksFragment mySearchResultsFragment = new BookmarksFragment(false);
+	private volatile BookmarksAdapter myThisBookAdapter = new BookmarksAdapter(true);
+	private volatile BookmarksAdapter myAllBooksAdapter = new BookmarksAdapter(false);
+	private volatile BookmarksAdapter mySearchResultsAdapter = new BookmarksAdapter(false);
 
 	private final ZLResource myResource = ZLResource.resource("bookmarksView");
 	private final ZLStringOption myBookmarkSearchPatternOption =
@@ -108,11 +106,11 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 				switch (position) {
 					default:
 					case 0:
-						return myThisBookFragment;
+						return new ThisBookBookmarksFragment();
 					case 1:
-						return myAllBooksFragment;
+						return new AllBooksBookmarksFragment();
 					case 2:
-						return mySearchResultsFragment;
+						return new SearchResultsFragment();
 				}
 			}
 
@@ -154,9 +152,7 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 			}
 
 			private void setupSearchFragment(TabLayout.Tab tab) {
-				final FragmentPagerAdapter adapter =
-					(FragmentPagerAdapter)myViewPager.getAdapter();
-				if (adapter.getItem(tab.getPosition()) == mySearchResultsFragment) {
+				if (tab.getPosition() == 2) {
 					onSearchRequested();
 				}
 			}
@@ -176,7 +172,7 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 		myCollection.bindToService(this, new Runnable() {
 			public void run() {
 				if (myBookmark == null) {
-					myThisBookFragment.getBookmarksAdapter().removeNewBookmarkItem();
+					myThisBookAdapter.removeNewBookmarkItem();
 				}
 				myCollection.addListener(BookmarksActivity.this);
 
@@ -214,15 +210,15 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 						if (thisBookBookmarks.isEmpty()) {
 							break;
 						}
-						myThisBookFragment.getBookmarksAdapter().addAll(thisBookBookmarks);
-						myAllBooksFragment.getBookmarksAdapter().addAll(thisBookBookmarks);
+						myThisBookAdapter.addAll(thisBookBookmarks);
+						myAllBooksAdapter.addAll(thisBookBookmarks);
 					}
 					for (BookmarkQuery query = new BookmarkQuery(50); ; query = query.next()) {
 						final List<Bookmark> allBookmarks = myCollection.bookmarks(query);
 						if (allBookmarks.isEmpty()) {
 							break;
 						}
-						myAllBooksFragment.getBookmarksAdapter().addAll(allBookmarks);
+						myAllBooksAdapter.addAll(allBookmarks);
 					}
 				}
 			}
@@ -237,11 +233,11 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 
 					final Map<String,Bookmark> oldBookmarks = new HashMap<String,Bookmark>();
 					if (flagThisBookTab) {
-						for (Bookmark b : myThisBookFragment.getBookmarksAdapter().bookmarks()) {
+						for (Bookmark b : myThisBookAdapter.bookmarks()) {
 							oldBookmarks.put(b.Uid, b);
 						}
 					} else {
-						for (Bookmark b : myAllBooksFragment.getBookmarksAdapter().bookmarks()) {
+						for (Bookmark b : myAllBooksAdapter.bookmarks()) {
 							if (b.BookId == book.getId()) {
 								oldBookmarks.put(b.Uid, b);
 							}
@@ -256,20 +252,20 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 						}
 						for (Bookmark b : loaded) {
 							final Bookmark old = oldBookmarks.remove(b.Uid);
-							myAllBooksFragment.getBookmarksAdapter().replace(old, b);
+							myAllBooksAdapter.replace(old, b);
 							if (flagThisBookTab) {
-								myThisBookFragment.getBookmarksAdapter().replace(old, b);
+								myThisBookAdapter.replace(old, b);
 							}
 							if (MiscUtil.matchesIgnoreCase(b.getText(), pattern)) {
-								mySearchResultsFragment.getBookmarksAdapter().replace(old, b);
+								mySearchResultsAdapter.replace(old, b);
 							}
 						}
 					}
-					myAllBooksFragment.getBookmarksAdapter().removeAll(oldBookmarks.values());
+					myAllBooksAdapter.removeAll(oldBookmarks.values());
 					if (flagThisBookTab) {
-						myThisBookFragment.getBookmarksAdapter().removeAll(oldBookmarks.values());
+						myThisBookAdapter.removeAll(oldBookmarks.values());
 					}
-					mySearchResultsFragment.getBookmarksAdapter().removeAll(oldBookmarks.values());
+					mySearchResultsAdapter.removeAll(oldBookmarks.values());
 				}
 			}
 		}).start();
@@ -278,14 +274,14 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 	private void doSearch(String pattern) {
 		final LinkedList<Bookmark> bookmarks = new LinkedList<Bookmark>();
 		pattern = pattern.toLowerCase();
-		for (Bookmark b : myAllBooksFragment.getBookmarksAdapter().bookmarks()) {
+		for (Bookmark b : myAllBooksAdapter.bookmarks()) {
 			if (MiscUtil.matchesIgnoreCase(b.getText(), pattern)) {
 				bookmarks.add(b);
 			}
 		}
 		if (!bookmarks.isEmpty()) {
-			mySearchResultsFragment.getBookmarksAdapter().clear();
-			mySearchResultsFragment.getBookmarksAdapter().addAll(bookmarks);
+			mySearchResultsAdapter.clear();
+			mySearchResultsAdapter.addAll(bookmarks);
 		} else {
 			UIMessageUtil.showErrorMessage(this, "bookmarkNotFound");
 		}
@@ -315,13 +311,14 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 	}
 
 	private final class BookmarksAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+		private final Comparator<Bookmark> myComparator = new Bookmark.ByTimeComparator();
+
 		private final List<Bookmark> myBookmarksList =
 			Collections.synchronizedList(new LinkedList<Bookmark>());
 		private volatile boolean myShowAddBookmarkItem;
 
-		BookmarksAdapter(ListFragment listFragment, boolean showAddBookmarkItem) {
+		BookmarksAdapter(boolean showAddBookmarkItem) {
 			myShowAddBookmarkItem = showAddBookmarkItem;
-			listFragment.setListAdapter(this);
 		}
 
 		public List<Bookmark> bookmarks() {
@@ -505,25 +502,57 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 		}
 	}
 
-	private final class BookmarksFragment extends ListFragment {
-		BookmarksFragment(boolean showAddBookmarkItem) {
-			setListAdapter(new BookmarksAdapter(this, showAddBookmarkItem));
+	public final static class ThisBookBookmarksFragment extends BookmarksFragment {
+		@Override
+		protected BookmarksAdapter getBookmarksAdapter() {
+			final BookmarksActivity activity = (BookmarksActivity)getActivity();
+			return activity != null ? activity.myThisBookAdapter : null;
 		}
+	}
 
-		BookmarksAdapter getBookmarksAdapter() {
-			return (BookmarksAdapter)getListAdapter();
+	public final static class AllBooksBookmarksFragment extends BookmarksFragment {
+		@Override
+		protected BookmarksAdapter getBookmarksAdapter() {
+			final BookmarksActivity activity = (BookmarksActivity)getActivity();
+			return activity != null ? activity.myAllBooksAdapter : null;
+		}
+	}
+
+	public final static class SearchResultsFragment extends BookmarksFragment {
+		@Override
+		protected BookmarksAdapter getBookmarksAdapter() {
+			final BookmarksActivity activity = (BookmarksActivity)getActivity();
+			return activity != null ? activity.mySearchResultsAdapter : null;
+		}
+	}
+
+	public abstract static class BookmarksFragment extends ListFragment {
+		protected abstract BookmarksAdapter getBookmarksAdapter();
+
+		@Override
+		public void onCreate(Bundle bundle) {
+			super.onCreate(bundle);
+			final BookmarksAdapter adapter = getBookmarksAdapter();
+			if (adapter != null) {
+				setListAdapter(adapter);
+			}
 		}
 
 		@Override
 		public void onViewCreated(View view, Bundle saved) {
 			super.onViewCreated(view, saved);
-
-			getListView().setOnItemLongClickListener(getBookmarksAdapter());
+			final BookmarksAdapter adapter = getBookmarksAdapter();
+			if (adapter != null) {
+				getListView().setOnItemLongClickListener(adapter);
+			}
 		}
 
 		@Override
 		public void onListItemClick(ListView listView, View view, int position, long id) {
-			getBookmarksAdapter().onItemClick(listView, view, position, id);
+			final BookmarksAdapter adapter = getBookmarksAdapter();
+			if (adapter != null) {
+				adapter.onItemClick(listView, view, position, id);
+			}
 		}
 	}
 
@@ -536,9 +565,9 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 				runOnUiThread(new Runnable() {
 					public void run() {
 						updateStyles();
-						myAllBooksFragment.getBookmarksAdapter().notifyDataSetChanged();
-						myThisBookFragment.getBookmarksAdapter().notifyDataSetChanged();
-						mySearchResultsFragment.getBookmarksAdapter().notifyDataSetChanged();
+						myAllBooksAdapter.notifyDataSetChanged();
+						myThisBookAdapter.notifyDataSetChanged();
+						mySearchResultsAdapter.notifyDataSetChanged();
 					}
 				});
 				break;
