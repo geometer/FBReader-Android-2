@@ -69,8 +69,6 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 	private volatile Book myBook;
 	private volatile Bookmark myBookmark;
 
-	private final Comparator<Bookmark> myComparator = new Bookmark.ByTimeComparator();
-
 	private volatile BookmarksFragment myThisBookFragment = new BookmarksFragment(true);
 	private volatile BookmarksFragment myAllBooksFragment = new BookmarksFragment(false);
 	private volatile BookmarksFragment mySearchResultsFragment = new BookmarksFragment(false);
@@ -315,6 +313,8 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 	}
 
 	private final class BookmarksAdapter extends BaseAdapter implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+		private final Comparator<Bookmark> myComparator = new Bookmark.ByTimeComparator();
+
 		private final List<Bookmark> myBookmarksList =
 			Collections.synchronizedList(new LinkedList<Bookmark>());
 		private volatile boolean myShowAddBookmarkItem;
