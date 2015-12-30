@@ -20,7 +20,10 @@
 package org.geometerplus.android.fbreader.preferences;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
 import net.simonvt.numberpicker.NumberPicker;
 
 import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
@@ -54,6 +57,16 @@ class ZLIntegerRangePreference extends MDDialogPreference {
 		myPicker.setWrapSelectorWheel(false);
 
 		super.onBindDialogView(view);
+	}
+
+	@Override
+	public void onDialogShow(AlertDialog dialog) {
+		myPicker.setFocusable(true);
+		myPicker.setFocusableInTouchMode(true);
+		myPicker.requestFocus();
+		final InputMethodManager imm =
+			(InputMethodManager)myPicker.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(myPicker.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	@Override

@@ -20,9 +20,11 @@
 package org.fbreader.reader.android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import net.simonvt.numberpicker.NumberPicker;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
@@ -65,6 +67,9 @@ public abstract class GotoPageDialogUtil {
 				picker.setFocusable(true);
 				picker.setFocusableInTouchMode(true);
 				picker.requestFocus();
+				final InputMethodManager imm =
+					(InputMethodManager)picker.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(picker.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 			}
 		});
 		dialog.show();

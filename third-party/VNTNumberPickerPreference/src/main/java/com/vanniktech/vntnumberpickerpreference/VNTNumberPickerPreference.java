@@ -21,8 +21,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import net.simonvt.numberpicker.NumberPicker;
 
@@ -86,6 +88,16 @@ public class VNTNumberPickerPreference extends MDDialogPreference {
 		myPicker.setMaxValue(myMaxValue);
 		myPicker.setValue(mySelectedValue);
 		myPicker.setWrapSelectorWheel(false);
+	}
+
+	@Override
+	public void onDialogShow(AlertDialog dialog) {
+		myPicker.setFocusable(true);
+		myPicker.setFocusableInTouchMode(true);
+		myPicker.requestFocus();
+		final InputMethodManager imm =
+			(InputMethodManager)myPicker.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(myPicker.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	@Override
