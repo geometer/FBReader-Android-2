@@ -76,7 +76,8 @@ import org.fbreader.common.android.FBSettingsActivity;
 public class PreferenceActivity extends FBSettingsActivity {
 	public static String SCREEN_KEY = "screen";
 
-	private class Fragment extends PreferenceFragment {
+	private static class Fragment extends PreferenceFragment {
+		private PreferenceScreen myScreen;
 		private final HashMap<String,Screen> myScreenMap = new HashMap<String,Screen>();
 
 		private class Screen {
@@ -85,7 +86,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 			private Screen(ZLResource root, String resourceKey) {
 				Resource = root.getResource(resourceKey);
-				myScreen = getPreferenceManager().createPreferenceScreen(PreferenceActivity.this);
+				myScreen = getPreferenceManager().createPreferenceScreen(getActivity());
 				myScreen.setTitle(Resource.getValue());
 				myScreen.setSummary(Resource.getResource("summary").getValue());
 			}
@@ -107,31 +108,31 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 			public Preference addOption(ZLBooleanOption option, String resourceKey) {
 				return addPreference(
-					new ZLBooleanPreference(PreferenceActivity.this, option, Resource.getResource(resourceKey))
+					new ZLBooleanPreference(getActivity(), option, Resource.getResource(resourceKey))
 				);
 			}
 
 			public Preference addOption(ZLColorOption option, String resourceKey) {
 				return addPreference(
-					new ZLColorPreference(PreferenceActivity.this, Resource, resourceKey, option)
+					new ZLColorPreference(getActivity(), Resource, resourceKey, option)
 				);
 			}
 
 			public Preference addOption(ZLIntegerRangeOption option, String resourceKey) {
 				return addPreference(new ZLIntegerRangePreference(
-					PreferenceActivity.this, Resource.getResource(resourceKey), option
+					getActivity(), Resource.getResource(resourceKey), option
 				));
 			}
 
 			public <T extends Enum<T>> Preference addOption(ZLEnumOption<T> option, String key) {
 				return addPreference(
-					new ZLEnumPreference<T>(PreferenceActivity.this, option, Resource.getResource(key))
+					new ZLEnumPreference<T>(getActivity(), option, Resource.getResource(key))
 				);
 			}
 
 			public <T extends Enum<T>> Preference addOption(ZLEnumOption<T> option, String key, String valuesKey) {
 				return addPreference(
-					new ZLEnumPreference<T>(PreferenceActivity.this, option, Resource.getResource(key), Resource.getResource(valuesKey))
+					new ZLEnumPreference<T>(getActivity(), option, Resource.getResource(key), Resource.getResource(valuesKey))
 				);
 			}
 		}
@@ -148,16 +149,17 @@ public class PreferenceActivity extends FBSettingsActivity {
 					view = parent instanceof View ? (View)parent : null;
 				}
 				if (view instanceof LinearLayout) {
+					final PreferenceActivity activity = (PreferenceActivity)getActivity();
 					final LinearLayout ll = (LinearLayout)view;
 					final Toolbar toolbar =
-						(Toolbar)getLayoutInflater().inflate(R.layout.md_toolbar, ll, false);
+						(Toolbar)activity.getLayoutInflater().inflate(R.layout.md_toolbar, ll, false);
 					toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View view) {
 							dialog.dismiss();
 						}
 					});
-					setupToolbarAppearance(toolbar, true);
+					activity.setupToolbarAppearance(toolbar, true);
 					toolbar.setTitle(preference.getTitle());
 					ll.addView(toolbar, 0);
 				}
@@ -170,9 +172,14 @@ public class PreferenceActivity extends FBSettingsActivity {
 		public void onCreate(Bundle bundle) {
 			super.onCreate(bundle);
 
-			myScreen = getPreferenceManager().createPreferenceScreen(PreferenceActivity.this);
+			final PreferenceActivity activity = (PreferenceActivity)getActivity();
+			if (activity == null) {
+				return;
+			}
 
-			final Intent intent = getIntent();
+			myScreen = getPreferenceManager().createPreferenceScreen(activity);
+
+			final Intent intent = activity.getIntent();
 			final Uri data = intent.getData();
 			final String screenId;
 			if (Intent.ACTION_VIEW.equals(intent.getAction())
@@ -184,17 +191,17 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 			Config.Instance().runOnConnect(new Runnable() {
 				public void run() {
-					init(intent);
+					init(activity, intent);
 					final Screen screen = myScreenMap.get(screenId);
 					setPreferenceScreen(screen != null ? screen.myScreen : myScreen);
 					if (screen != null) {
-						setTitle(screen.Resource.getValue());
+						activity.setTitle(screen.Resource.getValue());
 					}
 				}
 			});
 		}
 
-		private void init(Intent intent) {
+		private void init(final PreferenceActivity activity, Intent intent) {
 			final Config config = Config.Instance();
 			config.requestAllValuesForGroup("Style");
 			config.requestAllValuesForGroup("Options");
@@ -205,7 +212,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 			config.requestAllValuesForGroup("Colors");
 			config.requestAllValuesForGroup("Sync");
 			config.requestAllValuesForGroup("ReadingModeMenu");
-			setResult(FBReader.RESULT_REPAINT);
+			activity.setResult(FBReader.RESULT_REPAINT);
 
 			final ViewOptions viewOptions = new ViewOptions();
 			final MiscOptions miscOptions = new MiscOptions();
@@ -217,9 +224,9 @@ public class PreferenceActivity extends FBSettingsActivity {
 			final ZLTextStyleCollection collection = viewOptions.getTextStyleCollection();
 			final ZLKeyBindings keyBindings = new ZLKeyBindings();
 
-			final ZLAndroidLibrary androidLibrary = FBReaderUtil.getZLibrary(PreferenceActivity.this);
+			final ZLAndroidLibrary androidLibrary = FBReaderUtil.getZLibrary(activity);
 			final Locale uiLocale =
-				Language.uiLocale(FBReaderUtil.activityLocale(PreferenceActivity.this));
+				Language.uiLocale(FBReaderUtil.activityLocale(activity));
 			final String decimalSeparator = String.valueOf(
 				new DecimalFormatSymbols(uiLocale).getDecimalSeparator()
 			);
@@ -228,7 +235,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 			final Runnable libraryUpdater = new Runnable() {
 				public void run() {
 					final BookCollectionShadow bookCollection = new BookCollectionShadow();
-					bookCollection.bindToService(PreferenceActivity.this, new Runnable() {
+					bookCollection.bindToService(activity, new Runnable() {
 						public void run() {
 							bookCollection.reset(false);
 							bookCollection.unbind();
@@ -236,18 +243,18 @@ public class PreferenceActivity extends FBSettingsActivity {
 					});
 				}
 			};
-			directoriesScreen.addPreference(myChooserCollection.createPreference(
+			directoriesScreen.addPreference(activity.ChooserCollection.createPreference(
 				directoriesScreen.Resource, "bookPath", Paths.BookPathOption, libraryUpdater
 			));
-			directoriesScreen.addPreference(myChooserCollection.createPreference(
+			directoriesScreen.addPreference(activity.ChooserCollection.createPreference(
 				directoriesScreen.Resource, "downloadDir", Paths.DownloadsDirectoryOption, libraryUpdater
 			));
 			final PreferenceSet fontReloader = new PreferenceSet.Reloader();
-			directoriesScreen.addPreference(myChooserCollection.createPreference(
+			directoriesScreen.addPreference(activity.ChooserCollection.createPreference(
 				directoriesScreen.Resource, "fontPath", Paths.FontPathOption, fontReloader
 			));
-			directoriesScreen.addPreference(myChooserCollection.createPreference(
-				directoriesScreen.Resource, "tempDir", Paths.TempDirectoryOption(PreferenceActivity.this), null
+			directoriesScreen.addPreference(activity.ChooserCollection.createPreference(
+				directoriesScreen.Resource, "tempDir", Paths.TempDirectoryOption(activity), null
 			));
 
 			final Screen syncScreen = createPreferenceScreen("sync");
@@ -257,21 +264,21 @@ public class PreferenceActivity extends FBSettingsActivity {
 					return syncOptions.Enabled.getValue();
 				}
 			};
-			syncScreen.addPreference(new UrlPreference(PreferenceActivity.this, syncScreen.Resource, "site"));
+			syncScreen.addPreference(new UrlPreference(activity, syncScreen.Resource, "site"));
 			syncScreen.addPreference(new ZLCheckBoxPreference(
-				PreferenceActivity.this, syncScreen.Resource.getResource("enable")
+				activity, syncScreen.Resource.getResource("enable")
 			) {
 				{
 					if (syncOptions.Enabled.getValue()) {
 						setChecked(true);
-						setOnSummary(SyncUtil.getAccountName(myNetworkContext));
+						setOnSummary(SyncUtil.getAccountName(activity.NetworkContext));
 					} else {
 						setChecked(false);
 					}
 				}
 
 				private void enableSynchronisation() {
-					SyncOperations.enableSync(PreferenceActivity.this, syncOptions);
+					SyncOperations.enableSync(activity, syncOptions);
 				}
 
 				@Override
@@ -280,7 +287,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 					syncPreferences.run();
 
 					if (!isChecked()) {
-						SyncUtil.logout(myNetworkContext);
+						SyncUtil.logout(activity.NetworkContext);
 						syncOptions.Enabled.setValue(false);
 						enableSynchronisation();
 						syncPreferences.run();
@@ -288,17 +295,17 @@ public class PreferenceActivity extends FBSettingsActivity {
 						return;
 					}
 
-					UIUtil.createExecutor(PreferenceActivity.this, "tryConnect").execute(new Runnable() {
+					UIUtil.createExecutor(activity, "tryConnect").execute(new Runnable() {
 						public void run() {
 							try {
-								myNetworkContext.perform(
+								activity.NetworkContext.perform(
 									new JsonRequest(SyncOptions.BASE_URL + "login/test") {
 										@Override
 										public void processResponse(Object response) {
 											final String account = (String)((Map)response).get("user");
 											syncOptions.Enabled.setValue(account != null);
 											enableSynchronisation();
-											runOnUiThread(new Runnable() {
+											activity.runOnUiThread(new Runnable() {
 												public void run() {
 													setOnSummary(account);
 													syncPreferences.run();
@@ -309,7 +316,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 								);
 							} catch (ZLNetworkException e) {
 								e.printStackTrace();
-								runOnUiThread(new Runnable() {
+								activity.runOnUiThread(new Runnable() {
 									public void run() {
 										setChecked(false);
 									}
@@ -323,7 +330,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 					final String summary = account != null
 						? Resource.getResource("summaryOnWithAccount").getValue().replace("%s", account)
 						: Resource.getResource("summaryOn").getValue();
-					runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							setSummaryOn(summary);
 						}
@@ -340,7 +347,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 			final Screen appearanceScreen = createPreferenceScreen("appearance");
 			appearanceScreen.addPreference(new LanguagePreference(
-				PreferenceActivity.this, appearanceScreen.Resource.getResource("language"), ZLResource.interfaceLanguages()
+				activity, appearanceScreen.Resource.getResource("language"), ZLResource.interfaceLanguages()
 			) {
 				@Override
 				protected String currentValue() {
@@ -352,25 +359,25 @@ public class PreferenceActivity extends FBSettingsActivity {
 					final ZLStringOption languageOption = Language.uiLanguageOption();
 					if (!code.equals(languageOption.getValue())) {
 						languageOption.setValue(code);
-						finish();
+						activity.finish();
 						startActivity(new Intent(
 							Intent.ACTION_VIEW, Uri.parse("fbreader-preferences:appearance"),
-							PreferenceActivity.this, PreferenceActivity.class
+							activity, PreferenceActivity.class
 						));
 					}
 				}
 			});
 			appearanceScreen.addPreference(new SingleChoiceStringPreference(
-				PreferenceActivity.this, appearanceScreen.Resource.getResource("screenOrientation"),
+				activity, appearanceScreen.Resource.getResource("screenOrientation"),
 				androidLibrary.getOrientationOption(), androidLibrary.allOrientations()
 			));
 			appearanceScreen.addPreference(new ZLBooleanPreference(
-				PreferenceActivity.this,
+				activity,
 				viewOptions.TwoColumnView,
 				appearanceScreen.Resource.getResource("twoColumnView")
 			));
 			appearanceScreen.addPreference(new ZLBooleanPreference(
-				PreferenceActivity.this,
+				activity,
 				miscOptions.AllowScreenBrightnessAdjustment,
 				appearanceScreen.Resource.getResource("allowScreenBrightnessAdjustment")
 			) {
@@ -383,13 +390,13 @@ public class PreferenceActivity extends FBSettingsActivity {
 				}
 			});
 			appearanceScreen.addPreference(new BatteryLevelToTurnScreenOffPreference(
-				PreferenceActivity.this,
+				activity,
 				androidLibrary.BatteryLevelToTurnScreenOffOption,
 				appearanceScreen.Resource.getResource("dontTurnScreenOff")
 			));
 			/*
 			appearanceScreen.addPreference(new ZLBooleanPreference(
-				PreferenceActivity.this,
+				activity,
 				androidLibrary.DontTurnScreenOffDuringChargingOption,
 				appearanceScreen.Resource.getResource("dontTurnScreenOffDuringCharging")
 			));
@@ -414,7 +421,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 				};
 
 				einkScreen.addPreference(new ZLBooleanPreference(
-					PreferenceActivity.this, einkOptions.EnableFastRefresh,
+					activity, einkOptions.EnableFastRefresh,
 					einkScreen.Resource.getResource("enableFastRefresh")
 				) {
 					@Override
@@ -425,7 +432,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 				});
 
 				final ZLIntegerRangePreference updateIntervalPreference = new ZLIntegerRangePreference(
-					PreferenceActivity.this, einkScreen.Resource.getResource("interval"), einkOptions.UpdateInterval
+					activity, einkScreen.Resource.getResource("interval"), einkOptions.UpdateInterval
 				);
 				einkScreen.addPreference(updateIntervalPreference);
 
@@ -447,15 +454,15 @@ public class PreferenceActivity extends FBSettingsActivity {
 			final ZLTextBaseStyle baseStyle = collection.getBaseStyle();
 
 			fontReloader.add(textScreen.addPreference(new FontPreference(
-				PreferenceActivity.this, textScreen.Resource.getResource("font"),
+				activity, textScreen.Resource.getResource("font"),
 				baseStyle.FontFamilyOption, false
 			)));
 			textScreen.addPreference(new ZLIntegerRangePreference(
-				PreferenceActivity.this, textScreen.Resource.getResource("fontSize"),
+				activity, textScreen.Resource.getResource("fontSize"),
 				baseStyle.FontSizeOption
 			));
 			textScreen.addPreference(new FontStylePreference(
-				PreferenceActivity.this, textScreen.Resource.getResource("fontStyle"),
+				activity, textScreen.Resource.getResource("fontStyle"),
 				baseStyle.BoldOption, baseStyle.ItalicOption
 			));
 			final ZLIntegerRangeOption spaceOption = baseStyle.LineSpaceOption;
@@ -465,12 +472,12 @@ public class PreferenceActivity extends FBSettingsActivity {
 				spacings[i] = (char)(val / 10 + '0') + decimalSeparator + (char)(val % 10 + '0');
 			}
 			textScreen.addPreference(new SingleChoiceIntegerPreference(
-				PreferenceActivity.this, textScreen.Resource.getResource("lineSpacing"),
+				activity, textScreen.Resource.getResource("lineSpacing"),
 				spaceOption, spacings
 			));
 			final String[] alignments = { "left", "right", "center", "justify" };
 			textScreen.addPreference(new SingleChoiceIntegerPreference(
-				PreferenceActivity.this, textScreen.Resource.getResource("alignment"),
+				activity, textScreen.Resource.getResource("alignment"),
 				baseStyle.AlignmentOption, alignments
 			));
 			textScreen.addOption(baseStyle.AutoHyphenationOption, "autoHyphenations");
@@ -479,71 +486,71 @@ public class PreferenceActivity extends FBSettingsActivity {
 			for (ZLTextNGStyleDescription description : collection.getDescriptionList()) {
 				final Screen ngScreen = moreStylesScreen.createPreferenceScreen(description.Name);
 				ngScreen.addPreference(new FontPreference(
-					PreferenceActivity.this, textScreen.Resource.getResource("font"),
+					activity, textScreen.Resource.getResource("font"),
 					description.FontFamilyOption, true
 				));
 				ngScreen.addPreference(new StringPreference(
-					PreferenceActivity.this, description.FontSizeOption,
+					activity, description.FontSizeOption,
 					StringPreference.CONSTRAINT_POSITIVE_LENGTH,
 					textScreen.Resource, "fontSize"
 				));
 				ngScreen.addPreference(new SingleChoiceStringPreference(
-					PreferenceActivity.this, textScreen.Resource.getResource("bold"),
+					activity, textScreen.Resource.getResource("bold"),
 					description.FontWeightOption,
 					new String[] { "inherit", "normal", "bold" }
 				));
 				ngScreen.addPreference(new SingleChoiceStringPreference(
-					PreferenceActivity.this, textScreen.Resource.getResource("italic"),
+					activity, textScreen.Resource.getResource("italic"),
 					description.FontStyleOption,
 					new String[] { "inherit", "normal", "italic" }
 				));
 				ngScreen.addPreference(new SingleChoiceStringPreference(
-					PreferenceActivity.this, textScreen.Resource.getResource("textDecoration"),
+					activity, textScreen.Resource.getResource("textDecoration"),
 					description.TextDecorationOption,
 					new String[] { "inherit", "none", "underline", "line-through" }
 				));
 				ngScreen.addPreference(new SingleChoiceStringPreference(
-					PreferenceActivity.this, textScreen.Resource.getResource("allowHyphenations"),
+					activity, textScreen.Resource.getResource("allowHyphenations"),
 					description.HyphenationOption,
 					new String[] { "inherit", "none", "auto" }
 				));
 				ngScreen.addPreference(new SingleChoiceStringPreference(
-					PreferenceActivity.this, textScreen.Resource.getResource("alignment"),
+					activity, textScreen.Resource.getResource("alignment"),
 					description.AlignmentOption,
 					new String[] { "inherit", "left", "right", "center", "justify" }
 				));
 				ngScreen.addPreference(new StringPreference(
-					PreferenceActivity.this, description.LineHeightOption,
+					activity, description.LineHeightOption,
 					StringPreference.CONSTRAINT_PERCENT,
 					textScreen.Resource, "lineSpacing"
 				));
 				ngScreen.addPreference(new StringPreference(
-					PreferenceActivity.this, description.MarginTopOption,
+					activity, description.MarginTopOption,
 					StringPreference.CONSTRAINT_LENGTH,
 					textScreen.Resource, "spaceBefore"
 				));
 				ngScreen.addPreference(new StringPreference(
-					PreferenceActivity.this, description.MarginBottomOption,
+					activity, description.MarginBottomOption,
 					StringPreference.CONSTRAINT_LENGTH,
 					textScreen.Resource, "spaceAfter"
 				));
 				ngScreen.addPreference(new StringPreference(
-					PreferenceActivity.this, description.MarginLeftOption,
+					activity, description.MarginLeftOption,
 					StringPreference.CONSTRAINT_LENGTH,
 					textScreen.Resource, "leftIndent"
 				));
 				ngScreen.addPreference(new StringPreference(
-					PreferenceActivity.this, description.MarginRightOption,
+					activity, description.MarginRightOption,
 					StringPreference.CONSTRAINT_LENGTH,
 					textScreen.Resource, "rightIndent"
 				));
 				ngScreen.addPreference(new StringPreference(
-					PreferenceActivity.this, description.TextIndentOption,
+					activity, description.TextIndentOption,
 					StringPreference.CONSTRAINT_LENGTH,
 					textScreen.Resource, "firstLineIndent"
 				));
 				ngScreen.addPreference(new StringPreference(
-					PreferenceActivity.this, description.VerticalAlignOption,
+					activity, description.VerticalAlignOption,
 					StringPreference.CONSTRAINT_LENGTH,
 					textScreen.Resource, "verticalAlignment"
 				));
@@ -553,7 +560,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 			toastsScreen.addOption(miscOptions.ToastFontSizePercent, "fontSizePercent");
 			toastsScreen.addOption(miscOptions.ShowFootnoteToast, "showFootnoteToast");
 			toastsScreen.addPreference(new ZLEnumPreference(
-				PreferenceActivity.this,
+				activity,
 				miscOptions.FootnoteToastDuration,
 				toastsScreen.Resource.getResource("footnoteToastDuration"),
 				ZLResource.resource("duration")
@@ -573,8 +580,8 @@ public class PreferenceActivity extends FBSettingsActivity {
 					return profile.WallpaperOption.getValue().startsWith("/");
 				}
 			};
-			myBackgroundPreference = new BackgroundPreference(
-				PreferenceActivity.this,
+			activity.BackgroundPreference = new BackgroundPreference(
+				activity,
 				profile,
 				colorsScreen.Resource.getResource("background"),
 				BACKGROUND_REQUEST_CODE
@@ -585,7 +592,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 					backgroundSet.run();
 				}
 			};
-			colorsScreen.addPreference(myBackgroundPreference);
+			colorsScreen.addPreference(activity.BackgroundPreference);
 			backgroundSet.add(colorsScreen.addOption(profile.FillModeOption, "fillMode"));
 			backgroundSet.run();
 
@@ -660,7 +667,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 			final String[] scrollBarTypes = {"hide", "show", "showAsProgress", "showAsFooter", "showAsFooterOldStyle"};
 			statusLineScreen.addPreference(new SingleChoiceIntegerPreference(
-				PreferenceActivity.this, statusLineScreen.Resource.getResource("scrollbarType"),
+				activity, statusLineScreen.Resource.getResource("scrollbarType"),
 				viewOptions.ScrollbarType, scrollBarTypes
 			) {
 				@Override
@@ -674,7 +681,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 			});
 
 			footerPreferences.add(statusLineScreen.addPreference(new ZLIntegerRangePreference(
-				PreferenceActivity.this, statusLineScreen.Resource.getResource("footerHeight"),
+				activity, statusLineScreen.Resource.getResource("footerHeight"),
 				viewOptions.FooterHeight
 			)));
 			oldStyleFooterPreferences.add(statusLineScreen.addOption(profile.FooterFillOption, "footerOldStyleColor"));
@@ -682,7 +689,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 			newStyleFooterPreferences.add(statusLineScreen.addOption(profile.FooterNGForegroundOption, "footerForegroundColor"));
 			newStyleFooterPreferences.add(statusLineScreen.addOption(profile.FooterNGForegroundUnreadOption, "footerForegroundUnreadColor"));
 			footerPreferences.add(statusLineScreen.addPreference(new ZLBooleanPreference(
-				PreferenceActivity.this,
+				activity,
 				footerOptions.ShowTOCMarks,
 				statusLineScreen.Resource.getResource("tocMarks")
 			) {
@@ -697,7 +704,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 			footerPreferences.add(statusLineScreen.addOption(footerOptions.ShowClock, "showClock"));
 			footerPreferences.add(statusLineScreen.addOption(footerOptions.ShowBattery, "showBattery"));
 			footerPreferences.add(statusLineScreen.addPreference(new FontPreference(
-				PreferenceActivity.this, statusLineScreen.Resource.getResource("font"),
+				activity, statusLineScreen.Resource.getResource("font"),
 				footerOptions.Font, false
 			)));
 			footerPreferences.run();
@@ -711,7 +718,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 			colorProfileScreen.setSummary(ColorProfilePreference.createTitle(resource, fbreader.getColorProfileName()));
 			for (String key : ColorProfile.names()) {
 				colorProfileScreen.addPreference(new ColorProfilePreference(
-					PreferenceActivity.this, fbreader, colorProfileScreen, key, ColorProfilePreference.createTitle(resource, key)
+					activity, fbreader, colorProfileScreen, key, ColorProfilePreference.createTitle(resource, key)
 				));
 			}
 			 */
@@ -727,7 +734,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 				}
 			};
 			scrollingScreen.addPreference(new ZLCheckBoxPreference(
-				PreferenceActivity.this, scrollingScreen.Resource.getResource("volumeKeys")
+				activity, scrollingScreen.Resource.getResource("volumeKeys")
 			) {
 				{
 					setChecked(keyBindings.hasBinding(KeyEvent.KEYCODE_VOLUME_UP, false));
@@ -747,7 +754,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 				}
 			});
 			volumeKeysPreferences.add(scrollingScreen.addPreference(new ZLCheckBoxPreference(
-				PreferenceActivity.this, scrollingScreen.Resource.getResource("invertVolumeKeys")
+				activity, scrollingScreen.Resource.getResource("invertVolumeKeys")
 			) {
 				{
 					setChecked(ActionCode.VOLUME_KEY_SCROLL_FORWARD.equals(
@@ -771,7 +778,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 			scrollingScreen.addOption(pageTurningOptions.Animation, "animation");
 			scrollingScreen.addPreference(new AnimationSpeedPreference(
-				PreferenceActivity.this,
+				activity,
 				scrollingScreen.Resource,
 				"animationSpeed",
 				pageTurningOptions.AnimationSpeed
@@ -790,7 +797,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 				Language.ANY_CODE, dictionaryScreen.Resource.getResource("targetLanguage")
 			));
 			final LanguagePreference targetLanguagePreference = new LanguagePreference(
-				PreferenceActivity.this, dictionaryScreen.Resource.getResource("targetLanguage"), languages
+				activity, dictionaryScreen.Resource.getResource("targetLanguage"), languages
 			) {
 				@Override
 				protected String currentValue() {
@@ -803,13 +810,13 @@ public class PreferenceActivity extends FBSettingsActivity {
 				}
 			};
 
-			DictionaryUtil.init(PreferenceActivity.this, new Runnable() {
+			DictionaryUtil.init(activity, new Runnable() {
 				public void run() {
 					dictionaryScreen.addPreference(new DictionaryPreference(
-						PreferenceActivity.this,
+						activity,
 						dictionaryScreen.Resource.getResource("dictionary"),
 						DictionaryUtil.singleWordTranslatorOption(),
-						DictionaryUtil.dictionaryInfos(PreferenceActivity.this, true)
+						DictionaryUtil.dictionaryInfos(activity, true)
 					) {
 						@Override
 						protected void onValueSelected(int index, String value) {
@@ -820,13 +827,13 @@ public class PreferenceActivity extends FBSettingsActivity {
 						}
 					});
 					dictionaryScreen.addPreference(new DictionaryPreference(
-						PreferenceActivity.this,
+						activity,
 						dictionaryScreen.Resource.getResource("translator"),
 						DictionaryUtil.multiWordTranslatorOption(),
-						DictionaryUtil.dictionaryInfos(PreferenceActivity.this, false)
+						DictionaryUtil.dictionaryInfos(activity, false)
 					));
 					dictionaryScreen.addPreference(new ZLBooleanPreference(
-						PreferenceActivity.this,
+						activity,
 						miscOptions.NavigateAllWords,
 						dictionaryScreen.Resource.getResource("navigateOverAllWords")
 					));
@@ -846,7 +853,7 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 			final Screen menuScreen = createPreferenceScreen("menu");
 			menuScreen.addPreference(new MenuPreference(
-				PreferenceActivity.this,
+				activity,
 				menuScreen.Resource.getResource("items"))
 			);
 			menuScreen.addOption(miscOptions.CoverAsMenuBackground, "backgroundCover");
@@ -860,13 +867,13 @@ public class PreferenceActivity extends FBSettingsActivity {
 			final String[] backKeyActions =
 				{ ActionCode.EXIT, ActionCode.SHOW_CANCEL_MENU };
 			cancelMenuScreen.addPreference(new SingleChoiceStringPreference(
-				PreferenceActivity.this, cancelMenuScreen.Resource.getResource("backKeyAction"),
+				activity, cancelMenuScreen.Resource.getResource("backKeyAction"),
 				keyBindings.getOption(KeyEvent.KEYCODE_BACK, false), backKeyActions
 			));
 			final String[] backKeyLongPressActions =
 				{ ActionCode.EXIT, ActionCode.SHOW_CANCEL_MENU, FBReaderApp.NoAction };
 			cancelMenuScreen.addPreference(new SingleChoiceStringPreference(
-				PreferenceActivity.this, cancelMenuScreen.Resource.getResource("backKeyLongPressAction"),
+				activity, cancelMenuScreen.Resource.getResource("backKeyLongPressAction"),
 				keyBindings.getOption(KeyEvent.KEYCODE_BACK, true), backKeyLongPressActions
 			));
 
@@ -875,16 +882,16 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 			final Screen aboutScreen = createPreferenceScreen("about");
 			aboutScreen.addPreference(new InfoPreference(
-				PreferenceActivity.this,
+				activity,
 				aboutScreen.Resource.getResource("version").getValue(),
 				androidLibrary.getFullVersionName()
 			));
-			aboutScreen.addPreference(new UrlPreference(PreferenceActivity.this, aboutScreen.Resource, "site"));
-			aboutScreen.addPreference(new UrlPreference(PreferenceActivity.this, aboutScreen.Resource, "email"));
-			aboutScreen.addPreference(new UrlPreference(PreferenceActivity.this, aboutScreen.Resource, "googleplus"));
-			aboutScreen.addPreference(new UrlPreference(PreferenceActivity.this, aboutScreen.Resource, "twitter"));
-			aboutScreen.addPreference(new UrlPreference(PreferenceActivity.this, aboutScreen.Resource, "facebook"));
-			aboutScreen.addPreference(new ThirdPartyLibrariesPreference(PreferenceActivity.this, aboutScreen.Resource, "thirdParty"));
+			aboutScreen.addPreference(new UrlPreference(activity, aboutScreen.Resource, "site"));
+			aboutScreen.addPreference(new UrlPreference(activity, aboutScreen.Resource, "email"));
+			aboutScreen.addPreference(new UrlPreference(activity, aboutScreen.Resource, "googleplus"));
+			aboutScreen.addPreference(new UrlPreference(activity, aboutScreen.Resource, "twitter"));
+			aboutScreen.addPreference(new UrlPreference(activity, aboutScreen.Resource, "facebook"));
+			aboutScreen.addPreference(new ThirdPartyLibrariesPreference(activity, aboutScreen.Resource, "thirdParty"));
 		}
 
 		Screen createPreferenceScreen(String resourceKey) {
@@ -897,27 +904,21 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 	private static final int BACKGROUND_REQUEST_CODE = 3000;
 
-	private final ActivityNetworkContext myNetworkContext = new ActivityNetworkContext(this);
-	private final FileChooserCollection myChooserCollection = new FileChooserCollection(this, 2000);
-	private BackgroundPreference myBackgroundPreference;
+	final ActivityNetworkContext NetworkContext = new ActivityNetworkContext(this);
+	final FileChooserCollection ChooserCollection = new FileChooserCollection(this, 2000);
+	volatile BackgroundPreference BackgroundPreference;
 
-	private PreferenceScreen myScreen;
-	final ZLResource Resource = ZLResource.resource("Preferences");
-
-	public Preference addPreference(Preference preference) {
-		myScreen.addPreference(preference);
-		return preference;
-	}
+	static final ZLResource Resource = ZLResource.resource("Preferences");
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		myNetworkContext.onResume();
+		NetworkContext.onResume();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (myNetworkContext.onActivityResult(requestCode, resultCode, data)) {
+		if (NetworkContext.onActivityResult(requestCode, resultCode, data)) {
 			return;
 		}
 
@@ -927,11 +928,11 @@ public class PreferenceActivity extends FBSettingsActivity {
 
 		switch (requestCode) {
 			default:
-				myChooserCollection.update(requestCode, data);
+				ChooserCollection.update(requestCode, data);
 				break;
 			case BACKGROUND_REQUEST_CODE:
-				if (myBackgroundPreference != null) {
-					myBackgroundPreference.update(data);
+				if (BackgroundPreference != null) {
+					BackgroundPreference.update(data);
 				}
 				break;
 		}
