@@ -96,7 +96,7 @@ public abstract class MDActivity extends ActionBarActivity {
 		} 
 	}
 
-	protected final void setupToolbarAppearance(Toolbar toolbar, boolean single) {
+	public final void setupToolbarAppearance(Toolbar toolbar, boolean single) {
 		final TypedValue typedValue = new TypedValue();
 		if (single) {
 			getTheme().resolveAttribute(R.attr.titleOnlyTextAppearance, typedValue, true);
