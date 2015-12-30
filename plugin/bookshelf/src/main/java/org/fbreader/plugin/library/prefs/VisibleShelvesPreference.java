@@ -47,6 +47,6 @@ public class VisibleShelvesPreference extends MultiChoicePreference {
 	@Override
 	protected void update() {
 		super.update();
-		((SettingsActivity)getContext()).enableShelvesPreferences(disabledValues());
+		((SettingsActivity)getContext()).enableShelvesPreferences();
 	}
 }
