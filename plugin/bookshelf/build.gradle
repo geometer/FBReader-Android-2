@@ -61,7 +61,7 @@ android {
 }
 
 android.applicationVariants.all { variant ->
-	def version = new File("$projectDir/VERSION").text.trim()
+	def version = versionName
 	if (version.matches('\\d*\\.\\d*')) {
 		def parts = version.split('\\.')
 		variant.mergedFlavor.versionCode = parts[0].toInteger() * 100000 + parts[1].toInteger() * 1000
