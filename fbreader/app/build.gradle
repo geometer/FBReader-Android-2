@@ -45,7 +45,7 @@ android {
 		minSdkVersion 11
 		targetSdkVersion 21
 		versionCode 0
-		versionName new File("$rootDir/VERSION").text.trim()
+		versionName new File("$projectDir/VERSION").text.trim()
 	}
 
 	sourceSets {
@@ -141,7 +141,7 @@ android.applicationVariants.all { variant ->
 	def abiVersion = variant.productFlavors.get(0).versionCode
 
 	def baseCode = 0
-	def version = new File("$rootDir/VERSION").text.trim()
+	def version = new File("$projectDir/VERSION").text.trim()
 	if (version.matches('\\d*\\.\\d* beta \\d*')) {
 		def parts = version.split('[ .]')
 		baseCode = parts[0].toInteger() * 1000000 + parts[1].toInteger() * 10000 - 5000 + parts[3].toInteger() * 100
