@@ -397,9 +397,39 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 			startActivity(new Intent(FBReaderIntents.Action.EXTERNAL_LIBRARY));
 			finish();
 		} catch (ActivityNotFoundException e) {
-			if (install) {
-				PackageUtil.installFromMarket(this, "org.fbreader.plugin.library");
+			if (!install) {
+				return;
 			}
+
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				PackageUtil.installFromMarket(LibraryActivity.this, "org.fbreader.plugin.library");
+				return;
+			}
+
+			final String title = LibraryTree.resource().getResource("bookshelfView").getValue();
+			final ZLResource resource = ZLResource.resource("dialog").getResource("button");
+			FBReaderUtil.htmlDialogBuilder(this, title, "thumbnail", true)
+				.setPositiveButton(
+					resource.getResource("premium").getValue(),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							PackageUtil.installFromMarket(
+								LibraryActivity.this, "com.fbreader"
+							);
+						}
+					}
+				)
+				.setNegativeButton(
+					resource.getResource("plugin").getValue(),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							PackageUtil.installFromMarket(
+								LibraryActivity.this, "org.fbreader.plugin.library"
+							);
+						}
+					}
+				)
+				.create().show();
 		}
 	}
 

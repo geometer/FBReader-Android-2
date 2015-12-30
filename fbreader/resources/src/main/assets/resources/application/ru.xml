@@ -942,6 +942,8 @@
 			<node name="removeFromFavorites" value="Убрать из избранного"/>
 			<node name="markAsRead" value="Пометить как прочтённое"/>
 			<node name="markAsUnread" value="Пометить как непрочтённое"/>
+			<node name="plugin" value="Модуль"/>
+			<node name="premium" value="Premium"/>
 		</node>
 		<node name="gotoPage" value="На страницу"/>
 		<node name="plugin">

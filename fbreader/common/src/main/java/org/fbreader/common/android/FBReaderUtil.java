@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -155,15 +156,19 @@ public abstract class FBReaderUtil {
 		return buffer.toString();
 	}
 
-	public static void showHtmlDialog(MDActivity activity, String title, String fileName) {
-		final TextView textView =
-			(TextView)activity.getLayoutInflater().inflate(R.layout.text_dialog, null);
+	public static AlertDialog.Builder htmlDialogBuilder(MDActivity activity, String title, String fileName, boolean large) {
+		final TextView textView = (TextView)activity.getLayoutInflater().inflate(
+			large ? R.layout.text_dialog_medium : R.layout.text_dialog, null
+		);
 		textView.setText(Html.fromHtml(fromResourceFile(activity, "data/" + fileName)));
 		textView.setMovementMethod(new LinkMovementMethod());
-		new MDAlertDialogBuilder(activity)
+		return new MDAlertDialogBuilder(activity)
 			.setTitle(title)
-			.setView(textView)
-			.create().show();
+			.setView(textView);
+	}
+
+	public static void showHtmlDialog(MDActivity activity, String title, String fileName) {
+		htmlDialogBuilder(activity, title, fileName, false).create().show();
 	}
 
 	public static void shareBook(final MDActivity activity, final Book book) {
