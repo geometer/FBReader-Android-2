@@ -593,10 +593,11 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		int sizeOfText = myModel.getTextLength(paragraphIndex - 1);
 		final int paragraphLength = paragraphCursor.getParagraphLength();
 		if (paragraphLength > 0) {
-			sizeOfText +=
+			sizeOfText += (int)(.5f + 1.f *
 				(myModel.getTextLength(paragraphIndex) - sizeOfText)
 				* wordCursor.getElementIndex()
-				/ paragraphLength;
+				/ paragraphLength
+			);
 		}
 		return sizeOfText;
 	}
