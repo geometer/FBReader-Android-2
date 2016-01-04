@@ -308,11 +308,12 @@ void StyleSheetMultiStyleParser::processAtRule(const std::string &name, const St
 		}
 
 		const std::string weight = value(attributes, "font-weight");
+		const int weightNum = ZLStringUtil::parseDecimal(weight, -1);
 		const std::string style = value(attributes, "font-style");
 
 		myFontMap->append(
 			family,
-			weight == "bold",
+			weightNum >= 600 || weight == "bold",
 			style == "italic" || style == "oblique",
 			path,
 			myEncryptionMap.isNull() ? 0 : myEncryptionMap->info(path)
