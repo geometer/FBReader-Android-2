@@ -38,6 +38,7 @@ public abstract class FBReaderIntents {
 		public static String BOOK_INFO                        = "android.fbreader.action.BOOK_INFO";
 		public static String LIBRARY                          = "android.fbreader.action.LIBRARY";
 		public static String EXTERNAL_LIBRARY                 = "android.fbreader.action.EXTERNAL_LIBRARY";
+		public static String TABLE_OF_CONTENTS                = "android.fbreader.action.TABLE_OF_CONTENTS";
 		public static String BOOKMARKS                        = "android.fbreader.action.BOOKMARKS";
 		public static String EXTERNAL_BOOKMARKS               = "android.fbreader.action.EXTERNAL_BOOKMARKS";
 		public static String PREFERENCES                      = "android.fbreader.action.PREFERENCES";

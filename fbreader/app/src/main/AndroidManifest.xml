@@ -307,10 +307,15 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name="org.geometerplus.android.fbreader.TOCActivity"
+			android:name="org.geometerplus.android.fbreader.toc.TOCActivity"
 			android:theme="@style/FBReaderMD.Activity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
-		/>
+		>
+			<intent-filter>
+				<action android:name="android.fbreader.action.TABLE_OF_CONTENTS"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+		</activity>
 		<activity
 			android:name="org.geometerplus.android.fbreader.preferences.PreferenceActivity"
 			android:theme="@style/FBReaderMD.Activity"

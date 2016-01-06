@@ -24,6 +24,8 @@ import android.content.Intent;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
+import org.geometerplus.android.fbreader.api.FBReaderIntents;
+
 class ShowTOCAction extends FBReader.Action<FBReader,FBReaderApp> {
 	ShowTOCAction(FBReader baseActivity) {
 		super(baseActivity);
@@ -44,8 +46,8 @@ class ShowTOCAction extends FBReader.Action<FBReader,FBReaderApp> {
 
 	@Override
 	protected void run(Object ... params) {
-		BaseActivity.startActivity(
-			new Intent(BaseActivity.getApplicationContext(), TOCActivity.class)
-		);
+		final Intent intent =
+			FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.TABLE_OF_CONTENTS);
+		BaseActivity.startActivity(intent);
 	}
 }
