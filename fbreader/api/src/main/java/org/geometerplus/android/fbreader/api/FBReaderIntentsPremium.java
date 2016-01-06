@@ -34,6 +34,7 @@ abstract class FBReaderIntentsPremium {
 		String BOOK_INFO                        = "com.fbreader.action.BOOK_INFO";
 		String LIBRARY                          = "com.fbreader.action.LIBRARY";
 		String EXTERNAL_LIBRARY                 = "com.fbreader.action.EXTERNAL_LIBRARY";
+		String TABLE_OF_CONTENTS                = "com.fbreader.action.TABLE_OF_CONTENTS";
 		String BOOKMARKS                        = "com.fbreader.action.BOOKMARKS";
 		String EXTERNAL_BOOKMARKS               = "com.fbreader.action.EXTERNAL_BOOKMARKS";
 		String PREFERENCES                      = "com.fbreader.action.PREFERENCES";
