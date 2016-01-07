@@ -688,6 +688,17 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 					}
 				}
 				break;
+			case REQUEST_TOC:
+				if (resultCode == RESULT_OK && data != null) {
+					final int ref = data.getIntExtra(TOCKey.REF, -1);
+					if (ref != -1) {
+						final FBReaderApp fbreader = myFBReaderApp;
+						fbreader.addInvisibleBookmark();
+						fbreader.BookTextView.gotoPosition(ref, 0, 0);
+						fbreader.showBookTextView();
+						fbreader.storePosition();
+					}
+				}
 			case REQUEST_CANCEL_MENU:
 				runCancelAction(data);
 				break;

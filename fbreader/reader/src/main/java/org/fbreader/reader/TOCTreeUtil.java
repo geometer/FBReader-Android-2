@@ -66,7 +66,7 @@ public abstract class TOCTreeUtil {
 	}
 
 	private static TOCTree fromJSONObject(Map<String,Object> map, TOCTree parent) {
-		if (map == null) {
+		if (map == null || map.isEmpty()) {
 			return null;
 		}
 

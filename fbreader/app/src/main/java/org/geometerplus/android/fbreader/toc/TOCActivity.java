@@ -28,10 +28,10 @@ import org.fbreader.common.android.FBActivity;
 import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.reader.TOCTree;
 import org.fbreader.reader.android.ContextMenuDialog;
+import org.fbreader.reader.android.MainActivity;
 import org.fbreader.reader.android.TOCAdapterBase;
 import org.fbreader.util.android.ViewUtil;
 
-import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
@@ -54,7 +54,7 @@ public class TOCActivity extends FBActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
+		final FBReaderApp fbreader = (FBReaderApp)FBReaderApp.Instance();
 
 		FBReaderUtil.setBookTitle(this, fbreader.Model.Book);
 
@@ -121,7 +121,7 @@ public class TOCActivity extends FBActivity {
 			setIcon(ViewUtil.findImageView(view, R.id.toc_tree_item_icon), tree);
 			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.Text);
 			if (tree.Reference != null && tree.Reference != -1) {
-				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
+				final FBReaderApp fbreader = (FBReaderApp)FBReaderApp.Instance();
 				final int page = fbreader.BookTextView.pageNoFromParagraph(tree.Reference);
 				ViewUtil.setSubviewText(view, R.id.toc_tree_item_pageno, String.valueOf(page));
 			} else {
@@ -132,12 +132,10 @@ public class TOCActivity extends FBActivity {
 
 		void openBookText(TOCTree tree) {
 			if (tree.Reference != null && tree.Reference != -1) {
+				final Intent intent = new Intent();
+				intent.putExtra(MainActivity.TOCKey.REF, tree.Reference);
+				setResult(RESULT_OK, intent);
 				finish();
-				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
-				fbreader.addInvisibleBookmark();
-				fbreader.BookTextView.gotoPosition(tree.Reference, 0, 0);
-				fbreader.showBookTextView();
-				fbreader.storePosition();
 			}
 		}
 
