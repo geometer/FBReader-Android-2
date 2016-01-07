@@ -127,13 +127,13 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		return myBookInfo;
 	}
 
-	public ViewHolder(FBReaderPluginActivity activity) {
+	public ViewHolder(final FBReaderPluginActivity activity) {
+		myActivity = activity;
 		Log.e("VIEWHOLDER", "CREATE" + activity.toString());
 		ourInstance = this;
-		myActivity = activity;
-		myDB = new BookSettingsDB(myActivity);
+		myDB = new BookSettingsDB(activity);
 		myNeedToOpen = true;
-		Collection.bindToService(myActivity, new Runnable() {
+		Collection.bindToService(activity, new Runnable() {
 			public void run() {
 				tryToOpenFile();
 				Collection.addListener(ViewHolder.this);
@@ -150,7 +150,7 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 				config.requestAllValuesForGroup("Files");
 				config.requestAllValuesForGroup("ReadingModeMenu");
 
-				if (!myActivity.restartIfNewOptionsFound()) {
+				if (!activity.restartIfNewOptionsFound()) {
 					tryToOpenFile();
 				}
 			}
@@ -171,8 +171,8 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		addAction(ActionCode.SHOW_BOOKMARKS, new Actions.OpenBookmarksAction(this));
 		addAction(ActionCode.SHOW_BOOK_INFO, new Actions.OpenBookInfoAction(this));
 		addAction(ActionCode.SHOW_TOC, new Actions.ShowTOCAction(this));
-		addAction(ActionCode.SWITCH_TO_DAY_PROFILE, new Actions.SwitchProfileAction(this, myActivity.getSettings(), ColorProfile.DAY));
-		addAction(ActionCode.SWITCH_TO_NIGHT_PROFILE, new Actions.SwitchProfileAction(this, myActivity.getSettings(), ColorProfile.NIGHT));
+		addAction(ActionCode.SWITCH_TO_DAY_PROFILE, new Actions.SwitchProfileAction(this, activity.getSettings(), ColorProfile.DAY));
+		addAction(ActionCode.SWITCH_TO_NIGHT_PROFILE, new Actions.SwitchProfileAction(this, activity.getSettings(), ColorProfile.NIGHT));
 		addAction(ActionCode.INCREASE_FONT, new Actions.ZoomInAction(this));
 		addAction(ActionCode.DECREASE_FONT, new Actions.ZoomOutAction(this));
 		addAction(ActionCode.TURN_PAGE_BACK, new Actions.PrevPageAction(this));
