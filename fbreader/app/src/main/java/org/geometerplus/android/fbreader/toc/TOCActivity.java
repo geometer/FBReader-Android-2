@@ -90,18 +90,24 @@ public class TOCActivity extends FBActivity {
 				protected void onItemClick(long itemId) {
 					switch ((int)itemId) {
 						case PROCESS_TREE_ITEM_ID:
-							myAdapter.runTreeItem(tree);
+							runTreeItem(tree);
 							break;
 						case READ_BOOK_ITEM_ID:
-							myAdapter.openBookText(tree);
+							openBookText(tree);
 							break;
 					}
 				}
 			};
 
 			final ZLResource resource = ZLResource.resource("tocView");
-			dialog.addItem(PROCESS_TREE_ITEM_ID, resource, isOpen(tree) ? "collapseTree" : "expandTree");
-			dialog.addItem(READ_BOOK_ITEM_ID, resource, "readText");
+			dialog.addItem(
+				PROCESS_TREE_ITEM_ID,
+				resource,
+				isOpen(tree) ? "collapseTree" : "expandTree"
+			);
+			if (tree.Reference != null && tree.Reference != -1) {
+				dialog.addItem(READ_BOOK_ITEM_ID, resource, "readText");
+			}
 			dialog.show(TOCActivity.this);
 			return true;
 		}
@@ -114,7 +120,7 @@ public class TOCActivity extends FBActivity {
 			view.setBackgroundColor(tree == mySelectedItem ? 0xff808080 : 0);
 			setIcon(ViewUtil.findImageView(view, R.id.toc_tree_item_icon), tree);
 			ViewUtil.setSubviewText(view, R.id.toc_tree_item_text, tree.Text);
-			if (tree.Reference != null) {
+			if (tree.Reference != null && tree.Reference != -1) {
 				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
 				final int page = fbreader.BookTextView.pageNoFromParagraph(tree.Reference);
 				ViewUtil.setSubviewText(view, R.id.toc_tree_item_pageno, String.valueOf(page));
@@ -125,7 +131,7 @@ public class TOCActivity extends FBActivity {
 		}
 
 		void openBookText(TOCTree tree) {
-			if (tree.Reference != null) {
+			if (tree.Reference != null && tree.Reference != -1) {
 				finish();
 				final FBReaderApp fbreader = (FBReaderApp)ZLApplication.Instance();
 				fbreader.addInvisibleBookmark();
