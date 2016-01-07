@@ -21,13 +21,15 @@ package org.geometerplus.android.fbreader;
 
 import android.content.Intent;
 
+import org.fbreader.reader.android.MainActivity;
+
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
-class ShowTOCAction extends FBReader.Action<FBReader,FBReaderApp> {
-	ShowTOCAction(FBReader baseActivity) {
+class ShowTOCAction extends MainActivity.Action<MainActivity,FBReaderApp> {
+	ShowTOCAction(MainActivity baseActivity) {
 		super(baseActivity);
 	}
 
@@ -48,6 +50,6 @@ class ShowTOCAction extends FBReader.Action<FBReader,FBReaderApp> {
 	protected void run(Object ... params) {
 		final Intent intent =
 			FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.TABLE_OF_CONTENTS);
-		BaseActivity.startActivity(intent);
+		BaseActivity.startActivityForResult(intent, MainActivity.REQUEST_TOC);
 	}
 }
