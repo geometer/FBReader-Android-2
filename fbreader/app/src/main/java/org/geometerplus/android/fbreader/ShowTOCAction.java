@@ -50,6 +50,10 @@ class ShowTOCAction extends MainActivity.Action<MainActivity,FBReaderApp> {
 	protected void run(Object ... params) {
 		final Intent intent =
 			FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.TABLE_OF_CONTENTS);
+		FBReaderIntents.putBookExtra(intent, Reader.getCurrentBook());
+		intent.putExtra(MainActivity.TOCKey.REF, Reader.getCurrentTOCReference());
+		//intent.putExtra(MainActivity.TOCKey.TREE_FILE, toc.Path);
+		//intent.putExtra(MainActivity.TOCKey.PAGEMAP, Reader.getPageMap(toc));
 		BaseActivity.startActivityForResult(intent, MainActivity.REQUEST_TOC);
 	}
 }
