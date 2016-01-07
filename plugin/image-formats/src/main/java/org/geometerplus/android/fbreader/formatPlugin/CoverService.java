@@ -34,7 +34,7 @@ public abstract class CoverService extends Service {
 		try {
 			final DocumentHolder doc = ((PluginApplication)getApplication()).createDocument();
 			Log.d("METAINFO", "doccreated");
-			if (!doc.open(path)) {
+			if (!doc.open(path, false)) {
 				return null;
 			}
 			final int width = Math.min(300, Math.max(50, maxWidth));
