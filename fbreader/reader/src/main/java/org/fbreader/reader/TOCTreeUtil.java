@@ -42,10 +42,6 @@ public abstract class TOCTreeUtil {
 		}
 	}
 
-	public static String toJSONString(TOCTree tree) {
-		return JSONValue.toJSONString(toJSONObject(tree));
-	}
-
 	public static HashMap<String,Object> toJSONObject(TOCTree tree) {
 		final HashMap<String,Object> map = new HashMap<String,Object>();
 		if (tree.Text != null) {
@@ -63,10 +59,6 @@ public abstract class TOCTreeUtil {
 			map.put("c", lst);
 		}
 		return map;
-	}
-
-	public static TOCTree fromJSONString(String json) {
-		return json != null ? fromJSONObject((Map<String,Object>)JSONValue.parse(json)) : null;
 	}
 
 	public static TOCTree fromJSONObject(Map<String,Object> map) {
