@@ -22,6 +22,7 @@ package org.geometerplus.fbreader.fbreader;
 import java.util.*;
 
 import org.fbreader.reader.TOCTree;
+import org.fbreader.reader.TOCTreeUtil;
 import org.fbreader.util.ComparisonUtil;
 
 import org.geometerplus.zlibrary.core.application.*;
@@ -633,27 +634,26 @@ public final class FBReaderApp extends ZLApplication {
 		);
 	}
 
-	public TOCTree getCurrentTOCElement() {
+	public Integer getCurrentTOCReference() {
 		final ZLTextWordCursor cursor = BookTextView.getStartCursor();
-		if (Model == null || cursor == null) {
+		if (cursor == null) {
 			return null;
 		}
 
-		int index = cursor.getParagraphIndex();
-		if (cursor.isEndOfParagraph()) {
-			++index;
+		return cursor.getParagraphIndex() + (cursor.isEndOfParagraph() ? 1 : 0);
+	}
+
+	public TOCTree getCurrentTOCElement() {
+		final BookModel model = Model;
+		if (model == null) {
+			return null;
 		}
-		TOCTree treeToSelect = null;
-		for (TOCTree tree : Model.TOCTree) {
-			if (tree.Reference == null) {
-				continue;
-			}
-			if (tree.Reference > index) {
-				break;
-			}
-			treeToSelect = tree;
+
+		final Integer ref = getCurrentTOCReference();
+		if (ref == null) {
+			return null;
 		}
-		return treeToSelect;
+		return TOCTreeUtil.findTreeByReference(model.TOCTree, ref);
 	}
 
 	public void onBookUpdated(Book book) {

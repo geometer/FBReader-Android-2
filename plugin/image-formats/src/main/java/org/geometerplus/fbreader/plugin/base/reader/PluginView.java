@@ -37,7 +37,7 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	public static final ExecutorService AuxService = Executors.newSingleThreadExecutor();
 
 	private final Object myDocumentLock = new Object();
-	private DocumentHolder myDocument = new DummyDocument();
+	private DocumentHolder myDocument = new DummyDocument(null);
 
 	public DocumentHolder getDocument() {
 		return myDocument;
@@ -183,14 +183,14 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	public boolean open(Book book) {
 		synchronized (myDocumentLock) {
 			myDocument.close();
-			myDocument = new DummyDocument();
+			myDocument = new DummyDocument(Paths.systemInfo(getContext()));
 			System.gc();
 			System.gc();
 			myDocument = getActivity().createDocument(book);
 		}
 
 		myDocument.init(this, getWidth(), getMainAreaHeight());
-		if (myDocument.open(book.getPath())) {
+		if (myDocument.open(book.getPath(), true)) {
 			myCurrPageNo = 0;
 			if (myFooter != null) {
 				myFooter.resetTOCMarks();

@@ -9,11 +9,17 @@ import com.radaee.pdf.*;
 
 import org.fbreader.reader.TOCTree;
 
+import org.geometerplus.zlibrary.core.util.SystemInfo;
+
 import org.geometerplus.fbreader.book.AbstractBook;
 
 public class PDFDocument extends DocumentHolder {
 	private final Object myDocumentLock = new Object();
 	private Document myDocument;
+
+	public PDFDocument(SystemInfo info) {
+		super(info);
+	}
 
 	public static void init(ContextWrapper context) {
 		Global.Init(context);
@@ -110,16 +116,17 @@ public class PDFDocument extends DocumentHolder {
 	}
 
 	@Override
-	public void initTOC(TOCTree root) {
+	public boolean initTOC(TOCTree root) {
 		synchronized (myDocumentLock) {
 			if (myDocument == null) {
-				return;
+				return false;
 			}
 			final Document.Outline outline = myDocument.GetOutlines();
 			if (outline != null) {
 				createTOCTree(outline, root, true);
 			}
 		}
+		return root.hasChildren();
 	}
 
 	private void createTOCTree(final Document.Outline n, TOCTree parent, boolean firstChild) {

@@ -13,11 +13,10 @@ import org.geometerplus.zlibrary.core.util.SystemInfo;
 import org.geometerplus.fbreader.book.AbstractBook;
 
 public class CBZDocument extends DocumentHolder {
-	private final SystemInfo mySystemInfo;
 	private OneLevelImageArchive myArchive = null;
 
 	public CBZDocument(SystemInfo info) {
-		mySystemInfo = info;
+		super(info);
 		CBFileCacheUtil.clearCache(info);
 	}
 
@@ -27,7 +26,7 @@ public class CBZDocument extends DocumentHolder {
 			if (path.toLowerCase().endsWith(".cbz")) {
 				myArchive = new ZipArchive(new File(path));
 			} else if (path.toLowerCase().endsWith(".cbr")) {
-				myArchive = new RarArchive(new File(path), mySystemInfo);
+				myArchive = new RarArchive(new File(path), SystemInfo);
 			}
 			return true;
 		} catch (Exception e) {
@@ -89,11 +88,12 @@ public class CBZDocument extends DocumentHolder {
 		if (myArchive != null) {
 			myArchive.close();
 		}
-		CBFileCacheUtil.clearCache(mySystemInfo);
+		CBFileCacheUtil.clearCache(SystemInfo);
 	}
 
 	@Override
-	public void initTOC(TOCTree root) {
+	public boolean initTOC(TOCTree root) {
+		return false;
 	}
 
 	@Override

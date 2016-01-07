@@ -65,16 +65,6 @@ public abstract class TOCTreeUtil {
 		return fromJSONObject(map, null);
 	}
 
-	private static Integer asInteger(Object object) {
-		if (object instanceof Integer) {
-			return (Integer)object;
-		} else if (object instanceof Long) {
-			return (int)(long)(Long)object;
-		} else {
-			return null;
-		}
-	}
-
 	private static TOCTree fromJSONObject(Map<String,Object> map, TOCTree parent) {
 		if (map == null) {
 			return null;
@@ -88,5 +78,15 @@ public abstract class TOCTreeUtil {
 			}
 		}
 		return tree;
+	}
+
+	private static Integer asInteger(Object object) {
+		if (object instanceof Integer) {
+			return (Integer)object;
+		} else if (object instanceof Long) {
+			return (int)(long)(Long)object;
+		} else {
+			return null;
+		}
 	}
 }

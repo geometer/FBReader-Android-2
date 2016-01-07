@@ -4,8 +4,10 @@ import android.app.ActivityManager;
 import android.os.Process;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
+import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.plugin.base.PluginApplication;
 import org.geometerplus.fbreader.plugin.base.document.DJVUDocument;
+import org.geometerplus.zlibrary.core.util.SystemInfo;
 
 public class DJVUApplication extends PluginApplication {
 	@Override
@@ -26,6 +28,6 @@ public class DJVUApplication extends PluginApplication {
 
 	@Override
 	public DJVUDocument createDocument() {
-		return new DJVUDocument();
+		return new DJVUDocument(Paths.systemInfo(this));
 	}
 }

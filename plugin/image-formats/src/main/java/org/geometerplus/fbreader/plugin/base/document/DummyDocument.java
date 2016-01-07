@@ -7,10 +7,16 @@ import android.graphics.*;
 
 import org.fbreader.reader.TOCTree;
 
+import org.geometerplus.zlibrary.core.util.SystemInfo;
+
 import org.geometerplus.fbreader.book.AbstractBook;
 
 public class DummyDocument extends DocumentHolder {
 	//Just a workaround for NPE in PluginView
+
+	public DummyDocument(SystemInfo info) {
+		super(info);
+	}
 
 	@Override
 	protected boolean openDocumentInternal(String path) {
@@ -36,7 +42,8 @@ public class DummyDocument extends DocumentHolder {
 	}
 
 	@Override
-	public void initTOC(TOCTree root) {
+	public boolean initTOC(TOCTree root) {
+		return false;
 	}
 
 	@Override

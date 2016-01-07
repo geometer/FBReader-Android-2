@@ -9,8 +9,7 @@ import org.fbreader.common.options.ColorProfile;
 import org.fbreader.reader.TOCTree;
 
 import org.geometerplus.zlibrary.core.library.ZLibrary;
-import org.geometerplus.zlibrary.core.util.BitmapUtil;
-import org.geometerplus.zlibrary.core.util.ZLColor;
+import org.geometerplus.zlibrary.core.util.*;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.plugin.base.SettingsHolder;
 import org.geometerplus.fbreader.plugin.base.document.PageHolder;
@@ -41,6 +40,8 @@ public abstract class DocumentHolder {
 		}
 	}
 
+	protected final SystemInfo SystemInfo;
+
 	protected int myW = 100;
 	protected int myH = 140;
 	private PluginView myView;
@@ -65,6 +66,10 @@ public abstract class DocumentHolder {
 		}
 	};
 	private final List<Bookmark> myBookmarks = Collections.synchronizedList(new ArrayList<Bookmark>());
+
+	protected DocumentHolder(SystemInfo info) {
+		SystemInfo = info;
+	}
 
 	public abstract boolean acceptsPath(String path);
 
@@ -202,7 +207,7 @@ public abstract class DocumentHolder {
 
 	protected abstract boolean openDocumentInternal(String path);
 	protected abstract void closeInternal();
-	public abstract void initTOC(TOCTree root);
+	public abstract boolean initTOC(TOCTree root);
 
 	public abstract void readMetainfo(AbstractBook book);
 	public abstract String readAnnotation();
@@ -352,15 +357,19 @@ public abstract class DocumentHolder {
 		myCropInfo = CropInfo.NULL;
 	}
 
-	public boolean open(String path) {
+	public boolean open(String path, boolean full) {
 		clearCache();
 		if (!openDocumentInternal(path)) {
 			return false;
 		}
 		mySizes.clear();
 		myPageCount = -1;
-		myTOCTree = new TOCTree();
-		initTOC(myTOCTree);
+		if (full) {
+			myTOCTree = new TOCTree();
+			initTOC(myTOCTree);
+		} else {
+			myTOCTree = null;
+		}
 		myDocInitialized = true;
 		return true;
 	}
