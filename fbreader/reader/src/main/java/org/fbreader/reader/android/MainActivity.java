@@ -76,6 +76,12 @@ public abstract class MainActivity extends FBActivity {
 	public static final int REQUEST_DICTIONARY_EXTRA = 4;
 	public static final int REQUEST_TOC = 5;
 
+	public interface TOCKey {
+		String TREE_FILE = "fbreader:toc:file";
+		String REF = "fbreader:toc:ref";
+		String PAGEMAP = "fbreader:toc:pageMap";
+	}
+
 	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
 
 	private volatile MainView myMainView;
