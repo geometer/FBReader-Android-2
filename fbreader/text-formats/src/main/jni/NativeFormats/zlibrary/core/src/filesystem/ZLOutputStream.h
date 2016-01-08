@@ -30,8 +30,10 @@ protected:
 public:
 	virtual ~ZLOutputStream();
 	virtual bool open() = 0;
+	virtual void write(const char &chr) = 0;
 	virtual void write(const char *data, std::size_t len) = 0;
-	virtual void write(const std::string &str) = 0;
+	void write(const std::string &str, std::size_t offset, std::size_t len);
+	void write(const std::string &str);
 	virtual void close() = 0;
 
 private:
@@ -41,5 +43,15 @@ private:
 
 inline ZLOutputStream::ZLOutputStream() {}
 inline ZLOutputStream::~ZLOutputStream() {}
+
+inline void ZLOutputStream::write(const std::string &str) {
+	write(str.data(), str.length());
+}
+
+inline void ZLOutputStream::write(const std::string &str, std::size_t offset, std::size_t len) {
+	if (len > 0) {
+		write(str.data() + offset, len);
+	}
+}
 
 #endif /* __ZLOUTPUTSTREAM_H__ */
