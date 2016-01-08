@@ -30,8 +30,8 @@ public:
 	ZLUnixFileOutputStream(const std::string &name);
 	~ZLUnixFileOutputStream();
 	bool open();
+	void write(const char &chr);
 	void write(const char *data, std::size_t len);
-	void write(const std::string &str);
 	void close();
 
 private:
