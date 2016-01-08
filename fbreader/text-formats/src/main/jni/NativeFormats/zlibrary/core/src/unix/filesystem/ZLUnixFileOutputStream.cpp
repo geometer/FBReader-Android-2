@@ -46,14 +46,14 @@ bool ZLUnixFileOutputStream::open() {
 	return myFile != 0;
 }
 
-void ZLUnixFileOutputStream::write(const char *data, std::size_t len) {
-	if (::fwrite(data, 1, len, myFile) != len) {
+void ZLUnixFileOutputStream::write(const char &chr) {
+	if (::fwrite(&chr, 1, 1, myFile) != 1) {
 		myHasErrors = true;
 	}
 }
 
-void ZLUnixFileOutputStream::write(const std::string &str) {
-	if (::fwrite(str.data(), 1, str.length(), myFile) != (std::size_t)str.length()) {
+void ZLUnixFileOutputStream::write(const char *data, std::size_t len) {
+	if (::fwrite(data, 1, len, myFile) != len) {
 		myHasErrors = true;
 	}
 }
