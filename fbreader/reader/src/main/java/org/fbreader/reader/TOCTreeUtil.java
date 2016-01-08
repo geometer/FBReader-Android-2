@@ -19,9 +19,12 @@
 
 package org.fbreader.reader;
 
+import java.io.*;
 import java.util.*;
 
 import org.json.simple.JSONValue;
+
+import org.fbreader.util.IOUtil;
 
 public abstract class TOCTreeUtil {
 	public static TOCTree findTreeByReference(TOCTree tree, int reference) {
@@ -42,6 +45,20 @@ public abstract class TOCTreeUtil {
 		}
 	}
 
+	static boolean writeToFile(TOCTree tree, String path) {
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(path);
+			JSONValue.writeJSONString(toJSONObject(tree), writer);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			IOUtil.closeQuietly(writer);
+		}
+	}
+
 	public static HashMap<String,Object> toJSONObject(TOCTree tree) {
 		final HashMap<String,Object> map = new HashMap<String,Object>();
 		if (tree.Text != null) {
@@ -59,6 +76,19 @@ public abstract class TOCTreeUtil {
 			map.put("c", lst);
 		}
 		return map;
+	}
+
+	static TOCTree readFromFile(String path) {
+		FileReader reader = null;
+		try {
+			reader = new FileReader(path);
+			return fromJSONObject((Map<String,Object>)JSONValue.parse(reader), null);
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return null;
+		} finally {
+			IOUtil.closeQuietly(reader);
+		}
 	}
 
 	public static TOCTree fromJSONObject(Map<String,Object> map) {
