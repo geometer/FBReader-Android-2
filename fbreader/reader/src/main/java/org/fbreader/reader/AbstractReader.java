@@ -29,7 +29,7 @@ import org.geometerplus.fbreader.book.IBookCollection;
 import org.geometerplus.fbreader.book.Book;
 
 public abstract class AbstractReader implements IBookCollection.Listener<Book> {
-	static abstract public class Action<T extends AbstractReader> {
+	public static abstract class Action<T extends AbstractReader> {
 		protected final T Reader;
 
 		protected Action(T reader) {
