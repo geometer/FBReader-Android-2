@@ -73,10 +73,10 @@ private:
 public:
 	~JSONMapWriter();
 
-	void addElement(const std::string &key, const std::string &value);
-	void addElement(const std::string &key, int value);
 	shared_ptr<JSONMapWriter> addMap(const std::string &key);
 	shared_ptr<JSONArrayWriter> addArray(const std::string &key);
+	void addElement(const std::string &key, const std::string &value);
+	void addElement(const std::string &key, int value);
 
 private:
 	bool writeKeyAndColon(const std::string &key);
@@ -97,6 +97,8 @@ public:
 
 	shared_ptr<JSONMapWriter> addMap();
 	shared_ptr<JSONArrayWriter> addArray();
+	void addElement(const std::string &value);
+	void addElement(int value);
 };
 
 inline JSONWriter::JSONWriter(shared_ptr<ZLOutputStream> stream, char start, char end) : myStream(stream), myEndBracket(end), myRoot(false), myIsClosed(false), myIsEmpty(true) {
@@ -174,6 +176,18 @@ inline JSONArrayWriter::JSONArrayWriter(shared_ptr<ZLOutputStream> stream) : JSO
 }
 
 inline JSONArrayWriter::~JSONArrayWriter() {
+}
+
+inline void JSONArrayWriter::addElement(const std::string &value) {
+	if (preAddElement()) {
+		writeString(value);
+	}
+}
+
+inline void JSONArrayWriter::addElement(int value) {
+	if (preAddElement()) {
+		writeNumber(value);
+	}
 }
 
 inline shared_ptr<JSONMapWriter> JSONArrayWriter::addMap() {
