@@ -332,6 +332,7 @@ std::size_t ZLUnicodeUtil::lastChar(Ucs4Char &ch, const char *utf8String) {
 			break;
 	}
 	return utf8String - ptr;
+}
 
 int ZLUnicodeUtil::ucs4ToUtf8(char *to, Ucs4Char ch) {
 	if (ch < 0x80) {
