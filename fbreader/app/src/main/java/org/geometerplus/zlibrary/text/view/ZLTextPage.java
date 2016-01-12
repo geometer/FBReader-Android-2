@@ -94,11 +94,13 @@ final class ZLTextPage {
 			EndCursor.setCursor(StartCursor);
 		}
 		EndCursor.moveToParagraph(paragraphIndex);
-		if ((paragraphIndex > 0) && (wordIndex == 0) && (charIndex == 0)) {
-			EndCursor.previousParagraph();
-			EndCursor.moveToParagraphEnd();
-		} else {
-			EndCursor.moveTo(wordIndex, charIndex);
+		if (EndCursor.getParagraphIndex() == paragraphIndex) {
+			if (paragraphIndex > 0 && wordIndex == 0 && charIndex == 0) {
+				EndCursor.previousParagraph();
+				EndCursor.moveToParagraphEnd();
+			} else {
+				EndCursor.moveTo(wordIndex, charIndex);
+			}
 		}
 		StartCursor.reset();
 		LineInfos.clear();

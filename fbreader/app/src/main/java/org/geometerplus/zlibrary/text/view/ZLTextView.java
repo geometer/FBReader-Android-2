@@ -75,6 +75,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 
 		mySelection.clear();
 		myHighlightings.clear();
+		mySections.clear();
 
 		myModel = model;
 		myCurrentPage.reset();
@@ -640,9 +641,11 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 	};
 
-	private static final int MAX_PRECOMPUTED_PAGES = 5;
 	private final List<SectionInfo> mySections = new ArrayList<SectionInfo>();
 	private volatile SectionInfo myLargestSection;
+	private volatile int myMaxParagraphTextSize;
+
+	private static final int MAX_PRECOMPUTED_PAGES = 5;
 	private final List<Integer> myStartPages = new ArrayList<Integer>(MAX_PRECOMPUTED_PAGES);
 	private final List<Integer> myEndPages = new ArrayList<Integer>(MAX_PRECOMPUTED_PAGES);
 	private float myCharsPerPage;
@@ -654,9 +657,18 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 
 		if (mySections.isEmpty()) {
-			int start = 0;
 			final int paraNumber = myModel.getParagraphsNumber();
+
 			int prevSize = 0;
+			myMaxParagraphTextSize = 0;
+			for (int i = 0; i < paraNumber; ++i) {
+				final int size = myModel.getTextLength(i);
+				myMaxParagraphTextSize = Math.max(size - prevSize, myMaxParagraphTextSize);
+				prevSize = size;
+			}
+
+			int start = 0;
+			prevSize = 0;
 			for (int i = 0; i < paraNumber; ++i) {
 				if (myModel.getParagraphKind(i) == ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH) {
 					final int size = myModel.getTextLength(i);
@@ -701,23 +713,11 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
 			testPage.PaintState = PaintStateEnum.START_IS_KNOWN;
 			preparePaintInfo(testPage, false, false);
-			final int size = sizeOfTextBeforeCursor(testPage.EndCursor);
-			myStartPages.add(size);
+			myStartPages.add(sizeOfTextBeforeCursor(testPage.EndCursor));
 			if (testPage.EndCursor.isEndOfText()) {
 				break;
 			}
 			testPage.StartCursor.setCursor(testPage.EndCursor);
-		}
-		testPage.moveEndCursor(myModel.getParagraphsNumber(), 0, 0);
-		for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
-			testPage.PaintState = PaintStateEnum.END_IS_KNOWN;
-			preparePaintInfo(testPage, false, true);
-			final int size = sizeOfTextBeforeCursor(testPage.StartCursor);
-			myEndPages.add(size);
-			if (testPage.StartCursor.isStartOfText()) {
-				break;
-			}
-			testPage.EndCursor.setCursor(testPage.StartCursor);
 		}
 
 		final ArrayList<Integer> test = new ArrayList<Integer>();
@@ -752,9 +752,22 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 		myTotalPages = pages;
 
-		if (myStartPages.isEmpty() || myEndPages.isEmpty()) {
+		if (myMaxParagraphTextSize < MAX_PRECOMPUTED_PAGES * myCharsPerPage) {
+			testPage.moveEndCursor(myModel.getParagraphsNumber(), 0, 0);
+			for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
+				testPage.PaintState = PaintStateEnum.END_IS_KNOWN;
+				preparePaintInfo(testPage, false, true);
+				myEndPages.add(sizeOfTextBeforeCursor(testPage.StartCursor));
+				if (testPage.StartCursor.isStartOfText()) {
+					break;
+				}
+				testPage.EndCursor.setCursor(testPage.StartCursor);
+			}
+		}
+
+		if (myStartPages.isEmpty()) {
 			myTotalPages = 1;
-		} else {
+		} else if (!myEndPages.isEmpty()) {
 			final int lastStartPagesChar = myStartPages.get(myStartPages.size() - 1);
 			final int firstEndPagesChar = myEndPages.get(myEndPages.size() - 1);
 			if (lastStartPagesChar >= firstEndPagesChar) {
