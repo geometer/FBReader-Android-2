@@ -625,7 +625,24 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 	}
 
+	private static class SectionInfo {
+		final int StartParagraph;
+		final int EndParagraph;
+		final int SizeBefore;
+		final int TextSize;
+		int PagesBefore;
+
+		SectionInfo(int start, int end, int sizeBefore, int size) {
+			StartParagraph = start;
+			EndParagraph = end;
+			SizeBefore = sizeBefore;
+			TextSize = size;
+		}
+	};
+
 	private static final int MAX_PRECOMPUTED_PAGES = 5;
+	private final List<SectionInfo> mySections = new ArrayList<SectionInfo>();
+	private volatile SectionInfo myLargestSection;
 	private final List<Integer> myStartPages = new ArrayList<Integer>(MAX_PRECOMPUTED_PAGES);
 	private final List<Integer> myEndPages = new ArrayList<Integer>(MAX_PRECOMPUTED_PAGES);
 	private float myCharsPerPage;
@@ -633,6 +650,38 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	private synchronized void precomputePagePositions() {
 		updateTextParams();
 		if (!myStartPages.isEmpty()) {
+			return;
+		}
+
+		if (mySections.isEmpty()) {
+			int start = 0;
+			final int paraNumber = myModel.getParagraphsNumber();
+			int prevSize = 0;
+			for (int i = 0; i < paraNumber; ++i) {
+				if (myModel.getParagraphKind(i) == ZLTextParagraph.Kind.END_OF_SECTION_PARAGRAPH) {
+					final int size = myModel.getTextLength(i);
+					mySections.add(new SectionInfo(start, i, prevSize, size - prevSize));
+					prevSize = size;
+					start = i + 1;
+				}
+			}
+			if (start < paraNumber) {
+				mySections.add(new SectionInfo(
+					start, paraNumber - 1, prevSize, sizeOfFullText() - prevSize
+				));
+			}
+			int maxSize = -1;
+			for (SectionInfo section : mySections) {
+				if (section.TextSize > maxSize) {
+					myLargestSection = section;
+					maxSize = section.TextSize;
+				}
+			}
+		}
+
+		if (myLargestSection == null) {
+			myCharsPerPage = 1000;
+			myTotalPages = 1;
 			return;
 		}
 
@@ -646,11 +695,9 @@ public abstract class ZLTextView extends ZLTextViewBase {
 			return;
 		}
 
-		final ArrayList<Integer> all = new ArrayList<Integer>();
 		final ZLTextPage testPage = new ZLTextPage();
 		testPage.StartCursor.setCursor(cursor);
 		testPage.moveStartCursor(0, 0, 0);
-		int prev = 0;
 		for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
 			testPage.PaintState = PaintStateEnum.START_IS_KNOWN;
 			preparePaintInfo(testPage, false, false);
@@ -659,12 +706,9 @@ public abstract class ZLTextView extends ZLTextViewBase {
 			if (testPage.EndCursor.isEndOfText()) {
 				break;
 			}
-			all.add(size - prev);
-			prev = size;
 			testPage.StartCursor.setCursor(testPage.EndCursor);
 		}
 		testPage.moveEndCursor(myModel.getParagraphsNumber(), 0, 0);
-		prev = sizeOfFullText();
 		for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
 			testPage.PaintState = PaintStateEnum.END_IS_KNOWN;
 			preparePaintInfo(testPage, false, true);
@@ -673,29 +717,48 @@ public abstract class ZLTextView extends ZLTextViewBase {
 			if (testPage.StartCursor.isStartOfText()) {
 				break;
 			}
-			all.add(prev - size);
-			prev = size;
 			testPage.EndCursor.setCursor(testPage.StartCursor);
 		}
 
-		all.addAll(myStartPages);
-		all.addAll(myEndPages);
-		Collections.sort(all);
-		if (all.size() == 0) {
-			myCharsPerPage = 1000;
-		} else if (all.size() % 2 == 0) {
-			myCharsPerPage = .5f * (all.get(all.size() / 2 - 1) + all.get(all.size() / 2));
-		} else {
-			myCharsPerPage = all.get(all.size() / 2);
+		final ArrayList<Integer> test = new ArrayList<Integer>();
+		testPage.moveStartCursor(myLargestSection.StartParagraph, 0, 0);
+		int prev = sizeOfTextBeforeCursor(testPage.StartCursor);
+		for (int i = 0; i < MAX_PRECOMPUTED_PAGES; ++i) {
+			testPage.PaintState = PaintStateEnum.START_IS_KNOWN;
+			preparePaintInfo(testPage, false, false);
+			final int size = sizeOfTextBeforeCursor(testPage.EndCursor);
+			test.add(size - prev);
+			prev = size;
+			int para = testPage.EndCursor.getParagraphIndex();
+			if (testPage.EndCursor.isEndOfParagraph()) {
+				++para;
+			}
+			if (para > myLargestSection.EndParagraph) {
+				break;
+			}
+			testPage.StartCursor.setCursor(testPage.EndCursor);
 		}
+		Collections.sort(test);
+		if (test.size() == 0) {
+			myCharsPerPage = 1000;
+		} else {
+			myCharsPerPage = test.get(test.size() - 1);
+		}
+
+		int pages = 0;
+		for (SectionInfo section : mySections) {
+			section.PagesBefore = pages;
+			pages += (section.TextSize + myCharsPerPage - 1) / myCharsPerPage;
+		}
+		myTotalPages = pages;
 
 		if (myStartPages.isEmpty() || myEndPages.isEmpty()) {
 			myTotalPages = 1;
 		} else {
-			myTotalPages = myStartPages.size();
 			final int lastStartPagesChar = myStartPages.get(myStartPages.size() - 1);
 			final int firstEndPagesChar = myEndPages.get(myEndPages.size() - 1);
 			if (lastStartPagesChar >= firstEndPagesChar) {
+				myTotalPages = myStartPages.size();
 				if (lastStartPagesChar < sizeOfFullText()) {
 					++myTotalPages;
 					for (int c : myEndPages) {
@@ -706,11 +769,6 @@ public abstract class ZLTextView extends ZLTextViewBase {
 						}
 					}
 				}
-			} else {
-				myTotalPages += myEndPages.size();
-				final int uncountedChars = firstEndPagesChar - lastStartPagesChar;
-				myTotalPages +=
-					Math.max(1, (int)((uncountedChars + myCharsPerPage - 1) / myCharsPerPage));
 			}
 		}
 	}
@@ -746,10 +804,20 @@ public abstract class ZLTextView extends ZLTextViewBase {
 				return myTotalPages - i - 1;
 			}
 		}
-		final int lastStartPagesChar =
-			myStartPages.size() > 0 ? myStartPages.get(myStartPages.size() - 1) : 0;
-		final int uncountedChars = chars - lastStartPagesChar;
-		return myStartPages.size() + Math.max(1, (int)(uncountedChars / myCharsPerPage + .5f));
+
+		final SectionInfo fake = new SectionInfo(0, 0, chars, 0);
+		final int sectionIndex = Collections.binarySearch(
+			mySections, fake, new Comparator<SectionInfo> () {
+				public int compare(SectionInfo info0, SectionInfo info1) {
+					return info0.SizeBefore - info1.SizeBefore;
+				}
+			}
+		);
+		final SectionInfo section =
+			mySections.get(sectionIndex >= 0 ? sectionIndex : Math.max(0, - sectionIndex - 2));
+		final int page =
+			section.PagesBefore + (int)(.5f + (chars - section.SizeBefore) / myCharsPerPage);
+		return Math.max(myStartPages.size() + 1, Math.min(myTotalPages - myEndPages.size(), page));
 	}
 
 	public final RationalNumber getProgress() {
