@@ -421,6 +421,10 @@ public final class ZLTextPlainModel implements ZLTextModel, ZLTextStyleEntry.Fea
 		return myParagraphsNumber;
 	}
 
+	public final byte getParagraphKind(int index) {
+		return myParagraphKinds[index];
+	}
+
 	public final ZLTextParagraph getParagraph(int index) {
 		final byte kind = myParagraphKinds[index];
 		return (kind == ZLTextParagraph.Kind.TEXT_PARAGRAPH) ?

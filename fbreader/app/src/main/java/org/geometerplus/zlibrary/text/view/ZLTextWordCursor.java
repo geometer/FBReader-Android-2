@@ -162,9 +162,14 @@ public final class ZLTextWordCursor extends ZLTextPosition {
 	public void moveToParagraph(int paragraphIndex) {
 		if (!isNull() && (paragraphIndex != myParagraphCursor.Index)) {
 			final ZLTextModel model = myParagraphCursor.Model;
+			final boolean moveToStart = paragraphIndex < model.getParagraphsNumber();
 			paragraphIndex = Math.max(0, Math.min(paragraphIndex, model.getParagraphsNumber() - 1));
 			myParagraphCursor = myParagraphCursor.CursorManager.get(paragraphIndex);
-			moveToParagraphStart();
+			if (moveToStart) {
+				moveToParagraphStart();
+			} else {
+				moveToParagraphEnd();
+			}
 		}
 	}
 

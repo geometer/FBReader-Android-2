@@ -432,10 +432,14 @@ public abstract class MainActivity extends FBActivity {
 		super.onResume();
 
 		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-		myDrawerLayout.setDrawerLockMode(
-			getReader().MiscOptions.EnableBookMenuSwipeGesture.getValue()
-				? DrawerLayout.LOCK_MODE_UNLOCKED : DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-		);
+		Config.Instance().runOnConnect(new Runnable() {
+			public void run() {
+				myDrawerLayout.setDrawerLockMode(
+					getReader().MiscOptions.EnableBookMenuSwipeGesture.getValue()
+						? DrawerLayout.LOCK_MODE_UNLOCKED : DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+				);
+			}
+		});
 	}
 
 	@Override

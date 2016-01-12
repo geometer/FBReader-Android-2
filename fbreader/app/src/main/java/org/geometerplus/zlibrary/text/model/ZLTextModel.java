@@ -26,6 +26,7 @@ public interface ZLTextModel {
 	String getLanguage();
 
 	int getParagraphsNumber();
+	byte getParagraphKind(int index);
 	ZLTextParagraph getParagraph(int index);
 
 	void removeAllMarks();
