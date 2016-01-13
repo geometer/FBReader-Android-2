@@ -42,7 +42,7 @@ public class DataServer extends NanoHTTPD {
 	private final DataService myService;
 
 	DataServer(DataService service, int port) {
-		super(port);
+		super("localhost", port);
 		myService = service;
 	}
 
