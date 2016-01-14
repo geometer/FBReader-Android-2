@@ -39,6 +39,10 @@ public abstract class ZLAndroidApplication extends Application {
 			Class.forName("android.os.AsyncTask");
 		} catch (Throwable t) {
 		}
+		try {
+			Class.forName("android.support.v7.view.menu.MenuBuilder");
+		} catch (Throwable t) {
+		}
 
 		initIntents();
 
