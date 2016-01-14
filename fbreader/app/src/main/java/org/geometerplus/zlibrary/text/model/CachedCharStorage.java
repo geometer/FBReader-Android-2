@@ -24,6 +24,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import android.os.StatFs;
+
 public final class CachedCharStorage {
 	protected final ArrayList<WeakReference<char[]>> myArray =
 		new ArrayList<WeakReference<char[]>>();
@@ -55,10 +57,15 @@ public final class CachedCharStorage {
 			final File dir = new File(myDirectoryName);
 			buffer.append("ts = ").append(System.currentTimeMillis()).append("\n");
 			buffer.append("dir exists = ").append(dir.exists()).append("\n");
-			for (File f : dir.listFiles()) {
-				buffer.append(f.getName()).append(" :: ");
-				buffer.append(f.length()).append(" :: ");
-				buffer.append(f.lastModified()).append("\n");
+			if (dir.exists()) {
+				final StatFs stat = new StatFs(myDirectoryName);
+				buffer.append("blocks available = ").append(stat.getAvailableBlocks()).append("\n");
+				buffer.append("block size = ").append(stat.getBlockSize()).append("\n");
+				for (File f : dir.listFiles()) {
+					buffer.append(f.getName()).append(" :: ");
+					buffer.append(f.length()).append(" :: ");
+					buffer.append(f.lastModified()).append("\n");
+				}
 			}
 		} catch (Throwable t) {
 			buffer.append(t.getClass().getName());
@@ -88,7 +95,7 @@ public final class CachedCharStorage {
 					);
 				final int rd = reader.read(block);
 				if (rd != block.length) {
-					throw new CachedCharStorageException(exceptionMessage(index, "; " + rd + " != " + block.length));
+					throw new CachedCharStorageException(exceptionMessage(index, rd + " != " + block.length));
 				}
 				reader.close();
 			} catch (IOException e) {
