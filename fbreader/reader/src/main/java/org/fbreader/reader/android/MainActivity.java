@@ -303,6 +303,9 @@ public abstract class MainActivity extends FBActivity {
 
 	protected final void refreshMenu() {
 		final AbstractReader reader = getReader();
+		if (reader == null) {
+			return;
+		}
 
 		myHamburgerMenuAdapter.rebuild(reader);
 
