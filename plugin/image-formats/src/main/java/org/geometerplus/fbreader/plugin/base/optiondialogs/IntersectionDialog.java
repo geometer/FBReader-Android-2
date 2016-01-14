@@ -1,7 +1,6 @@
 package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
 import org.fbreader.plugin.format.base.R;
-import org.geometerplus.fbreader.plugin.base.ViewHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 
@@ -14,9 +13,9 @@ public class IntersectionDialog extends OptionDialog implements PercentEditor.Ch
 	private PercentEditor myXEdit;
 	private PercentEditor myYEdit;
 
-	public IntersectionDialog(Context context, PluginView.IntersectionsHolder intersections) {
-		super(context);
-		myIntersections = intersections;
+	public IntersectionDialog(Context context, PluginView view) {
+		super(context, view);
+		myIntersections = view.getIntersections();
 	}
 
 	protected int layoutId() {
@@ -33,13 +32,13 @@ public class IntersectionDialog extends OptionDialog implements PercentEditor.Ch
 		myXEdit = initPercentEditor(R.id.fmt_x_edit, R.string.x, myIntersections.XPercent);
 		myYEdit = initPercentEditor(R.id.fmt_y_edit, R.string.y, myIntersections.YPercent);
 
-		ViewHolder.getInstance().getView().setDrawIntersections(true);
+		myView.setDrawIntersections(true);
 	}
 
 	@Override
 	protected void onStop() {
 		onPercentChanged();
-		ViewHolder.getInstance().getView().setDrawIntersections(false);
+		myView.setDrawIntersections(false);
 		super.onStop();
 	}
 
@@ -56,6 +55,6 @@ public class IntersectionDialog extends OptionDialog implements PercentEditor.Ch
 			myXEdit.getValue(),
 			myYEdit.getValue()
 		);
-		ViewHolder.getInstance().getView().setIntersections(myIntersections);
+		myView.setIntersections(myIntersections);
 	}
 }

@@ -1,7 +1,6 @@
 package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
 import org.fbreader.plugin.format.base.R;
-import org.geometerplus.fbreader.plugin.base.ViewHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 
@@ -18,8 +17,9 @@ public class ZoomModeDialog extends OptionDialog implements PercentEditor.Change
 	private int myZoomMode;
 	private int myZoomPercent;
 
-	public ZoomModeDialog(Context context, PluginView.ZoomMode mode) {
-		super(context);
+	public ZoomModeDialog(Context context, PluginView view) {
+		super(context, view);
+		final PluginView.ZoomMode mode = view.getZoomMode();
 		myZoomMode = mode.Mode;
 		myZoomPercent = mode.Percent;
 	}
@@ -35,7 +35,7 @@ public class ZoomModeDialog extends OptionDialog implements PercentEditor.Change
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		myPluginView = ViewHolder.getInstance().getView();
+		myPluginView = myView;
 
 		myPageEdit = (PercentEditor)findViewById(R.id.fmt_page_percent_editor);
 		myScreenEdit = (PercentEditor)findViewById(R.id.fmt_screen_percent_editor);
