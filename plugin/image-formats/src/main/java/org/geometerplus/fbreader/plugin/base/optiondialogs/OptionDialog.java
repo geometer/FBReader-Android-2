@@ -2,7 +2,7 @@ package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
 import org.fbreader.plugin.format.base.R;
 import org.geometerplus.fbreader.plugin.base.ViewHolder;
-import org.geometerplus.fbreader.plugin.base.reader.PercentEditor;
+import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,8 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 public abstract class OptionDialog extends Dialog {
-	public OptionDialog(Context context) {
+	protected final PluginView myView;
+
+	public OptionDialog(Context context, PluginView view) {
 		super(context, R.style.FBReaderMD_Dialog_Translucent);
+		myView = view;
 	}
 	
 	protected abstract int layoutId();
@@ -35,7 +38,10 @@ public abstract class OptionDialog extends Dialog {
 
 	@Override
 	protected void onStop() {
-		ViewHolder.getInstance().storeAll();
+		final ViewHolder holder = ViewHolder.getInstance();
+		if (holder != null) {
+			holder.storeAll();
+		}
 		super.onStop();
 	}
 }

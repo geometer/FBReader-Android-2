@@ -1,12 +1,12 @@
 package org.geometerplus.fbreader.plugin.base.optiondialogs;
 
-import org.fbreader.plugin.format.base.R;
-import org.geometerplus.fbreader.plugin.base.ViewHolder;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
+
+import org.fbreader.plugin.format.base.R;
+import org.geometerplus.fbreader.plugin.base.reader.PluginView;
 
 public class PageWayDialog extends OptionDialog {
 	private RadioButton myHButton;
@@ -14,9 +14,9 @@ public class PageWayDialog extends OptionDialog {
 
 	private boolean myHorizontal;
 
-	public PageWayDialog(Context context, boolean horizontal) {
-		super(context);
-		myHorizontal = horizontal;
+	public PageWayDialog(Context context, PluginView view) {
+		super(context, view);
+		myHorizontal = view.isHorizontalFirst();
 	}
 
 	protected int layoutId() {
@@ -47,7 +47,7 @@ public class PageWayDialog extends OptionDialog {
 
 	@Override
 	protected void onStop() {
-		ViewHolder.getInstance().getView().setHorizontalFirst(myHorizontal);
+		myView.setHorizontalFirst(myHorizontal);
 		super.onStop();
 	}
 

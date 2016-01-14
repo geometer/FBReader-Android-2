@@ -553,7 +553,7 @@ public class Actions {
 		protected void run(Object... params) {
 			final FBReaderPluginActivity activity = Reader.getActivity();
 			activity.hideBars();
-			new CropDialog(activity, activity.getPluginView().getDocument().getCropInfo()).show();
+			new CropDialog(activity, activity.getPluginView()).show();
 		}
 	}
 
@@ -566,7 +566,7 @@ public class Actions {
 		protected void run(Object... params) {
 			final FBReaderPluginActivity activity = Reader.getActivity();
 			activity.hideBars();
-			new ZoomModeDialog(activity, activity.getPluginView().getZoomMode()).show();
+			new ZoomModeDialog(activity, activity.getPluginView()).show();
 		}
 	}
 
@@ -579,7 +579,7 @@ public class Actions {
 		protected void run(Object... params) {
 			final FBReaderPluginActivity activity = Reader.getActivity();
 			activity.hideBars();
-			new IntersectionDialog(activity, activity.getPluginView().getIntersections()).show();
+			new IntersectionDialog(activity, activity.getPluginView()).show();
 		}
 	}
 
@@ -592,7 +592,7 @@ public class Actions {
 		protected void run(Object... params) {
 			final FBReaderPluginActivity activity = Reader.getActivity();
 			activity.hideBars();
-			new PageWayDialog(activity, activity.getPluginView().isHorizontalFirst()).show();
+			new PageWayDialog(activity, activity.getPluginView()).show();
 		}
 	}
 
