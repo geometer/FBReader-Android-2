@@ -26,6 +26,7 @@ done
 mv $outdir/apk/fbreader/app-fat-release.apk READY/FBReaderJ_$build.apk
 mv $outdir/mapping/fat/release/mapping.txt mappings/mapping-$version.$build.txt
 
+fp_version=`cat plugin/image-formats/VERSION | sed "s/ /_/g"`
 for plugin in bookshelf comicbook djvu; do
 	./gradlew zipAlignRelease -p plugin/$plugin
 	mv plugin/$plugin/build/outputs/apk/plugin/$plugin-release.apk READY/$plugin.apk
@@ -35,7 +36,7 @@ for plugin in pdf; do
 		./gradlew zipAlign${arch}Release -p plugin/$plugin
 		lower=`echo $arch | tr '[:upper:]' '[:lower:]'`
 		mv plugin/$plugin/build/outputs/apk/plugin/$plugin-$lower-release.apk READY/$plugin-$lower.apk
-		mv plugin/$plugin/build/outputs/mapping/$lower/release/mapping.txt mappings/mapping-$plugin-$version.$build-$lower.txt
+		mv plugin/$plugin/build/outputs/mapping/$lower/release/mapping.txt mappings/mapping-$plugin-$fp_version.$build-$lower.txt
 	done
 done
 
