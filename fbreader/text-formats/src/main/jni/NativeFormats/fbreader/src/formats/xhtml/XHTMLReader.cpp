@@ -75,7 +75,7 @@ private:
 	bool isEnabled(XHTMLReadingState state);
 };
 
-bool XHTMLGlobalTagAction::isEnabled(XHTMLReadingState state) {
+bool XHTMLGlobalTagAction::isEnabled(XHTMLReadingState) {
 	return true;
 }
 
@@ -348,14 +348,14 @@ void XHTMLTagBodyAction::doAtEnd(XHTMLReader &reader) {
 	}
 }
 
-void XHTMLTagSectionAction::doAtStart(XHTMLReader &reader, const char**) {
+void XHTMLTagSectionAction::doAtStart(XHTMLReader&, const char**) {
 }
 
 void XHTMLTagSectionAction::doAtEnd(XHTMLReader &reader) {
 	bookReader(reader).insertEndOfSectionParagraph();
 }
 
-void XHTMLTagPseudoSectionAction::doAtStart(XHTMLReader &reader, const char**) {
+void XHTMLTagPseudoSectionAction::doAtStart(XHTMLReader&, const char**) {
 }
 
 void XHTMLTagPseudoSectionAction::doAtEnd(XHTMLReader &reader) {
@@ -400,7 +400,7 @@ void XHTMLTagItemAction::doAtStart(XHTMLReader &reader, const char**) {
 	reader.myNewParagraphInProgress = true;
 }
 
-void XHTMLTagItemAction::doAtEnd(XHTMLReader &reader) {
+void XHTMLTagItemAction::doAtEnd(XHTMLReader&) {
 }
 
 bool XHTMLTagVideoAction::isEnabled(XHTMLReadingState state) {
@@ -437,7 +437,7 @@ void XHTMLTagSourceAction::doAtStart(XHTMLReader &reader, const char **xmlattrib
 	}
 }
 
-void XHTMLTagSourceAction::doAtEnd(XHTMLReader &reader) {
+void XHTMLTagSourceAction::doAtEnd(XHTMLReader&) {
 }
 
 XHTMLTagImageAction::XHTMLTagImageAction(shared_ptr<ZLXMLReader::NamePredicate> predicate) {
@@ -581,7 +581,7 @@ void XHTMLTagOpdsAction::doAtStart(XHTMLReader &reader, const char **xmlattribut
 	bookReader(reader).addExtensionEntry("opds", reader.attributeMap(xmlattributes));
 }
 
-void XHTMLTagOpdsAction::doAtEnd(XHTMLReader &reader) {
+void XHTMLTagOpdsAction::doAtEnd(XHTMLReader&) {
 }
 
 XHTMLTagAction *XHTMLReader::addAction(const std::string &tag, XHTMLTagAction *action) {

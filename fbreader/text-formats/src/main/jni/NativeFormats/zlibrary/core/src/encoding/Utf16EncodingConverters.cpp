@@ -79,8 +79,8 @@ void Utf16EncodingConverter::reset() {
 	myHasStoredChar = false;
 }
 
-bool Utf16EncodingConverter::fillTable(int *map) {
-	// is not possible
+bool Utf16EncodingConverter::fillTable(int*) {
+	// should be never called
 	return false;
 }
 

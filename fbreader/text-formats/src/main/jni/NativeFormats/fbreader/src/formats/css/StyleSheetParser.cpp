@@ -133,7 +133,7 @@ std::string StyleSheetParser::url2FullPath(const std::string &url) const {
 	return myPathPrefix + MiscUtil::decodeHtmlURL(path);
 }
 
-void StyleSheetParser::importCSS(const std::string &path) {
+void StyleSheetParser::importCSS(const std::string&) {
 }
 
 void StyleSheetParser::processControl(const char control) {

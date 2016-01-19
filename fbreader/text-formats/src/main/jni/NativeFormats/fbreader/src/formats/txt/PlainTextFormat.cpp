@@ -35,7 +35,7 @@ const std::string OPTION_IgnoredIndent = "IgnoredIndent";
 const std::string OPTION_EmptyLinesBeforeNewSection = "EmptyLinesBeforeNewSection";
 const std::string OPTION_CreateContentsTable = "CreateContentsTable";
 
-PlainTextFormat::PlainTextFormat(const ZLFile &file) :
+PlainTextFormat::PlainTextFormat(const ZLFile&) :
 //	InitializedOption(FBCategoryKey::BOOKS, file.path(), OPTION_Initialized, false),
 //	BreakTypeOption(FBCategoryKey::BOOKS, file.path(), OPTION_BreakType, 1),
 //	IgnoredIndentOption(FBCategoryKey::BOOKS, file.path(), OPTION_IgnoredIndent, 1, 100, 1),

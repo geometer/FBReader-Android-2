@@ -25,8 +25,6 @@
 
 #include <ZLXMLReader.h>
 
-#include "../../bookmodel/BookReader.h"
-
 class NCXReader : public ZLXMLReader {
 
 public:
@@ -41,7 +39,7 @@ public:
 	};
 
 public:
-	NCXReader(BookReader &modelReader);
+	NCXReader();
 	const std::map<int,NavPoint> &navigationMap() const;
 
 private:
@@ -51,7 +49,6 @@ private:
 	const std::vector<std::string> &externalDTDs() const;
 
 private:
-	BookReader &myModelReader;
 	std::map<int,NavPoint> myNavigationMap;
 	std::vector<NavPoint> myPointStack;
 

@@ -87,9 +87,9 @@ static int specialSymbolNumber(SpecialType type, const std::string &txt) {
 		case ST_NAME:
 			return HtmlEntityCollection::symbolNumber(txt);
 		case ST_DEC:
-			return std::strtol(txt.c_str() + 1, &end, 10);
+			return ::strtol(txt.c_str() + 1, &end, 10);
 		case ST_HEX:
-			return std::strtol(txt.c_str() + 2, &end, 16);
+			return ::strtol(txt.c_str() + 2, &end, 16);
 		default:
 			return 0;
 	}
