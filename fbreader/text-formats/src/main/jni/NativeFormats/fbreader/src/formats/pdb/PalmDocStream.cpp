@@ -201,5 +201,5 @@ size_t PalmDocCssStream::offset() const {
 }
 
 size_t PalmDocCssStream::sizeOfOpened() {
-	return (size_t)((1 << 31) - 1);
+	return (size_t)(1 << 31) - 1;
 }

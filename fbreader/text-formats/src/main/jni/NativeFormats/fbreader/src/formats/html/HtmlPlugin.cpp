@@ -80,6 +80,6 @@ bool HtmlPlugin::readModel(BookModel &model) const {
 //	return new PlainTextInfoPage(dialog, file, ZLResourceKey("<PRE>"), false);
 //}
 
-bool HtmlPlugin::readLanguageAndEncoding(Book &book) const {
+bool HtmlPlugin::readLanguageAndEncoding(Book&) const {
 	return true;
 }

@@ -64,6 +64,7 @@ public:
 	class HyperlinkMatcher {
 
 	public:
+		virtual ~HyperlinkMatcher();
 		virtual Label match(const std::map<std::string,Label> &lMap, const std::string &id) const = 0;
 	};
 
@@ -119,5 +120,7 @@ inline void ContentsTree::addText(const std::string &buffer) {
 inline const std::string &ContentsTree::text() const { return myText; }
 inline int ContentsTree::reference() const { return myReference; }
 inline const std::vector<shared_ptr<ContentsTree> > &ContentsTree::children() const { return myChildren; }
+
+inline BookModel::HyperlinkMatcher::~HyperlinkMatcher() {}
 
 #endif /* __BOOKMODEL_H__ */

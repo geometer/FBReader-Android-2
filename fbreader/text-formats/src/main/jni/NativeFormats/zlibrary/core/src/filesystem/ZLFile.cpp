@@ -19,7 +19,6 @@
 
 #include <cstring>
 
-#include <ZLLogger.h>
 #include <ZLStringUtil.h>
 #include <ZLUnicodeUtil.h>
 
