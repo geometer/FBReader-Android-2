@@ -328,7 +328,7 @@ bool MobipocketPlugin::readUids(Book &/*book*/) const {
 	return true;
 }
 
-std::vector<shared_ptr<FileEncryptionInfo> > MobipocketPlugin::readEncryptionInfos(Book &book) const {
+std::vector<shared_ptr<FileEncryptionInfo> > MobipocketPlugin::readEncryptionInfos(const Book &book) const {
 	std::vector<shared_ptr<FileEncryptionInfo> > infos;
 
 	PalmDocContentStream pbStream(book.file());

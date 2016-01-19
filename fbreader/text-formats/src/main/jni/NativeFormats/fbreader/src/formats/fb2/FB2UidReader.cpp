@@ -31,7 +31,7 @@ void FB2UidReader::characterDataHandler(const char *text, std::size_t len) {
 	}
 }
 
-void FB2UidReader::startElementHandler(int tag, const char **attributes) {
+void FB2UidReader::startElementHandler(int tag, const char**) {
 	switch (tag) {
 		case _BODY:
 			myReturnCode = true;

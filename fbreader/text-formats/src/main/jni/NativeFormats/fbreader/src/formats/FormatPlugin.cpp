@@ -101,14 +101,14 @@ const std::string &FormatPlugin::tryOpen(const ZLFile&) const {
 }
 */
 
-std::vector<shared_ptr<FileEncryptionInfo> > FormatPlugin::readEncryptionInfos(Book &book) const {
+std::vector<shared_ptr<FileEncryptionInfo> > FormatPlugin::readEncryptionInfos(const Book&) const {
 	return std::vector<shared_ptr<FileEncryptionInfo> >();
 }
 
-shared_ptr<const ZLImage> FormatPlugin::coverImage(const ZLFile &file) const {
+shared_ptr<const ZLImage> FormatPlugin::coverImage(const ZLFile&) const {
 	return 0;
 }
 
-std::string FormatPlugin::readAnnotation(const ZLFile &file) const {
+std::string FormatPlugin::readAnnotation(const ZLFile&) const {
 	return "";
 }

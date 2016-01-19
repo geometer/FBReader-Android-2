@@ -19,7 +19,7 @@
 
 #include <cstring>
 
-#include <ZLLogger.h>
+//#include <ZLLogger.h>
 
 #include "CSSInputStream.h"
 
@@ -71,7 +71,7 @@ void CSSInputStream::close() {
 	return myBaseStream->close();
 }
 
-void CSSInputStream::seek(int offset, bool absoluteOffset) {
+void CSSInputStream::seek(int /*offset*/, bool /*absoluteOffset*/) {
 	// TODO: implement
 }
 

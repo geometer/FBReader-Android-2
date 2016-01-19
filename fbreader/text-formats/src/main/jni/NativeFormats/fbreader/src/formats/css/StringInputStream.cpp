@@ -19,7 +19,7 @@
 
 #include <cstring>
 
-#include <ZLLogger.h>
+//#include <ZLLogger.h>
 
 #include "StringInputStream.h"
 

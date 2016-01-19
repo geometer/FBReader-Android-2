@@ -252,7 +252,7 @@ bool OEBBookReader::readBook(const ZLFile &opfFile) {
 
 void OEBBookReader::generateTOC(const XHTMLReader &xhtmlReader) {
 	if (!myNCXTOCFileName.empty()) {
-		NCXReader ncxReader(myModelReader);
+		NCXReader ncxReader;
 		const ZLFile ncxFile(myFilePrefix + myNCXTOCFileName);
 		if (ncxReader.readDocument(ncxFile.inputStream(myEncryptionMap))) {
 			const std::map<int,NCXReader::NavPoint> navigationMap = ncxReader.navigationMap();

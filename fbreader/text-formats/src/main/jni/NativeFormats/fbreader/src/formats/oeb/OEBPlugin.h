@@ -33,7 +33,7 @@ public:
 	bool providesMetainfo() const;
 	const std::string supportedFileType() const;
 	bool readMetainfo(Book &book) const;
-	virtual std::vector<shared_ptr<FileEncryptionInfo> > readEncryptionInfos(Book &book) const;
+	virtual std::vector<shared_ptr<FileEncryptionInfo> > readEncryptionInfos(const Book &book) const;
 	bool readUids(Book &book) const;
 	bool readLanguageAndEncoding(Book &book) const;
 	bool readModel(BookModel &model) const;
