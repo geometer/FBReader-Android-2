@@ -22,7 +22,7 @@
 
 #include <ZLImage.h>
 #include <ZLFileImage.h>
-#include <ZLLogger.h>
+//#include <ZLLogger.h>
 #include <ZLCachedMemoryAllocator.h>
 #include <ZLTextStyleEntry.h>
 #include <ZLVideoEntry.h>
@@ -174,10 +174,10 @@ void BookReader::addHyperlinkControl(FBTextKind kind, const std::string &label) 
 			myHyperlinkType = HYPERLINK_NONE;
 			break;
 	}
-	ZLLogger::Instance().println(
-		"hyperlink",
-		" + control (" + type + "): " + label
-	);
+//	ZLLogger::Instance().println(
+//		"hyperlink",
+//		" + control (" + type + "): " + label
+//	);
 	if (paragraphIsOpen()) {
 		flushTextBufferToParagraph();
 		myCurrentTextModel->addHyperlinkControl(kind, myHyperlinkType, label);
@@ -196,10 +196,10 @@ void BookReader::addHyperlinkLabel(const std::string &label) {
 }
 
 void BookReader::addHyperlinkLabel(const std::string &label, int paragraphNumber) {
-	ZLLogger::Instance().println(
-		"hyperlink",
-		" + label: " + label
-	);
+//	ZLLogger::Instance().println(
+//		"hyperlink",
+//		" + label: " + label
+//	);
 	myModel.myInternalHyperlinks.insert(std::make_pair(
 		label, BookModel::Label(myCurrentTextModel, paragraphNumber)
 	));

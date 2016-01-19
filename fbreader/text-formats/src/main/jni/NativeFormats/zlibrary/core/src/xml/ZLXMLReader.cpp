@@ -150,7 +150,7 @@ const std::vector<std::string> &ZLXMLReader::externalDTDs() const {
 	return EMPTY_VECTOR;
 }
 
-void ZLXMLReader::collectExternalEntities(std::map<std::string,std::string> &entityMap) {
+void ZLXMLReader::collectExternalEntities(std::map<std::string,std::string>&) {
 }
 
 const char *ZLXMLReader::attributeValue(const char **xmlattributes, const char *name) const {
@@ -199,7 +199,7 @@ bool ZLXMLReader::SimpleNamePredicate::accepts(const ZLXMLReader&, const std::st
 ZLXMLReader::IgnoreCaseNamePredicate::IgnoreCaseNamePredicate(const std::string &lowerCaseName) : myLowerCaseName(lowerCaseName) {
 }
 
-bool ZLXMLReader::IgnoreCaseNamePredicate::accepts(const ZLXMLReader &reader, const char *name) const {
+bool ZLXMLReader::IgnoreCaseNamePredicate::accepts(const ZLXMLReader&, const char *name) const {
 	std::string lc = name;
 	ZLStringUtil::asciiToLowerInline(lc);
 	return myLowerCaseName == lc;
@@ -238,7 +238,7 @@ bool ZLXMLReader::BrokenNamePredicate::accepts(const ZLXMLReader &reader, const 
 	return accepts(reader, std::string(name));
 }
 
-bool ZLXMLReader::BrokenNamePredicate::accepts(const ZLXMLReader &reader, const std::string &name) const {
+bool ZLXMLReader::BrokenNamePredicate::accepts(const ZLXMLReader&, const std::string &name) const {
 	return myName == name.substr(name.find(':') + 1);
 }
 

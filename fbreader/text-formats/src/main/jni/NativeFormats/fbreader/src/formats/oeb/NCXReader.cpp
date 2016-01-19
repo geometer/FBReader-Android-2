@@ -23,7 +23,7 @@
 #include "../util/MiscUtil.h"
 #include "../util/EntityFilesCollector.h"
 
-NCXReader::NCXReader(BookReader &modelReader) : myModelReader(modelReader), myReadState(READ_NONE), myPlayIndex(-65535) {
+NCXReader::NCXReader() : myReadState(READ_NONE), myPlayIndex(-65535) {
 }
 
 static const std::string TAG_NAVMAP = "navMap";

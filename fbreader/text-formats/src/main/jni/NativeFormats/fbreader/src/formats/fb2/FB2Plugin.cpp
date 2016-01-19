@@ -46,6 +46,6 @@ shared_ptr<const ZLImage> FB2Plugin::coverImage(const ZLFile &file) const {
 	return FB2CoverReader(file).readCover();
 }
 
-bool FB2Plugin::readLanguageAndEncoding(Book &book) const {
+bool FB2Plugin::readLanguageAndEncoding(Book&) const {
 	return true;
 }

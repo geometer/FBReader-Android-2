@@ -115,7 +115,7 @@ std::string EpubRightsFileReader::method() const {
 	return myMethod;
 }
 
-void EpubRightsFileReader::startElementHandler(const char *tag, const char **attributes) {
+void EpubRightsFileReader::startElementHandler(const char *tag, const char**) {
 	if (testTag(ZLXMLNamespace::MarlinEpub, "Marlin", tag)) {
 		myMethod = EncryptionMethod::MARLIN;
 	}

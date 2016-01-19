@@ -59,7 +59,7 @@ public:
 
 	//virtual const std::string &tryOpen(const ZLFile &file) const;
 	virtual bool readMetainfo(Book &book) const = 0;
-	virtual std::vector<shared_ptr<FileEncryptionInfo> > readEncryptionInfos(Book &book) const;
+	virtual std::vector<shared_ptr<FileEncryptionInfo> > readEncryptionInfos(const Book &book) const;
 	virtual bool readUids(Book &book) const = 0;
 	virtual bool readLanguageAndEncoding(Book &book) const = 0;
 	virtual bool readModel(BookModel &model) const = 0;
