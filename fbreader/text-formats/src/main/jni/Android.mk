@@ -52,6 +52,7 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/common/zlibrary/core/language/ZLStatisticsItem.cpp \
 	NativeFormats/common/zlibrary/core/language/ZLStatisticsXMLReader.cpp \
 	NativeFormats/common/zlibrary/core/library/ZLibrary.cpp \
+	NativeFormats/common/zlibrary/core/logger/ZLLogger.cpp \
 	NativeFormats/android/zlibrary/core/logger/ZLLogger.cpp \
 	NativeFormats/common/zlibrary/core/util/ZLFileUtil.cpp \
 	NativeFormats/common/zlibrary/core/util/ZLLanguageUtil.cpp \
