@@ -17,9 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <AndroidUtil.h>
-#include <JniEnvelope.h>
-
 #include <ZLibrary.h>
 #include <ZLFile.h>
 
@@ -69,15 +66,9 @@ void PluginCollection::deleteInstance() {
 }
 
 PluginCollection::PluginCollection() {
-	//JNIEnv *env = AndroidUtil::getEnv();
-	//jobject instance = AndroidUtil::StaticMethod_PluginCollection_Instance->call();
-	//myJavaInstance = env->NewGlobalRef(instance);
-	//env->DeleteLocalRef(instance);
 }
 
 PluginCollection::~PluginCollection() {
-	//JNIEnv *env = AndroidUtil::getEnv();
-	//env->DeleteGlobalRef(myJavaInstance);
 }
 
 shared_ptr<FormatPlugin> PluginCollection::pluginByType(const std::string &fileType) const {

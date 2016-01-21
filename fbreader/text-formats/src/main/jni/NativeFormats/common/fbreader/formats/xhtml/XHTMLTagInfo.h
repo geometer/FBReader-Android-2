@@ -36,8 +36,12 @@ struct XHTMLTagInfo {
 class XHTMLTagInfoList : public std::vector<XHTMLTagInfo> {
 
 public:
+	XHTMLTagInfoList();
 	int find(const CSSSelector &selector, int from, int to) const;
 	bool matches(const CSSSelector &selector, int index) const;
 };
+
+inline XHTMLTagInfoList::XHTMLTagInfoList() {
+}
 
 #endif /* __XHTMLTAGINFO_H__ */
