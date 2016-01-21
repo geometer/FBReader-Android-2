@@ -20,7 +20,7 @@
 #ifndef __ZLANDROIDFSMANAGER_H__
 #define __ZLANDROIDFSMANAGER_H__
 
-#include "../../../../core/src/unix/filesystem/ZLUnixFSManager.h"
+#include "../../../core/unix/filesystem/ZLUnixFSManager.h"
 
 class ZLAndroidFSManager : public ZLUnixFSManager {
 
