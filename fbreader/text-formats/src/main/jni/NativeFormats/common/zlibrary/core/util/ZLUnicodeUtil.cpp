@@ -21,12 +21,7 @@
 #include <cstdlib>
 #include <map>
 
-#include <AndroidUtil.h>
-#include <JniEnvelope.h>
-
-#include <ZLibrary.h>
 #include <ZLFile.h>
-#include <ZLXMLReader.h>
 
 #include "ZLUnicodeUtil.h"
 
@@ -490,49 +485,21 @@ void ZLUnicodeUtil::toLower(Ucs4String &str) {
 }
 */
 
-std::string ZLUnicodeUtil::toLower(const std::string &utf8String) {
-	/*
-	Ucs4String ucs4String;
-	utf8ToUcs4(ucs4String, utf8String);
-
-	toLower(ucs4String);
-
-	std::string result;
-	ucs4ToUtf8(result, ucs4String, utf8String.length());
-	return result;
-	*/
-	if (utf8String.empty()) {
-		return utf8String;
-	}
-
-	bool isAscii = true;
+std::string ZLUnicodeUtil::toLowerAscii(const std::string &utf8String) {
 	const int size = utf8String.size();
-	for (int i = size - 1; i >= 0; --i) {
-		if ((utf8String[i] & 0x80) != 0) {
-			isAscii = false;
-			break;
-		}
-	}
-	if (isAscii) {
-		std::string result(size, ' ');
-		for (int i = size - 1; i >= 0; --i) {
-			result[i] = std::tolower(utf8String[i]);
-		}
-		return result;
-	}
-	JNIEnv *env = AndroidUtil::getEnv();
-	jstring javaString = AndroidUtil::createJavaString(env, utf8String);
-	jstring lowerCased = AndroidUtil::Method_java_lang_String_toLowerCase->callForJavaString(javaString);
-	if (javaString == lowerCased) {
-		env->DeleteLocalRef(lowerCased);
-		env->DeleteLocalRef(javaString);
+	if (size == 0) {
 		return utf8String;
-	} else {
-		const std::string result = AndroidUtil::fromJavaString(env, lowerCased);
-		env->DeleteLocalRef(lowerCased);
-		env->DeleteLocalRef(javaString);
-		return result;
 	}
+
+	std::string result(size, ' ');
+	for (int i = size - 1; i >= 0; --i) {
+		if ((utf8String[i] & 0x80) == 0) {
+			result[i] = std::tolower(utf8String[i]);
+		} else {
+			result[i] = utf8String[i];
+		}
+	}
+	return result;
 }
 
 /*
@@ -549,34 +516,59 @@ void ZLUnicodeUtil::toUpper(Ucs4String &str) {
 }
 */
 
-std::string ZLUnicodeUtil::toUpper(const std::string &utf8String) {
-	/*
-	Ucs4String ucs4String;
-	utf8ToUcs4(ucs4String, utf8String);
+std::string ZLUnicodeUtil::toUpperAscii(const std::string &utf8String) {
+	const int size = utf8String.size();
+	if (size == 0) {
+		return utf8String;
+	}
 
-	toUpper(ucs4String);
-
-	std::string result;
-	ucs4ToUtf8(result, ucs4String, utf8String.length());
+	std::string result(size, ' ');
+	for (int i = size - 1; i >= 0; --i) {
+		if ((utf8String[i] & 0x80) == 0) {
+			result[i] = std::toupper(utf8String[i]);
+		} else {
+			result[i] = utf8String[i];
+		}
+	}
 	return result;
-	*/
-	if (utf8String.empty()) {
-		return utf8String;
-	}
+}
 
-	JNIEnv *env = AndroidUtil::getEnv();
-	jstring javaString = AndroidUtil::createJavaString(env, utf8String);
-	jstring upperCased = AndroidUtil::Method_java_lang_String_toUpperCase->callForJavaString(javaString);
-	if (javaString == upperCased) {
-		env->DeleteLocalRef(upperCased);
-		env->DeleteLocalRef(javaString);
-		return utf8String;
-	} else {
-		const std::string result = AndroidUtil::fromJavaString(env, upperCased);
-		env->DeleteLocalRef(upperCased);
-		env->DeleteLocalRef(javaString);
-		return result;
+bool ZLUnicodeUtil::equalsIgnoreCaseAscii(const std::string &s0, const std::string &s1) {
+	const size_t size = s0.size();
+	if (s1.size() != size) {
+		return false;
 	}
+	for (size_t i = 0; i < size; ++i) {
+		if (s0[i] == s1[i]) {
+			continue;
+		}
+		if ((s0[i] & 0x80) != 0 || (s1[i] & 0x80) != 0) {
+			return false;
+		}
+		if (std::tolower(s0[i]) != std::tolower(s1[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool ZLUnicodeUtil::equalsIgnoreCaseAscii(const std::string &s0, const char *s1) {
+	const size_t size = s0.size();
+	if (std::strlen(s1) != size) {
+		return false;
+	}
+	for (size_t i = 0; i < size; ++i) {
+		if (s0[i] == s1[i]) {
+			continue;
+		}
+		if ((s0[i] & 0x80) != 0 || (s1[i] & 0x80) != 0) {
+			return false;
+		}
+		if (std::tolower(s0[i]) != std::tolower(s1[i])) {
+			return false;
+		}
+	}
+	return true;
 }
 
 void ZLUnicodeUtil::utf8Trim(std::string &utf8String) {

@@ -45,7 +45,7 @@ bool HtmlMetainfoReader::tagHandler(const HtmlReader::HtmlTag &tag) {
 	} else if ((myReadType & AUTHOR) == AUTHOR && tag.Name == "dc:creator") {
 		if (tag.Start) {
 			const std::string *role = tag.find("role");
-			if (role != 0 && ZLUnicodeUtil::toLower(*role) == "aut") {
+			if (role != 0 && ZLUnicodeUtil::equalsIgnoreCaseAscii(*role, "aut")) {
 				if (!myBuffer.empty()) {
 					myBuffer += ", ";
 				}
