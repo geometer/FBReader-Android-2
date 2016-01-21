@@ -17,24 +17,22 @@
  * 02110-1301, USA.
  */
 
-#include <android/log.h>
+#include "ZLLogger.h"
 
-#include <ZLLogger.h>
+const std::string ZLLogger::DEFAULT_CLASS;
 
-void ZLLogger::print(const std::string &className, const std::string &message) const {
-	std::string m = message;
-	for (std::size_t index = m.find('%'); index != std::string::npos; index = m.find('%', index + 2)) {
-		m.replace(index, 1, "%%");
+ZLLogger *ZLLogger::ourInstance = 0;
+
+ZLLogger &ZLLogger::Instance() {
+	if (ourInstance == 0) {
+		ourInstance = new ZLLogger();
 	}
-	if (className == DEFAULT_CLASS) {
-		__android_log_print(ANDROID_LOG_WARN, "ZLLogger", "%s", m.c_str());
-	} else {
-		if (myRegisteredClasses.find(className) != myRegisteredClasses.end()) {
-			__android_log_print(ANDROID_LOG_WARN, className.c_str(), "%s", m.c_str());
-		}
-	}
+	return *ourInstance;
 }
 
-void ZLLogger::println(const std::string &className, const std::string &message) const {
-	print(className, message);
+ZLLogger::ZLLogger() {
+}
+
+void ZLLogger::registerClass(const std::string &className) {
+	myRegisteredClasses.insert(className);
 }
