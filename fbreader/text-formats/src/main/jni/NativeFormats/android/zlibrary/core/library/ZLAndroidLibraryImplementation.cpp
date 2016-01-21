@@ -22,7 +22,7 @@
 
 #include <ZLibrary.h>
 
-#include "../../../core/unix/library/ZLibraryImplementation.h"
+#include "../../../../common/zlibrary/core/unix/library/ZLibraryImplementation.h"
 
 #include "../filesystem/ZLAndroidFSManager.h"
 

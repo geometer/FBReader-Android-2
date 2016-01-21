@@ -22,7 +22,7 @@
 
 #include <jni.h>
 
-#include "../../../core/filesystem/ZLFSDir.h"
+#include "../../../../common/zlibrary/core/filesystem/ZLFSDir.h"
 
 class JavaFSDir : public ZLFSDir {
 

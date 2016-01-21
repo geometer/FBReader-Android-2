@@ -21,7 +21,7 @@
 #include <JniEnvelope.h>
 #include <ZLUnicodeUtil.h>
 
-#include "JavaEncodingConverter.h"
+#include <JavaEncodingConverter.h>
 
 class JavaEncodingConverter : public ZLEncodingConverter {
 
