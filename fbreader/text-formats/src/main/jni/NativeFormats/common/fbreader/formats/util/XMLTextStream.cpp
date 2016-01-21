@@ -45,7 +45,7 @@ XMLTextReader::XMLTextReader(std::string &buffer, const std::string &startTag) :
 }
 
 void XMLTextReader::startElementHandler(const char *tag, const char**) {
-	if (!myStarted && (myStartTag == ZLUnicodeUtil::toLowerAscii(tag))) {
+	if (!myStarted && ZLUnicodeUtil::equalsIgnoreCaseAscii(myStartTag, tag)) {
 		myStarted = true;
 	}
 }
