@@ -22,7 +22,7 @@
 #include <AndroidUtil.h>
 #include <JniEnvelope.h>
 
-#include "fbreader/src/formats/FormatPlugin.h"
+#include "../common/fbreader/formats/FormatPlugin.h"
 
 extern "C"
 JNIEXPORT jobjectArray JNICALL Java_org_geometerplus_fbreader_formats_PluginCollection_nativePlugins(JNIEnv* env, jobject thiz, jobject systemInfo) {
