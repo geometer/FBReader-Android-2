@@ -22,12 +22,12 @@
 #include <ZLFileImage.h>
 #include <FileEncryptionInfo.h>
 
-#include "fbreader/src/bookmodel/BookModel.h"
-#include "fbreader/src/formats/FormatPlugin.h"
-#include "fbreader/src/library/Author.h"
-#include "fbreader/src/library/Book.h"
-#include "fbreader/src/library/Tag.h"
-#include "fbreader/src/library/UID.h"
+#include "../common/fbreader/bookmodel/BookModel.h"
+#include "../common/fbreader/formats/FormatPlugin.h"
+#include "../common/fbreader/library/Author.h"
+#include "../common/fbreader/library/Book.h"
+#include "../common/fbreader/library/Tag.h"
+#include "../common/fbreader/library/UID.h"
 
 static shared_ptr<FormatPlugin> findCppPlugin(jobject base) {
 	const std::string fileType = AndroidUtil::Method_NativeFormatPlugin_supportedFileType->callForCppString(base);
