@@ -30,7 +30,7 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/common/zlibrary/core/encoding/DummyEncodingConverter.cpp \
 	NativeFormats/common/zlibrary/core/encoding/Utf16EncodingConverters.cpp \
 	NativeFormats/common/zlibrary/core/encoding/Utf8EncodingConverter.cpp \
-	NativeFormats/common/zlibrary/core/encoding/JavaEncodingConverter.cpp \
+	NativeFormats/android/zlibrary/core/encoding/JavaEncodingConverter.cpp \
 	NativeFormats/common/zlibrary/core/encoding/ZLEncodingCollection.cpp \
 	NativeFormats/common/zlibrary/core/encoding/ZLEncodingConverter.cpp \
 	NativeFormats/common/zlibrary/core/filesystem/ZLDir.cpp \
@@ -52,7 +52,7 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/common/zlibrary/core/language/ZLStatisticsItem.cpp \
 	NativeFormats/common/zlibrary/core/language/ZLStatisticsXMLReader.cpp \
 	NativeFormats/common/zlibrary/core/library/ZLibrary.cpp \
-	NativeFormats/common/zlibrary/core/logger/ZLLogger.cpp \
+	NativeFormats/android/zlibrary/core/logger/ZLLogger.cpp \
 	NativeFormats/common/zlibrary/core/util/ZLFileUtil.cpp \
 	NativeFormats/common/zlibrary/core/util/ZLLanguageUtil.cpp \
 	NativeFormats/common/zlibrary/core/util/ZLStringUtil.cpp \
@@ -75,10 +75,10 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/common/zlibrary/text/model/ZLVideoEntry.cpp \
 	NativeFormats/common/zlibrary/text/fonts/FontManager.cpp \
 	NativeFormats/common/zlibrary/text/fonts/FontMap.cpp \
-	NativeFormats/common/zlibrary/ui/android/filesystem/JavaFSDir.cpp \
-	NativeFormats/common/zlibrary/ui/android/filesystem/JavaInputStream.cpp \
-	NativeFormats/common/zlibrary/ui/android/filesystem/ZLAndroidFSManager.cpp \
-	NativeFormats/common/zlibrary/ui/android/library/ZLAndroidLibraryImplementation.cpp \
+	NativeFormats/android/zlibrary/core/filesystem/JavaFSDir.cpp \
+	NativeFormats/android/zlibrary/core/filesystem/JavaInputStream.cpp \
+	NativeFormats/android/zlibrary/core/filesystem/ZLAndroidFSManager.cpp \
+	NativeFormats/android/zlibrary/core/library/ZLAndroidLibraryImplementation.cpp \
 	NativeFormats/common/fbreader/bookmodel/BookModel.cpp \
 	NativeFormats/common/fbreader/bookmodel/BookReader.cpp \
 	NativeFormats/common/fbreader/formats/EncodedTextReader.cpp \
