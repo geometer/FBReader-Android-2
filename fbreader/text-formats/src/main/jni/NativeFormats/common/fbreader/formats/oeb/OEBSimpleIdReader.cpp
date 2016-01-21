@@ -35,7 +35,7 @@ void OEBSimpleIdReader::characterDataHandler(const char *text, std::size_t len) 
 }
 
 void OEBSimpleIdReader::startElementHandler(const char *tag, const char**) {
-	const std::string tagString = ZLUnicodeUtil::toLower(tag);
+	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
 	switch (myReadState) {
 		default:
 			break;
@@ -53,7 +53,7 @@ void OEBSimpleIdReader::startElementHandler(const char *tag, const char**) {
 }
 
 void OEBSimpleIdReader::endElementHandler(const char *tag) {
-	const std::string tagString = ZLUnicodeUtil::toLower(tag);
+	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
 	switch (myReadState) {
 		case READ_NONE:
 			break;

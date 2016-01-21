@@ -17,9 +17,9 @@
  * 02110-1301, USA.
  */
 
-#include <AndroidUtil.h>
 #include <ZLLogger.h>
 #include <ZLFile.h>
+#include <ZLUnicodeUtil.h>
 
 #include "ZLZip.h"
 #include "ZLZipHeader.h"
@@ -66,7 +66,7 @@ ZLZipEntryCache::ZLZipEntryCache(const std::string &containerName, ZLInputStream
 		if (header.Signature == (unsigned long)ZLZipHeader::SignatureLocalFile) {
 			std::string entryName(header.NameLength, '\0');
 			if ((unsigned int)containerStream.read((char*)entryName.data(), header.NameLength) == header.NameLength) {
-				entryName = AndroidUtil::convertNonUtfString(entryName);
+				entryName = ZLUnicodeUtil::convertNonUtfString(entryName);
 				Info &info = myInfoMap[entryName];
 				info.Offset = containerStream.offset() + header.ExtraLength;
 				info.CompressionMethod = header.CompressionMethod;

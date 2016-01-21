@@ -167,7 +167,6 @@ public:
 
 	static std::string fromJavaString(JNIEnv *env, jstring from);
 	static jstring createJavaString(JNIEnv* env, const std::string &str);
-	static std::string convertNonUtfString(const std::string &str);
 
 	static jobject createJavaFile(JNIEnv *env, const std::string &path);
 	static jobject createJavaEncryptionInfo(JNIEnv *env, shared_ptr<FileEncryptionInfo> info);

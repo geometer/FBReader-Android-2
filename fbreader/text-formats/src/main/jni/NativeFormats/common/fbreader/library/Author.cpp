@@ -55,7 +55,7 @@ shared_ptr<Author> Author::getAuthor(const std::string &name, const std::string 
 	}
 
 	shared_ptr<Author> author =
-		new Author(strippedName, ZLUnicodeUtil::toLower(strippedKey));
+		new Author(strippedName, ZLUnicodeUtil::toLowerFull(strippedKey));
 	std::set<shared_ptr<Author>,AuthorComparator>::const_iterator it =
 		ourAuthorSet.find(author);
 	if (it != ourAuthorSet.end()) {

@@ -20,8 +20,6 @@
 #ifndef __FORMATPLUGIN_H__
 #define __FORMATPLUGIN_H__
 
-#include <jni.h>
-
 #include <string>
 #include <vector>
 
@@ -91,8 +89,6 @@ public:
 
 private:
 	static PluginCollection *ourInstance;
-
-	//jobject myJavaInstance;
 
 	std::vector<shared_ptr<FormatPlugin> > myPlugins;
 };

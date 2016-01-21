@@ -57,6 +57,7 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/common/zlibrary/core/util/ZLLanguageUtil.cpp \
 	NativeFormats/common/zlibrary/core/util/ZLStringUtil.cpp \
 	NativeFormats/common/zlibrary/core/util/ZLUnicodeUtil.cpp \
+	NativeFormats/android/zlibrary/core/util/ZLUnicodeUtil.cpp \
 	NativeFormats/common/zlibrary/core/util/JSONWriter.cpp \
 	NativeFormats/common/zlibrary/core/xml/ZLAsynchronousInputStream.cpp \
 	NativeFormats/common/zlibrary/core/xml/ZLPlainAsynchronousInputStream.cpp \

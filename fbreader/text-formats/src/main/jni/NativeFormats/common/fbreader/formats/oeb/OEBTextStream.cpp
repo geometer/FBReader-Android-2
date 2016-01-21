@@ -55,7 +55,7 @@ static const std::string ITEM = "item";
 static const std::string ITEMREF = "itemref";
 
 void XHTMLFilesCollector::startElementHandler(const char *tag, const char **xmlattributes) {
-	const std::string tagString = ZLUnicodeUtil::toLower(tag);
+	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
 	if (MANIFEST == tagString) {
 		myState = READ_MANIFEST;
 	} else if (SPINE == tagString) {
@@ -78,7 +78,7 @@ void XHTMLFilesCollector::startElementHandler(const char *tag, const char **xmla
 }
 
 void XHTMLFilesCollector::endElementHandler(const char *tag) {
-	if (SPINE == ZLUnicodeUtil::toLower(tag)) {
+	if (ZLUnicodeUtil::equalsIgnoreCaseAscii(SPINE, tag)) {
 		interrupt();
 	}
 }
