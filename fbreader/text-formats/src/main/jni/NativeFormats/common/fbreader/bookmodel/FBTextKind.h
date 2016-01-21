@@ -24,7 +24,9 @@ enum FBTextKind {
 	// please, don't change these numbers
 	// add new text kinds at end of this enumeration
 	//
-	// all the values MUST be in the range 0..127
+	// all regular values MUST be in the range 0..127
+	UNKNOWN = -1,
+
 	REGULAR = 0,
 	TITLE = 1,
 	SECTION_TITLE = 2,

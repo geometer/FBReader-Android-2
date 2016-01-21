@@ -37,7 +37,7 @@ friend class DummyEncodingConverterProvider;
 };
 
 bool DummyEncodingConverterProvider::providesConverter(const std::string &encoding) {
-	return ZLUnicodeUtil::toLower(encoding) == ZLEncodingConverter::ASCII;
+	return ZLUnicodeUtil::equalsIgnoreCaseAscii(encoding, ZLEncodingConverter::ASCII);
 }
 
 shared_ptr<ZLEncodingConverter> DummyEncodingConverterProvider::createConverter(const std::string&) {

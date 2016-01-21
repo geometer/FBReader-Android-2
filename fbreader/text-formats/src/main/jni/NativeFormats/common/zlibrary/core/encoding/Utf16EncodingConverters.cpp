@@ -58,14 +58,13 @@ private:
 };
 
 bool Utf16EncodingConverterProvider::providesConverter(const std::string &encoding) {
-	const std::string lowerCasedEncoding = ZLUnicodeUtil::toLower(encoding);
 	return
-		ZLEncodingConverter::UTF16 == lowerCasedEncoding ||
-		ZLEncodingConverter::UTF16BE == lowerCasedEncoding;
+		ZLUnicodeUtil::equalsIgnoreCaseAscii(encoding, ZLEncodingConverter::UTF16) ||
+		ZLUnicodeUtil::equalsIgnoreCaseAscii(encoding, ZLEncodingConverter::UTF16BE);
 }
 
 shared_ptr<ZLEncodingConverter> Utf16EncodingConverterProvider::createConverter(const std::string &name) {
-	if (ZLEncodingConverter::UTF16 == ZLUnicodeUtil::toLower(name)) {
+	if (ZLUnicodeUtil::equalsIgnoreCaseAscii(name, ZLEncodingConverter::UTF16)) {
 		return new Utf16LEEncodingConverter();
 	} else {
 		return new Utf16BEEncodingConverter();

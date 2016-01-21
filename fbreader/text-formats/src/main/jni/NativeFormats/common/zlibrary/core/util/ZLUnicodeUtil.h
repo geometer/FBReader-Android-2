@@ -67,17 +67,29 @@ public:
 
 	//static Ucs4Char toLower(Ucs4Char ch);
 	//static void toLower(Ucs4String &str);
-	static std::string toLower(const std::string &utf8String);
+	static std::string toLowerAscii(const std::string &utf8String);
+	static std::string toLowerFull(const std::string &utf8String);
 
 	//static Ucs4Char toUpper(Ucs4Char ch);
 	//static void toUpper(Ucs4String &str);
-	static std::string toUpper(const std::string &utf8String);
+	static std::string toUpperAscii(const std::string &utf8String);
+	static std::string toUpperFull(const std::string &utf8String);
+
+	static bool equalsIgnoreCaseAscii(const std::string &s0, const std::string &s1);
+	static bool equalsIgnoreCaseAscii(const char *s0, const std::string &s1);
+	static bool equalsIgnoreCaseAscii(const std::string &s0, const char *s1);
 
 	static void utf8Trim(std::string &utf8String);
+
+	static std::string convertNonUtfString(const std::string &str);
 };
 
 inline bool ZLUnicodeUtil::isNBSpace(Ucs4Char ch) {
 	return ch == 160;
+}
+
+inline bool ZLUnicodeUtil::equalsIgnoreCaseAscii(const char *s0, const std::string &s1) {
+	return equalsIgnoreCaseAscii(s1, s0);
 }
 
 #endif /* __ZLUNICODEUTIL_H__ */

@@ -54,7 +54,7 @@ static const std::string COVER = "cover";
 static const std::string COVER_IMAGE = "other.ms-coverimage-standard";
 
 void OEBBookReader::startElementHandler(const char *tag, const char **xmlattributes) {
-	std::string tagString = ZLUnicodeUtil::toLower(tag);
+	std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
 
 	switch (myState) {
 		case READ_NONE:
@@ -155,7 +155,7 @@ void OEBBookReader::addCoverImage() {
 }
 
 void OEBBookReader::endElementHandler(const char *tag) {
-	std::string tagString = ZLUnicodeUtil::toLower(tag);
+	std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
 
 	switch (myState) {
 		case READ_MANIFEST:
