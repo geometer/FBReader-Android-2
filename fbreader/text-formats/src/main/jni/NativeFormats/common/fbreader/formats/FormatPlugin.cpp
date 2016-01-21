@@ -17,8 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <jni.h>
-
 #include <ZLInputStream.h>
 #include <ZLLanguageDetector.h>
 #include <ZLImage.h>

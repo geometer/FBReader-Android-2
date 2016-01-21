@@ -42,7 +42,7 @@ friend class Utf8EncodingConverterProvider;
 };
 
 bool Utf8EncodingConverterProvider::providesConverter(const std::string &encoding) {
-	return ZLUnicodeUtil::toLower(encoding) == ZLEncodingConverter::UTF8;
+	return ZLUnicodeUtil::equalsIgnoreCaseAscii(encoding, ZLEncodingConverter::UTF8);
 }
 
 shared_ptr<ZLEncodingConverter> Utf8EncodingConverterProvider::createConverter(const std::string&) {

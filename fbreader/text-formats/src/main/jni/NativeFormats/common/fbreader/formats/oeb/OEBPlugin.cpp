@@ -57,7 +57,7 @@ const std::string &ContainerFileReader::rootPath() const {
 }
 
 void ContainerFileReader::startElementHandler(const char *tag, const char **attributes) {
-	const std::string tagString = ZLUnicodeUtil::toLower(tag);
+	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
 	if (tagString == "rootfile") {
 		const char *path = attributeValue(attributes, "full-path");
 		if (path != 0) {

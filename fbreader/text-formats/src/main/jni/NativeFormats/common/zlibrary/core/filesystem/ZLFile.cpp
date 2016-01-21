@@ -53,7 +53,7 @@ ZLFile::ZLFile(const std::string &path, const std::string &mimeType) : myPath(pa
 		myArchiveType = it->second;
 	} else {
 		myArchiveType = NONE;
-		std::string lowerCaseName = ZLUnicodeUtil::toLower(myNameWithoutExtension);
+		std::string lowerCaseName = ZLUnicodeUtil::toLowerAscii(myNameWithoutExtension);
 
 		if (ZLStringUtil::stringEndsWith(lowerCaseName, ".gz")) {
 			myNameWithoutExtension = myNameWithoutExtension.substr(0, myNameWithoutExtension.length() - 3);
@@ -78,7 +78,7 @@ ZLFile::ZLFile(const std::string &path, const std::string &mimeType) : myPath(pa
 
 	int index = myNameWithoutExtension.rfind('.');
 	if (index > 0) {
-		myExtension = ZLUnicodeUtil::toLower(myNameWithoutExtension.substr(index + 1));
+		myExtension = ZLUnicodeUtil::toLowerAscii(myNameWithoutExtension.substr(index + 1));
 		myNameWithoutExtension = myNameWithoutExtension.substr(0, index);
 	}
 }

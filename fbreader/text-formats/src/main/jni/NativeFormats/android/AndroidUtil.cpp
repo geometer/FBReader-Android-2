@@ -20,7 +20,6 @@
 #include <ZLFile.h>
 #include <FileEncryptionInfo.h>
 #include <ZLFileImage.h>
-#include <ZLUnicodeUtil.h>
 
 #include "AndroidUtil.h"
 #include "JniEnvelope.h"
@@ -279,26 +278,6 @@ jstring AndroidUtil::createJavaString(JNIEnv* env, const std::string &str) {
 		return 0;
 	}
 	return env->NewStringUTF(str.c_str());
-}
-
-std::string AndroidUtil::convertNonUtfString(const std::string &str) {
-	if (ZLUnicodeUtil::isUtf8String(str)) {
-		return str;
-	}
-
-	JNIEnv *env = getEnv();
-
-	const int len = str.length();
-	jchar *chars = new jchar[len];
-	for (int i = 0; i < len; ++i) {
-		chars[i] = (unsigned char)str[i];
-	}
-	jstring javaString = env->NewString(chars, len);
-	const std::string result = fromJavaString(env, javaString);
-	env->DeleteLocalRef(javaString);
-	delete[] chars;
-
-	return result;
 }
 
 jintArray AndroidUtil::createJavaIntArray(JNIEnv *env, const std::vector<jint> &data) {
