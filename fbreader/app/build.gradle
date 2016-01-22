@@ -43,7 +43,7 @@ android {
 
 	defaultConfig {
 		minSdkVersion 11
-		targetSdkVersion 21
+		targetSdkVersion 23
 		versionCode 0
 		versionName new File("$projectDir/VERSION").text.trim()
 	}
