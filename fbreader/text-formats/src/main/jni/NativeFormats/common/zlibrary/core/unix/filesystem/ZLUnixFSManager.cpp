@@ -190,4 +190,3 @@ std::string ZLUnixFSManager::parentPath(const std::string &path) const {
 bool ZLUnixFSManager::canRemoveFile(const std::string &path) const {
 	return access(parentPath(path).c_str(), W_OK) == 0;
 }
-
