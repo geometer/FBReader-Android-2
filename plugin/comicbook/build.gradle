@@ -46,7 +46,7 @@ android {
 
 	defaultConfig {
 		minSdkVersion 11
-		targetSdkVersion 17
+		targetSdkVersion 23
 		versionCode 0
 		versionName new File("$projectDir/../image-formats/VERSION").text.trim()
 	}
