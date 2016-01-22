@@ -38,7 +38,6 @@ private:
 
 public:
 	void registerClass(const std::string &className);
-	void print(const std::string &className, const std::string &message) const;
 	void println(const std::string &className, const std::string &message) const;
 
 private:
