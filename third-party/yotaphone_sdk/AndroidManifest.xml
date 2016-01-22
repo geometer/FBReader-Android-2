@@ -8,13 +8,4 @@
 	would be subject to legal prosecution. Legal use of the software provides
 	receipt of a license from the right holder only.-->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yotadevices.platinum"
-    android:versionCode="2"
-    android:versionName="0.0.3" >
-
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="17" />
-
-</manifest>
+<manifest package="com.yotadevices.platinum"/>
