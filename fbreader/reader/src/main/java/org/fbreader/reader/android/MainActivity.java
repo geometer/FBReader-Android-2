@@ -25,6 +25,7 @@ import android.app.SearchManager;
 import android.content.*;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.*;
 import android.support.v4.view.GravityCompat;
@@ -62,6 +63,7 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.api.MenuNode;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
+import org.geometerplus.android.util.DeviceType;
 
 import org.fbreader.common.android.FBActivity;
 import org.fbreader.reader.R;
@@ -551,17 +553,19 @@ public abstract class MainActivity extends FBActivity {
 	}
 	/* ------ SUPER TOAST ------ */
 
-	/* ++++++ TOOLBAR ++++++ */
-	protected final void setupToolbar(View mainView, boolean visibleAlways) {
-		if (visibleAlways) {
-			final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
-			);
+	/* ++++++ STATUS BAR & ACTION BAR ++++++ */
+	protected final void setupTopBars(boolean alwaysShowStatusBar, boolean alwaysShowActionBar) {
+		final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+			RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
+		);
+		if (alwaysShowActionBar) {
 			params.addRule(RelativeLayout.BELOW, getToolbar().getId());
-			mainView.setLayoutParams(params);
+		} else if (alwaysShowStatusBar) {
+			params.addRule(RelativeLayout.BELOW, R.id.main_statusbar_strut);
 		}
+		getMainView().setLayoutParams(params);
 	}
-	/* ------ TOOLBAR ------ */
+	/* ------ STATUS BAR & ACTION BAR ------ */
 
 	public abstract void hideDictionarySelection();
 
@@ -740,5 +744,36 @@ public abstract class MainActivity extends FBActivity {
 			final Book book = reader.getCurrentBook();
 			crashBookPathOption().setValue(book != null ? book.getPath() : "");
 		}
+	}
+
+	protected final void setStatusBarVisible(boolean visible) {
+		final ZLAndroidLibrary zLibrary = getZLibrary();
+		final boolean shownAlways = zLibrary.showStatusBar();
+		if (DeviceType.Instance() != DeviceType.KINDLE_FIRE_1ST_GENERATION && !shownAlways) {
+			final int statusBarHeight =
+				zLibrary.ShowActionBarOption.getValue() ? getStatusBarHeight() : 0;
+			getMainView().setPreserveSize(visible, statusBarHeight);
+			if (visible) {
+				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			} else {
+				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+			}
+		}
+
+		final boolean reallyVisible = shownAlways || visible;
+		final View strut = findViewById(R.id.main_statusbar_strut);
+		strut.setLayoutParams(new RelativeLayout.LayoutParams(
+			RelativeLayout.LayoutParams.MATCH_PARENT,
+			reallyVisible ? getStatusBarHeight() : 0
+		));
+		strut.setVisibility(reallyVisible ? View.VISIBLE : View.INVISIBLE);
+	}
+
+	private int getStatusBarHeight() {
+		final Resources res = getResources();
+		int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
+		return resourceId > 0 ? res.getDimensionPixelSize(resourceId) : 0;
 	}
 }

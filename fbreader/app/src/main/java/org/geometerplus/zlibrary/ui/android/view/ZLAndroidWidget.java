@@ -86,10 +86,12 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 	private volatile boolean myAmendSize = false;
 	private volatile int myHDiff = 0;
 	private volatile int myHShift = 0;
+	private volatile int myStatusBarHeight = 0;
 
 	@Override
-	public void setPreserveSize(boolean preserve) {
+	public void setPreserveSize(boolean preserve, int statusBarHeight) {
 		myAmendSize = preserve;
+		myStatusBarHeight = statusBarHeight;
 		if (!preserve) {
 			myHDiff = 0;
 			myHShift = 0;
@@ -101,7 +103,7 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 		super.onSizeChanged(w, h, oldw, oldh);
 		if (myAmendSize && oldw == w) {
 			myHDiff += h - oldh;
-			myHShift -= getStatusBarHeight();
+			myHShift -= myStatusBarHeight;
 		} else {
 			myHDiff = 0;
 			myHShift = 0;
@@ -678,12 +680,6 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 		final ZLView.FooterArea footer = ZLApplication.Instance().getCurrentView().getFooterArea();
 		final int height = footer != null ? getHeight() - footer.getHeight() : getHeight();
 		return height - myHDiff;
-	}
-
-	private int getStatusBarHeight() {
-		final Resources res = getContext().getResources();
-		int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
-		return resourceId > 0 ? res.getDimensionPixelSize(resourceId) : 0;
 	}
 
 	@Override

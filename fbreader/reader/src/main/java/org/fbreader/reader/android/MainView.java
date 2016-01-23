@@ -167,5 +167,5 @@ public abstract class MainView extends View {
 		return null;
 	}
 
-	public abstract void setPreserveSize(boolean preserve);
+	public abstract void setPreserveSize(boolean preserve, int statusBarHeight);
 }
