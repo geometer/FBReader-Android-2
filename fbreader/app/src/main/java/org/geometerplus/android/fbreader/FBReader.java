@@ -246,7 +246,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 		});
 
 		final ZLAndroidLibrary zlibrary = getZLibrary();
-		myShowStatusBarFlag = zlibrary.ShowStatusBarOption.getValue();
+		myShowStatusBarFlag = zlibrary.showStatusBar();
 		myShowActionBarFlag = zlibrary.ShowActionBarOption.getValue();
 		myActionBarIsVisible = myShowActionBarFlag;
 
@@ -419,7 +419,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 
 		Config.Instance().runOnConnect(new Runnable() {
 			public void run() {
-				final boolean showStatusBar = zlibrary.ShowStatusBarOption.getValue();
+				final boolean showStatusBar = zlibrary.showStatusBar();
 				final boolean showActionBar = zlibrary.ShowActionBarOption.getValue();
 				if (showStatusBar != myShowStatusBarFlag || showActionBar != myShowActionBarFlag) {
 					finish();

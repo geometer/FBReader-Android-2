@@ -64,6 +64,10 @@ public final class ZLAndroidLibrary extends ZLibrary {
 		myApplication = application;
 	}
 
+	public boolean showStatusBar() {
+		return !EnableFullscreenModeOption.getValue() && ShowStatusBarOption.getValue();
+	}
+
 	public AssetManager getAssets() {
 		return myApplication.getAssets();
 	}

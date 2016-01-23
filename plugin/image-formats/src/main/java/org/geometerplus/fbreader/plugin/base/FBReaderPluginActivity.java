@@ -145,7 +145,7 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 	void applyUISettings() {
 		final ZLAndroidLibrary zlibrary = getZLibrary();
 		setOrientation(zlibrary.getOrientationOption().getValue());
-		if (zlibrary.ShowStatusBarOption.getValue()) {
+		if (zlibrary.showStatusBar()) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		} else {
@@ -336,7 +336,7 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 
 	private void setStatusBarVisible(boolean visible) {
 		getMainView().setPreserveSize(visible);
-		if (!getZLibrary().ShowStatusBarOption.getValue()) {
+		if (!getZLibrary().showStatusBar()) {
 			if (visible) {
 				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
