@@ -671,10 +671,14 @@ public abstract class MainActivity extends FBActivity {
 		}
 	}
 
+	private volatile View myShadowView;
 	@Override
 	protected void setTitleVisible(boolean visible) {
 		super.setTitleVisible(visible);
-		findViewById(R.id.main_shadow).setVisibility(visible ? View.VISIBLE : View.GONE);
+		if (myShadowView == null) {
+			myShadowView = findViewById(R.id.main_shadow);
+		}
+		myShadowView.setVisibility(visible ? View.VISIBLE : View.GONE);
 	}
 
 	protected abstract AbstractReader getReader();
@@ -746,6 +750,7 @@ public abstract class MainActivity extends FBActivity {
 		}
 	}
 
+	private volatile View myStrut;
 	protected final void setStatusBarVisible(boolean visible) {
 		final ZLAndroidLibrary zLibrary = getZLibrary();
 		final boolean shownAlways = zLibrary.showStatusBar();
@@ -763,12 +768,14 @@ public abstract class MainActivity extends FBActivity {
 		}
 
 		final boolean reallyVisible = shownAlways || visible;
-		final View strut = findViewById(R.id.main_statusbar_strut);
-		strut.setLayoutParams(new RelativeLayout.LayoutParams(
+		if (myStrut == null) {
+			myStrut = findViewById(R.id.main_statusbar_strut);
+		}
+		myStrut.setLayoutParams(new RelativeLayout.LayoutParams(
 			RelativeLayout.LayoutParams.MATCH_PARENT,
 			reallyVisible ? getStatusBarHeight() : 0
 		));
-		strut.setVisibility(reallyVisible ? View.VISIBLE : View.INVISIBLE);
+		myStrut.setVisibility(reallyVisible ? View.VISIBLE : View.INVISIBLE);
 	}
 
 	private int getStatusBarHeight() {
