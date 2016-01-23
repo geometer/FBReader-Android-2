@@ -55,7 +55,7 @@ public class ImageViewActivity extends FBActivity {
 
 		setTitleVisible(false);
 
-		final boolean showStatusBar = FBReaderUtil.getZLibrary(this).ShowStatusBarOption.getValue();
+		final boolean showStatusBar = FBReaderUtil.getZLibrary(this).showStatusBar();
 		getWindow().setFlags(
 			WindowManager.LayoutParams.FLAG_FULLSCREEN,
 			showStatusBar ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN

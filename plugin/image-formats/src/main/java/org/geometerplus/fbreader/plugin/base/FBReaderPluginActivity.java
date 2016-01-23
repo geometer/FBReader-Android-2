@@ -98,7 +98,7 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 			return;
 		}
 
-		setupToolbar(getMainView(), myShowActionBarFlag);
+		setupTopBars(getZLibrary().showStatusBar(), myShowActionBarFlag);
 
 		if (getPopupById(TextSearchPopup.ID) == null) {
 			myPopups.put(TextSearchPopup.ID, new TextSearchPopup());
@@ -145,7 +145,7 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 	void applyUISettings() {
 		final ZLAndroidLibrary zlibrary = getZLibrary();
 		setOrientation(zlibrary.getOrientationOption().getValue());
-		if (zlibrary.ShowStatusBarOption.getValue()) {
+		if (zlibrary.showStatusBar()) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		} else {
@@ -333,19 +333,6 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 
 	private NavigationPopup myNavigationPopup;
 	private boolean myActionBarIsVisible = true;
-
-	private void setStatusBarVisible(boolean visible) {
-		getMainView().setPreserveSize(visible);
-		if (!getZLibrary().ShowStatusBarOption.getValue()) {
-			if (visible) {
-				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			} else {
-				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-			}
-		}
-	}
 
 	@Override
 	protected final void hideBars() {

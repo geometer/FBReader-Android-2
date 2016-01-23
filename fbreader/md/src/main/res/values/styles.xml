@@ -1,4 +1,9 @@
 <resources>
+	<style name="FBReaderMD.DrawerActivity" parent="FBReaderMD.Activity">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:windowTranslucentStatus">true</item>
+	</style>
 	<style name="FBReaderMD.Activity" parent="@style/Theme.AppCompat.NoActionBar">
 		<item name="android:textColorPrimary">@color/text_primary</item>
 		<item name="android:colorPrimary">@color/primary</item>

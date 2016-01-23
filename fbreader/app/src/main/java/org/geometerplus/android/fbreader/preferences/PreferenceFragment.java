@@ -393,14 +393,32 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			androidLibrary.DontTurnScreenOffDuringChargingOption,
 			appearanceScreen.Resource.getResource("dontTurnScreenOffDuringCharging")
 		));
-		 */
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+		*/
+		if (Build.VERSION.SDK_INT >= 19/*Build.VERSION_CODES.KITKAT*/) {
+			final PreferenceSet nonFullscreenPrefences = new PreferenceSet.Enabler() {
+				@Override
+				protected Boolean detectState() {
+					return !androidLibrary.EnableFullscreenModeOption.getValue();
+				}
+			};
+			appearanceScreen.addPreference(new ZLBooleanPreference(
+				activity, androidLibrary.EnableFullscreenModeOption,
+				appearanceScreen.Resource.getResource("fullscreenMode")
+			) {
+				@Override
+				protected void onClick() {
+					super.onClick();
+					nonFullscreenPrefences.run();
+				}
+			});
+			nonFullscreenPrefences.add(
+				appearanceScreen.addOption(androidLibrary.ShowStatusBarOption, "showStatusBar")
+			);
+			nonFullscreenPrefences.run();
+		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			appearanceScreen.addOption(androidLibrary.ShowStatusBarOption, "showStatusBar");
 		}
 		appearanceScreen.addOption(androidLibrary.ShowActionBarOption, "showActionBar");
-		if (Build.VERSION.SDK_INT >= 19/*Build.VERSION_CODES.KITKAT*/) {
-			appearanceScreen.addOption(androidLibrary.EnableFullscreenModeOption, "fullscreenMode");
-		}
 		appearanceScreen.addOption(androidLibrary.DisableButtonLightsOption, "disableButtonLights");
 		appearanceScreen.addOption(miscOptions.EnableBookMenuSwipeGesture, "enableBookMenuSwipeGesture");
 

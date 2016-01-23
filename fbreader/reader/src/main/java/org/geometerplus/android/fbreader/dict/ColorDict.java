@@ -46,7 +46,7 @@ final class ColorDict extends DictionaryUtil.PackageInfo {
 		final Intent intent = getActionIntent(text);
 		intent.putExtra(ColorDict3.HEIGHT, frameMetrics.Height);
 		intent.putExtra(ColorDict3.GRAVITY, frameMetrics.Gravity);
-		intent.putExtra(ColorDict3.FULLSCREEN, !fbreader.getZLibrary().ShowStatusBarOption.getValue());
+		intent.putExtra(ColorDict3.FULLSCREEN, !fbreader.getZLibrary().showStatusBar());
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 		InternalUtil.startDictionaryActivity(fbreader, intent, this);

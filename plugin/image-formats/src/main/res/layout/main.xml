@@ -1,100 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v4.widget.DrawerLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/main_drawer_layout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 >
-	<android.support.v4.widget.DrawerLayout
-		android:id="@+id/main_drawer_layout"
+	<RelativeLayout
+		android:id="@+id/root_view"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 	>
-		<RelativeLayout
-			android:id="@+id/root_view"
+		<org.geometerplus.fbreader.plugin.base.reader.PluginView
+			android:id="@+id/fmt_main_view"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-		>
-			<org.geometerplus.fbreader.plugin.base.reader.PluginView
-				android:id="@+id/fmt_main_view"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:focusable="true"
-				android:scrollbars="vertical"
-				android:scrollbarAlwaysDrawVerticalTrack="true"
-				android:fadeScrollbars="false"
-				android:visibility="gone"
-			/>
-			<TextView
-				android:id="@+id/main_view_info"
-				android:visibility="gone"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:focusable="false"
-				android:textSize="60sp"
-				android:textColor="#CC888888"
-				android:background="@android:color/transparent"
-				android:gravity="center|center_vertical"
-				android:paddingLeft="30dp"
-				android:paddingRight="30dp"
-			/>
-			<TextView
-				android:id="@+id/hint_view"
-				android:visibility="gone"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:focusable="false"
-				android:textAppearance="?android:attr/textAppearanceLarge"
-				android:textColor="#FFFFFFFF"
-				android:background="#AA666666"
-				android:gravity="center|center_vertical"
-				android:paddingLeft="30dp"
-				android:paddingRight="30dp"
-			/>
-			<include
-				layout="@layout/md_toolbar"
-				android:id="@+id/md_toolbar"
-			/>
-			<View
-				android:id="@+id/main_shadow"
-				android:layout_height="5dp"
-				android:layout_width="match_parent"
-				android:background="@drawable/light_shadow_bottom"
-				android:layout_below="@id/md_toolbar"
-			/>
-		</RelativeLayout>
-		<LinearLayout
-			android:layout_width="240dp"
+			android:focusable="true"
+			android:scrollbars="vertical"
+			android:scrollbarAlwaysDrawVerticalTrack="true"
+			android:fadeScrollbars="false"
+			android:visibility="gone"
+		/>
+		<TextView
+			android:id="@+id/main_view_info"
+			android:visibility="gone"
+			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:layout_gravity="start"
+			android:focusable="false"
+			android:textSize="60sp"
+			android:textColor="#CC888888"
+			android:background="@android:color/transparent"
+			android:gravity="center|center_vertical"
+			android:paddingLeft="30dp"
+			android:paddingRight="30dp"
+		/>
+		<TextView
+			android:id="@+id/hint_view"
+			android:visibility="gone"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:focusable="false"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textColor="#FFFFFFFF"
+			android:background="#AA666666"
+			android:gravity="center|center_vertical"
+			android:paddingLeft="30dp"
+			android:paddingRight="30dp"
+		/>
+		<View
+			android:id="@+id/main_statusbar_strut"
+			android:layout_height="0dp"
+			android:layout_width="match_parent"
+			android:background="@color/primary_dark"
+		/>
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/md_toolbar"
+			android:layout_height="?attr/actionBarSize"
+			android:layout_width="match_parent"
 			android:background="?attr/colorPrimaryDrawable"
+			android:theme="?attr/actionBarTheme"
+			app:popupTheme="?attr/popupTheme"
+			app:navigationIcon="?attr/homeAsUpIndicator"
+			android:layout_below="@id/main_statusbar_strut"
+		/>
+		<View
+			android:id="@+id/main_shadow"
+			android:layout_height="5dp"
+			android:layout_width="match_parent"
+			android:background="@drawable/light_shadow_bottom"
+			android:layout_below="@id/md_toolbar"
+		/>
+	</RelativeLayout>
+	<RelativeLayout
+		android:layout_width="240dp"
+		android:layout_height="match_parent"
+		android:layout_gravity="start"
+		android:background="?attr/colorPrimaryDrawable"
+		android:fitsSystemWindows="true"
+	>
+		<ImageView
+			android:id="@+id/main_drawer_cover"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:adjustViewBounds="true"
+			android:scaleType="centerCrop"
+			android:layout_alignParentTop="true"
+			android:alpha="0.25"
+		/>
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
 			android:orientation="vertical"
+			android:background="@android:color/transparent"
 		>
-			<include
-				layout="@layout/md_toolbar"
+			<android.support.v7.widget.Toolbar
 				android:id="@+id/main_drawer_toolbar"
+				android:layout_height="?attr/actionBarSize"
+				android:layout_width="match_parent"
+				android:theme="?attr/actionBarTheme"
+				app:navigationIcon="?attr/homeAsUpIndicator"
 			/>
-			<RelativeLayout
+			<ListView
+				android:id="@+id/main_drawer_menu"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-			>
-				<ImageView
-					android:id="@+id/main_drawer_cover"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:adjustViewBounds="true"
-					android:scaleType="centerCrop"
-					android:layout_alignParentTop="true"
-					android:alpha="0.25"
-				/>
-				<ListView
-					android:id="@+id/main_drawer_menu"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:divider="@null"
-					android:dividerHeight="0dp"
-					android:background="@android:color/transparent"
-				/>
-			</RelativeLayout>
+				android:divider="@null"
+				android:dividerHeight="0dp"
+			/>
 		</LinearLayout>
-	</android.support.v4.widget.DrawerLayout>
-</RelativeLayout>
+	</RelativeLayout>
+</android.support.v4.widget.DrawerLayout>

@@ -246,7 +246,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 		});
 
 		final ZLAndroidLibrary zlibrary = getZLibrary();
-		myShowStatusBarFlag = zlibrary.ShowStatusBarOption.getValue();
+		myShowStatusBarFlag = zlibrary.showStatusBar();
 		myShowActionBarFlag = zlibrary.ShowActionBarOption.getValue();
 		myActionBarIsVisible = myShowActionBarFlag;
 
@@ -258,7 +258,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 		myRootView = (RelativeLayout)findViewById(R.id.root_view);
 		selectMainView(R.id.main_view);
 
-		setupToolbar(findViewById(R.id.main_drawer_layout), myShowActionBarFlag);
+		setupTopBars(myShowStatusBarFlag, myShowActionBarFlag);
 
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
@@ -423,7 +423,7 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 
 		Config.Instance().runOnConnect(new Runnable() {
 			public void run() {
-				final boolean showStatusBar = zlibrary.ShowStatusBarOption.getValue();
+				final boolean showStatusBar = zlibrary.showStatusBar();
 				final boolean showActionBar = zlibrary.ShowActionBarOption.getValue();
 				if (showStatusBar != myShowStatusBarFlag || showActionBar != myShowActionBarFlag) {
 					finish();
@@ -757,20 +757,6 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 				}
 			}
 		});
-	}
-
-	private void setStatusBarVisible(boolean visible) {
-		final ZLAndroidLibrary zlibrary = getZLibrary();
-		if (DeviceType.Instance() != DeviceType.KINDLE_FIRE_1ST_GENERATION && !myShowStatusBarFlag) {
-			getMainView().setPreserveSize(visible);
-			if (visible) {
-				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			} else {
-				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-			}
-		}
 	}
 
 	private NavigationPopup myNavigationPopup;
