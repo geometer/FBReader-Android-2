@@ -75,7 +75,7 @@
 			android:launchMode="singleTask"
 			android:icon="@drawable/fbreader"
 			android:label="@string/app_name"
-			android:theme="@style/FBReaderMD.Activity"
+			android:theme="@style/FBReaderMD.DrawerActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 		>
 			<intent-filter>
