@@ -47,9 +47,21 @@
 			android:paddingLeft="30dp"
 			android:paddingRight="30dp"
 		/>
-		<include
-			layout="@layout/md_toolbar"
+		<View
+			android:id="@+id/main_statusbar_strut"
+			android:layout_height="0dp"
+			android:layout_width="match_parent"
+			android:background="@color/primary_dark"
+		/>
+		<android.support.v7.widget.Toolbar
 			android:id="@+id/md_toolbar"
+			android:layout_height="?attr/actionBarSize"
+			android:layout_width="match_parent"
+			android:background="?attr/colorPrimaryDrawable"
+			android:theme="?attr/actionBarTheme"
+			app:popupTheme="?attr/popupTheme"
+			app:navigationIcon="?attr/homeAsUpIndicator"
+			android:layout_below="@id/main_statusbar_strut"
 		/>
 		<View
 			android:id="@+id/main_shadow"
