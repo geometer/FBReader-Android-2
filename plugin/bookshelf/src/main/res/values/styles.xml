@@ -1,4 +1,35 @@
 <resources>
+	<style name="Theme.Library.Main.Indigo" parent="@style/Theme.Library.Indigo">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:windowTranslucentStatus">true</item>
+	</style>
+	<style name="Theme.Library.Main.Pink" parent="@style/Theme.Library.Pink">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:windowTranslucentStatus">true</item>
+	</style>
+	<style name="Theme.Library.Main.Teal" parent="@style/Theme.Library.Teal">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:windowTranslucentStatus">true</item>
+	</style>
+	<style name="Theme.Library.Main.Green" parent="@style/Theme.Library.Green">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:windowTranslucentStatus">true</item>
+	</style>
+	<style name="Theme.Library.Main.Grey" parent="@style/Theme.Library.Grey">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:windowTranslucentStatus">true</item>
+	</style>
+	<style name="Theme.Library.Main.Dark" parent="@style/Theme.Library.Dark">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
+		<item name="android:windowTranslucentStatus">true</item>
+	</style>
+
 	<style name="Theme.Library.Indigo" parent="@style/Theme.Library.Light">
 		<item name="colorPrimary">@color/indigo_500</item>
 		<item name="colorPrimaryDrawable">@drawable/indigo_500</item>

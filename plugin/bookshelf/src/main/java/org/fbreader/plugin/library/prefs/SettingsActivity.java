@@ -20,6 +20,11 @@ public class SettingsActivity extends FullActivity {
 	private volatile SettingsFragment myFragment;
 
 	@Override
+	protected ActivityUtil.ActivityType type() {
+		return ActivityUtil.ActivityType.Full;
+	}
+
+	@Override
 	protected int layoutId() {
 		return R.layout.bks_settings;
 	}

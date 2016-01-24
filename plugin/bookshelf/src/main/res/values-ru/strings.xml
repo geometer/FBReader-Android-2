@@ -23,6 +23,7 @@
 
 	<string name="shared_from_fbreader">Отправлено из &lt;a href=&quot;https://ru.fbreader.org/&quot;&gt;FBReader&lt;/a&gt;"</string>
 
+	<string name="shelves">Полки</string>
 	<string name="category_favorites">Избранные</string>
 	<string name="category_recently_added">Новые</string>
 	<string name="category_recently_opened">Недавние</string>

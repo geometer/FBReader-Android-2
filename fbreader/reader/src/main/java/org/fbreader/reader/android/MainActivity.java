@@ -89,6 +89,9 @@ public abstract class MainActivity extends FBActivity {
 	private volatile MainView myMainView;
 	private volatile SuperActivityToast myToast;
 
+	private volatile View myStrut;
+	private volatile View myShadowView;
+
 	private final HamburgerMenuAdapter myHamburgerMenuAdapter = new HamburgerMenuAdapter();
 	private volatile DrawerLayout myDrawerLayout;
 	private volatile ActionBarDrawerToggle myDrawerToggle;
@@ -138,6 +141,9 @@ public abstract class MainActivity extends FBActivity {
 		drawerMenu.setAdapter(myHamburgerMenuAdapter);
 		drawerMenu.setOnItemClickListener(myHamburgerMenuAdapter);
 
+		myStrut = findViewById(R.id.main_statusbar_strut);
+		myShadowView = findViewById(R.id.main_shadow);
+
 		myDrawerLayout = (DrawerLayout)findViewById(R.id.main_drawer_layout);
 		myDrawerToolbar = (Toolbar)findViewById(R.id.main_drawer_toolbar);
 		myDrawerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -145,6 +151,7 @@ public abstract class MainActivity extends FBActivity {
 				closeDrawer();
 			}
 		});
+		myDrawerToolbar.setNavigationContentDescription(R.string.desc_hide_book_menu);
 		myDrawerToggle = new ActionBarDrawerToggle(
 			this,
 			myDrawerLayout,
@@ -671,13 +678,9 @@ public abstract class MainActivity extends FBActivity {
 		}
 	}
 
-	private volatile View myShadowView;
 	@Override
 	protected void setTitleVisible(boolean visible) {
 		super.setTitleVisible(visible);
-		if (myShadowView == null) {
-			myShadowView = findViewById(R.id.main_shadow);
-		}
 		myShadowView.setVisibility(visible ? View.VISIBLE : View.GONE);
 	}
 
@@ -750,7 +753,6 @@ public abstract class MainActivity extends FBActivity {
 		}
 	}
 
-	private volatile View myStrut;
 	protected final void setStatusBarVisible(boolean visible) {
 		final ZLAndroidLibrary zLibrary = getZLibrary();
 		final boolean shownAlways = zLibrary.showStatusBar();
@@ -768,9 +770,6 @@ public abstract class MainActivity extends FBActivity {
 		}
 
 		final boolean reallyVisible = shownAlways || visible;
-		if (myStrut == null) {
-			myStrut = findViewById(R.id.main_statusbar_strut);
-		}
 		myStrut.setLayoutParams(new RelativeLayout.LayoutParams(
 			RelativeLayout.LayoutParams.MATCH_PARENT,
 			reallyVisible ? getStatusBarHeight() : 0

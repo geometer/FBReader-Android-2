@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 >
@@ -9,16 +10,20 @@
 		android:layout_height="match_parent"
 		android:orientation="vertical"
 	>
-		<include layout="@layout/md_toolbar"/>
 		<android.support.v4.widget.DrawerLayout
 			android:id="@+id/bks_library_drawer_layout"
 			android:layout_height="match_parent"
 			android:layout_width="match_parent"
+			android:fitsSystemWindows="true"
 		>
 			<RelativeLayout
 				android:layout_height="match_parent"
 				android:layout_width="match_parent"
 			>
+				<include
+					layout="@layout/md_toolbar"
+					android:id="@+id/md_toolbar"
+				/>
 				<GridView
 					android:id="@+id/bks_library_grid"
 					android:layout_height="match_parent"
@@ -34,12 +39,13 @@
 					android:horizontalSpacing="@dimen/grid_spacing"
 					android:verticalSpacing="@dimen/grid_spacing"
 					android:background="?attr/gridBackgroundColor"
+					android:layout_below="@id/md_toolbar"
 				/>
 				<View
 					android:layout_height="5dp"
 					android:layout_width="match_parent"
-					android:layout_alignParentTop="true"
 					android:background="?attr/bottomShadowDrawable"
+					android:layout_below="@id/md_toolbar"
 				/>
 				<include layout="@layout/md_progress_indicator"/>
 				<include
@@ -47,14 +53,30 @@
 					android:id="@+id/bks_library_ad"
 				/>
 			</RelativeLayout>
-			<ListView
-				android:id="@+id/bks_library_drawer"
+			<LinearLayout
 				android:layout_width="240dp"
 				android:layout_height="match_parent"
 				android:layout_gravity="start"
-				android:background="?attr/mainBackgroundColor"
-				android:dividerHeight="1dp"
-			/>
+				android:orientation="vertical"
+				android:background="?attr/colorPrimary"
+				android:fitsSystemWindows="true"
+			>
+				<android.support.v7.widget.Toolbar
+					android:id="@+id/bks_drawer_toolbar"
+					android:layout_height="?attr/actionBarSize"
+					android:layout_width="match_parent"
+					android:theme="?attr/actionBarTheme"
+					app:navigationIcon="?attr/homeAsUpIndicator"
+					android:background="?attr/colorPrimary"
+				/>
+				<ListView
+					android:id="@+id/bks_library_drawer"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:dividerHeight="1dp"
+					android:background="?attr/mainBackgroundColor"
+				/>
+			</LinearLayout>
 		</android.support.v4.widget.DrawerLayout>
 	</LinearLayout>
 	<RelativeLayout
