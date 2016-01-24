@@ -16,6 +16,7 @@
 
 	<string name="shared_from_fbreader">Bereitgestellt von &lt;a href=&quot;https://fbreader.org/&quot;&gt;FBReader&lt;/a&gt;</string>
 
+	<string name="shelves">Regale</string>
 	<string name="category_favorites">Favoriten</string>
 	<string name="category_recently_added">Zuletzt hinzugefügt</string>
 	<string name="category_recently_opened">Zuletzt geöffnet</string>

@@ -23,6 +23,7 @@
 
 	<string name="shared_from_fbreader">Partilhado de &lt;a href=&quot;https://fbreader.org/&quot;&gt;FBReader&lt;/a&gt;"</string>
 
+	<string name="shelves">Prateleiras</string>
 	<string name="category_favorites">Favoritos</string>
 	<string name="category_recently_added">Adicionados Recentemente</string>
 	<string name="category_recently_opened">Abertos Recentemente</string>

@@ -15,6 +15,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.*;
@@ -111,6 +112,11 @@ public final class LibraryActivity extends FullActivity {
 	}
 
 	@Override
+	protected ActivityUtil.ActivityType type() {
+		return ActivityUtil.ActivityType.Main;
+	}
+
+	@Override
 	protected int layoutId() {
 		return R.layout.bks_library;
 	}
@@ -204,6 +210,15 @@ public final class LibraryActivity extends FullActivity {
 		);
 		myDrawerLayout.setDrawerListener(myDrawerToggle);
 		myDrawerLayout.setDrawerShadow(R.drawable.shadow_right_6dp, GravityCompat.START);
+
+		final Toolbar drawerToolbar = (Toolbar)findViewById(R.id.bks_drawer_toolbar);
+		drawerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				myDrawerLayout.closeDrawer(GravityCompat.START);
+			}
+		});
+		drawerToolbar.setTitle(R.string.shelves);
+		drawerToolbar.setNavigationContentDescription(R.string.desc_close_drawer);
 	}
 
 	void setProgressVisibility(boolean visible) {
