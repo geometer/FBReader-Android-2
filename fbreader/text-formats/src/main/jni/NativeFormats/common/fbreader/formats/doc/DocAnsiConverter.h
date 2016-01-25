@@ -22,15 +22,16 @@
 
 #include <string>
 #include <vector>
+#include <ZLUnicodeUtil.h>
 
 class DocAnsiConverter {
 
 private:
-	std::vector<std::string> myCharMap;
+	std::vector<ZLUnicodeUtil::Ucs2Char> myCharMap;
 
 public:
 	DocAnsiConverter();
-	void convert(std::string &dst, const char *srcStart, const char *srcEnd);
+	void convert(ZLUnicodeUtil::Ucs2String &to, const char *srcStart, const char *srcEnd);
 };
 
 #endif /* __DOCANSICONVERTER_H__ */
