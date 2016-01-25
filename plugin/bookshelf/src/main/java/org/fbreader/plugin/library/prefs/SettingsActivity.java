@@ -10,6 +10,7 @@ import android.preference.*;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import org.fbreader.plugin.library.*;
 
@@ -20,11 +21,6 @@ public class SettingsActivity extends FullActivity {
 	private volatile SettingsFragment myFragment;
 
 	@Override
-	protected ActivityUtil.ActivityType type() {
-		return ActivityUtil.ActivityType.Full;
-	}
-
-	@Override
 	protected int layoutId() {
 		return R.layout.bks_settings;
 	}
@@ -32,6 +28,10 @@ public class SettingsActivity extends FullActivity {
 	@Override
 	protected void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
+
+		findViewById(R.id.bks_statusbar_strut).setLayoutParams(new LinearLayout.LayoutParams(
+			LinearLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight()
+		));
 
 		getFragmentManager()
 			.beginTransaction()

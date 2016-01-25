@@ -7,7 +7,6 @@ import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -110,11 +109,6 @@ public final class LibraryActivity extends FullActivity {
 		myAdState = state;
 		myAdView.init(state);
 		supportInvalidateOptionsMenu();
-	}
-
-	@Override
-	protected ActivityUtil.ActivityType type() {
-		return ActivityUtil.ActivityType.Main;
 	}
 
 	@Override
@@ -886,11 +880,5 @@ public final class LibraryActivity extends FullActivity {
 			myBooksAdapter.selectShelf(getItem(position));
 			myDrawerLayout.closeDrawer(GravityCompat.START);
 		}
-	}
-
-	private int getStatusBarHeight() {
-		final Resources res = getResources();
-		int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
-		return resourceId > 0 ? res.getDimensionPixelSize(resourceId) : 0;
 	}
 }

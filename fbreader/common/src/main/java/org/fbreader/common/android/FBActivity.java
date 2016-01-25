@@ -20,6 +20,7 @@
 package org.fbreader.common.android;
 
 import android.content.Intent;
+import android.content.res.Resources;
 
 import org.fbreader.md.MDActivity;
 
@@ -61,5 +62,11 @@ public abstract class FBActivity extends MDActivity {
 	@Override
 	protected Thread.UncaughtExceptionHandler exceptionHandler() {
 		return new UncaughtExceptionHandler(this);
+	}
+
+	protected final int getStatusBarHeight() {
+		final Resources res = getResources();
+		int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
+		return resourceId > 0 ? res.getDimensionPixelSize(resourceId) : 0;
 	}
 }
