@@ -31,6 +31,11 @@ public class GotoPageNumberAction extends FBReader.Action<FBReader,FBReaderApp> 
 	}
 
 	@Override
+	public boolean isVisible() {
+		return Reader.getTextView().pagePosition().Total > 1;
+	}
+
+	@Override
 	protected void run(Object ... params) {
 		final ZLTextView textView = Reader.getTextView();
 		final ZLTextView.PagePosition pagePosition = textView.pagePosition();
