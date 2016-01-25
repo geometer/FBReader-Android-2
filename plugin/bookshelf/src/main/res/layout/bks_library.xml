@@ -14,15 +14,26 @@
 			android:id="@+id/bks_library_drawer_layout"
 			android:layout_height="match_parent"
 			android:layout_width="match_parent"
-			android:fitsSystemWindows="true"
 		>
 			<RelativeLayout
 				android:layout_height="match_parent"
 				android:layout_width="match_parent"
 			>
-				<include
-					layout="@layout/md_toolbar"
+				<View
+					android:id="@+id/bks_statusbar_strut"
+					android:layout_height="0dp"
+					android:layout_width="match_parent"
+					android:background="?attr/colorPrimaryDark"
+				/>
+				<android.support.v7.widget.Toolbar
 					android:id="@+id/md_toolbar"
+					android:layout_height="?attr/actionBarSize"
+					android:layout_width="match_parent"
+					android:background="?attr/colorPrimaryDrawable"
+					android:theme="?attr/actionBarTheme"
+					app:popupTheme="?attr/popupTheme"
+					app:navigationIcon="?attr/homeAsUpIndicator"
+					android:layout_below="@id/bks_statusbar_strut"
 				/>
 				<GridView
 					android:id="@+id/bks_library_grid"
@@ -58,7 +69,7 @@
 				android:layout_height="match_parent"
 				android:layout_gravity="start"
 				android:orientation="vertical"
-				android:background="?attr/colorPrimary"
+				android:background="?attr/colorPrimaryDark"
 				android:fitsSystemWindows="true"
 			>
 				<android.support.v7.widget.Toolbar
