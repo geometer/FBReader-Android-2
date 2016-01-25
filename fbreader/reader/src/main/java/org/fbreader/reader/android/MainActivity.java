@@ -629,10 +629,15 @@ public abstract class MainActivity extends FBActivity {
 					coverView.setVisibility(View.GONE);
 				}
 				if (myDrawerToolbar != null) {
-					myDrawerToolbar.setTitleTextAppearance(MainActivity.this, R.style.FBReaderMD_TextAppearance_Title);
-					myDrawerToolbar.setSubtitleTextAppearance(MainActivity.this, R.style.FBReaderMD_TextAppearance_Subtitle);
+					final String subtitle = book.authorsString(", ");
+					if (subtitle == null || "".equals(subtitle)) {
+						myDrawerToolbar.setTitleTextAppearance(MainActivity.this, R.style.FBReaderMD_TextAppearance_TitleOnly);
+					} else {
+						myDrawerToolbar.setTitleTextAppearance(MainActivity.this, R.style.FBReaderMD_TextAppearance_Title);
+						myDrawerToolbar.setSubtitleTextAppearance(MainActivity.this, R.style.FBReaderMD_TextAppearance_Subtitle);
+						myDrawerToolbar.setSubtitle(subtitle);
+					}
 					myDrawerToolbar.setTitle(book.getTitle());
-					myDrawerToolbar.setSubtitle(book.authorsString(", "));
 				}
 			}
 		});
