@@ -23,7 +23,7 @@ public class CreateShelfActivity extends FBActivity {
 	@Override
 	protected void onPreCreate() {
 		super.onPreCreate();
-		ActivityUtil.setup(this, ActivityUtil.ActivityType.Dialog);
+		ActivityUtil.setup(this, true);
 	}
 
 	@Override

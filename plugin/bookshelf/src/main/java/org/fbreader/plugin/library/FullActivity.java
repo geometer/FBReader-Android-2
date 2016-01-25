@@ -12,18 +12,16 @@ public abstract class FullActivity extends FBActivity {
 	private volatile int myThemeId;
 	private volatile boolean myThemeIsDark;
 
-	protected abstract ActivityUtil.ActivityType type();
-
 	@Override
 	protected void onPreCreate() {
 		super.onPreCreate();
-		myThemeId = ActivityUtil.setup(this, type());
+		myThemeId = ActivityUtil.setup(this, false);
 		myThemeIsDark =
 			getTheme().obtainStyledAttributes(new int[] {R.attr.isThemeDark}).getBoolean(0, false);
 	}
 
 	public final boolean applyTheme() {
-		if (myThemeId != ActivityUtil.currentThemeId(this, type())) {
+		if (myThemeId != ActivityUtil.currentThemeId(this, false)) {
 			finish();
 			startActivity(new Intent(this, getClass()));
 			return true;

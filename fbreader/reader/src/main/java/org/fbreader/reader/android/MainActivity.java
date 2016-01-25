@@ -25,7 +25,6 @@ import android.app.SearchManager;
 import android.content.*;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.*;
 import android.support.v4.view.GravityCompat;
@@ -775,11 +774,5 @@ public abstract class MainActivity extends FBActivity {
 			reallyVisible ? getStatusBarHeight() : 0
 		));
 		myStrut.setVisibility(reallyVisible ? View.VISIBLE : View.INVISIBLE);
-	}
-
-	private int getStatusBarHeight() {
-		final Resources res = getResources();
-		int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
-		return resourceId > 0 ? res.getDimensionPixelSize(resourceId) : 0;
 	}
 }
