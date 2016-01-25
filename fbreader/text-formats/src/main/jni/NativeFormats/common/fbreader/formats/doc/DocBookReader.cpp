@@ -354,9 +354,7 @@ void DocBookReader::footnotesStartHandler() {
 }
 
 void DocBookReader::ansiDataHandler(const char *buffer, std::size_t len) {
-	std::string utf8String;
-	myConverter.convert(utf8String, buffer, buffer + len);
-	ZLUnicodeUtil::utf8ToUcs2(myBuffer, utf8String);
+	myConverter.convert(myBuffer, buffer, buffer + len);
 }
 
 void DocBookReader::ucs2SymbolHandler(ZLUnicodeUtil::Ucs2Char symbol) {
