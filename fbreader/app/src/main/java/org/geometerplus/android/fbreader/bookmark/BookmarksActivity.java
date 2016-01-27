@@ -493,12 +493,14 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 				gotoBookmark(bookmark);
 			} else if (myShowAddBookmarkItem) {
 				myShowAddBookmarkItem = false;
+				notifyDataSetChanged();
 				myCollection.saveBookmark(myBookmark);
 			}
 		}
 
 		void removeNewBookmarkItem() {
 			myShowAddBookmarkItem = false;
+			notifyDataSetChanged();
 		}
 	}
 
