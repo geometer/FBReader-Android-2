@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
@@ -73,13 +74,17 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 	private PreferenceScreen myScreen;
 	private final HashMap<String,Screen> myScreenMap = new HashMap<String,Screen>();
 
-	private class Screen {
+	private static class Screen {
+		private final PreferenceManager myManager;
+		private final PreferenceActivity myActivity;
 		public final ZLResource Resource;
 		private final PreferenceScreen myScreen;
 
-		private Screen(ZLResource root, String resourceKey) {
+		private Screen(PreferenceManager manager, PreferenceActivity activity, ZLResource root, String resourceKey) {
+			myManager = manager;
+			myActivity = activity;
 			Resource = root.getResource(resourceKey);
-			myScreen = getPreferenceManager().createPreferenceScreen(getActivity());
+			myScreen = manager.createPreferenceScreen(activity);
 			myScreen.setTitle(Resource.getValue());
 			myScreen.setSummary(Resource.getResource("summary").getValue());
 		}
@@ -89,7 +94,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 		}
 
 		public Screen createPreferenceScreen(String resourceKey) {
-			Screen screen = new Screen(Resource, resourceKey);
+			Screen screen = new Screen(myManager, myActivity, Resource, resourceKey);
 			myScreen.addPreference(screen.myScreen);
 			return screen;
 		}
@@ -101,31 +106,31 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 
 		public Preference addOption(ZLBooleanOption option, String resourceKey) {
 			return addPreference(
-				new ZLBooleanPreference(getActivity(), option, Resource.getResource(resourceKey))
+				new ZLBooleanPreference(myActivity, option, Resource.getResource(resourceKey))
 			);
 		}
 
 		public Preference addOption(ZLColorOption option, String resourceKey) {
 			return addPreference(
-				new ZLColorPreference(getActivity(), Resource, resourceKey, option)
+				new ZLColorPreference(myActivity, Resource, resourceKey, option)
 			);
 		}
 
 		public Preference addOption(ZLIntegerRangeOption option, String resourceKey) {
 			return addPreference(new ZLIntegerRangePreference(
-				getActivity(), Resource.getResource(resourceKey), option
+				myActivity, Resource.getResource(resourceKey), option
 			));
 		}
 
 		public <T extends Enum<T>> Preference addOption(ZLEnumOption<T> option, String key) {
 			return addPreference(
-				new ZLEnumPreference<T>(getActivity(), option, Resource.getResource(key))
+				new ZLEnumPreference<T>(myActivity, option, Resource.getResource(key))
 			);
 		}
 
 		public <T extends Enum<T>> Preference addOption(ZLEnumOption<T> option, String key, String valuesKey) {
 			return addPreference(
-				new ZLEnumPreference<T>(getActivity(), option, Resource.getResource(key), Resource.getResource(valuesKey))
+				new ZLEnumPreference<T>(myActivity, option, Resource.getResource(key), Resource.getResource(valuesKey))
 			);
 		}
 	}
@@ -224,7 +229,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			new DecimalFormatSymbols(uiLocale).getDecimalSeparator()
 		);
 
-		final Screen directoriesScreen = createPreferenceScreen("directories");
+		final Screen directoriesScreen = createPreferenceScreen(activity, "directories");
 		final Runnable libraryUpdater = new Runnable() {
 			public void run() {
 				final BookCollectionShadow bookCollection = new BookCollectionShadow();
@@ -250,7 +255,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			directoriesScreen.Resource, "tempDir", Paths.TempDirectoryOption(activity), null
 		));
 
-		final Screen syncScreen = createPreferenceScreen("sync");
+		final Screen syncScreen = createPreferenceScreen(activity, "sync");
 		final PreferenceSet syncPreferences = new PreferenceSet.Enabler() {
 			@Override
 			protected Boolean detectState() {
@@ -338,7 +343,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 		syncPreferences.add(syncScreen.addOption(syncOptions.CustomShelves, "customShelves", "values"));
 		syncPreferences.run();
 
-		final Screen appearanceScreen = createPreferenceScreen("appearance");
+		final Screen appearanceScreen = createPreferenceScreen(activity, "appearance");
 		appearanceScreen.addPreference(new LanguagePreference(
 			activity, appearanceScreen.Resource.getResource("language"), ZLResource.interfaceLanguages()
 		) {
@@ -424,7 +429,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 
 		if (DeviceType.Instance().isEInk()) {
 			final EInkOptions einkOptions = new EInkOptions();
-			final Screen einkScreen = createPreferenceScreen("eink");
+			final Screen einkScreen = createPreferenceScreen(activity, "eink");
 			final PreferenceSet einkPreferences = new PreferenceSet.Enabler() {
 				@Override
 				protected Boolean detectState() {
@@ -452,7 +457,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			einkPreferences.run();
 		}
 
-		final Screen textScreen = createPreferenceScreen("text");
+		final Screen textScreen = createPreferenceScreen(activity, "text");
 
 		final Screen fontPropertiesScreen = textScreen.createPreferenceScreen("fontProperties");
 		fontPropertiesScreen.addOption(ZLAndroidPaintContext.AntiAliasOption, "antiAlias");
@@ -568,7 +573,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			));
 		}
 
-		final Screen toastsScreen = createPreferenceScreen("toast");
+		final Screen toastsScreen = createPreferenceScreen(activity, "toast");
 		toastsScreen.addOption(miscOptions.ToastFontSizePercent, "fontSizePercent");
 		toastsScreen.addOption(miscOptions.ShowFootnoteToast, "showFootnoteToast");
 		toastsScreen.addPreference(new ZLEnumPreference(
@@ -578,13 +583,13 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			ZLResource.resource("duration")
 		));
 
-		final Screen cssScreen = createPreferenceScreen("css");
+		final Screen cssScreen = createPreferenceScreen(activity, "css");
 		cssScreen.addOption(baseStyle.UseCSSFontFamilyOption, "fontFamily");
 		cssScreen.addOption(baseStyle.UseCSSFontSizeOption, "fontSize");
 		cssScreen.addOption(baseStyle.UseCSSTextAlignmentOption, "textAlignment");
 		cssScreen.addOption(baseStyle.UseCSSMarginsOption, "margins");
 
-		final Screen colorsScreen = createPreferenceScreen("colors");
+		final Screen colorsScreen = createPreferenceScreen(activity, "colors");
 
 		final PreferenceSet backgroundSet = new PreferenceSet.Enabler() {
 			@Override
@@ -620,14 +625,14 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 		colorsScreen.addOption(profile.HighlightingForegroundOption, "highlightingForeground");
 		colorsScreen.addOption(profile.HighlightingBackgroundOption, "highlightingBackground");
 
-		final Screen marginsScreen = createPreferenceScreen("margins");
+		final Screen marginsScreen = createPreferenceScreen(activity, "margins");
 		marginsScreen.addOption(viewOptions.LeftMargin, "left");
 		marginsScreen.addOption(viewOptions.RightMargin, "right");
 		marginsScreen.addOption(viewOptions.TopMargin, "top");
 		marginsScreen.addOption(viewOptions.BottomMargin, "bottom");
 		marginsScreen.addOption(viewOptions.SpaceBetweenColumns, "spaceBetweenColumns");
 
-		final Screen statusLineScreen = createPreferenceScreen("scrollBar");
+		final Screen statusLineScreen = createPreferenceScreen(activity, "scrollBar");
 
 		final PreferenceSet footerPreferences = new PreferenceSet.Enabler() {
 			@Override
@@ -725,7 +730,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 		newStyleFooterPreferences.run();
 
 		/*
-		final Screen colorProfileScreen = createPreferenceScreen("colorProfile");
+		final Screen colorProfileScreen = createPreferenceScreen(activity, "colorProfile");
 		final ZLResource resource = colorProfileScreen.Resource;
 		colorProfileScreen.setSummary(ColorProfilePreference.createTitle(resource, fbreader.getColorProfileName()));
 		for (String key : ColorProfile.names()) {
@@ -735,7 +740,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 		}
 		 */
 
-		final Screen scrollingScreen = createPreferenceScreen("scrolling");
+		final Screen scrollingScreen = createPreferenceScreen(activity, "scrolling");
 		scrollingScreen.addOption(pageTurningOptions.FingerScrolling, "fingerScrolling");
 		scrollingScreen.addOption(miscOptions.EnableDoubleTap, "enableDoubleTapDetection");
 
@@ -797,7 +802,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 		));
 		scrollingScreen.addOption(pageTurningOptions.Horizontal, "horizontal");
 
-		final Screen dictionaryScreen = createPreferenceScreen("dictionary");
+		final Screen dictionaryScreen = createPreferenceScreen(activity, "dictionary");
 
 		final List<String> langCodes = ZLResource.languageCodes();
 		final ArrayList<Language> languages = new ArrayList<Language>(langCodes.size() + 1);
@@ -857,13 +862,13 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			}
 		});
 
-		final Screen imagesScreen = createPreferenceScreen("images");
+		final Screen imagesScreen = createPreferenceScreen(activity, "images");
 		imagesScreen.addOption(imageOptions.TapAction, "longTapAction");
 		imagesScreen.addOption(imageOptions.FitToScreen, "fitImagesToScreen");
 		imagesScreen.addOption(imageOptions.ImageViewBackground, "backgroundColor");
 		imagesScreen.addOption(imageOptions.MatchBackground, "matchBackground");
 
-		final Screen menuScreen = createPreferenceScreen("menu");
+		final Screen menuScreen = createPreferenceScreen(activity, "menu");
 		menuScreen.addPreference(new MenuPreference(
 			activity,
 			menuScreen.Resource.getResource("items"))
@@ -871,7 +876,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 		menuScreen.addOption(miscOptions.CoverAsMenuBackground, "backgroundCover");
 
 		final CancelMenuHelper cancelMenuHelper = new CancelMenuHelper();
-		final Screen cancelMenuScreen = createPreferenceScreen("cancelMenu");
+		final Screen cancelMenuScreen = createPreferenceScreen(activity, "cancelMenu");
 		cancelMenuScreen.addOption(cancelMenuHelper.ShowLibraryItemOption, "library");
 		cancelMenuScreen.addOption(cancelMenuHelper.ShowNetworkLibraryItemOption, "networkLibrary");
 		cancelMenuScreen.addOption(cancelMenuHelper.ShowPreviousBookItemOption, "previousBook");
@@ -889,10 +894,10 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			keyBindings.getOption(KeyEvent.KEYCODE_BACK, true), backKeyLongPressActions
 		));
 
-		final Screen tipsScreen = createPreferenceScreen("tips");
+		final Screen tipsScreen = createPreferenceScreen(activity, "tips");
 		tipsScreen.addOption(TipsManager.ShowTipsOption, "showTips");
 
-		final Screen aboutScreen = createPreferenceScreen("about");
+		final Screen aboutScreen = createPreferenceScreen(activity, "about");
 		aboutScreen.addPreference(new InfoPreference(
 			activity,
 			aboutScreen.Resource.getResource("version").getValue(),
@@ -906,8 +911,8 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 		aboutScreen.addPreference(new ThirdPartyLibrariesPreference(activity, aboutScreen.Resource, "thirdParty"));
 	}
 
-	Screen createPreferenceScreen(String resourceKey) {
-		final Screen screen = new Screen(PreferenceActivity.Resource, resourceKey);
+	Screen createPreferenceScreen(PreferenceActivity activity, String resourceKey) {
+		final Screen screen = new Screen(getPreferenceManager(), activity, PreferenceActivity.Resource, resourceKey);
 		myScreenMap.put(resourceKey, screen);
 		myScreen.addPreference(screen.myScreen);
 		return screen;
