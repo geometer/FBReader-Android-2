@@ -100,12 +100,12 @@ public final class AndroidFontUtil {
 
 	public static String realFontFamilyName(String fontFamily) {
 		for (String name : getFontAssetMap().keySet()) {
-			if (name.equalsIgnoreCase(fontFamily)) {
+			if (name != null && name.equalsIgnoreCase(fontFamily)) {
 				return name;
 			}
 		}
 		for (String name : getFontFileMap(false).keySet()) {
-			if (name.equalsIgnoreCase(fontFamily)) {
+			if (name != null && name.equalsIgnoreCase(fontFamily)) {
 				return name;
 			}
 		}
