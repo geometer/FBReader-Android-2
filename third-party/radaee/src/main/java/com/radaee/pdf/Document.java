@@ -245,6 +245,7 @@ public class Document
 	private static native long open( String path, String password ) throws Exception;
 	private static native long openMem( byte[] data, String password ) throws Exception;
 	private static native long openStream( PDFStream stream, String password ) throws Exception;
+    private static native long openStreamNoLoadPages( PDFStream stream, String password ) throws Exception;
 	private static native boolean setCache( long hand, String path );
     private static native boolean runJS(long hand, String js, PDFJSDelegate del) throws Exception;
 	private static native void setFontDel( long hand, PDFFontDelegate del );
@@ -256,6 +257,7 @@ public class Document
 	private static native int getPageCount( long hand );
 	private static native float getPageWidth( long hand, int pageno );
 	private static native float getPageHeight( long hand, int pageno );
+    private static native float[] getPagesMaxSize(long hand);
 	private static native boolean changePageRect( long hand, int pageno, float dl, float dt, float dr, float db );
 	private static native boolean setPageRotate( long hand, int pageno, int degree );
 	private static native String getOutlineTitle( long hand, long outline );
@@ -751,7 +753,29 @@ public class Document
 		}
 		return 0;
 	}
-
+    public int OpenStreamWithoutLoadingPages( PDFStream stream, String password )
+    {
+        if( hand_val == 0 )
+        {
+            int ret = 0;
+            try {
+                hand_val = openStreamNoLoadPages(stream, password);
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            if( hand_val <= 0 && hand_val >= -10 )//error
+            {
+                ret = (int)hand_val;
+                hand_val = 0;
+                page_count = 0;
+            }
+            else
+                page_count = getPageCount(hand_val);
+            return ret;
+        }
+        return 0;
+    }
     /**
      * run javascript, NOTICE:considering some complex js, this method is not thread-safe.<br/>
      * this method need premium license, it always return false if using other license type.
@@ -861,6 +885,15 @@ public class Document
 		if( h <= 0 ) return 1;
 		else return h;
 	}
+
+    /**
+     * get max width and max height of all pages.
+     * @return 2 elements container width and height values, or null if failed.
+     */
+    public float[] GetPagesMaxSize()
+    {
+        return getPagesMaxSize(hand_val);
+    }
 	/**
 	 * get meta data of document.
 	 * @param tag Predefined values:"Title", "Author", "Subject", "Keywords", "Creator", "Producer", "CreationDate", "ModDate".<br/>or you can pass any key that self-defined.
@@ -877,7 +910,8 @@ public class Document
      */
     public String GetXMP()
     {
-        return getXMP( hand_val );
+		return null;
+        //return getXMP( hand_val );
     }
 	/**
 	 * get id of document.

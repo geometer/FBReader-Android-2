@@ -19,7 +19,10 @@
 
 package org.geometerplus.fbreader.formats;
 
+import java.io.File;
 import java.util.*;
+
+import org.fbreader.reader.SafeFileHandler;
 
 import org.geometerplus.zlibrary.core.drm.FileEncryptionInfo;
 import org.geometerplus.zlibrary.core.encodings.EncodingCollection;
@@ -104,18 +107,28 @@ public class NativeFormatPlugin extends BuiltinFormatPlugin {
 	private native void detectLanguageAndEncodingNative(AbstractBook book);
 
 	@Override
-	synchronized public void readModel(BookModel model) throws BookReadingException {
+	synchronized public SafeFileHandler readModel(BookModel model) throws BookReadingException {
+		final SafeFileHandler handler = new SafeFileHandler(SystemInfo.tempDirectory());
+
+		final File[] files = new File(handler.Dir).listFiles();
+		if (files != null) {
+			for (File f : files) {
+				if (!f.isDirectory()) {
+					f.delete();
+				}
+			}
+		}
+
 		final int code;
-		final String tempDirectory = SystemInfo.tempDirectory();
 		synchronized (ourNativeLock) {
-			code = readModelNative(model, tempDirectory);
+			code = readModelNative(model, handler);
 		}
 		switch (code) {
 			case 0:
-				return;
+				break;
 			case 3:
 				throw new CachedCharStorageException(
-					"Cannot write file from native code to " + tempDirectory
+					"Cannot write file from native code to " + handler.Dir
 				);
 			default:
 				BookReadingUtil.throwException(
@@ -124,9 +137,11 @@ public class NativeFormatPlugin extends BuiltinFormatPlugin {
 					new String[] { String.valueOf(code), model.Book.getPath() }
 				);
 		}
+
+		return handler;
 	}
 
-	private native int readModelNative(BookModel model, String cacheDir);
+	private native int readModelNative(BookModel model, SafeFileHandler handler);
 
 	@Override
 	public final ZLFileImageProxy readCover(ZLFile file) {

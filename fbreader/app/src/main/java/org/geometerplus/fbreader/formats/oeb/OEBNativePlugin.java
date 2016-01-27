@@ -22,6 +22,8 @@ package org.geometerplus.fbreader.formats.oeb;
 import java.util.Collections;
 import java.util.List;
 
+import org.fbreader.reader.SafeFileHandler;
+
 import org.geometerplus.zlibrary.core.encodings.EncodingCollection;
 import org.geometerplus.zlibrary.core.encodings.AutoEncodingCollection;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
@@ -39,11 +41,11 @@ public class OEBNativePlugin extends NativeFormatPlugin {
 	}
 
 	@Override
-	public void readModel(BookModel model) throws BookReadingException {
+	public SafeFileHandler readModel(BookModel model) throws BookReadingException {
 		final ZLFile file = BookUtil.fileByBook(model.Book);
 		file.setCached(true);
 		try {
-			super.readModel(model);
+			final SafeFileHandler handler = super.readModel(model);
 			model.setLabelResolver(new BookModel.LabelResolver() {
 				public List<String> getCandidates(String id) {
 					final int index = id.indexOf("#");
@@ -52,6 +54,7 @@ public class OEBNativePlugin extends NativeFormatPlugin {
 						: Collections.<String>emptyList();
 				}
 			});
+			return handler;
 		} finally {
 			file.setCached(false);
 		}

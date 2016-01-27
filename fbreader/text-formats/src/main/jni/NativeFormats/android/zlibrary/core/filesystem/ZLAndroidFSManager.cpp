@@ -23,9 +23,9 @@
 
 #include "ZLAndroidFSManager.h"
 
+#include "SafeAndroidOutputStream.h"
 #include "JavaInputStream.h"
 #include "JavaFSDir.h"
-
 
 std::string ZLAndroidFSManager::convertFilenameToUtf8(const std::string &name) const {
 	return name;
@@ -128,12 +128,12 @@ ZLInputStream *ZLAndroidFSManager::createPlainInputStream(const std::string &pat
 	return new JavaInputStream(path);
 }
 
-/*ZLOutputStream *ZLAndroidFSManager::createOutputStream(const std::string &path) const {
-	if (useNativeImplementation(path)) {
-		return ZLUnixFSManager::createOutputStream(path);
-	}
-	return 0;
-}*/
+ZLOutputStream *ZLAndroidFSManager::createOutputStream(const std::string &path) const {
+	const std::size_t index = findLastFileNameDelimiter(path);
+	return new SafeAndroidOutputStream(
+		ZLUnixFSManager::createOutputStream(path), myFileHandler, path.substr(index + 1)
+	);
+}
 
 bool ZLAndroidFSManager::removeFile(const std::string &path) const {
 	if (useNativeImplementation(path)) {

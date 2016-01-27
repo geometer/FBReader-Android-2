@@ -82,7 +82,7 @@ public:
 	std::string resolvedPath() const;
 
 	shared_ptr<ZLInputStream> inputStream(shared_ptr<EncryptionMap> encryptionMap = 0) const;
-	shared_ptr<ZLOutputStream> outputStream(bool writeThrough = false) const;
+	shared_ptr<ZLOutputStream> outputStream() const;
 	shared_ptr<ZLDir> directory(bool createUnexisting = false) const;
 
 	bool operator == (const ZLFile &other) const;

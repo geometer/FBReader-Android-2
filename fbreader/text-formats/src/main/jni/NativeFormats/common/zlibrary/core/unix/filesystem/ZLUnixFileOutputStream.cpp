@@ -46,7 +46,7 @@ bool ZLUnixFileOutputStream::open() {
 	return myFile != 0;
 }
 
-void ZLUnixFileOutputStream::write(const char &chr) {
+void ZLUnixFileOutputStream::write(const char chr) {
 	if (::fwrite(&chr, 1, 1, myFile) != 1) {
 		myHasErrors = true;
 	}
@@ -63,7 +63,10 @@ void ZLUnixFileOutputStream::close() {
 		::fclose(myFile);
 		myFile = 0;
 		if (!myHasErrors) {
-			rename(myTemporaryName.c_str(), myName.c_str());
+			myHasErrors = ::rename(myTemporaryName.c_str(), myName.c_str()) != 0;
+		}
+		if (myHasErrors) {
+			::remove(myTemporaryName.c_str());
 		}
 	}
 }

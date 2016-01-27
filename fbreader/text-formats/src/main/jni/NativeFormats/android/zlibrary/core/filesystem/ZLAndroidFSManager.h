@@ -20,12 +20,15 @@
 #ifndef __ZLANDROIDFSMANAGER_H__
 #define __ZLANDROIDFSMANAGER_H__
 
+#include <jni.h>
+
 #include "../../../../common/zlibrary/core/unix/filesystem/ZLUnixFSManager.h"
 
 class ZLAndroidFSManager : public ZLUnixFSManager {
 
 public:
 	static void createInstance();
+	static void setFileHandler(jobject fileHandler);
 
 private:
 	ZLAndroidFSManager();
@@ -44,16 +47,23 @@ protected: // Overridden methods
 	ZLFSDir *createNewDirectory(const std::string &path) const;
 	ZLFSDir *createPlainDirectory(const std::string &path) const;
 	ZLInputStream *createPlainInputStream(const std::string &path) const;
-	//ZLOutputStream *createOutputStream(const std::string &path) const;
+	ZLOutputStream *createOutputStream(const std::string &path) const;
 	bool removeFile(const std::string &path) const;
 
 	ZLFileInfo fileInfo(const std::string &path) const;
 
 	bool canRemoveFile(const std::string &path) const;
+
+private:
+	jobject myFileHandler;
 };
 
 inline ZLAndroidFSManager::ZLAndroidFSManager() {}
 inline void ZLAndroidFSManager::createInstance() { ourInstance = new ZLAndroidFSManager(); }
+
+inline void ZLAndroidFSManager::setFileHandler(jobject fileHandler) {
+	((ZLAndroidFSManager*)ourInstance)->myFileHandler = fileHandler;
+}
 
 inline bool ZLAndroidFSManager::useNativeImplementation(const std::string &path) {
 	return path.length() > 0 && path[0] == '/';

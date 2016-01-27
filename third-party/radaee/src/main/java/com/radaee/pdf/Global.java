@@ -305,9 +305,12 @@ public class Global
 
 	/**
 	 * temp path, able after Init() invoked
+	 * debug_mode, show or remove "Avail Mem" watermark
+	 * save_thumb_in_cache, save pdf first page in cache storage
 	 */
 	public static String tmp_path = null;
 	public static boolean debug_mode = true;
+	public static boolean save_thumb_in_cache = true;
 
 	static private void load_file(Resources res, int res_id, File save_file)
 	{
@@ -362,17 +365,17 @@ public class Global
 	 * @param serial
 	 * @return
 	 */
-	public static boolean Init(ContextWrapper context, int license_type, String company_name, String mail, String serial)
+	public static boolean Init(ContextWrapper act, int license_type, String company_name, String mail, String serial)
 	{
 		if(ms_init) return true;
-		if( context == null ) return false;
+		if( act == null ) return false;
  		// load library
 		System.loadLibrary("rdpdf");
 		// save resource to sand-box for application.
-		File files = new File(context.getFilesDir(), "rdres");
+		File files = new File(act.getFilesDir(), "rdres");
 		if (!files.exists())// not exist? make it!
 			files.mkdir();
-		Resources res = context.getResources();
+		Resources res = act.getResources();
         load_std_font( res, R.raw.rdf008, 8, new File(files, "rdf008") );
         load_std_font( res, R.raw.rdf013, 13, new File(files, "rdf013") );
 		load_cmyk_icc( res, R.raw.cmyk_rgb, new File(files, "cmyk_rgb") );
@@ -384,7 +387,7 @@ public class Global
 		if (sdDir != null && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
             ftmp = new File(sdDir, "rdtmp");
 		else
-            ftmp = new File(context.getFilesDir(), "rdtmp");
+            ftmp = new File(act.getFilesDir(), "rdtmp");
 		if (!ftmp.exists())// not exist? make it!
             ftmp.mkdir();
 		tmp_path = ftmp.getPath();
@@ -392,31 +395,31 @@ public class Global
 		switch(license_type)
 		{
 		case 1:
-			ms_init = activeProfessional(context, company_name, mail, serial);
+			ms_init = activeProfessional(act, company_name, mail, serial);
 			break;
 		case 2:
-			ms_init = activePremium(context, company_name, mail, serial);
+			ms_init = activePremium(act, company_name, mail, serial);
 			break;
 		default:
-			ms_init = activeStandard(context, company_name, mail, serial);
+			ms_init = activeStandard(act, company_name, mail, serial);
 			break;
 		}
 		// active library, or WaterMark will displayed on each page.
-		// boolean succeeded = activeStandard(context, "radaee",
+		// boolean succeeded = activeStandard(act, "radaee",
 		// "radaee_com@yahoo.cn", "HV8A19-WOT9YC-9ZOU9E-OQ31K2-FADG6Z-XEBCAO");
-		// boolean succeeded = activeProfessional( context, "radaee",
+		// boolean succeeded = activeProfessional( act, "radaee",
 		// "radaee_com@yahoo.cn", "Z5A7JV-5WQAJY-9ZOU9E-OQ31K2-FADG6Z-XEBCAO" );
-		//boolean succeeded = activePremium(context, "radaee", "radaee_com@yahoo.cn",
+		//boolean succeeded = activePremium(act, "radaee", "radaee_com@yahoo.cn",
 		//		"LNJFDN-C89QFX-9ZOU9E-OQ31K2-FADG6Z-XEBCAO");
 
 		// active library, or WaterMark will displayed on each page.
 		// these active function is binding to version string "201401".
 		//String ver = getVersion();
-		// boolean succeeded = activeStandardForVer(context, "Radaee",
+		// boolean succeeded = activeStandardForVer(act, "Radaee",
 		// "radaeepdf@gmail.com", "NP8HLC-Q3M21C-H3CRUZ-WAJQ9H-5R5V9L-KM0Y1L");
-		// boolean succeeded = activeProfessionalForVer(context, "Radaee",
+		// boolean succeeded = activeProfessionalForVer(act, "Radaee",
 		// "radaeepdf@gmail.com", "6D7KV9-FYCVAE-H3CRUZ-WAJQ9H-5R5V9L-KM0Y1L" );
-		// boolean succeeded = activePremiumForVer(context, "Radaee", "radaeepdf@gmail.com",
+		// boolean succeeded = activePremiumForVer(act, "Radaee", "radaeepdf@gmail.com",
 		//		"Q6EL00-BTB1EG-H3CRUZ-WAJQ9H-5R5V9L-KM0Y1L");
 
 		// add system external fonts.
