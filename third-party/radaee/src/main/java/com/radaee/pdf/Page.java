@@ -621,6 +621,20 @@ public class Page
 		{
 			return Page.setAnnotEditText(page.hand, hand, text);
 		}
+
+        /**
+         * set font of edittext.<br/>
+         * you should re-render page to display modified data.<br/>
+         * this method valid in premium version.<br/>
+         * @param font DocFont object from Document.NewFontCID().
+         * @return true or false.
+         */
+        final public boolean SetEditFont(DocFont font)
+        {
+            if(font == null) return false;
+            return setAnnotEditFont(page.hand, hand, font.hand);
+        }
+
 		/**
 		 * get item count of combo-box.<br/>
 		 * this method valid in premium version
@@ -1236,6 +1250,7 @@ public class Page
 	static private native boolean setAnnotEditTextColor(long hand, long annot, int color);
 	static private native String getAnnotEditText( long hand, long annot );
 	static private native boolean setAnnotEditText( long hand, long annot, String text );
+    static private native boolean setAnnotEditFont( long hand, long annot, long font);
 	static private native int getAnnotComboItemCount( long hand, long annot );
 	static private native String getAnnotComboItem( long hand, long annot, int item );
 	static private native int getAnnotComboItemSel( long hand, long annot );

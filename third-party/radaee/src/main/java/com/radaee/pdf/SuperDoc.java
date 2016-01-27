@@ -576,6 +576,22 @@ public class SuperDoc extends Document
 	{
 		return -1;
 	}
+
+    public float[] GetPagesMaxSize()
+    {
+        if(m_docs == null) return null;
+        float [] max = m_docs[0].doc.GetPagesMaxSize();
+        int cur = 1;
+        int cnt = m_docs.length;
+        while(cur < cnt)
+        {
+            float[] cs1 = m_docs[cur].doc.GetPagesMaxSize();
+            if(max[0] < cs1[0]) max[0] = cs1[0];
+            if(max[1] < cs1[1]) max[1] = cs1[1];
+            cur++;
+        }
+        return max;
+    }
     @Override
     protected void finalize() throws Throwable
     {
