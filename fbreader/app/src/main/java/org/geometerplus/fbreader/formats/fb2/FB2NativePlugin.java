@@ -23,6 +23,8 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fbreader.reader.SafeFileHandler;
+
 import org.geometerplus.zlibrary.core.encodings.EncodingCollection;
 import org.geometerplus.zlibrary.core.encodings.AutoEncodingCollection;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
@@ -39,8 +41,9 @@ public class FB2NativePlugin extends NativeFormatPlugin {
 	}
 
 	@Override
-	public void readModel(BookModel model) throws BookReadingException {
-		super.readModel(model);
+	public SafeFileHandler readModel(BookModel model) throws BookReadingException {
+		final SafeFileHandler handler = super.readModel(model);
+
 		model.setLabelResolver(new BookModel.LabelResolver() {
 			public List<String> getCandidates(String id) {
 				final List<String> candidates = new ArrayList<String>();
@@ -63,6 +66,8 @@ public class FB2NativePlugin extends NativeFormatPlugin {
 				return candidates;
 			}
 		});
+
+		return handler;
 	}
 
 	@Override

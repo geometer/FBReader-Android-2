@@ -17,18 +17,23 @@
  * 02110-1301, USA.
  */
 
-#ifndef __ZLUNIXFILEOUTPUTSTREAM_H__
-#define __ZLUNIXFILEOUTPUTSTREAM_H__
+#ifndef __SAFEANDROIDOUTPUTSTREAM_H__
+#define __SAFEANDROIDOUTPUTSTREAM_H__
 
-#include <stdio.h>
+#include <jni.h>
+
+#include <string>
+
+#include <shared_ptr.h>
 
 #include <ZLOutputStream.h>
 
-class ZLUnixFileOutputStream : public ZLOutputStream {
+class SafeAndroidOutputStream : public ZLOutputStream {
 
 public:
-	ZLUnixFileOutputStream(const std::string &name);
-	~ZLUnixFileOutputStream();
+	SafeAndroidOutputStream(shared_ptr<ZLOutputStream> base, jobject fileHandler, const std::string &name);
+	~SafeAndroidOutputStream();
+
 	bool open();
 	void write(const char chr);
 	void write(const char *data, std::size_t len);
@@ -36,14 +41,15 @@ public:
 	bool hasErrors();
 
 private:
-	std::string myName;
-	std::string myTemporaryName;
-	bool myHasErrors;
-	FILE *myFile;
+	shared_ptr<ZLOutputStream> myBase;
+	bool myUseBase;
+	std::string myBuffer;
+	jobject myFileHandler;
+	const std::string myName;
 };
 
-inline bool ZLUnixFileOutputStream::hasErrors() {
-	return myHasErrors;
+inline bool SafeAndroidOutputStream::hasErrors() {
+	return false;
 }
 
-#endif /* __ZLUNIXFILEOUTPUTSTREAM_H__ */
+#endif /* __SAFEANDROIDOUTPUTSTREAM_H__ */

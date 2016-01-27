@@ -19,6 +19,8 @@
 
 package org.geometerplus.fbreader.formats;
 
+import org.fbreader.reader.SafeFileHandler;
+
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 
 import org.geometerplus.fbreader.bookmodel.BookModel;
@@ -28,5 +30,5 @@ public abstract class BuiltinFormatPlugin extends FormatPlugin {
 		super(systemInfo, fileType);
 	}
 
-	public abstract void readModel(BookModel model) throws BookReadingException;
+	public abstract SafeFileHandler readModel(BookModel model) throws BookReadingException;
 }

@@ -21,6 +21,8 @@ package org.geometerplus.zlibrary.text.model;
 
 import java.util.*;
 
+import org.fbreader.reader.SafeFileHandler;
+
 import org.geometerplus.zlibrary.core.fonts.FontManager;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.core.util.*;
@@ -307,7 +309,7 @@ public final class ZLTextPlainModel implements ZLTextModel, ZLTextStyleEntry.Fea
 		int[] paragraphLengths,
 		int[] textSizes,
 		byte[] paragraphKinds,
-		String directoryName,
+		SafeFileHandler handler,
 		String fileExtension,
 		int blocksNumber,
 		Map<String,ZLImage> imageMap,
@@ -321,7 +323,7 @@ public final class ZLTextPlainModel implements ZLTextModel, ZLTextStyleEntry.Fea
 		myParagraphLengths = paragraphLengths;
 		myTextSizes = textSizes;
 		myParagraphKinds = paragraphKinds;
-		myStorage = new CachedCharStorage(directoryName, fileExtension, blocksNumber);
+		myStorage = new CachedCharStorage(handler, fileExtension, blocksNumber);
 		myImageMap = imageMap;
 		myFontManager = fontManager;
 	}

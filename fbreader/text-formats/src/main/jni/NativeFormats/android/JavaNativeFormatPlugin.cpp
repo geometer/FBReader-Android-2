@@ -22,6 +22,8 @@
 #include <ZLFileImage.h>
 #include <FileEncryptionInfo.h>
 
+#include "zlibrary/core/filesystem/ZLAndroidFSManager.h"
+
 #include "../common/fbreader/bookmodel/BookModel.h"
 #include "../common/fbreader/formats/FormatPlugin.h"
 #include "../common/fbreader/library/Author.h"
@@ -161,7 +163,7 @@ JNIEXPORT void JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 	fillLanguageAndEncoding(env, javaBook, *book);
 }
 
-static bool initInternalHyperlinks(JNIEnv *env, jobject javaModel, BookModel &model, const std::string &cacheDir) {
+static bool initInternalHyperlinks(JNIEnv *env, jobject javaModel, jobject fileHandler, BookModel &model, const std::string &cacheDir) {
 	ZLCachedMemoryAllocator allocator(131072, cacheDir, "nlinks");
 
 	ZLUnicodeUtil::Ucs2String ucs2id;
@@ -196,11 +198,11 @@ static bool initInternalHyperlinks(JNIEnv *env, jobject javaModel, BookModel &mo
 	JString linksDirectoryName(env, allocator.directoryName(), false);
 	JString linksFileExtension(env, allocator.fileExtension(), false);
 	jint linksBlocksNumber = allocator.blocksNumber();
-	AndroidUtil::Method_BookModel_initInternalHyperlinks->call(javaModel, linksDirectoryName.j(), linksFileExtension.j(), linksBlocksNumber);
+	AndroidUtil::Method_BookModel_initInternalHyperlinks->call(javaModel, fileHandler, linksFileExtension.j(), linksBlocksNumber);
 	return !env->ExceptionCheck();
 }
 
-static jobject createTextModel(JNIEnv *env, jobject javaModel, ZLTextModel &model) {
+static jobject createTextModel(JNIEnv *env, jobject javaModel, jobject fileHandler, ZLTextModel &model) {
 	env->PushLocalFrame(16);
 
 	jstring id = AndroidUtil::createJavaString(env, model.id());
@@ -219,7 +221,6 @@ static jobject createTextModel(JNIEnv *env, jobject javaModel, ZLTextModel &mode
 	env->SetIntArrayRegion(textSizes, 0, arraysSize, &model.textSizes().front());
 	env->SetByteArrayRegion(paragraphKinds, 0, arraysSize, &model.paragraphKinds().front());
 
-	jstring directoryName = env->NewStringUTF(model.allocator().directoryName().c_str());
 	jstring fileExtension = env->NewStringUTF(model.allocator().fileExtension().c_str());
 	jint blocksNumber = (jint) model.allocator().blocksNumber();
 
@@ -228,7 +229,7 @@ static jobject createTextModel(JNIEnv *env, jobject javaModel, ZLTextModel &mode
 		id, language,
 		paragraphsNumber, entryIndices, entryOffsets,
 		paragraphLenghts, textSizes, paragraphKinds,
-		directoryName, fileExtension, blocksNumber
+		fileHandler, fileExtension, blocksNumber
 	);
 
 	if (env->ExceptionCheck()) {
@@ -273,13 +274,17 @@ static jobject createJavaFileInfo(JNIEnv *env, shared_ptr<FileInfo> info) {
 }
 
 extern "C"
-JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin_readModelNative(JNIEnv* env, jobject thiz, jobject javaModel, jstring javaCacheDir) {
+JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin_readModelNative(JNIEnv* env, jobject thiz, jobject javaModel, jobject fileHandler) {
+	ZLAndroidFSManager::setFileHandler(fileHandler);
+
 	shared_ptr<FormatPlugin> plugin = findCppPlugin(thiz);
 	if (plugin.isNull()) {
 		return 1;
 	}
 
+	jstring javaCacheDir = (jstring)AndroidUtil::Field_SafeFileHandler_Dir->value(fileHandler);
 	const std::string cacheDir = AndroidUtil::fromJavaString(env, javaCacheDir);
+	env->DeleteLocalRef(javaCacheDir);
 
 	jobject javaBook = AndroidUtil::Field_BookModel_Book->value(javaModel);
 
@@ -292,14 +297,14 @@ JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 		return 3;
 	}
 
-	if (!initInternalHyperlinks(env, javaModel, *model, cacheDir)) {
+	if (!initInternalHyperlinks(env, javaModel, fileHandler, *model, cacheDir)) {
 		return 4;
 	}
 
 	initTOC(env, javaModel, *model->contentsTree());
 
 	shared_ptr<ZLTextModel> textModel = model->bookTextModel();
-	jobject javaTextModel = createTextModel(env, javaModel, *textModel);
+	jobject javaTextModel = createTextModel(env, javaModel, fileHandler, *textModel);
 	if (javaTextModel == 0) {
 		return 5;
 	}
@@ -312,7 +317,7 @@ JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 	const std::map<std::string,shared_ptr<ZLTextModel> > &footnotes = model->footnotes();
 	std::map<std::string,shared_ptr<ZLTextModel> >::const_iterator it = footnotes.begin();
 	for (; it != footnotes.end(); ++it) {
-		jobject javaFootnoteModel = createTextModel(env, javaModel, *it->second);
+		jobject javaFootnoteModel = createTextModel(env, javaModel, fileHandler, *it->second);
 		if (javaFootnoteModel == 0) {
 			return 7;
 		}
@@ -355,6 +360,8 @@ JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 		if (bold != 0) env->DeleteLocalRef(bold);
 		if (normal != 0) env->DeleteLocalRef(normal);
 	}
+
+	ZLAndroidFSManager::setFileHandler(0);
 
 	return 0;
 }

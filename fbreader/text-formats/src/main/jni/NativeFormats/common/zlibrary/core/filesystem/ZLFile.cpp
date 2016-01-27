@@ -38,7 +38,7 @@ ZLFile::ZLFile() : myMimeTypeIsUpToDate(true), myInfoIsFilled(true) {
 ZLFile::ZLFile(const std::string &path, const std::string &mimeType) : myPath(path), myMimeType(mimeType), myMimeTypeIsUpToDate(!mimeType.empty()), myInfoIsFilled(false) {
 	ZLFSManager::Instance().normalize(myPath);
 	{
-		std::size_t index = ZLFSManager::Instance().findLastFileNameDelimiter(myPath);
+		const std::size_t index = ZLFSManager::Instance().findLastFileNameDelimiter(myPath);
 		if (index < myPath.length() - 1) {
 			myNameWithExtension = myPath.substr(index + 1);
 		} else {
@@ -130,8 +130,8 @@ shared_ptr<ZLInputStream> ZLFile::inputStream(shared_ptr<EncryptionMap> encrypti
 	return envelopeCompressedStream(stream);
 }
 
-shared_ptr<ZLOutputStream> ZLFile::outputStream(bool writeThrough) const {
-	if (!writeThrough && isCompressed()) {
+shared_ptr<ZLOutputStream> ZLFile::outputStream() const {
+	if (isCompressed()) {
 		return 0;
 	}
 	if (ZLFSManager::Instance().findArchiveFileNameDelimiter(myPath) != -1) {

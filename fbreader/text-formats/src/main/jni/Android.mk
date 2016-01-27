@@ -78,6 +78,7 @@ LOCAL_SRC_FILES               := \
 	NativeFormats/common/zlibrary/text/fonts/FontMap.cpp \
 	NativeFormats/android/zlibrary/core/filesystem/JavaFSDir.cpp \
 	NativeFormats/android/zlibrary/core/filesystem/JavaInputStream.cpp \
+	NativeFormats/android/zlibrary/core/filesystem/SafeAndroidOutputStream.cpp \
 	NativeFormats/android/zlibrary/core/filesystem/ZLAndroidFSManager.cpp \
 	NativeFormats/android/zlibrary/core/library/ZLAndroidLibraryImplementation.cpp \
 	NativeFormats/common/fbreader/bookmodel/BookModel.cpp \

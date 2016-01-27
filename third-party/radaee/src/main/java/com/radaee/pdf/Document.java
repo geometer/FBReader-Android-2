@@ -910,7 +910,8 @@ public class Document
      */
     public String GetXMP()
     {
-        return getXMP( hand_val );
+		return null;
+        //return getXMP( hand_val );
     }
 	/**
 	 * get id of document.

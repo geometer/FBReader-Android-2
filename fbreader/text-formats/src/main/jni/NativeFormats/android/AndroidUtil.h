@@ -78,6 +78,7 @@ public:
 	static JavaClass Class_FileInfo;
 	static JavaClass Class_FileEncryptionInfo;
 	static JavaClass Class_ZLFileImage;
+	static JavaClass Class_SafeFileHandler;
 	static JavaClass Class_ZLTextModel;
 	static JavaClass Class_NativeFormatPlugin;
 	static JavaClass Class_PluginCollection;
@@ -160,6 +161,9 @@ public:
 	static shared_ptr<VoidMethod> Method_BookModel_addImage;
 	static shared_ptr<VoidMethod> Method_BookModel_registerFontFamilyList;
 	static shared_ptr<VoidMethod> Method_BookModel_registerFontEntry;
+
+	static shared_ptr<ObjectField> Field_SafeFileHandler_Dir;
+	static shared_ptr<VoidMethod> Method_SafeFileHandler_setContent;
 
 public:
 	static bool init(JavaVM* jvm);
