@@ -25,6 +25,14 @@ import org.geometerplus.zlibrary.text.view.*;
 import org.geometerplus.fbreader.bookmodel.FBTextKind;
 
 public final class AutoTextSnippet implements TextSnippet {
+	public static String textFromView(ZLTextView view, int maxChars) {
+		final ZLTextWordCursor cursor = view.getStartCursor();
+		if (cursor == null || cursor.isNull()) {
+			return "";
+		}
+		return new AutoTextSnippet(cursor, maxChars).getText();
+	}
+
 	private final ZLTextPosition myStart;
 	private final ZLTextPosition myEnd;
 	private final String myText;
@@ -32,7 +40,6 @@ public final class AutoTextSnippet implements TextSnippet {
 	public final boolean IsEndOfText;
 
 	public AutoTextSnippet(ZLTextWordCursor start, int maxChars) {
-		System.err.println("AutoTextSnippet " + maxChars);
 		final ZLTextWordCursor cursor = new ZLTextWordCursor(start);
 
 		final Buffer buffer = new Buffer(cursor);

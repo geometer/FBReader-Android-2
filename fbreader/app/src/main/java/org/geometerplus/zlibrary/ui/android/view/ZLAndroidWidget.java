@@ -36,6 +36,7 @@ import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 import org.geometerplus.zlibrary.core.view.*;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
 
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
@@ -685,5 +686,12 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 	@Override
 	protected void updateColorLevel() {
 		ViewUtil.setColorLevel(myPaint, myColorLevel);
+	}
+
+	@Override
+	public String getContentDescription() {
+		return AutoTextSnippet.textFromView(
+			(ZLTextView)ZLApplication.Instance().getCurrentView(), 150
+		);
 	}
 }
