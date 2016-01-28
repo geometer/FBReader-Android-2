@@ -539,11 +539,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 	}
 
-	protected final synchronized int sizeOfTextBeforeParagraph(int paragraphIndex) {
-		return myModel != null ? myModel.getTextLength(paragraphIndex - 1) : 0;
-	}
-
-	protected final synchronized int sizeOfFullText() {
+	private synchronized int sizeOfFullText() {
 		if (myModel == null || myModel.getParagraphsNumber() == 0) {
 			return 1;
 		}

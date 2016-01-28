@@ -626,7 +626,7 @@ public final class FBView extends ZLTextView {
 			context.drawLine(gaugeRight, lineWidth, left, lineWidth);
 
 			final int gaugeInternalRight =
-				left + lineWidth + (int)(1.0 * gaugeWidth * pagePosition.Current / pagePosition.Total);
+				left + lineWidth + (int)(.5f + 1f * gaugeWidth * pagePosition.Current / pagePosition.Total);
 
 			context.setFillColor(fillColor);
 			context.fillRectangle(left + 1, height - 2 * lineWidth, gaugeInternalRight, lineWidth + 1);
@@ -634,12 +634,11 @@ public final class FBView extends ZLTextView {
 			final FooterOptions footerOptions = myViewOptions.getFooterOptions();
 			if (footerOptions.ShowTOCMarks.getValue()) {
 				updateTOCMarks(model, footerOptions.MaxTOCMarks.getValue());
-				final int fullLength = sizeOfFullText();
 				for (TOCTree tocItem : myTOCMarks) {
-					if (tocItem.Reference != null) {
-						final int refCoord = sizeOfTextBeforeParagraph(tocItem.Reference);
+					if (tocItem.Reference != null && tocItem.Reference != -1) {
+						final int pageNo = pageNoFromParagraph(tocItem.Reference);
 						final int xCoord =
-							left + 2 * lineWidth + (int)(1.0 * gaugeWidth * refCoord / fullLength);
+							left + 2 * lineWidth + (int)(.5f + 1f * gaugeWidth * pageNo / pagePosition.Total);
 						context.drawLine(xCoord, height - lineWidth, xCoord, lineWidth);
 					}
 				}
@@ -678,7 +677,7 @@ public final class FBView extends ZLTextView {
 			// draw gauge
 			final int gaugeRight = right - (infoWidth == 0 ? 0 : infoWidth + 10);
 			final int gaugeInternalRight =
-				left + (int)(1.0 * (gaugeRight - left) * pagePosition.Current / pagePosition.Total + 0.5);
+				left + (int)(.5f + 1f * (gaugeRight - left) * pagePosition.Current / pagePosition.Total);
 			final int v = height / 2;
 
 			context.setLineWidth(lineWidth);
@@ -696,11 +695,10 @@ public final class FBView extends ZLTextView {
 				labels.add(left);
 				labels.add(gaugeRight);
 				updateTOCMarks(model, footerOptions.MaxTOCMarks.getValue());
-				final int fullLength = sizeOfFullText();
 				for (TOCTree tocItem : myTOCMarks) {
 					if (tocItem.Reference != null) {
-						final int refCoord = sizeOfTextBeforeParagraph(tocItem.Reference);
-						labels.add(left + (int)(1.0 * (gaugeRight - left) * refCoord / fullLength + 0.5));
+						final int pageNo = pageNoFromParagraph(tocItem.Reference);
+						labels.add(left + (int)(.5f + 1f * (gaugeRight - left) * pageNo / pagePosition.Total));
 					}
 				}
 				for (int l : labels) {
