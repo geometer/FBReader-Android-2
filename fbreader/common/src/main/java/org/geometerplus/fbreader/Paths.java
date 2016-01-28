@@ -73,12 +73,8 @@ public abstract class Paths {
 		return null;
 	}
 
-	public static ZLStringOption DownloadsDirectoryOption =
-		new ZLStringOption("Files", "DownloadsDirectory", "");
-	static {
-		if ("".equals(DownloadsDirectoryOption.getValue())) {
-			DownloadsDirectoryOption.setValue(mainBookDirectory());
-		}
+	public static ZLStringOption DownloadsDirectoryOption() {
+		return new ZLStringOption("Files", "DownloadsDirectory", mainBookDirectory());
 	}
 
 	private static void addDirToList(List<String> list, String candidate) {
@@ -189,7 +185,7 @@ public abstract class Paths {
 
 	public static List<String> bookPath() {
 		final List<String> path = new ArrayList<String>(BookPathOption.getValue());
-		final String downloadsDirectory = DownloadsDirectoryOption.getValue();
+		final String downloadsDirectory = DownloadsDirectoryOption().getValue();
 		if (!"".equals(downloadsDirectory) && !path.contains(downloadsDirectory)) {
 			path.add(downloadsDirectory);
 		}
