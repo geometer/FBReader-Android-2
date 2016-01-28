@@ -42,6 +42,7 @@ import org.geometerplus.fbreader.fbreader.options.EInkOptions;
 import org.geometerplus.zlibrary.ui.android.view.animation.*;
 
 import org.geometerplus.fbreader.Paths;
+import org.geometerplus.fbreader.util.AutoTextSnippet;
 import org.geometerplus.android.fbreader.FBReader;
 import org.geometerplus.android.util.eink.EInkUtil;
 
