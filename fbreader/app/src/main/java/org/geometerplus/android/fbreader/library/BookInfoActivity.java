@@ -296,6 +296,10 @@ public class BookInfoActivity extends FBActivity implements MenuItem.OnMenuItemC
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
+		if (myBook == null) {
+			return true;
+		}
+
 		addMenuItem(menu, OPEN_BOOK, "openBook", true);
 		addMenuItem(menu, EDIT_INFO, "edit", true);
 		addMenuItem(menu, SHARE_BOOK, "shareBook", false);
