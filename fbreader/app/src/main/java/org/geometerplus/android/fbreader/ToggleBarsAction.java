@@ -30,8 +30,10 @@ class ToggleBarsAction extends FBReader.Action<FBReader,AbstractReader> {
 	protected void run(Object ... params) {
 		if (BaseActivity.barsAreShown()) {
 			BaseActivity.hideBars();
+			BaseActivity.setHintStage(3);
 		} else {
 			BaseActivity.showBars();
+			BaseActivity.setHintStage(2);
 		}
 	}
 }

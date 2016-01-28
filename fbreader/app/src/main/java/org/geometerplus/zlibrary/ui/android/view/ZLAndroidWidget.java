@@ -150,45 +150,33 @@ public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLo
 		if (!(context instanceof FBReader)) {
 			return;
 		}
+		final FBReader fbReader = (FBReader)context;
 
-		final ZLAndroidLibrary library = ((FBReader)context).getZLibrary();
+		final ZLAndroidLibrary library = fbReader.getZLibrary();
 		final ZLIntegerOption stageOption = library.ScreenHintStageOption;
 		if (!library.OldShowActionBarOption.getValue()) {
 			stageOption.setValue(3);
 		}
-		if (stageOption.getValue() >= 3) {
+
+		final TextView hintView = (TextView)fbReader.findViewById(R.id.hint_view);
+		if (stageOption.getValue() >= 3 && hintView.getVisibility() == View.GONE) {
 			return;
 		}
 
-		final FBReader fbReader = (FBReader)context;
+		final String key;
+		if (!new PageTurningOptions().Horizontal.getValue()) {
+			key = null;
+			stageOption.setValue(3);
+		} else if (stageOption.getValue() <= 1) {
+			key = "message1";
+		} else if (stageOption.getValue() == 2) {
+			key = "message2";
+		} else {
+			key = null;
+		}
+
 		fbReader.runOnUiThread(new Runnable() {
 			public void run() {
-				String key = null;
-				if (!fbReader.barsAreShown()) {
-					if (stageOption.getValue() == 0) {
-						stageOption.setValue(1);
-					}
-					if (stageOption.getValue() == 1) {
-						key = "message1";
-					} else {
-						stageOption.setValue(3);
-					}
-				} else {
-					if (stageOption.getValue() == 1) {
-						stageOption.setValue(2);
-					}
-					if (stageOption.getValue() == 2) {
-						key = "message2";
-					}
-				}
-
-				final TextView hintView = (TextView)fbReader.findViewById(R.id.hint_view);
-				if (key != null) {
-					if (!new PageTurningOptions().Horizontal.getValue()) {
-						key = null;
-						stageOption.setValue(3);
-					}
-				}
 				if (key != null) {
 					final String text =
 						ZLResource.resource("dialog").getResource("screenHint").getResource(key).getValue();

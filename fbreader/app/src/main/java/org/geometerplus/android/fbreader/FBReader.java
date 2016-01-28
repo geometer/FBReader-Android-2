@@ -1133,4 +1133,15 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 	void setExternalBook(Book book) {
 		((FBReaderApplication)getApplication()).ExternalBook = book;
 	}
+
+	void setHintStage(int value) {
+		final View view = getMainView();
+		if (view != null) {
+			final ZLIntegerOption stageOption = getZLibrary().ScreenHintStageOption;
+			if (stageOption.getValue() < value) {
+				stageOption.setValue(value);
+				view.postInvalidate();
+			}
+		}
+	}
 }
