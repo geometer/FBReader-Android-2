@@ -245,7 +245,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			directoriesScreen.Resource, "bookPath", Paths.BookPathOption, libraryUpdater
 		));
 		directoriesScreen.addPreference(activity.ChooserCollection.createPreference(
-			directoriesScreen.Resource, "downloadDir", Paths.DownloadsDirectoryOption, libraryUpdater
+			directoriesScreen.Resource, "downloadDir", Paths.DownloadsDirectoryOption(), libraryUpdater
 		));
 		final PreferenceSet fontReloader = new PreferenceSet.Reloader();
 		directoriesScreen.addPreference(activity.ChooserCollection.createPreference(
