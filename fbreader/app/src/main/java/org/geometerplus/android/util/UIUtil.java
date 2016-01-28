@@ -123,7 +123,8 @@ public abstract class UIUtil {
 			public void execute(final Runnable action, final Runnable uiPostAction) {
 				activity.runOnUiThread(new Runnable() {
 					public void run() {
-						myProgress = ProgressDialog.show(activity, null, myMessage, true, false);
+						myProgress = activity.isFinishing()
+							? null : ProgressDialog.show(activity, null, myMessage, true, false);
 						final Thread runner = new Thread() {
 							public void run() {
 								action.run();
