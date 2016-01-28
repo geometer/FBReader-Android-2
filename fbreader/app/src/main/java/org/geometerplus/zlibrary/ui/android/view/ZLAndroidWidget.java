@@ -46,7 +46,7 @@ import org.fbreader.common.options.PageTurningOptions;
 import org.fbreader.reader.android.MainView;
 
 import org.geometerplus.fbreader.Paths;
-
+import org.geometerplus.fbreader.util.AutoTextSnippet;
 import org.geometerplus.android.fbreader.FBReader;
 
 public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLongClickListener {
