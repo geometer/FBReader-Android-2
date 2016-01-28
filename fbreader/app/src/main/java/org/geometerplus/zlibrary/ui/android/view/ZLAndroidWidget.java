@@ -37,6 +37,7 @@ import org.geometerplus.zlibrary.text.view.ZLTextView;
 import org.geometerplus.zlibrary.ui.android.view.animation.*;
 
 import org.geometerplus.fbreader.Paths;
+import org.geometerplus.fbreader.util.AutoTextSnippet;
 import org.geometerplus.android.fbreader.FBReader;
 
 public class ZLAndroidWidget extends MainView implements ZLViewWidget, View.OnLongClickListener {
