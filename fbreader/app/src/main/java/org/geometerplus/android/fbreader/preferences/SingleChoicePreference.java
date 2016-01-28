@@ -25,8 +25,8 @@ import org.fbreader.md.MDListPreference;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 public abstract class SingleChoicePreference extends MDListPreference {
-	private String[] myValues;
-	private String[] myNames;
+	private volatile String[] myValues;
+	private volatile String[] myNames;
 	protected final ZLResource myValuesResource;
 
 	protected SingleChoicePreference(Context context, ZLResource resource) {
