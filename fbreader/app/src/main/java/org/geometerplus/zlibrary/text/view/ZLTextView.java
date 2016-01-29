@@ -798,6 +798,10 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	}
 
 	public final synchronized int pageNoFromParagraph(int paragraphIndex) {
+		if (myModel == null || myModel.getParagraphsNumber() == 0) {
+			return 1;
+		}
+
 		precomputePagePositions();
 		return pageNoFromChars(myModel.getTextLength(paragraphIndex - 1)) + 1;
 	}
