@@ -23,6 +23,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import android.content.*;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 
 import org.geometerplus.zlibrary.core.options.Config;
@@ -38,6 +39,7 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.formatPlugin.PluginUtil;
 import org.geometerplus.android.util.PackageUtil;
 
+import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.md.MDAlertDialogBuilder;
 
 class ExternalFileOpener implements FBReaderApp.ExternalFileOpener {
@@ -81,10 +83,37 @@ class ExternalFileOpener implements FBReaderApp.ExternalFileOpener {
 		});
 	}
 
-	private void showErrorDialog(final ExternalFormatPlugin plugin, final Book book) {
+	private AlertDialog.Builder advancedErrorDialogBuilder(final ExternalFormatPlugin plugin, String type) {
+		final ZLResource rootResource = ZLResource.resource("dialog");
+		final ZLResource resource = rootResource.getResource("button");
+		final String title = rootResource.getResource("missingPlugin").getValue();
+		return FBReaderUtil.htmlDialogBuilder(myReader, title, type, true)
+			.setPositiveButton(
+				resource.getResource("premium").getValue(),
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						PackageUtil.installFromMarket(
+							myReader, "com.fbreader"
+						);
+					}
+				}
+			)
+			.setNegativeButton(
+				resource.getResource("plugin").getValue(),
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						PackageUtil.installFromMarket(
+							myReader, plugin.packageName()
+						);
+					}
+				}
+			);
+	}
+
+	private AlertDialog.Builder simpleErrorDialogBuilder(final ExternalFormatPlugin plugin) {
 		final ZLResource rootResource = ZLResource.resource("dialog");
 		final ZLResource dialogResource = rootResource.getResource("missingPlugin");
-		final AlertDialog.Builder builder = new MDAlertDialogBuilder(myReader)
+		return new MDAlertDialogBuilder(myReader)
 			.setTitle(dialogResource.getValue())
 			.setMessage(dialogResource.getResource("message").getValue().replaceAll("%s", plugin.supportedFileType()))
 			.setPositiveButton(rootResource.getResource("button").getResource("yes").getValue(), new DialogInterface.OnClickListener() {
@@ -93,14 +122,29 @@ class ExternalFileOpener implements FBReaderApp.ExternalFileOpener {
 					PackageUtil.installFromMarket(myReader, plugin.packageName());
 					myDialog = null;
 				}
-			})
-			.setOnCancelListener(new DialogInterface.OnCancelListener() {
-				@Override
-				public void onCancel(DialogInterface dialog) {
-					myReader.onPluginNotFound(book);
-					myDialog = null;
-				}
 			});
+	}
+
+	private void showErrorDialog(final ExternalFormatPlugin plugin, final Book book) {
+		final ZLResource rootResource = ZLResource.resource("dialog");
+		final ZLResource dialogResource = rootResource.getResource("missingPlugin");
+		final AlertDialog.Builder builder;
+		if (Build.VERSION.SDK_INT < 14) {
+			builder = simpleErrorDialogBuilder(plugin);
+		} else if (plugin.packageName().endsWith(".pdf")) {
+			builder = advancedErrorDialogBuilder(plugin, "pdf");
+		} else if (plugin.packageName().endsWith(".comicbook")) {
+			builder = advancedErrorDialogBuilder(plugin, "comicbook");
+		} else {
+			builder = simpleErrorDialogBuilder(plugin);
+		}
+		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				myReader.onPluginNotFound(book);
+				myDialog = null;
+			}
+		});
 		myReader.ensureFullscreenOnDismiss(builder);
 
 		final Runnable showDialog = new Runnable() {
