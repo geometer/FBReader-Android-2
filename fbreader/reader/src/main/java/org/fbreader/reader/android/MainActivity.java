@@ -761,8 +761,12 @@ public abstract class MainActivity extends FBActivity {
 		final ZLAndroidLibrary zLibrary = getZLibrary();
 		final boolean shownAlways = zLibrary.showStatusBar();
 		if (DeviceType.Instance() != DeviceType.KINDLE_FIRE_1ST_GENERATION && !shownAlways) {
-			final int statusBarHeight =
-				zLibrary.ShowActionBarOption.getValue() ? getStatusBarHeight() : 0;
+			final int statusBarHeight;
+			if (Build.VERSION.SDK_INT >= 19) {
+				statusBarHeight = zLibrary.ShowActionBarOption.getValue() ? getStatusBarHeight() : 0;
+			} else {
+				statusBarHeight = getStatusBarHeight();
+			}
 			getMainView().setPreserveSize(visible, statusBarHeight);
 			if (visible) {
 				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
@@ -776,7 +780,7 @@ public abstract class MainActivity extends FBActivity {
 		final boolean reallyVisible = shownAlways || visible;
 		myStrut.setLayoutParams(new RelativeLayout.LayoutParams(
 			RelativeLayout.LayoutParams.MATCH_PARENT,
-			reallyVisible ? getStatusBarHeight() : 0
+			reallyVisible ? getStrutHeight() : 0
 		));
 		myStrut.setVisibility(reallyVisible ? View.VISIBLE : View.INVISIBLE);
 	}

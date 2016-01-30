@@ -141,7 +141,7 @@ public final class LibraryActivity extends FullActivity {
 		BookUtil.resetPopup();
 
 		findViewById(R.id.bks_statusbar_strut).setLayoutParams(new RelativeLayout.LayoutParams(
-			RelativeLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight()
+			RelativeLayout.LayoutParams.MATCH_PARENT, getStrutHeight()
 		));
 
 		myGrid = (GridView)findViewById(R.id.bks_library_grid);

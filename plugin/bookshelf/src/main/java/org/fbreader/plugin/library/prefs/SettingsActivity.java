@@ -23,7 +23,7 @@ public class SettingsActivity extends FullActivity {
 		super.onCreate(savedState);
 
 		findViewById(R.id.bks_statusbar_strut).setLayoutParams(new LinearLayout.LayoutParams(
-			LinearLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight()
+			LinearLayout.LayoutParams.MATCH_PARENT, getStrutHeight()
 		));
 
 		getFragmentManager()
