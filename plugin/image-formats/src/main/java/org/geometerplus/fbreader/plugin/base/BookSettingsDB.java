@@ -136,6 +136,9 @@ public class BookSettingsDB {//TODO: do not store default values
 			}
 			final String id = bookInfo.DcId;
 			final PluginView view = vh.getView();
+			if (id == null || view == null) {
+				return;
+			}
 
 			Cursor cursor = myDb.rawQuery("SELECT top,bottom,left,right FROM crops WHERE id = ?", new String[] { id });
 			if (cursor.moveToFirst()) {
