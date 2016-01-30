@@ -335,17 +335,26 @@ public class LibraryActivity extends TreeActivity<LibraryTree> implements MenuIt
 		}
 
 		final MenuItem rescanItem = menu.findItem(OptionsItemId.Rescan);
-		myCollection.bindToService(this, new Runnable() {
-			public void run() {
-				rescanItem.setEnabled(myCollection.status().IsComplete);
-			}
-		});
-		rescanItem.setVisible(tree == myRootTree);
-		menu.findItem(OptionsItemId.UploadAgain).setVisible(enableUploadAgain);
-		menu.findItem(OptionsItemId.TryAgain).setVisible(enableTryAgain);
-		menu.findItem(OptionsItemId.DeleteAll).setVisible(enableDeleteAll);
+		if (rescanItem != null) {
+			myCollection.bindToService(this, new Runnable() {
+				public void run() {
+					rescanItem.setEnabled(myCollection.status().IsComplete);
+				}
+			});
+			rescanItem.setVisible(tree == myRootTree);
+		}
+		setVisibleIfExists(menu, OptionsItemId.UploadAgain, enableUploadAgain);
+		setVisibleIfExists(menu, OptionsItemId.TryAgain, enableTryAgain);
+		setVisibleIfExists(menu, OptionsItemId.DeleteAll, enableDeleteAll);
 
 		return true;
+	}
+
+	private void setVisibleIfExists(Menu menu, int id, boolean visible) {
+		final MenuItem item = menu.findItem(id);
+		if (item != null) {
+			item.setVisible(visible);
+		}
 	}
 
 	private MenuItem addMenuItem(Menu menu, int id, String resourceKey) {
