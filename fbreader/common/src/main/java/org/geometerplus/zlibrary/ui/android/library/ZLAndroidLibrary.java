@@ -65,7 +65,11 @@ public final class ZLAndroidLibrary extends ZLibrary {
 	}
 
 	public boolean showStatusBar() {
-		return !EnableFullscreenModeOption.getValue() && ShowStatusBarOption.getValue();
+		if (Build.VERSION.SDK_INT >= 19) {
+			return !EnableFullscreenModeOption.getValue() && ShowStatusBarOption.getValue();
+		} else {
+			return ShowStatusBarOption.getValue();
+		}
 	}
 
 	public AssetManager getAssets() {
