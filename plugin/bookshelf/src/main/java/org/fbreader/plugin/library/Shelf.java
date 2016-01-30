@@ -419,6 +419,9 @@ public abstract class Shelf {
 				defaultPath = "/";
 			}
 			myPath = prefs.getString(PATH_LIST_KEY, defaultPath);
+			if (myPath == null) {
+				myPath = defaultPath != null ? defaultPath : "/";
+			}
 		}
 
 		String getPath() {
@@ -426,10 +429,12 @@ public abstract class Shelf {
 		}
 
 		void setPath(String path, SharedPreferences prefs) {
-			myPath = path;
-			final SharedPreferences.Editor editor = prefs.edit();
-			editor.putString(PATH_LIST_KEY, path);
-			editor.commit();
+			if (path != null) {
+				myPath = path;
+				final SharedPreferences.Editor editor = prefs.edit();
+				editor.putString(PATH_LIST_KEY, path);
+				editor.commit();
+			}
 		}
 
 		@Override
