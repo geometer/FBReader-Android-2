@@ -21,6 +21,7 @@ package org.fbreader.common.android;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 
 import org.fbreader.md.MDActivity;
 
@@ -68,5 +69,9 @@ public abstract class FBActivity extends MDActivity {
 		final Resources res = getResources();
 		int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
 		return resourceId > 0 ? res.getDimensionPixelSize(resourceId) : 0;
+	}
+
+	protected final int getStrutHeight() {
+		return Build.VERSION.SDK_INT >= 19 ? getStatusBarHeight() : 0;
 	}
 }
