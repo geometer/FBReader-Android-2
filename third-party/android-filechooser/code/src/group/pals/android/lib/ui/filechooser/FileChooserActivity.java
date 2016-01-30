@@ -1519,37 +1519,45 @@ public class FileChooserActivity extends MDActivity {
             {
                 final File file = (File)getLocation();
                 if (file != null && file.canWrite()) {
-                    returnPath = getLocation().getAbsolutePath();
+                    returnPath = file.getAbsolutePath();
                 }
                 break;
             }
             case FilesAndDirectories:
-                if(files == null || files.isEmpty()){
-                    returnPath = getLocation().getAbsolutePath();
+                if (files == null || files.isEmpty()) {
+                    final IFile loc = getLocation();
+                    if (loc != null) {
+                        returnPath = loc.getAbsolutePath();
+                    }
                 }
             break;
             default:
-                returnPath = getLocation().getAbsolutePath();
+            {
+                final IFile loc = getLocation();
+                if (loc != null) {
+                    returnPath = loc.getAbsolutePath();
+                }
                 break;
+            }
         }
         
-		boolean hasData = false;
+        boolean hasData = false;
         Intent intent = new Intent();
         if (returnPath != null) {
             intent.putExtra(_FolderPath, returnPath);
-			hasData = true;
-		}
+            hasData = true;
+        }
         
         if (files != null) {
             intent.putExtra(_Results, files);
-			hasData = true;
+            hasData = true;
         } else {
             intent.putExtra(_Results, new ArrayList<IFile>());
         }
 
-		if (!hasData) {
-			return;
-		}
+        if (!hasData) {
+            return;
+        }
 
         // return flags for further use (in case the caller needs)
         intent.putExtra(_FilterMode, mFileProvider.getFilterMode());
