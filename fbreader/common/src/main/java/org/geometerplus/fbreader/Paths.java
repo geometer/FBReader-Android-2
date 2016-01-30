@@ -48,13 +48,17 @@ public abstract class Paths {
 		final String current = ourTempDirectoryOption.getValue();
 		final File obsoleteDir = context != null ? context.getExternalCacheDir() : null;
 		final String obsoletePath = obsoleteDir != null ? obsoleteDir.getPath() : null;
-		if ("".equals(current) || (obsoletePath != null && obsoletePath.equals(current))) {
+		final String obsoletePostfix = context != null ? context.getPackageName() + "/cache" : null;
+		if ("".equals(current) ||
+			(obsoletePath != null && obsoletePath.equals(current)) ||
+			(obsoletePostfix != null && current.endsWith(obsoletePostfix))
+		) {
 			ourTempDirectoryOption.setValue(internalTempDirectoryValue(context));
 		}
 		return ourTempDirectoryOption;
 	}
 
-	private static String getExternalCacheDirPath(Context context) {
+	private static String getExternalFilesDirPath(Context context) {
 		final File d = context != null ? context.getExternalFilesDir(null) : null;
 		if (d != null) {
 			d.mkdirs();
@@ -66,7 +70,7 @@ public abstract class Paths {
 	}
 
 	private static String internalTempDirectoryValue(Context context) {
-		final String dir = getExternalCacheDirPath(context);
+		final String dir = getExternalFilesDirPath(context);
 		return dir != null ? dir : mainBookDirectory() + "/.FBReader";
 	}
 
