@@ -202,11 +202,7 @@ public abstract class Paths {
 		final Context appContext = context.getApplicationContext();
 		return new SystemInfo() {
 			public String tempDirectory() {
-				final String value = ourTempDirectoryOption.getValue();
-				if (!"".equals(value)) {
-					return value;
-				}
-				return internalTempDirectoryValue(appContext);
+				return TempDirectoryOption(appContext).getValue();
 			}
 
 			public String networkCacheDirectory() {
