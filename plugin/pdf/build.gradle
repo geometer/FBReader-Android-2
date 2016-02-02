@@ -50,13 +50,6 @@ android {
 		versionCode 0
 		versionName new File("$projectDir/../image-formats/VERSION").text.trim()
 	}
-
-	buildTypes {
-		release {
-			minifyEnabled false
-			signingConfig signingConfigs.release
-		}
-	}
 }
 
 android {

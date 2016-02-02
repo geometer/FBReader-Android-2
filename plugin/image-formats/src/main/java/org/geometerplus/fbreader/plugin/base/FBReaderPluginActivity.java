@@ -518,4 +518,14 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 			}
 		});
 	}
+
+	@Override
+	protected void onStoragePermissionGranted(boolean granted) {
+		super.onStoragePermissionGranted(granted);
+
+		final ViewHolder holder = myViewHolder;
+		if (granted && holder != null) {
+			holder.tryToOpenFile();
+		}
+	}
 }

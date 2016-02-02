@@ -291,6 +291,7 @@ public final class LibraryActivity extends FullActivity {
 	protected void onResume() {
 		super.onResume();
 		myAdView.resume();
+		checkStoragePermission();
 	}
 
 	@Override
