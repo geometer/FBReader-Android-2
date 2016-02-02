@@ -30,7 +30,7 @@ import android.support.v4.content.ContextCompat;
 import org.fbreader.md.MDActivity;
 
 public abstract class FBActivity extends MDActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
-	public static final int REQUEST_STORAGE_PERMISSION = 1001;
+	public static final int REQUEST_STORAGE_PERMISSION = 201;
 
 	@Override
 	protected void onPreCreate() {
