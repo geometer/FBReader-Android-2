@@ -367,6 +367,9 @@ public abstract class MainActivity extends FBActivity {
 		}
 		mySearchItem.setVisible(true);
 		final SearchView searchView = (SearchView)mySearchItem.getActionView();
+		if (searchView == null) {
+			return;
+		}
 		searchView.setIconified(false);
 		searchView.setQuery(myTextSearchPatternOption.getValue(), false);
 		searchView.setOnCloseListener(new SearchView.OnCloseListener() {
