@@ -21,16 +21,12 @@ package org.fbreader.reader.android;
 
 import java.util.*;
 
-import android.Manifest;
 import android.app.SearchManager;
 import android.content.*;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.*;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -74,13 +70,12 @@ import org.fbreader.reader.R;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.formats.IFormatPluginCollection;
 
-public abstract class MainActivity extends FBActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public abstract class MainActivity extends FBActivity {
 	public static final int REQUEST_PREFERENCES = 1;
 	public static final int REQUEST_CANCEL_MENU = 2;
 	public static final int REQUEST_DICTIONARY = 3;
 	public static final int REQUEST_DICTIONARY_EXTRA = 4;
 	public static final int REQUEST_TOC = 5;
-	public static final int REQUEST_STORAGE_PERMISSION = 6;
 
 	public interface TOCKey {
 		String TREE_FILE = "fbreader:toc:file";
@@ -165,45 +160,6 @@ public abstract class MainActivity extends FBActivity implements ActivityCompat.
 		);
 		myDrawerLayout.setDrawerListener(myDrawerToggle);
 		myDrawerLayout.setDrawerShadow(R.drawable.shadow_right_6dp, GravityCompat.START);
-	}
-
-	private volatile int myPermissionsRequestCounter = 0;
-
-	public final boolean checkStoragePermission() {
-		final boolean hasPermission =
-			ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-				== PackageManager.PERMISSION_GRANTED;
-		if (!hasPermission) {
-			if (myPermissionsRequestCounter++ >= 10) {
-				return false;
-			}
-
-			ActivityCompat.requestPermissions(
-				this,
-				new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-				REQUEST_STORAGE_PERMISSION
-			);
-		}
-		return hasPermission;
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
-		if (requestCode != REQUEST_STORAGE_PERMISSION) {
-			return;
-		}
-		if (permissions == null || results == null || permissions.length != results.length) {
-			return;
-		}
-
-		for (int i = 0; i < permissions.length; ++i) {
-			if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
-				onStoragePermissionGranted(results[i] == PackageManager.PERMISSION_GRANTED);
-			}
-		}
-	}
-
-	protected void onStoragePermissionGranted(boolean granted) {
 	}
 
 	protected final void closeDrawer() {

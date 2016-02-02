@@ -19,13 +19,19 @@
 
 package org.fbreader.common.android;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import org.fbreader.md.MDActivity;
 
-public abstract class FBActivity extends MDActivity {
+public abstract class FBActivity extends MDActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+	public static final int REQUEST_STORAGE_PERMISSION = 1001;
+
 	@Override
 	protected void onPreCreate() {
 		FBActivityUtil.applyParameters(this, getIntent());
@@ -73,5 +79,44 @@ public abstract class FBActivity extends MDActivity {
 
 	protected final int getStrutHeight() {
 		return Build.VERSION.SDK_INT >= 19 ? getStatusBarHeight() : 0;
+	}
+
+	private volatile int myPermissionsRequestCounter = 0;
+
+	public final boolean checkStoragePermission() {
+		final boolean hasPermission =
+			ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+				== PackageManager.PERMISSION_GRANTED;
+		if (!hasPermission) {
+			if (myPermissionsRequestCounter++ >= 10) {
+				return false;
+			}
+
+			ActivityCompat.requestPermissions(
+				this,
+				new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+				REQUEST_STORAGE_PERMISSION
+			);
+		}
+		return hasPermission;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
+		if (requestCode != REQUEST_STORAGE_PERMISSION) {
+			return;
+		}
+		if (permissions == null || results == null || permissions.length != results.length) {
+			return;
+		}
+
+		for (int i = 0; i < permissions.length; ++i) {
+			if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
+				onStoragePermissionGranted(results[i] == PackageManager.PERMISSION_GRANTED);
+			}
+		}
+	}
+
+	protected void onStoragePermissionGranted(boolean granted) {
 	}
 }

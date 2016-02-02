@@ -3,7 +3,6 @@ package org.fbreader.plugin.library;
 import java.io.*;
 import java.util.*;
 
-import android.Manifest;
 import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -11,8 +10,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -45,7 +42,6 @@ public final class LibraryActivity extends FullActivity {
 
 	private static final int CREATE_SHELF_CODE = 102;
 	private static final int SETTINGS_CODE = 103;
-	private static final int REQUEST_STORAGE_PERMISSION_CODE = 104;
 
 	enum GridViewType {
 		small_cards(true),
@@ -885,44 +881,5 @@ public final class LibraryActivity extends FullActivity {
 			myBooksAdapter.selectShelf(getItem(position));
 			myDrawerLayout.closeDrawer(GravityCompat.START);
 		}
-	}
-
-	private volatile int myPermissionsRequestCounter = 0;
-
-	public final boolean checkStoragePermission() {
-		final boolean hasPermission =
-			ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-				== PackageManager.PERMISSION_GRANTED;
-		if (!hasPermission) {
-			if (myPermissionsRequestCounter++ >= 10) {
-				return false;
-			}
-
-			ActivityCompat.requestPermissions(
-				this,
-				new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-				REQUEST_STORAGE_PERMISSION_CODE
-			);
-		}
-		return hasPermission;
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
-		if (requestCode != REQUEST_STORAGE_PERMISSION_CODE) {
-			return;
-		}
-		if (permissions == null || results == null || permissions.length != results.length) {
-			return;
-		}
-
-		for (int i = 0; i < permissions.length; ++i) {
-			if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
-				onStoragePermissionGranted(results[i] == PackageManager.PERMISSION_GRANTED);
-			}
-		}
-	}
-
-	protected void onStoragePermissionGranted(boolean granted) {
 	}
 }
