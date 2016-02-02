@@ -42,6 +42,10 @@ public class Page
             if( page == null || page.hand == 0 || hand == 0 ) return;
             advReloadAnnot(page.hand, hand);
         }
+        public final long GetRef()
+        {
+            return getAnnotRef(page.hand, hand);
+        }
 		/**
 		 * get this annotation index in page.
 		 * @return 0 based index value or -1;
@@ -70,7 +74,9 @@ public class Page
 		 */
         final public boolean MoveToPage( Page dst_page, float[] rect )
 		{
-			return Page.moveAnnot(page.hand, dst_page.hand, hand, rect);
+			boolean ret = Page.moveAnnot(page.hand, dst_page.hand, hand, rect);
+            page = dst_page;
+            return ret;
 		}
 		/**
 		 * render an annotation to Bitmap. this method fully scale annotation to bitmap object.<br/>
@@ -1157,6 +1163,10 @@ public class Page
     static private native long advGetRef(long page);
     static private native void advReloadAnnot(long page, long annot);
     static private native void advReload(long page);
+
+    static private native long getAnnotRef(long page, long annot);
+    static private native boolean addAnnot(long page, long annot_ref);
+
     static private native float[] getCropBox( long hand );
 	static private native float[] getMediaBox( long hand );
 	static private native void close( long hand );
@@ -1362,7 +1372,10 @@ public class Page
 	{
 		return getMediaBox( hand );
 	}
-
+    final public boolean AddAnnot(long ref)
+    {
+        return addAnnot(hand, ref);
+    }
 	/**
 	 * Close page object and free memory.
 	 */

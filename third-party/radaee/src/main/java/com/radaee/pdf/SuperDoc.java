@@ -592,6 +592,11 @@ public class SuperDoc extends Document
         }
         return max;
     }
+    public Page GetPage0()
+    {
+        if(m_docs == null) return null;
+        return m_docs[0].doc.GetPage0();
+    }
     @Override
     protected void finalize() throws Throwable
     {

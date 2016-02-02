@@ -254,6 +254,7 @@ public class Document
 	private static native String exportForm( long hand );
 	private static native void close( long hand );
 	private static native long getPage( long hand, int pageno );
+    static private native long getPage0(long hand);
 	private static native int getPageCount( long hand );
 	private static native float getPageWidth( long hand, int pageno );
 	private static native float getPageHeight( long hand, int pageno );
@@ -836,10 +837,29 @@ public class Document
 		hand_val = 0;
 		page_count = 0;
 	}
+
+    /**
+     * fast get first page, used in first page thumbnail generating.<br/>
+     * do not use this method for other purpose.
+     * @return Page object or null.
+     */
+    public Page GetPage0()
+    {
+        if( hand_val == 0 ) return null;
+        long hand = getPage0( hand_val );
+        if( hand == 0 ) return null;
+        Page page = new Page();
+        if( page != null )
+        {
+            page.hand = hand;
+            page.m_doc = this;
+        }
+        return page;
+    }
 	/**
 	 * get a Page object for page NO.
 	 * @param pageno 0 based page NO. range:[0, GetPageCount()-1]
-	 * @return Page object
+	 * @return Page object or null.
 	 */
 	public Page GetPage( int pageno )
 	{
@@ -910,8 +930,7 @@ public class Document
      */
     public String GetXMP()
     {
-		return null;
-        //return getXMP( hand_val );
+        return getXMP( hand_val );
     }
 	/**
 	 * get id of document.
@@ -1001,7 +1020,7 @@ public class Document
 	 * bit 4(0x8) modify<br/>
 	 * bit 5(0x10) extract text or image<br/>
 	 * others: see PDF reference
-	 * @param method reserved, currently only AES with V=4 and R=4 mode can be working.
+	 * @param method set 3 means using AES 256bits encrypt(Acrobat X), V=5 and R = 6 mode, others AES with V=4 and R=4 mode.
 	 * @param id must be 32 bytes for file ID. it is divided to 2 array in native library, as each 16 bytes.
 	 * @return true or false. 
 	 */
