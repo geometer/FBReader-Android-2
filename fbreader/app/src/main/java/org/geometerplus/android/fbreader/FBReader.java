@@ -490,6 +490,12 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 	protected void onResume() {
 		super.onResume();
 
+		if (checkStoragePermission()) {
+			startReading();
+		}
+	}
+
+	private void startReading() {
 		myStartTimer = true;
 		Config.Instance().runOnConnect(new Runnable() {
 			public void run() {

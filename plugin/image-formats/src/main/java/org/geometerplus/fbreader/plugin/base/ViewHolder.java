@@ -133,12 +133,7 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		ourInstance = this;
 		myDB = new BookSettingsDB(activity);
 		myNeedToOpen = true;
-		Collection.bindToService(activity, new Runnable() {
-			public void run() {
-				tryToOpenFile();
-				Collection.addListener(ViewHolder.this);
-			}
-		});
+		Collection.bindToService(activity, null);
 		final Config config = Config.Instance();
 		config.runOnConnect(new Runnable() {
 			public void run() {
@@ -151,7 +146,12 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 				config.requestAllValuesForGroup("ReadingModeMenu");
 
 				if (!activity.restartIfNewOptionsFound()) {
-					tryToOpenFile();
+					Collection.bindToService(activity, new Runnable() {
+						public void run() {
+							tryToOpenFile();
+							Collection.addListener(ViewHolder.this);
+						}
+					});
 				}
 			}
 		});
@@ -201,9 +201,12 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 	private boolean myNeedToOpen;
 
 	public synchronized void tryToOpenFile() {
-		if (myNeedToOpen && Config.Instance().isInitialized() && myActivity.getIntent() != null) {
-			myNeedToOpen = false;
-			openFile(myActivity.getIntent());
+		if (myNeedToOpen && Config.Instance().isInitialized() && myActivity.checkStoragePermission()) {
+			final Intent intent = myActivity.getIntent();
+			if (intent != null) {
+				myNeedToOpen = false;
+				openFile(intent);
+			}
 		}
 	}
 
