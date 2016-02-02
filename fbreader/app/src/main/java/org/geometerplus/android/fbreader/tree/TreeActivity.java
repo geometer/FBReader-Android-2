@@ -104,7 +104,7 @@ public abstract class TreeActivity<T extends FBTree> extends FBListActivity impl
 		final MenuItem searchItem = mySearchItem;
 		if (searchItem != null && searchItem.isVisible() && searchItem.isEnabled()) {
 			final SearchView searchView = (SearchView)mySearchItem.getActionView();
-			if (!searchView.isIconified()) {
+			if (searchView != null && !searchView.isIconified()) {
 				searchView.setIconified(true);
 				searchView.setIconified(true);
 				searchView.setQuery(defaultSearchQuery(), false);
@@ -235,24 +235,28 @@ public abstract class TreeActivity<T extends FBTree> extends FBListActivity impl
 		getMenuInflater().inflate(R.menu.search_only, menu);
 
 		mySearchItem = menu.findItem(R.id.menu_search_item);
-		final SearchView searchView = (SearchView)mySearchItem.getActionView();
-		searchView.setQuery(defaultSearchQuery(), false);
-		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-			@Override
-			public boolean onQueryTextChange(String query) {
-				return true;
-			}
+		if (mySearchItem != null) {
+			final SearchView searchView = (SearchView)mySearchItem.getActionView();
+			if (searchView != null)  {
+				searchView.setQuery(defaultSearchQuery(), false);
+				searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+					@Override
+					public boolean onQueryTextChange(String query) {
+						return true;
+					}
 
-			@Override
-			public boolean onQueryTextSubmit(String query) {
-				query = query.trim();
-				if (!"".equals(query)) {
-					doSearch(query);
-					invalidateOptionsMenu();
-				}
-				return false;
+					@Override
+					public boolean onQueryTextSubmit(String query) {
+						query = query.trim();
+						if (!"".equals(query)) {
+							doSearch(query);
+							invalidateOptionsMenu();
+						}
+						return false;
+					}
+				});
 			}
-		});
+		}
 
 		return true;
 	}

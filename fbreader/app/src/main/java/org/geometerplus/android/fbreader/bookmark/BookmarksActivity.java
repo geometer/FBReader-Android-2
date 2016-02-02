@@ -589,6 +589,9 @@ public class BookmarksActivity extends FBActivity implements IBookCollection.Lis
 		}
 		mySearchItem.setVisible(true);
 		final SearchView searchView = (SearchView)mySearchItem.getActionView();
+		if (searchView == null) {
+			return;
+		}
 		searchView.setIconified(false);
 		searchView.setQuery(myBookmarkSearchPatternOption.getValue(), false);
 		searchView.setOnCloseListener(new SearchView.OnCloseListener() {
