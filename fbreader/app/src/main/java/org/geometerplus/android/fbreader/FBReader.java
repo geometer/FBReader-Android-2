@@ -624,12 +624,12 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 	protected void onStop() {
 		ApiServerImplementation.sendEvent(this, ApiListener.EVENT_READ_MODE_CLOSED);
 		PopupPanel.removeAllWindows(myFBReaderApp, this);
+		getCollection().unbind();
 		super.onStop();
 	}
 
 	@Override
 	protected void onDestroy() {
-		getCollection().unbind();
 		unbindService(DataConnection);
 		super.onDestroy();
 	}

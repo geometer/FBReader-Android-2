@@ -20,6 +20,8 @@
 package org.geometerplus.fbreader.fbreader;
 
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 import org.fbreader.util.ComparisonUtil;
 
@@ -491,33 +493,6 @@ public final class FBReaderApp extends ZLApplication {
 		}
 	}
 
-	private class SaverThread extends Thread {
-		private final List<Runnable> myTasks =
-			Collections.synchronizedList(new LinkedList<Runnable>());
-
-		SaverThread() {
-			setPriority(MIN_PRIORITY);
-		}
-
-		void add(Runnable task) {
-			myTasks.add(task);
-		}
-
-		public void run() {
-			while (true) {
-				synchronized (myTasks) {
-					while (!myTasks.isEmpty()) {
-						myTasks.remove(0).run();
-					}
-				}
-				try {
-					sleep(500);
-				} catch (InterruptedException e) {
-				}
-			}
-		}
-	}
-
 	public void useSyncInfo(boolean openOtherBook, Notifier notifier) {
 		if (openOtherBook && SyncOptions.ChangeCurrentBook.getValue()) {
 			final Book fromServer = getCurrentServerBook(notifier);
@@ -534,7 +509,7 @@ public final class FBReaderApp extends ZLApplication {
 		}
 	}
 
-	private final SaverThread mySaverThread = new SaverThread();
+	private final ExecutorService mySaver = Executors.newSingleThreadExecutor();
 	private volatile ZLTextPosition myStoredPosition;
 	private volatile Book myStoredPositionBook;
 
@@ -576,11 +551,8 @@ public final class FBReaderApp extends ZLApplication {
 
 	private void savePosition() {
 		final RationalNumber progress = BookTextView.getProgress();
-		synchronized (mySaverThread) {
-			if (!mySaverThread.isAlive()) {
-				mySaverThread.start();
-			}
-			mySaverThread.add(new PositionSaver(myStoredPositionBook, myStoredPosition, progress));
+		synchronized (mySaver) {
+			mySaver.execute(new PositionSaver(myStoredPositionBook, myStoredPosition, progress));
 		}
 	}
 
