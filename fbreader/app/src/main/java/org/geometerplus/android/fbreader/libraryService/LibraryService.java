@@ -43,9 +43,6 @@ import org.geometerplus.android.fbreader.httpd.DataService;
 import org.geometerplus.android.fbreader.httpd.DataUtil;
 
 public class LibraryService extends Service {
-	private static SQLiteBooksDatabase ourDatabase;
-	private static final Object ourDatabaseLock = new Object();
-
 	final DataService.Connection DataConnection = new DataService.Connection();
 
 	private static final class Observer extends FileObserver {
@@ -95,12 +92,16 @@ public class LibraryService extends Service {
 		private final List<FileObserver> myFileObservers = new LinkedList<FileObserver>();
 		private BookCollection myCollection;
 
-		LibraryImplementation(BooksDatabase db) {
+		LibraryImplementation(SQLiteBooksDatabase db) {
 			myDatabase = db;
 			myCollection = new BookCollection(
 				Paths.systemInfo(LibraryService.this), myDatabase, Paths.bookPath()
 			);
 			reset(true);
+		}
+
+		void closeDatabase() {
+			((SQLiteBooksDatabase)myDatabase).close();
 		}
 
 		public void reset(final boolean force) {
@@ -416,6 +417,7 @@ public class LibraryService extends Service {
 		}
 	}
 
+	private final Object myLibraryLock = new Object();
 	private volatile LibraryImplementation myLibrary;
 
 	@Override
@@ -436,12 +438,13 @@ public class LibraryService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		synchronized (ourDatabaseLock) {
-			if (ourDatabase == null) {
-				ourDatabase = new SQLiteBooksDatabase(LibraryService.this);
+		synchronized (myLibraryLock) {
+			if (myLibrary == null) {
+				myLibrary = new LibraryImplementation(
+					new SQLiteBooksDatabase(LibraryService.this)
+				);
 			}
 		}
-		myLibrary = new LibraryImplementation(ourDatabase);
 
 		bindService(
 			new Intent(this, DataService.class),
@@ -454,10 +457,13 @@ public class LibraryService extends Service {
 	public void onDestroy() {
 		unbindService(DataConnection);
 
-		if (myLibrary != null) {
-			final LibraryImplementation l = myLibrary;
-			myLibrary = null;
-			l.deactivate();
+		synchronized (myLibraryLock) {
+			if (myLibrary != null) {
+				final LibraryImplementation l = myLibrary;
+				myLibrary = null;
+				l.deactivate();
+				l.closeDatabase();
+			}
 		}
 		super.onDestroy();
 	}
