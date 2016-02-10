@@ -28,6 +28,8 @@ import android.database.sqlite.*;
 import android.database.SQLException;
 import android.database.Cursor;
 
+import org.fbreader.util.IOUtil;
+
 import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
@@ -50,9 +52,13 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 		migrate();
 	}
 
+	void close() {
+		IOUtil.closeQuietly(myDatabase);
+	}
+
 	@Override
 	public void finalize() {
-		myDatabase.close();
+		close();
 	}
 
 	protected void executeAsTransaction(Runnable actions) {
