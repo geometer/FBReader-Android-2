@@ -313,7 +313,15 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 	}
 
 	@Override
-	public void onDestroy() {
+	protected void onStop() {
+		if (myViewHolder != null) {
+			myViewHolder.unbindCollection();
+		}
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
 		getPluginView().getDocument().close();
 		if (myViewHolder != null) {
 			myViewHolder.finish();

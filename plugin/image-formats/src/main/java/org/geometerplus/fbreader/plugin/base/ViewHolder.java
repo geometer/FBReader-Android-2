@@ -402,17 +402,21 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		});
 	}
 
-	public synchronized void finish() {
-		Log.e("VIEWHOLDER", "FINISH" + myActivity.toString());
-		if (ourInstance == null) {
-			return;
-		}
+	public void unbindCollection() {
 		Collection.bindToService(myActivity, new Runnable() {
 			public void run() {
 				savePosition();
 				Collection.unbind();
 			}
 		});
+	}
+
+	public synchronized void finish() {
+		Log.e("VIEWHOLDER", "FINISH" + myActivity.toString());
+		if (ourInstance == null) {
+			return;
+		}
+		unbindCollection();
 		final PluginView view = myActivity.getPluginView();
 		if (view != null) {
 			view.close();
