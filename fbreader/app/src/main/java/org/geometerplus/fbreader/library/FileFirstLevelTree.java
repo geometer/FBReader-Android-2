@@ -19,6 +19,7 @@
 
 package org.geometerplus.fbreader.library;
 
+import java.io.File;
 import java.util.List;
 
 import org.fbreader.util.Pair;
@@ -65,9 +66,17 @@ public class FileFirstLevelTree extends FirstLevelTree {
 	}
 
 	private void addChild(String path, String title, String summary) {
-		final ZLFile file = ZLFile.createFileByPath(path);
-		if (file != null) {
-			new FileTree(this, file, title, summary);
+		final File dirFile = new File(path);
+		if (!dirFile.exists() && !dirFile.mkdirs()) {
+			return;
+		}
+		if (!dirFile.exists() || !dirFile.isDirectory()) {
+			return;
+		}
+
+		final ZLFile zlFile = ZLFile.createFileByPath(path);
+		if (zlFile != null) {
+			new FileTree(this, zlFile, title, summary);
 		}
 	}
 
