@@ -221,7 +221,6 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		view.resetFooterParams();
 		AndroidFontUtil.clearFontCache();
 		view.postInvalidate();
-		view.setAllowBrightnessAdjustment(MiscOptions.AllowScreenBrightnessAdjustment.getValue());
 	}
 
 	synchronized void openFile(final Intent i) {
