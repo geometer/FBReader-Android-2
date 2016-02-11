@@ -31,6 +31,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import org.geometerplus.zlibrary.core.network.*;
+import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.MimeType;
 import org.geometerplus.zlibrary.ui.android.R;
@@ -102,10 +103,19 @@ public class BookDownloaderService extends Service {
 	}
 
 	@Override
-	public void onStart(Intent intent, int startId) {
+	public void onStart(final Intent intent, int startId) {
 		super.onStart(intent, startId);
+
 		doStart();
 
+		Config.Instance().runOnConnect(new Runnable() {
+			public void run() {
+				startDownload(intent);
+			}
+		});
+	}
+
+	private void startDownload(Intent intent) {
 		final Uri uri = intent != null ? intent.getData() : null;
 		if (uri == null) {
 			doStop();
