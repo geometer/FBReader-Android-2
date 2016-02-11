@@ -538,8 +538,8 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	private float myStartFixedY = 0;
 	private int myPinchX = 0;
 	private int myPinchY = 0;
-	private int myStartPressedX = 0;
-	private int myStartPressedY = 0;
+	private int myStartPressedX;
+	private int myStartPressedY;
 	private float myStartPinchDistance2 = -1;
 	private float myStartZoomFactor;
 	private static final float MAX_ZOOM_FACTOR = 10;
@@ -1303,45 +1303,70 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 		return true;
 	}
 
-	private boolean onFingerMove(int x, int y) {
-		synchronized (this) {
-			if (mySelectionInProgress) {
-				extendSelection(x, y);
-				return true;
-			}
+	private synchronized boolean onFingerMove(int x, int y) {
+		if (mySelectionInProgress) {
+			extendSelection(x, y);
+			return true;
+		}
 
-			if (myIsBrightnessAdjustmentInProgress) {
-				if (x >= getWidth() / 5) {
-					myIsBrightnessAdjustmentInProgress = false;
-					onFingerPress(x, y);
-				} else {
-					final int delta = (myStartBrightness + 30) * (myStartPressedY - y) / getMainAreaHeight();
-					setScreenBrightness(myStartBrightness + delta, true);
-					return true;
+		switch (mySlideMode) {
+			case none:
+			{
+				final float maxDist = myDpi / 12;
+				final float xDiff = Math.abs(x - myStartPressedX);
+				final float yDiff = Math.abs(y - myStartPressedY);
+				if (yDiff >= maxDist && xDiff <= maxDist / 1.5f && x < getWidth() / 10 &&
+					getReader().MiscOptions.AllowScreenBrightnessAdjustment.getValue()) {
+					myStartBrightness = getScreenBrightness();
+					mySlideMode = SlideMode.brightnessAdjustment;
+				} else if (xDiff >= maxDist || yDiff >= maxDist) {
+					final PageHolder page = getCurrentPage();
+
+					if (myZoomInfo.Factor == 1 &&
+						x > 0 && x < getWidth() &&
+						y > 0 && y < getMainAreaHeight()
+					) {
+						x -= page.getShiftX();
+						y -= page.getShiftY();
+						startManualScrolling(x, y);
+						mySlideMode = SlideMode.pageTurning;
+					} else if (myCanScrollZoomedPage) {
+						myStartFixedX = myZoomInfo.FixedX;
+						myStartFixedY = myZoomInfo.FixedY;
+						mySlideMode = SlideMode.zoomSliding;
+					}
 				}
+				break;
 			}
-
-			final PageHolder page = getCurrentPage();
-
-			if (myZoomInfo.Factor == 1) {
-				if (isFlickScrollingEnabled()) {
+			case brightnessAdjustment:
+			{
+				final int delta = (myStartBrightness + 30) * (myStartPressedY - y) / getMainAreaHeight();
+				setScreenBrightness(myStartBrightness + delta, true);
+				break;
+			}
+			case pageTurning:
+			{
+				final PageHolder page = getCurrentPage();
+				if (myZoomInfo.Factor == 1 && isFlickScrollingEnabled()) {
 					x -= page.getShiftX();
 					y -= page.getShiftY();
 					scrollManuallyTo(x, y);
 				}
-			} else if (myCanScrollZoomedPage) {
-				if (myStartPressedX != -1) {
+				break;
+			}
+			case zoomSliding:
+			{
+				final PageHolder page = getCurrentPage();
+				if (myCanScrollZoomedPage) {
 					myZoomInfo.FixedX = ((myStartPressedX - x) / (myZoomInfo.Factor - 1)) + myStartFixedX;
 					myZoomInfo.FixedY = ((myStartPressedY - y) / (myZoomInfo.Factor - 1)) + myStartFixedY;
 					validateShift();
 					postInvalidate();
-				} else {
-					myStartPressedX = x;
-					myStartPressedY = y;
-					myStartFixedX = myZoomInfo.FixedX;
-					myStartFixedY = myZoomInfo.FixedY;
 				}
+				break;
 			}
+			case stopped:
+				break;
 		}
 		return true;
 	}
@@ -1356,14 +1381,17 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 		}
 	}
 
-	private boolean myIsBrightnessAdjustmentInProgress = false;
-	private int myStartBrightness;
-
-	private boolean myAllowBrightnessAdjustment;
-
-	public void setAllowBrightnessAdjustment(boolean AllowBrightnessAdjustment) {
-		myAllowBrightnessAdjustment = AllowBrightnessAdjustment;
+	private enum SlideMode {
+		none,
+		brightnessAdjustment,
+		pageTurning,
+		zoomSliding,
+		stopped
 	}
+
+	private SlideMode mySlideMode = SlideMode.none;
+
+	private int myStartBrightness;
 
 	private boolean onFingerPress(int x, int y) {
 		if (myDocument.getSelectionCursor(myCurrPageNo, x, y, myZoomInfo)) {
@@ -1372,31 +1400,12 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 				myListener.onSelectionStart();
 			}
 			extendSelection(x, y);
-			return true;
 		}
 
-		if (x < getWidth() / 10 && myAllowBrightnessAdjustment) {
-			myIsBrightnessAdjustmentInProgress = true;
-			myStartPressedY = y;
-			myStartBrightness = getScreenBrightness();
-			return true;
-		}
+		mySlideMode = SlideMode.none;
+		myStartPressedX = x;
+		myStartPressedY = y;
 
-		final PageHolder page = getCurrentPage();
-
-		if (myZoomInfo.Factor == 1 &&
-			x > 0 && x < getWidth() &&
-			y > 0 && y < getMainAreaHeight()
-		) {
-			x -= page.getShiftX();
-			y -= page.getShiftY();
-			startManualScrolling(x, y);
-		} else if (myCanScrollZoomedPage) {
-			myStartPressedX = x;
-			myStartPressedY = y;
-			myStartFixedX = myZoomInfo.FixedX;
-			myStartFixedY = myZoomInfo.FixedY;
-		}
 		return true;
 	}
 
@@ -1476,10 +1485,6 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	}
 
 	private void onFingerEventCancelled() {
-		if (myIsBrightnessAdjustmentInProgress) {
-			myIsBrightnessAdjustmentInProgress = false;
-		}
-
 		if (mySelectionInProgress) {
 			mySelectionInProgress = false;
 			if (myListener != null) {
@@ -1495,17 +1500,10 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 			postInvalidate();
 		}
 
-		myStartPressedX = -1;
-		myStartPressedY = -1;
-		myStartFixedX = -1;
-		myStartFixedY = -1;
+		mySlideMode = SlideMode.stopped;
 	}
 
 	private void onFingerRelease(int x, int y) {
-		if (myIsBrightnessAdjustmentInProgress) {
-			myIsBrightnessAdjustmentInProgress = false;
-		}
-
 		if (mySelectionInProgress) {
 			mySelectionInProgress = false;
 			if (myListener != null) {
@@ -1522,22 +1520,18 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 			return;
 		}
 
-		if (myZoomInfo.Factor == 1) {
-			if (isFlickScrollingEnabled()) {
-				final PageHolder page = getCurrentPage();
-				x -= page.getShiftX();
-				x = Math.min(Math.max(0, x), (int)(getWidth() - page.getShiftX() * 2 - 1));
-				y -= page.getShiftY();
-				y = Math.min(Math.max(0, y), (int)(getMainAreaHeight() - page.getShiftY() * 2 - 1));
-				startAnimatedScrolling(x, y, getReader().PageTurningOptions.AnimationSpeed.getValue());
-				return;
-			}
-		} else {
-			myStartPressedX = -1;
-			myStartPressedY = -1;
-			myStartFixedX = -1;
-			myStartFixedY = -1;
+		switch (mySlideMode) {
+			case pageTurning:
+				if (myZoomInfo.Factor == 1 && isFlickScrollingEnabled()) {
+					final PageHolder page = getCurrentPage();
+					x -= page.getShiftX();
+					x = Math.min(Math.max(0, x), (int)(getWidth() - page.getShiftX() * 2 - 1));
+					y -= page.getShiftY();
+					y = Math.min(Math.max(0, y), (int)(getMainAreaHeight() - page.getShiftY() * 2 - 1));
+					startAnimatedScrolling(x, y, getReader().PageTurningOptions.AnimationSpeed.getValue());
+				}
 		}
+		mySlideMode = SlideMode.stopped;
 	}
 
 	public void onFingerSingleTap(int x, int y) {

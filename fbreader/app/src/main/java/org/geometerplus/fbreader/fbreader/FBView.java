@@ -62,8 +62,16 @@ public final class FBView extends ZLTextView {
 		}
 	}
 
+	private enum SlideMode {
+		none,
+		brightnessAdjustment,
+		pageTurning
+	}
+
+	private SlideMode mySlideMode = SlideMode.none;
+	private int myStartX;
 	private int myStartY;
-	private boolean myIsBrightnessAdjustmentInProgress;
+
 	private int myStartBrightness;
 
 	private TapZoneMap myZoneMap;
@@ -151,6 +159,8 @@ public final class FBView extends ZLTextView {
 
 	@Override
 	public void onFingerPress(int x, int y) {
+		mySlideMode = SlideMode.none;
+
 		myReader.runAction(ActionCode.HIDE_TOAST);
 
 		final float maxDist = ZLibrary.Instance().getDisplayDPI() / 4;
@@ -161,14 +171,8 @@ public final class FBView extends ZLTextView {
 			return;
 		}
 
-		if (myReader.MiscOptions.AllowScreenBrightnessAdjustment.getValue() && x < getContextWidth() / 10) {
-			myIsBrightnessAdjustmentInProgress = true;
-			myStartY = y;
-			myStartBrightness = myReader.getViewWidget().getScreenBrightness();
-			return;
-		}
-
-		startManualScrolling(x, y);
+		myStartX = x;
+		myStartY = y;
 	}
 
 	private boolean isFlickScrollingEnabled() {
@@ -198,19 +202,33 @@ public final class FBView extends ZLTextView {
 		}
 
 		synchronized (this) {
-			if (myIsBrightnessAdjustmentInProgress) {
-				if (x >= getContextWidth() / 5) {
-					myIsBrightnessAdjustmentInProgress = false;
-					startManualScrolling(x, y);
-				} else {
+			switch (mySlideMode) {
+				case none:
+				{
+					final float maxDist = ZLibrary.Instance().getDisplayDPI() / 12;
+					final float xDiff = Math.abs(x - myStartX);
+					final float yDiff = Math.abs(y - myStartY);
+					if (yDiff >= maxDist && xDiff <= maxDist / 1.5f && x < getContextWidth() / 10 &&
+						myReader.MiscOptions.AllowScreenBrightnessAdjustment.getValue()) {
+						myStartBrightness = myReader.getViewWidget().getScreenBrightness();
+						mySlideMode = SlideMode.brightnessAdjustment;
+					} else if (xDiff >= maxDist || yDiff >= maxDist) {
+						startManualScrolling(myStartX, myStartY);
+						mySlideMode = SlideMode.pageTurning;
+					}
+					break;
+				}
+				case brightnessAdjustment:
+				{
 					final int delta = (myStartBrightness + 30) * (myStartY - y) / getContextHeight();
 					myReader.getViewWidget().setScreenBrightness(myStartBrightness + delta, true);
-					return;
+					break;
 				}
-			}
-
-			if (isFlickScrollingEnabled()) {
-				myReader.getViewWidget().scrollManuallyTo(x, y);
+				case pageTurning:
+					if (isFlickScrollingEnabled()) {
+						myReader.getViewWidget().scrollManuallyTo(x, y);
+					}
+					break;
 			}
 		}
 	}
@@ -220,13 +238,21 @@ public final class FBView extends ZLTextView {
 		final SelectionCursor.Which cursor = getSelectionCursorInMovement();
 		if (cursor != null) {
 			releaseSelectionCursor();
-		} else if (myIsBrightnessAdjustmentInProgress) {
-			myIsBrightnessAdjustmentInProgress = false;
-		} else if (isFlickScrollingEnabled()) {
-			myReader.getViewWidget().startAnimatedScrolling(
-				x, y, myReader.PageTurningOptions.AnimationSpeed.getValue()
-			);
+		} else {
+			switch (mySlideMode) {
+				case none:
+					break;
+				case brightnessAdjustment:
+					break;
+				case pageTurning:
+					if (isFlickScrollingEnabled()) {
+						myReader.getViewWidget().startAnimatedScrolling(
+							x, y, myReader.PageTurningOptions.AnimationSpeed.getValue()
+						);
+					}
+			}
 		}
+		mySlideMode = SlideMode.none;
 	}
 
 	@Override
