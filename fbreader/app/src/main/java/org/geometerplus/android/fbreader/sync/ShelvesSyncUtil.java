@@ -48,9 +48,14 @@ class ShelvesSyncUtil {
 	private static void updateLocalBookmarks(IBookCollection<Book> collection, Map<String,Object> data, List<String> deleted) {
 		for (Map<String,Object> labelInfo : (List<Map<String,Object>>)data.get("labels")) {
 			final String name = (String)labelInfo.get("name");
-			System.err.println("LABEL INFO: " + labelInfo);
-			// TODO: create label if does not exist
+			if (name == null) {
+				continue;
+			}
 			for (Map<String,Object> info : (List<Map<String,Object>>)labelInfo.get("bookLabels")) {
+				final String uid = (String)info.get("uid");
+				if (uid == null) {
+					continue;
+				}
 				Book book = null;
 				for (String hash : (List<String>)info.get("book")) {
 					book = collection.getBookByHash(hash);
@@ -59,9 +64,13 @@ class ShelvesSyncUtil {
 					}
 				}
 				if (book != null) {
-					book.removeLabel(name);
-					collection.saveBook(book);
-					book.addLabel(new Label((String)info.get("uid"), name));
+					final Label label = book.findLabel(name);
+					if (label == null) {
+						book.addLabel(new Label(uid, name));
+					} else if (!uid.equals(label.Uid)) {
+						book.removeLabel(label);
+						book.addLabel(new Label(uid, name));
+					}
 					collection.saveBook(book);
 				} else {
 					//System.err.println("BOOK NOT FOUND");
