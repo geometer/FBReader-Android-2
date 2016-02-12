@@ -81,24 +81,28 @@ public abstract class FBActivity extends MDActivity implements ActivityCompat.On
 		return Build.VERSION.SDK_INT >= 19 ? getStatusBarHeight() : 0;
 	}
 
+	private final String[] STORAGE_PERMISSIONS = new String[] {
+		Manifest.permission.READ_EXTERNAL_STORAGE,
+		Manifest.permission.WRITE_EXTERNAL_STORAGE
+	};
 	private volatile int myPermissionsRequestCounter = 0;
 
 	public final boolean checkStoragePermission() {
-		final boolean hasPermission =
-			ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+		boolean hasPermissions = true;
+		for (String sp : STORAGE_PERMISSIONS) {
+			hasPermissions &= ContextCompat.checkSelfPermission(this, sp)
 				== PackageManager.PERMISSION_GRANTED;
-		if (!hasPermission) {
+		}
+		if (!hasPermissions) {
 			if (myPermissionsRequestCounter++ >= 10) {
 				return false;
 			}
 
 			ActivityCompat.requestPermissions(
-				this,
-				new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-				REQUEST_STORAGE_PERMISSION
+				this, STORAGE_PERMISSIONS, REQUEST_STORAGE_PERMISSION
 			);
 		}
-		return hasPermission;
+		return hasPermissions;
 	}
 
 	@Override
@@ -110,11 +114,18 @@ public abstract class FBActivity extends MDActivity implements ActivityCompat.On
 			return;
 		}
 
+		int count = 0;
 		for (int i = 0; i < permissions.length; ++i) {
-			if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
-				onStoragePermissionGranted(results[i] == PackageManager.PERMISSION_GRANTED);
+			if (results[i] == PackageManager.PERMISSION_GRANTED) {
+				for (String sp : STORAGE_PERMISSIONS) {
+					if (sp.equals(permissions[i])) {
+						++count;
+						break;
+					}
+				}
 			}
 		}
+		onStoragePermissionGranted(count == STORAGE_PERMISSIONS.length);
 	}
 
 	protected void onStoragePermissionGranted(boolean granted) {

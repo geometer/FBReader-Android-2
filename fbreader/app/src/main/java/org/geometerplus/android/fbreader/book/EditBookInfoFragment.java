@@ -20,6 +20,7 @@
 package org.geometerplus.android.fbreader.book;
 
 import android.os.Bundle;
+import android.view.*;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
@@ -29,8 +30,8 @@ import org.fbreader.common.android.FBReaderUtil;
 
 public final class EditBookInfoFragment extends PreferenceFragment {
 	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
+	public View onCreateView(LayoutInflater inflater, ViewGroup group, Bundle bundle) {
+		final View view = super.onCreateView(inflater, group, bundle);
 
 		final EditBookInfoActivity ebia = (EditBookInfoActivity)getActivity();
 		final ZLResource resource = ZLResource.resource("BookInfo");
@@ -45,5 +46,7 @@ public final class EditBookInfoFragment extends PreferenceFragment {
 		screen.addPreference(new EditTagsPreference(ebia, resource, "tags"));
 		screen.addPreference(new BookLanguagePreference(ebia, resource.getResource("language"), ebia.Book));
 		screen.addPreference(new EncodingPreference(ebia, resource.getResource("encoding"), ebia.Book));
+
+		return view;
 	}
 }
