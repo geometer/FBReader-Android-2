@@ -313,6 +313,15 @@ public abstract class AbstractBook extends TitledEntity<AbstractBook> {
 		return false;
 	}
 
+	public Label findLabel(String name) {
+		for (Label l : labels()) {
+			if (name.equals(l.Name)) {
+				return l;
+			}
+		}
+		return null;
+	}
+
 	public List<Label> labels() {
 		return myLabels != null ? Collections.unmodifiableList(myLabels) : Collections.<Label>emptyList();
 	}
