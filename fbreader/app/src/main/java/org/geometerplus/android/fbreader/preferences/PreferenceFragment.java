@@ -167,12 +167,12 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 	}
 
 	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
+	public View onCreateView(LayoutInflater inflater, ViewGroup group, Bundle bundle) {
+		final View view = super.onCreateView(inflater, group, bundle);
 
 		final PreferenceActivity activity = (PreferenceActivity)getActivity();
 		if (activity == null) {
-			return;
+			return view;
 		}
 
 		myScreen = getPreferenceManager().createPreferenceScreen(activity);
@@ -197,6 +197,8 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 				}
 			}
 		});
+
+		return view;
 	}
 
 	private void init(final PreferenceActivity activity, Intent intent) {
