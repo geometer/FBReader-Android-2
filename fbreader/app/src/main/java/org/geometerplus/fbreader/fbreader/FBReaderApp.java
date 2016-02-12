@@ -168,7 +168,9 @@ public final class FBReaderApp extends ZLApplication {
 		final SynchronousExecutor executor = createExecutor("loadingBook");
 		executor.execute(new Runnable() {
 			public void run() {
-				openBookInternal(bookToOpen, bookmark, false);
+				synchronized (mySyncLock) {
+					openBookInternal(bookToOpen, bookmark, false);
+				}
 			}
 		}, postAction);
 	}
@@ -450,7 +452,14 @@ public final class FBReaderApp extends ZLApplication {
 		}
 	}
 
+	private final Object mySyncLock = new Object();
 	public void useSyncInfo(boolean openOtherBook, Notifier notifier) {
+		synchronized (mySyncLock) {
+			useSyncInfoInternal(openOtherBook, notifier);
+		}
+	}
+
+	private void useSyncInfoInternal(boolean openOtherBook, Notifier notifier) {
 		if (openOtherBook && SyncOptions.ChangeCurrentBook.getValue()) {
 			final Book fromServer = getCurrentServerBook(notifier);
 			if (fromServer != null && !Collection.sameBook(fromServer, Collection.getRecentBook(0))) {
@@ -648,7 +657,9 @@ public final class FBReaderApp extends ZLApplication {
 			final SynchronousExecutor executor = createExecutor("loadingBook");
 			executor.execute(new Runnable() {
 				public void run() {
-					openBookInternal(current, null, true);
+					synchronized (mySyncLock) {
+						openBookInternal(current, null, true);
+					}
 				}
 			}, null);
 		} else {

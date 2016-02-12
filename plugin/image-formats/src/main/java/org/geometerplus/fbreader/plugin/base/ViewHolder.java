@@ -231,7 +231,11 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		new Thread() {
 			public void run() {
 				applySettings();
-				if (!openFileInternal(i)) {
+				final boolean success;
+				synchronized (mySyncLock) {
+					success = openFileInternal(i);
+				}
+				if (!success) {
 					onSync(false);
 					progress.dismiss();
 					return;
@@ -542,7 +546,14 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		}
 	}
 
+	private final Object mySyncLock = new Object();
 	void onSync(boolean openOtherBook) {
+		synchronized (mySyncLock) {
+			onSyncInternal(openOtherBook);
+		}
+	}
+
+	private void onSyncInternal(boolean openOtherBook) {
 		if (myBook == null) {
 			return;
 		}
