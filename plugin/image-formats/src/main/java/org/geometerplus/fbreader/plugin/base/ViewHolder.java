@@ -17,7 +17,7 @@ import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.util.RationalNumber;
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.fbreader.TapZoneMap;
@@ -387,11 +387,12 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		}
 		final PluginView view = myActivity.getPluginView();
 		final int pageIndex = view.getCurPageNo();
-		final ZLTextFixedPosition.WithTimestamp local =
+		final ZLTextPositionWithTimestamp local =
 			Collection.getStoredPosition(myBook.getId());
-		if (local == null || pageIndex != local.ParagraphIndex) {
+		if (local == null || pageIndex != local.Position.ParagraphIndex) {
 			Collection.storePosition(
-				myBook.getId(), new ZLTextFixedPosition(pageIndex, 0, 0)
+				myBook.getId(),
+				new ZLTextPositionWithTimestamp(pageIndex, 0, 0, System.currentTimeMillis())
 			);
 			myBook.setProgress(RationalNumber.create(pageIndex, view.getPagesNum()));
 			Collection.saveBook(myBook);
@@ -580,16 +581,16 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 			}
 		}
 
-		final ZLTextFixedPosition.WithTimestamp fromServer =
+		final ZLTextPositionWithTimestamp fromServer =
 			mySyncData.getAndCleanPosition(Collection.getHash(myBook, true));
 		if (fromServer == null) {
 			return;
 		}
-		final ZLTextFixedPosition.WithTimestamp local =
+		final ZLTextPositionWithTimestamp local =
 			Collection.getStoredPosition(myBook.getId());
 
 		if (local == null || local.Timestamp < fromServer.Timestamp) {
-			myActivity.getPluginView().gotoPage(fromServer.ParagraphIndex, false);
+			myActivity.getPluginView().gotoPage(fromServer.Position.ParagraphIndex, false);
 		}
 	}
 }
