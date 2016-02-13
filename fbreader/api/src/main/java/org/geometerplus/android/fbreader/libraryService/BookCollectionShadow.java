@@ -28,8 +28,7 @@ import android.os.RemoteException;
 
 import org.geometerplus.zlibrary.core.options.Config;
 
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
-import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 import org.geometerplus.fbreader.book.*;
 
@@ -395,7 +394,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 		}
 	}
 
-	public synchronized ZLTextFixedPosition.WithTimestamp getStoredPosition(long bookId) {
+	public synchronized ZLTextPositionWithTimestamp getStoredPosition(long bookId) {
 		if (myInterface == null) {
 			return null;
 		}
@@ -406,7 +405,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 				return null;
 			}
 
-			return new ZLTextFixedPosition.WithTimestamp(
+			return new ZLTextPositionWithTimestamp(
 				pos.ParagraphIndex, pos.ElementIndex, pos.CharIndex, pos.Timestamp
 			);
 		} catch (RemoteException e) {
@@ -414,7 +413,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 		}
 	}
 
-	public synchronized void storePosition(long bookId, ZLTextPosition position) {
+	public synchronized void storePosition(long bookId, ZLTextPositionWithTimestamp position) {
 		if (position != null && myInterface != null) {
 			try {
 				myInterface.storePosition(bookId, new PositionWithTimestamp(position));

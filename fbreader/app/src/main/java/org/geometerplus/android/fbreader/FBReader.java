@@ -1020,7 +1020,13 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 
 	private BroadcastReceiver mySyncUpdateReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
-			myFBReaderApp.useSyncInfo(myResumeTimestamp + 10 * 1000 > System.currentTimeMillis(), myNotifier);
+			getCollection().bindToService(FBReader.this, new Runnable() {
+				public void run() {
+					myFBReaderApp.useSyncInfo(
+						myResumeTimestamp + 10 * 1000 > System.currentTimeMillis(), myNotifier
+					);
+				}
+			});
 		}
 	};
 

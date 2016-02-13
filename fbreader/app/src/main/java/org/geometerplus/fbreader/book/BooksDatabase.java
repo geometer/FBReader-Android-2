@@ -25,8 +25,7 @@ import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.util.RationalNumber;
 import org.geometerplus.zlibrary.core.util.ZLColor;
 
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
-import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 public abstract class BooksDatabase {
 	protected interface HistoryEvent {
@@ -140,8 +139,8 @@ public abstract class BooksDatabase {
 	protected abstract List<HighlightingStyle> loadStyles();
 	protected abstract void saveStyle(HighlightingStyle style);
 
-	protected abstract ZLTextFixedPosition.WithTimestamp getStoredPosition(long bookId);
-	protected abstract void storePosition(long bookId, ZLTextPosition position);
+	protected abstract ZLTextPositionWithTimestamp getStoredPosition(long bookId);
+	protected abstract void storePosition(long bookId, ZLTextPositionWithTimestamp position);
 
 	protected abstract Collection<String> loadVisitedHyperlinks(long bookId);
 	protected abstract void addVisitedHyperlink(long bookId, String hyperlinkId);

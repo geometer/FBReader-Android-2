@@ -36,7 +36,7 @@ import org.geometerplus.zlibrary.core.options.ZLIntegerOption;
 import org.geometerplus.zlibrary.core.util.RationalNumber;
 import org.geometerplus.zlibrary.core.util.ZLColor;
 import org.geometerplus.zlibrary.text.view.ZLTextPosition;
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 import org.geometerplus.fbreader.book.*;
 
@@ -1142,13 +1142,13 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 		}
 	}
 
-	protected ZLTextFixedPosition.WithTimestamp getStoredPosition(long bookId) {
-		ZLTextFixedPosition.WithTimestamp position = null;
+	protected ZLTextPositionWithTimestamp getStoredPosition(long bookId) {
+		ZLTextPositionWithTimestamp position = null;
 		final Cursor cursor = myDatabase.rawQuery(
 			"SELECT paragraph,word,char,timestamp FROM BookState WHERE book_id = " + bookId, null
 		);
 		if (cursor.moveToNext()) {
-			position = new ZLTextFixedPosition.WithTimestamp(
+			position = new ZLTextPositionWithTimestamp(
 				(int)cursor.getLong(0),
 				(int)cursor.getLong(1),
 				(int)cursor.getLong(2),
@@ -1159,24 +1159,16 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 		return position;
 	}
 
-	protected void storePosition(long bookId, ZLTextPosition position) {
+	protected void storePosition(long bookId, ZLTextPositionWithTimestamp position) {
 		final SQLiteStatement statement = get(
 			"INSERT OR REPLACE INTO BookState (book_id,paragraph,word,char,timestamp) VALUES (?,?,?,?,?)"
 		);
 		synchronized (statement) {
 			statement.bindLong(1, bookId);
-			statement.bindLong(2, position.getParagraphIndex());
-			statement.bindLong(3, position.getElementIndex());
-			statement.bindLong(4, position.getCharIndex());
-
-			long timestamp = -1;
-			if (position instanceof ZLTextFixedPosition.WithTimestamp) {
-				timestamp = ((ZLTextFixedPosition.WithTimestamp)position).Timestamp;
-			}
-			if (timestamp == -1) {
-				timestamp = System.currentTimeMillis();
-			}
-			statement.bindLong(5, timestamp);
+			statement.bindLong(2, position.Position.ParagraphIndex);
+			statement.bindLong(3, position.Position.ElementIndex);
+			statement.bindLong(4, position.Position.CharIndex);
+			statement.bindLong(5, position.Timestamp);
 
 			statement.execute();
 		}

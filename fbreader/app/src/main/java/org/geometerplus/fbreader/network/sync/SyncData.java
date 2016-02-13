@@ -25,7 +25,7 @@ import org.json.simple.JSONValue;
 
 import org.geometerplus.zlibrary.core.options.*;
 
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.book.IBookCollection;
@@ -120,17 +120,17 @@ public class SyncData {
 	}
 	private final ServerBook myServerBook = new ServerBook();
 
-	private Map<String,Object> position2Map(ZLTextFixedPosition.WithTimestamp pos) {
+	private Map<String,Object> position2Map(ZLTextPositionWithTimestamp pos) {
 		final Map<String,Object> map = new HashMap<String,Object>();
-		map.put("para", pos.ParagraphIndex);
-		map.put("elmt", pos.ElementIndex);
-		map.put("char", pos.CharIndex);
+		map.put("para", pos.Position.ParagraphIndex);
+		map.put("elmt", pos.Position.ElementIndex);
+		map.put("char", pos.Position.CharIndex);
 		map.put("timestamp", pos.Timestamp);
 		return map;
 	}
 
-	private ZLTextFixedPosition.WithTimestamp map2Position(Map<String,Object> map) {
-		return new ZLTextFixedPosition.WithTimestamp(
+	private ZLTextPositionWithTimestamp map2Position(Map<String,Object> map) {
+		return new ZLTextPositionWithTimestamp(
 			(int)(long)(Long)map.get("para"),
 			(int)(long)(Long)map.get("elmt"),
 			(int)(long)(Long)map.get("char"),
@@ -142,7 +142,7 @@ public class SyncData {
 		if (book == null) {
 			return null;
 		}
-		final ZLTextFixedPosition.WithTimestamp pos = collection.getStoredPosition(book.getId());
+		final ZLTextPositionWithTimestamp pos = collection.getStoredPosition(book.getId());
 		return pos != null ? position2Map(pos) : null;
 	}
 
@@ -204,7 +204,7 @@ public class SyncData {
 		final List<Map> positions = (List<Map>)data.get("positions");
 		if (positions != null) {
 			for (Map<String,Object> map : positions) {
-				final ZLTextFixedPosition.WithTimestamp pos = map2Position(map);
+				final ZLTextPositionWithTimestamp pos = map2Position(map);
 				for (String hash : (List<String>)map.get("all_hashes")) {
 					savePosition(hash, pos);
 				}
@@ -220,7 +220,7 @@ public class SyncData {
 		return new ZLStringOption("SyncData", "Pos:" + hash, "");
 	}
 
-	private void savePosition(String hash, ZLTextFixedPosition.WithTimestamp pos) {
+	private void savePosition(String hash, ZLTextPositionWithTimestamp pos) {
 		positionOption(hash).setValue(pos != null ? JSONValue.toJSONString(position2Map(pos)) : "");
 	}
 
@@ -232,7 +232,7 @@ public class SyncData {
 		return myServerBook.getInfo();
 	}
 
-	public ZLTextFixedPosition.WithTimestamp getAndCleanPosition(String hash) {
+	public ZLTextPositionWithTimestamp getAndCleanPosition(String hash) {
 		final ZLStringOption option = positionOption(hash);
 		try {
 			return map2Position((Map)JSONValue.parse(option.getValue()));
