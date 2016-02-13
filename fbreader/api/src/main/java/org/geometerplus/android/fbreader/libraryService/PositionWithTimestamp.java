@@ -7,8 +7,7 @@ package org.geometerplus.android.fbreader.libraryService;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
-import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 public final class PositionWithTimestamp implements Parcelable {
 	public final int ParagraphIndex;
@@ -16,13 +15,12 @@ public final class PositionWithTimestamp implements Parcelable {
 	public final int CharIndex;
 	public final long Timestamp;
 
-	public PositionWithTimestamp(ZLTextPosition pos) {
+	public PositionWithTimestamp(ZLTextPositionWithTimestamp pos) {
 		this(
-			pos.getParagraphIndex(),
-			pos.getElementIndex(),
-			pos.getCharIndex(),
-			(pos instanceof ZLTextFixedPosition.WithTimestamp)
-				? ((ZLTextFixedPosition.WithTimestamp)pos).Timestamp : -1
+			pos.Position.ParagraphIndex,
+			pos.Position.ElementIndex,
+			pos.Position.CharIndex,
+			pos.Timestamp
 		);
 	}
 

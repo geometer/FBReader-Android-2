@@ -21,8 +21,7 @@ package org.geometerplus.fbreader.book;
 
 import java.util.List;
 
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
-import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 public interface IBookCollection<B extends AbstractBook> extends AbstractSerializer.BookCreator<B> {
 	public enum Status {
@@ -83,8 +82,8 @@ public interface IBookCollection<B extends AbstractBook> extends AbstractSeriali
 	void setHash(B book, String hash);
 	boolean sameBook(B book0, B book1);
 
-	ZLTextFixedPosition.WithTimestamp getStoredPosition(long bookId);
-	void storePosition(long bookId, ZLTextPosition position);
+	ZLTextPositionWithTimestamp getStoredPosition(long bookId);
+	void storePosition(long bookId, ZLTextPositionWithTimestamp position);
 
 	boolean isHyperlinkVisited(B book, String linkId);
 	void markHyperlinkAsVisited(B book, String linkId);
