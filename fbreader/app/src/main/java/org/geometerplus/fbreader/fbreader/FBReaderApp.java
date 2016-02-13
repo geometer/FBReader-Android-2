@@ -517,24 +517,22 @@ public final class FBReaderApp extends ZLApplication {
 			}
 		}
 
-		synchronized (this) {
-			final Book book = Model != null ? Model.Book : null;
-			if (book == null) {
-				return;
-			}
+		final Book book = Model != null ? Model.Book : null;
+		if (book == null) {
+			return;
+		}
 
-			final ZLTextPositionWithTimestamp remote =
-				mySyncData.getAndCleanPosition(Collection.getHash(book, true));
-			if (remote == null) {
-				return;
-			}
+		final ZLTextPositionWithTimestamp remote =
+			mySyncData.getAndCleanPosition(Collection.getHash(book, true));
+		if (remote == null) {
+			return;
+		}
 
-			final ZLTextPositionWithTimestamp local =
-				myPositionManager.getLocallyStoredPosition(book);
-			if (local == null || local.Timestamp < remote.Timestamp) {
-				BookTextView.gotoPosition(remote.Position);
-				savePosition(book, remote, BookTextView.getProgress());
-			}
+		final ZLTextPositionWithTimestamp local =
+			myPositionManager.getLocallyStoredPosition(book);
+		if (local == null || local.Timestamp < remote.Timestamp) {
+			BookTextView.gotoPosition(remote.Position);
+			savePosition(book, remote, BookTextView.getProgress());
 		}
 	}
 
@@ -562,6 +560,12 @@ public final class FBReaderApp extends ZLApplication {
 			}
 		}
 
+		void resetPositionCache(Book book) {
+			if (book != null) {
+				myPositions.remove(book);
+			}
+		}
+
 		void storePositionLocally(Book book, ZLTextPositionWithTimestamp position) {
 			if (book == null || position == null) {
 				return;
@@ -583,6 +587,7 @@ public final class FBReaderApp extends ZLApplication {
 			mySyncData.getAndCleanPosition(Collection.getHash(book, true));
 		final ZLTextPositionWithTimestamp local =
 			myPositionManager.getLocallyStoredPosition(book);
+		myPositionManager.resetPositionCache(book);
 
 		if (local == null) {
 			return fromServer != null ? fromServer : new ZLTextPositionWithTimestamp(0, 0, 0, System.currentTimeMillis());
@@ -593,7 +598,7 @@ public final class FBReaderApp extends ZLApplication {
 		}
 	}
 
-	public synchronized void storePosition() {
+	public void storePosition() {
 		final Book book = Model != null ? Model.Book : null;
 		if (book == null || BookTextView == null) {
 			return;
