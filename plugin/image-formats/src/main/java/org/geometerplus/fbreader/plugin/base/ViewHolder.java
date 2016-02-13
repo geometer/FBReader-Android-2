@@ -385,17 +385,21 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		if (myBook == null) {
 			return;
 		}
-		final PluginView view = myActivity.getPluginView();
-		final int pageIndex = view.getCurPageNo();
-		final ZLTextPositionWithTimestamp local =
-			Collection.getStoredPosition(myBook.getId());
-		if (local == null || pageIndex != local.Position.ParagraphIndex) {
-			Collection.storePosition(
-				myBook.getId(),
-				new ZLTextPositionWithTimestamp(pageIndex, 0, 0, System.currentTimeMillis())
-			);
-			myBook.setProgress(RationalNumber.create(pageIndex, view.getPagesNum()));
-			Collection.saveBook(myBook);
+		try {
+			final PluginView view = myActivity.getPluginView();
+			final int pageIndex = view.getCurPageNo();
+			final ZLTextPositionWithTimestamp local =
+				Collection.getStoredPosition(myBook.getId());
+			if (local == null || pageIndex != local.Position.ParagraphIndex) {
+				Collection.storePosition(
+					myBook.getId(),
+					new ZLTextPositionWithTimestamp(pageIndex, 0, 0, System.currentTimeMillis())
+				);
+				myBook.setProgress(RationalNumber.create(pageIndex, view.getPagesNum()));
+				Collection.saveBook(myBook);
+			}
+		} catch (Throwable t) {
+			// ignore
 		}
 	}
 
