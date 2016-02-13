@@ -29,8 +29,7 @@ import android.os.FileObserver;
 
 import org.geometerplus.zlibrary.core.options.Config;
 
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
-import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
@@ -277,7 +276,7 @@ public class LibraryService extends Service {
 		}
 
 		public PositionWithTimestamp getStoredPosition(long bookId) {
-			final ZLTextPosition position = myCollection.getStoredPosition(bookId);
+			final ZLTextPositionWithTimestamp position = myCollection.getStoredPosition(bookId);
 			return position != null ? new PositionWithTimestamp(position) : null;
 		}
 
@@ -285,7 +284,7 @@ public class LibraryService extends Service {
 			if (pos == null) {
 				return;
 			}
-			myCollection.storePosition(bookId, new ZLTextFixedPosition.WithTimestamp(
+			myCollection.storePosition(bookId, new ZLTextPositionWithTimestamp(
 				pos.ParagraphIndex, pos.ElementIndex, pos.CharIndex, pos.Timestamp
 			));
 		}

@@ -168,9 +168,7 @@ public final class FBReaderApp extends ZLApplication {
 		final SynchronousExecutor executor = createExecutor("loadingBook");
 		executor.execute(new Runnable() {
 			public void run() {
-				synchronized (mySyncLock) {
-					openBookInternal(bookToOpen, bookmark, false);
-				}
+				openBookInternal(bookToOpen, bookmark, false);
 			}
 		}, postAction);
 	}
@@ -320,11 +318,8 @@ public final class FBReaderApp extends ZLApplication {
 			if (bookmark != null) {
 				bm = bookmark;
 			} else {
-				ZLTextPosition pos = getStoredPosition(book);
-				if (pos == null) {
-					pos = new ZLTextFixedPosition(0, 0, 0);
-				}
-				bm = new Bookmark(Collection, book, "", new EmptyTextSnippet(pos), false);
+				final ZLTextPositionWithTimestamp pos = getStoredPosition(book);
+				bm = new Bookmark(Collection, book, "", new EmptyTextSnippet(pos.Position), false);
 			}
 			myExternalFileOpener.openFile((ExternalFormatPlugin)plugin, book, bm);
 			return;
@@ -336,7 +331,25 @@ public final class FBReaderApp extends ZLApplication {
 			ZLTextHyphenator.Instance().load(book.getLanguage());
 			BookTextView.setModel(Model.getTextModel());
 			setBookmarkHighlightings(BookTextView, null);
-			gotoStoredPosition();
+
+			final ZLTextPositionWithTimestamp local =
+				myPositionManager.getLocallyStoredPosition(book);
+			final ZLTextPositionWithTimestamp remote =
+				mySyncData.getAndCleanPosition(Collection.getHash(book, true));
+
+			if (remote == null) {
+				if (local != null) {
+					BookTextView.gotoPosition(local.Position);
+				}
+			} else {
+				if (local == null || local.Timestamp < remote.Timestamp) {
+					BookTextView.gotoPosition(remote.Position);
+					savePosition(book, remote, BookTextView.getProgress());
+				} else {
+					BookTextView.gotoPosition(local.Position);
+				}
+			}
+
 			if (bookmark == null) {
 				setView(BookTextView);
 			} else {
@@ -436,30 +449,23 @@ public final class FBReaderApp extends ZLApplication {
 
 	private class PositionSaver implements Runnable {
 		private final Book myBook;
-		private final ZLTextPosition myPosition;
+		private final ZLTextPositionWithTimestamp myPosition;
 		private final RationalNumber myProgress;
 
-		PositionSaver(Book book, ZLTextPosition position, RationalNumber progress) {
+		PositionSaver(Book book, ZLTextPositionWithTimestamp position, RationalNumber progress) {
 			myBook = book;
 			myPosition = position;
 			myProgress = progress;
 		}
 
 		public void run() {
-			Collection.storePosition(myBook.getId(), myPosition);
+			myPositionManager.storePositionLocally(myBook, myPosition);
 			myBook.setProgress(myProgress);
 			Collection.saveBook(myBook);
 		}
 	}
 
-	private final Object mySyncLock = new Object();
 	public void useSyncInfo(boolean openOtherBook, Notifier notifier) {
-		synchronized (mySyncLock) {
-			useSyncInfoInternal(openOtherBook, notifier);
-		}
-	}
-
-	private void useSyncInfoInternal(boolean openOtherBook, Notifier notifier) {
 		if (openOtherBook && SyncOptions.ChangeCurrentBook.getValue()) {
 			final Book fromServer = getCurrentServerBook(notifier);
 			if (fromServer != null && !Collection.sameBook(fromServer, Collection.getRecentBook(0))) {
@@ -468,25 +474,75 @@ public final class FBReaderApp extends ZLApplication {
 			}
 		}
 
-		if (myStoredPositionBook != null &&
-			mySyncData.hasPosition(Collection.getHash(myStoredPositionBook, true))) {
-			gotoStoredPosition();
-			storePosition();
+		synchronized (this) {
+			final Book book = Model != null ? Model.Book : null;
+			if (book == null) {
+				return;
+			}
+
+			final ZLTextPositionWithTimestamp remote =
+				mySyncData.getAndCleanPosition(Collection.getHash(book, true));
+			if (remote == null) {
+				return;
+			}
+
+			final ZLTextPositionWithTimestamp local =
+				myPositionManager.getLocallyStoredPosition(book);
+			if (local == null || local.Timestamp < remote.Timestamp) {
+				BookTextView.gotoPosition(remote.Position);
+				savePosition(book, remote, BookTextView.getProgress());
+			}
 		}
 	}
 
 	private final ExecutorService mySaver = Executors.newSingleThreadExecutor();
-	private volatile ZLTextPosition myStoredPosition;
-	private volatile Book myStoredPositionBook;
 
-	private ZLTextFixedPosition getStoredPosition(Book book) {
-		final ZLTextFixedPosition.WithTimestamp fromServer =
+	private class PositionManager {
+		private final ZLTextPositionWithTimestamp NULL_POSITION =
+			new ZLTextPositionWithTimestamp(0, 0, 0, null);
+
+		private final Map<Book,ZLTextPositionWithTimestamp> myPositions =
+			Collections.synchronizedMap(new HashMap<Book,ZLTextPositionWithTimestamp>());
+
+		ZLTextPositionWithTimestamp getLocallyStoredPosition(Book book) {
+			if (book == null) {
+				return null;
+			}
+
+			synchronized (myPositions) {
+				ZLTextPositionWithTimestamp pos = myPositions.get(book);
+				if (pos == null) {
+					pos = Collection.getStoredPosition(book.getId());
+					myPositions.put(book, pos != null ? pos : NULL_POSITION);
+				}
+				return pos != NULL_POSITION ? pos : null;
+			}
+		}
+
+		void storePositionLocally(Book book, ZLTextPositionWithTimestamp position) {
+			if (book == null || position == null) {
+				return;
+			}
+			synchronized (myPositions) {
+				final ZLTextPositionWithTimestamp old = getLocallyStoredPosition(book);
+				if (old != null && position.Position.equals(old.Position)) {
+					return;
+				}
+				myPositions.put(book, position);
+				Collection.storePosition(book.getId(), position);
+			}
+		}
+	}
+	final PositionManager myPositionManager = new PositionManager();
+
+	private ZLTextPositionWithTimestamp getStoredPosition(Book book) {
+		final ZLTextPositionWithTimestamp fromServer =
 			mySyncData.getAndCleanPosition(Collection.getHash(book, true));
-		final ZLTextFixedPosition.WithTimestamp local =
-			Collection.getStoredPosition(book.getId());
+		final ZLTextPositionWithTimestamp local =
+			myPositionManager.getLocallyStoredPosition(book);
 
 		if (local == null) {
-			return fromServer != null ? fromServer : new ZLTextFixedPosition(0, 0, 0);
+			return fromServer != null ? fromServer : new ZLTextPositionWithTimestamp(0, 0, 0, System.currentTimeMillis());
 		} else if (fromServer == null) {
 			return local;
 		} else {
@@ -494,31 +550,26 @@ public final class FBReaderApp extends ZLApplication {
 		}
 	}
 
-	private void gotoStoredPosition() {
-		myStoredPositionBook = Model != null ? Model.Book : null;
-		if (myStoredPositionBook == null) {
+	public synchronized void storePosition() {
+		final Book book = Model != null ? Model.Book : null;
+		if (book == null || BookTextView == null) {
 			return;
 		}
-		myStoredPosition = getStoredPosition(myStoredPositionBook);
-		BookTextView.gotoPosition(myStoredPosition);
-		savePosition();
-	}
 
-	public void storePosition() {
-		final Book bk = Model != null ? Model.Book : null;
-		if (bk != null && bk == myStoredPositionBook && myStoredPosition != null && BookTextView != null) {
-			final ZLTextPosition position = new ZLTextFixedPosition(BookTextView.getStartCursor());
-			if (!myStoredPosition.equals(position)) {
-				myStoredPosition = position;
-				savePosition();
-			}
+		ZLTextPositionWithTimestamp local =
+			myPositionManager.getLocallyStoredPosition(book);
+		final ZLTextFixedPosition position =
+			new ZLTextFixedPosition(BookTextView.getStartCursor());
+
+		if (local == null || !local.Position.equals(position)) {
+			local = new ZLTextPositionWithTimestamp(position, System.currentTimeMillis());
+			savePosition(book, local, BookTextView.getProgress());
 		}
 	}
 
-	private void savePosition() {
-		final RationalNumber progress = BookTextView.getProgress();
+	private void savePosition(Book book, ZLTextPositionWithTimestamp position, RationalNumber progress) {
 		synchronized (mySaver) {
-			mySaver.execute(new PositionSaver(myStoredPositionBook, myStoredPosition, progress));
+			mySaver.execute(new PositionSaver(book, position, progress));
 		}
 	}
 
@@ -657,9 +708,7 @@ public final class FBReaderApp extends ZLApplication {
 			final SynchronousExecutor executor = createExecutor("loadingBook");
 			executor.execute(new Runnable() {
 				public void run() {
-					synchronized (mySyncLock) {
-						openBookInternal(current, null, true);
-					}
+					openBookInternal(current, null, true);
 				}
 			}, null);
 		} else {

@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.geometerplus.zlibrary.core.util.MiscUtil;
 import org.geometerplus.zlibrary.core.util.RationalNumber;
-import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 import org.geometerplus.fbreader.formats.BookReadingException;
 
@@ -75,11 +75,14 @@ class BookMergeHelper {
 	}
 
 	private boolean mergePositions(DbBook base, DbBook duplicate) {
-		if (myCollection.getStoredPosition(base.getId()) != null) {
+		final ZLTextPositionWithTimestamp position =
+			myCollection.getStoredPosition(duplicate.getId());
+		if (position == null) {
 			return false;
 		}
-		final ZLTextPosition position = myCollection.getStoredPosition(duplicate.getId());
-		if (position == null) {
+		final ZLTextPositionWithTimestamp old =
+			myCollection.getStoredPosition(base.getId());
+		if (old != null && old.Timestamp >= position.Timestamp) {
 			return false;
 		}
 		myCollection.storePosition(base.getId(), position);

@@ -28,8 +28,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.MiscUtil;
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 
-import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
-import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 import org.geometerplus.fbreader.formats.*;
 
@@ -777,11 +776,11 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 		myDatabase.purgeBookmarks(uids);
 	}
 
-	public ZLTextFixedPosition.WithTimestamp getStoredPosition(long bookId) {
+	public ZLTextPositionWithTimestamp getStoredPosition(long bookId) {
 		return myDatabase.getStoredPosition(bookId);
 	}
 
-	public void storePosition(long bookId, ZLTextPosition position) {
+	public void storePosition(long bookId, ZLTextPositionWithTimestamp position) {
 		if (bookId != -1) {
 			myDatabase.storePosition(bookId, position);
 		}

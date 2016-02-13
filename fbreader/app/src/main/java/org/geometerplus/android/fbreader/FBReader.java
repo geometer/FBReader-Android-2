@@ -168,22 +168,18 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 				NotificationUtil.drop(this, myBook);
 			}
 		}
-		Config.Instance().runOnConnect(new Runnable() {
+		myFBReaderApp.openBook(myBook, bookmark, new Runnable() {
 			public void run() {
-				myFBReaderApp.openBook(myBook, bookmark, new Runnable() {
-					public void run() {
-						if (action != null) {
-							action.run();
-						}
-						hideBars();
-						if (DeviceType.Instance() == DeviceType.YOTA_PHONE) {
-							refreshYotaScreen();
-						}
-					}
-				}, myNotifier);
-				AndroidFontUtil.clearFontCache();
+				if (action != null) {
+					action.run();
+				}
+				hideBars();
+				if (DeviceType.Instance() == DeviceType.YOTA_PHONE) {
+					refreshYotaScreen();
+				}
 			}
-		});
+		}, myNotifier);
+		AndroidFontUtil.clearFontCache();
 	}
 
 	private Book createBookForFile(ZLFile file) {
@@ -963,7 +959,13 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 
 	private BroadcastReceiver mySyncUpdateReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
-			myFBReaderApp.useSyncInfo(myResumeTimestamp + 10 * 1000 > System.currentTimeMillis(), myNotifier);
+			getCollection().bindToService(FBReader.this, new Runnable() {
+				public void run() {
+					myFBReaderApp.useSyncInfo(
+						myResumeTimestamp + 10 * 1000 > System.currentTimeMillis(), myNotifier
+					);
+				}
+			});
 		}
 	};
 
