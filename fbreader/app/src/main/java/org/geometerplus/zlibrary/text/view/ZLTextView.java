@@ -76,6 +76,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		mySelection.clear();
 		myHighlightings.clear();
 		mySections.clear();
+		myStartPages.clear();
+		myEndPages.clear();
 
 		myModel = model;
 		myCurrentPage.reset();
