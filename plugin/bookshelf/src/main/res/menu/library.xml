@@ -74,6 +74,10 @@
 		android:title="@string/menu_buy_premium"
 	/>
 	<item
+		android:id="@+id/bks_library_menu_get_premium"
+		android:title="@string/menu_get_premium"
+	/>
+	<item
 		android:id="@+id/bks_library_menu_about"
 		android:title="@string/menu_about"
 	/>
