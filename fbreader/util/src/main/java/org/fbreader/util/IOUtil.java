@@ -1,8 +1,42 @@
 package org.fbreader.util;
 
 import java.io.*;
+import java.util.Date;
 
 public class IOUtil {
+	public static void log2File(String filename, String text) {
+		if (filename == null) {
+			return;
+		}
+
+		Writer writer = null;
+		try {
+			writer = new FileWriter(filename, true);
+			writer.write("[" + new Date() + "] " + text + "\n");
+		} catch (IOException e) {
+			// ignore
+		} finally {
+			closeQuietly(writer);
+		}
+	}
+
+	public static void log2File(String filename, Throwable exc) {
+		if (filename == null) {
+			return;
+		}
+
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(new FileOutputStream(filename, true));
+			writer.write("[" + new Date() + "] ");
+			exc.printStackTrace(writer);
+		} catch (IOException e) {
+			// ignore
+		} finally {
+			closeQuietly(writer);
+		}
+	}
+
 	public static File copyToDir(File file, File dstDir, String name) {
 		InputStream is = null;
 		try {
