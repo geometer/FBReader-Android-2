@@ -338,7 +338,7 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 		while (cursor.moveToNext()) {
 			final DbBook book = booksById.get(cursor.getLong(0));
 			if (book != null) {
-				book.addUid(cursor.getString(1), cursor.getString(2));
+				addUid(book, new UID(cursor.getString(1), cursor.getString(2)));
 			}
 		}
 		cursor.close();
@@ -351,7 +351,7 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 		while (cursor.moveToNext()) {
 			final DbBook book = booksById.get(cursor.getLong(0));
 			if (book != null) {
-				book.addLabel(new Label(cursor.getString(2), cursor.getString(1)));
+				addLabel(book, new Label(cursor.getString(2), cursor.getString(1)));
 			}
 		}
 		cursor.close();
@@ -363,7 +363,7 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 		while (cursor.moveToNext()) {
 			final DbBook book = booksById.get(cursor.getLong(0));
 			if (book != null) {
-				book.setProgress(RationalNumber.create(cursor.getLong(1), cursor.getLong(2)));
+				setProgress(book, RationalNumber.create(cursor.getLong(1), cursor.getLong(2)));
 			}
 		}
 		cursor.close();

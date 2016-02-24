@@ -52,19 +52,19 @@ public abstract class AbstractBook extends TitledEntity<AbstractBook> {
 
 	protected interface InfoType {
 		int	Nothing           = 0;
-		int	Title             = 1 << 1;
-		int	Language          = 1 << 2;
-		int	Encoding          = 1 << 3;
+		int	Title             = 1 << 0;
+		int	Language          = 1 << 1;
+		int	Encoding          = 1 << 2;
 		int Headers           = Title | Language | Encoding;
-		int	Authors           = 1 << 4;
-		int	Tags              = 1 << 5;
-		int	Uids              = 1 << 6;
-		int	Series            = 1 << 7;
+		int	Authors           = 1 << 3;
+		int	Tags              = 1 << 4;
+		int	Uids              = 1 << 5;
+		int	Series            = 1 << 6;
 		int Metainfo          = Headers | Authors | Tags | Uids | Series;
-		int	Progress          = 1 << 8;
-		int	Labels            = 1 << 9;
-		int	HasBookmark       = 1 << 10;
-		int Everything        = (1 << 11) - 1;
+		int	Progress          = 1 << 7;
+		int	Labels            = 1 << 8;
+		int	HasBookmark       = 1 << 9;
+		int Everything        = (1 << 10) - 1;
 	};
 	protected volatile int myChangedInfo;
 
