@@ -44,7 +44,7 @@ public final class DbBook extends AbstractBook {
 	DbBook(ZLFile file, FormatPlugin plugin) throws BookReadingException {
 		this(-1, plugin.realBookFile(file), null, null, null);
 		BookUtil.readMetainfo(this, plugin);
-		mySaveState = SaveState.NotSaved;
+		myChangedInfo = InfoType.Metainfo;
 	}
 
 	@Override
@@ -60,68 +60,32 @@ public final class DbBook extends AbstractBook {
 		myUids = database.listUids(myId);
 		myProgress = database.getProgress(myId);
 		HasBookmark = database.hasVisibleBookmark(myId);
-		mySaveState = SaveState.Saved;
+		myChangedInfo = InfoType.Nothing;
 		if (myUids == null || myUids.isEmpty()) {
 			try {
 				BookUtil.getPlugin(pluginCollection, this).readUids(this);
-				save(database, false);
+				save(database);
 			} catch (BookReadingException e) {
 			}
 		}
 	}
 
-	enum WhatIsSaved {
-		Nothing,
-		Progress,
-		Everything;
-	}
-
-	WhatIsSaved save(BooksDatabase database, boolean force) {
-		if (force || myId == -1) {
-			mySaveState = SaveState.NotSaved;
+	int save(final BooksDatabase database) {
+		if (myId == -1) {
+			myChangedInfo = InfoType.Everything;
 		}
 
-		switch (mySaveState) {
-			case Saved:
-				return WhatIsSaved.Nothing;
-			case ProgressNotSaved:
-				return saveProgress(database) ? WhatIsSaved.Progress : WhatIsSaved.Nothing;
-			default:
-			case NotSaved:	
-				return saveFull(database) ? WhatIsSaved.Everything : WhatIsSaved.Nothing;
+		if (myChangedInfo == InfoType.Nothing) {
+			return InfoType.Nothing;
 		}
-	}
 
-	private boolean saveProgress(final BooksDatabase database) {
-		final boolean[] result = new boolean[] { false };
+		final int[] result = new int[] { myChangedInfo };
 		database.executeAsTransaction(new Runnable() {
 			public void run() {
-				if (myId != -1 && myProgress != null) {
-					database.saveBookProgress(myId, myProgress);
-					result[0] = true;
-				}
-			}
-		});
-
-		if (result[0]) {
-			mySaveState = SaveState.Saved;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private boolean saveFull(final BooksDatabase database) {
-		final boolean[] result = new boolean[] { true };
-		database.executeAsTransaction(new Runnable() {
-			public void run() {
-				if (myId >= 0) {
-					final FileInfoSet fileInfos = new FileInfoSet(database, File);
-					database.updateBookInfo(myId, fileInfos.getId(File), myEncoding, myLanguage, getTitle());
-				} else {
+				if (myId == -1) {
 					myId = database.insertBookInfo(File, myEncoding, myLanguage, getTitle());
 					if (myId == -1) {
-						result[0] = false;
+						result[0] = InfoType.Nothing;
 						return;
 					}
 					if (myVisitedHyperlinks != null) {
@@ -130,45 +94,55 @@ public final class DbBook extends AbstractBook {
 						}
 					}
 					database.addBookHistoryEvent(myId, BooksDatabase.HistoryEvent.Added);
+				} else if ((myChangedInfo & InfoType.Headers) != 0) {
+					final FileInfoSet fileInfos = new FileInfoSet(database, File);
+					database.updateBookInfo(myId, fileInfos.getId(File), myEncoding, myLanguage, getTitle());
 				}
 
 				long index = 0;
-				database.deleteAllBookAuthors(myId);
-				for (Author author : authors()) {
-					database.saveBookAuthorInfo(myId, index++, author);
-				}
-				database.deleteAllBookTags(myId);
-				for (Tag tag : tags()) {
-					database.saveBookTagInfo(myId, tag);
-				}
-				final List<Label> labelsInDb = database.listLabels(myId);
-				for (Label label : labelsInDb) {
-					if (myLabels == null || !myLabels.contains(label)) {
-						database.removeLabel(myId, label);
+				if ((myChangedInfo & InfoType.Authors) != 0) {
+					database.deleteAllBookAuthors(myId);
+					for (Author author : authors()) {
+						database.saveBookAuthorInfo(myId, index++, author);
 					}
 				}
-				if (myLabels != null) {
-					for (Label label : myLabels) {
-						database.addLabel(myId, label);
+				if ((myChangedInfo & InfoType.Tags) != 0) {
+					database.deleteAllBookTags(myId);
+					for (Tag tag : tags()) {
+						database.saveBookTagInfo(myId, tag);
 					}
 				}
-				database.saveBookSeriesInfo(myId, mySeriesInfo);
-				database.deleteAllBookUids(myId);
-				for (UID uid : uids()) {
-					database.saveBookUid(myId, uid);
+				if ((myChangedInfo & InfoType.Series) != 0) {
+					database.saveBookSeriesInfo(myId, mySeriesInfo);
 				}
-				if (myProgress != null) {
+				if ((myChangedInfo & InfoType.Uids) != 0) {
+					database.deleteAllBookUids(myId);
+					for (UID uid : uids()) {
+						database.saveBookUid(myId, uid);
+					}
+				}
+
+				if ((myChangedInfo & InfoType.Labels) != 0) {
+					final List<Label> labelsInDb = database.listLabels(myId);
+					for (Label label : labelsInDb) {
+						if (myLabels == null || !myLabels.contains(label)) {
+							database.removeLabel(myId, label);
+						}
+					}
+					if (myLabels != null) {
+						for (Label label : myLabels) {
+							database.addLabel(myId, label);
+						}
+					}
+				}
+				if ((myChangedInfo & InfoType.Progress) != 0 && myProgress != null) {
 					database.saveBookProgress(myId, myProgress);
 				}
 			}
 		});
 
-		if (result[0]) {
-			mySaveState = SaveState.Saved;
-			return true;
-		} else {
-			return false;
-		}
+		myChangedInfo &= ~result[0];
+		return result[0];
 	}
 
 	private void initHyperlinkSet(BooksDatabase database) {
@@ -222,18 +196,23 @@ public final class DbBook extends AbstractBook {
 		if (!MiscUtil.listsEquals(myTags, other.myTags) &&
 			MiscUtil.listsEquals(myTags, base.myTags)) {
 			myTags = other.myTags != null ? new ArrayList<Tag>(other.myTags) : null;
-			mySaveState = SaveState.NotSaved;
+			myChangedInfo |= InfoType.Tags;
 		}
 		if (!ComparisonUtil.equal(mySeriesInfo, other.mySeriesInfo) &&
 			ComparisonUtil.equal(mySeriesInfo, base.mySeriesInfo)) {
 			mySeriesInfo = other.mySeriesInfo;
-			mySaveState = SaveState.NotSaved;
+			myChangedInfo |= InfoType.Series;
 		}
 		if (!MiscUtil.listsEquals(myUids, other.myUids) &&
 			MiscUtil.listsEquals(myUids, base.myUids)) {
 			myUids = other.myUids != null ? new ArrayList<UID>(other.myUids) : null;
-			mySaveState = SaveState.NotSaved;
+			myChangedInfo |= InfoType.Uids;
 		}
+	}
+
+	@Override
+	public void updateFrom(AbstractBook book) {
+		updateFrom(book, book.myChangedInfo);
 	}
 
 	@Override
