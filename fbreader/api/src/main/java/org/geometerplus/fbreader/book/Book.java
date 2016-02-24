@@ -37,7 +37,7 @@ public final class Book extends AbstractBook {
 
 	@Override
 	public void updateFrom(AbstractBook book) {
-		updateFrom(book, SaveState.NotSaved);
+		updateFrom(book, InfoType.Everything);
 	}
 
 	@Override

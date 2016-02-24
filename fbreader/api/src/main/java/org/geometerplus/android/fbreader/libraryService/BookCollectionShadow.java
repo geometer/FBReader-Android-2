@@ -37,6 +37,7 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 public class BookCollectionShadow extends AbstractBookCollection<Book> implements ServiceConnection {
 	private volatile Context myContext;
 	private volatile LibraryInterface myInterface;
+	private volatile long myConnectionTimestamp = -1;
 	private final List<Runnable> myOnBindActions = new LinkedList<Runnable>();
 
 	private final BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -71,6 +72,14 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 					myOnBindActions.add(onBindAction);
 				}
 			}
+
+			final long ts = System.currentTimeMillis();
+			if (myContext == context && ts <= myConnectionTimestamp + 10 * 1000) {
+				return true;
+			} else {
+				myConnectionTimestamp = ts;
+			}
+
 			final boolean result = context.bindService(
 				FBReaderIntents.internalIntent(FBReaderIntents.Action.LIBRARY_SERVICE),
 				this,
@@ -78,6 +87,8 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 			);
 			if (result) {
 				myContext = context;
+			} else {
+				myConnectionTimestamp = -1;
 			}
 			return result;
 		}
@@ -98,6 +109,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 				e.printStackTrace();
 			}
 			myInterface = null;
+			myConnectionTimestamp = -1;
 			myContext = null;
 		}
 	}
@@ -621,6 +633,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 	public void onServiceConnected(ComponentName name, IBinder service) {
 		synchronized (this) {
 			myInterface = LibraryInterface.Stub.asInterface(service);
+			myConnectionTimestamp = -1;
 		}
 
 		final List<Runnable> actions;
