@@ -429,10 +429,10 @@ public final class ZLTextPlainModel implements ZLTextModel, ZLTextStyleEntry.Fea
 	}
 
 	public final int getTextLength(int index) {
-		if (myTextSizes.length == 0) {
+		if (index < 0 || myTextSizes.length == 0 || myParagraphsNumber == 0) {
 			return 0;
 		}
-		return myTextSizes[Math.max(Math.min(index, myParagraphsNumber - 1), 0)];
+		return myTextSizes[Math.min(index, myParagraphsNumber - 1)];
 	}
 
 	private static int binarySearch(int[] array, int length, int value) {
