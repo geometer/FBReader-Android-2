@@ -74,7 +74,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 			}
 
 			final long ts = System.currentTimeMillis();
-			if (myContext == context && ts <= myConnectionTimestamp + 10 * 1000) {
+			if (myContext == context && ts <= myConnectionTimestamp + 1000) {
 				return true;
 			} else {
 				myConnectionTimestamp = ts;
