@@ -8,13 +8,14 @@ import android.app.Application;
 import android.content.*;
 import android.content.pm.*;
 import android.content.res.Configuration;
-import android.net.Uri;
+import android.net.*;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -545,11 +546,20 @@ public final class LibraryActivity extends FullActivity {
 			.create().show();
 	}
 
+	private static final String CODE_NETWORK_FAILURE = new String();
 	private String getPremiumCode() {
+		final ConnectivityManager manager =
+			(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+		final NetworkInfo info = manager != null ? manager.getActiveNetworkInfo() : null;
+		if (info == null || !info.isConnected()) {
+			return CODE_NETWORK_FAILURE;
+		}
+
+		final HttpURLConnection connection;
 		try {
 			final String s = "https://books.fbreader.org/promo/code";
 			final URL url = new URL(s.replace("o/", "oz/"));
-			final HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+			connection = (HttpURLConnection)url.openConnection();
 
 			connection.setDoOutput(true);
 			final StringBuilder buffer = new StringBuilder();
@@ -570,7 +580,12 @@ public final class LibraryActivity extends FullActivity {
 			writer.write(buffer.toString());
 			writer.flush();
 			writer.close();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return CODE_NETWORK_FAILURE;
+		}
 
+		try {
 			final Object response =
 				JSONValue.parse(new InputStreamReader(connection.getInputStream()));
 			final String code = ((Map<String,String>)response).get("code");
@@ -585,28 +600,41 @@ public final class LibraryActivity extends FullActivity {
 		new Thread() {
 			public void run() {
 				final String code = getPremiumCode();
-				final CharSequence text;
-				if (code != null) {
-					text = Html.fromHtml(getResources().getString(R.string.promocode_instruction, code));
+				final String text;
+				final boolean error;
+				if (code == null) {
+					text = getResources().getString(R.string.promocode_failure);
+					error = true;
+				} else if (code == CODE_NETWORK_FAILURE) {
+					text = getResources().getString(R.string.promocode_network_failure);
+					error = true;
 				} else {
-					text = code;
+					text = getResources().getString(R.string.promocode_instruction, code);
+					error = false;
 				}
 				runOnUiThread(new Runnable() {
 					public void run() {
-						new MDAlertDialogBuilder(LibraryActivity.this)
-							.setTitle(R.string.menu_get_premium)
-							.setMessage(text)
-							.setPositiveButton(
+						final AlertDialog.Builder builder =
+							new MDAlertDialogBuilder(LibraryActivity.this)
+								.setTitle(R.string.menu_get_premium)
+								.setMessage(Html.fromHtml(text));
+						if (error) {
+							builder.setPositiveButton(
+								R.string.button_ok, null
+							);
+						} else {
+							builder.setPositiveButton(
 								R.string.copy_to_clipboard,
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog, int which) {
 										final ClipboardManager clipboard =
 											(ClipboardManager)getApplicationContext().getSystemService(Application.CLIPBOARD_SERVICE);
-										clipboard.setPrimaryClip(ClipData.newPlainText("FBReader", text));
+										clipboard.setPrimaryClip(ClipData.newPlainText("FBReader", code));
 									}
 								}
-							)
-							.create().show();
+							);
+						}
+						builder.create().show();
 					}
 				});
 			}
