@@ -73,6 +73,10 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 				}
 			}
 
+			if (context == null) {
+				return false;
+			}
+
 			final long ts = System.currentTimeMillis();
 			if (myContext == context && ts <= myConnectionTimestamp + 1000) {
 				return true;
@@ -95,7 +99,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 	}
 
 	public synchronized void unbind() {
-		if (myContext != null && myInterface != null) {
+		if (myContext != null) {
 			try {
 				myContext.unregisterReceiver(myReceiver);
 			} catch (IllegalArgumentException e) {
@@ -108,10 +112,10 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			myInterface = null;
-			myConnectionTimestamp = -1;
-			myContext = null;
 		}
+		myInterface = null;
+		myConnectionTimestamp = -1;
+		myContext = null;
 	}
 
 	public synchronized void reset(boolean force) {
@@ -425,13 +429,19 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 		}
 	}
 
-	public synchronized void storePosition(long bookId, ZLTextPositionWithTimestamp position) {
-		if (position != null && myInterface != null) {
-			try {
-				myInterface.storePosition(bookId, new PositionWithTimestamp(position));
-			} catch (RemoteException e) {
-			}
+	public synchronized void storePosition(final long bookId, final ZLTextPositionWithTimestamp position) {
+		if (position == null) {
+			return;
 		}
+
+		bindToService(myContext, new Runnable() {
+			public void run() {
+				try {
+					myInterface.storePosition(bookId, new PositionWithTimestamp(position));
+				} catch (RemoteException e) {
+				}
+			}
+		});
 	}
 
 	public synchronized boolean isHyperlinkVisited(Book book, String linkId) {
@@ -490,15 +500,17 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 		});
 	}
 
-	public synchronized void saveBookmark(Bookmark bookmark) {
-		if (myInterface != null) {
-			try {
-				bookmark.update(SerializerUtil.deserializeBookmark(
-					myInterface.saveBookmark(SerializerUtil.serialize(bookmark))
-				));
-			} catch (RemoteException e) {
+	public synchronized void saveBookmark(final Bookmark bookmark) {
+		bindToService(myContext, new Runnable() {
+			public void run() {
+				try {
+					bookmark.update(SerializerUtil.deserializeBookmark(
+						myInterface.saveBookmark(SerializerUtil.serialize(bookmark))
+					));
+				} catch (RemoteException e) {
+				}
 			}
-		}
+		});
 	}
 
 	public synchronized void deleteBookmark(Bookmark bookmark) {
