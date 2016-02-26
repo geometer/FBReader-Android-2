@@ -18,8 +18,14 @@
 	<string name="menu_all_series">Все серии</string>
 	<string name="menu_settings">Настройки</string>
 	<string name="menu_buy_premium">Купить FBReader Premium</string>
+	<string name="menu_get_premium">Код для FBReader Premium</string>
 	<string name="menu_about">О программе</string>
 	<string name="menu_whatsnew">Что нового</string>
+
+	<string name="promocode_instruction">Ваш промокод %s. Для использования:&lt;br/&gt;&lt;br/&gt;1. Скопируйте промокод&lt;br/&gt;2. Запустите приложение Play Маркет&lt;br/&gt;3. Выберите пункт «Активировать промокод» в меню&lt;br/&gt;4. Вставьте код и нажмите «Отправить»&lt;br/&gt;5. Готово, вы получили возможность установить FBReader Premium!</string>
+	<string name="promocode_failure">В данный момент промокод не доступен. Попробуйте ещё раз через некоторое время.</string>
+	<string name="promocode_network_failure">Ошибка при соединении с сетью. Проверьте, подключено ли устройство к сети и попробуйте ещё раз.</string>
+	<string name="copy_to_clipboard">Скопировать</string>
 
 	<string name="shared_from_fbreader">Отправлено из &lt;a href=&quot;https://ru.fbreader.org/&quot;&gt;FBReader&lt;/a&gt;"</string>
 

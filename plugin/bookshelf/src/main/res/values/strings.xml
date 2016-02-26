@@ -18,8 +18,14 @@
 	<string name="menu_all_series">All series</string>
 	<string name="menu_settings">Settings</string>
 	<string name="menu_buy_premium">Buy FBReader Premium</string>
+	<string name="menu_get_premium">Get FBReader Premium</string>
 	<string name="menu_about">About the program</string>
 	<string name="menu_whatsnew">What\'s new</string>
+
+	<string name="promocode_instruction">Your promo code is %s. To redeem:&lt;br/&gt;&lt;br/&gt;1. Copy the code to clipboard&lt;br/&gt;2. Open Google Play application&lt;br/&gt;3. Select “Redeem” in the menu&lt;br/&gt;4. Paste your code and press “Redeem”&lt;br/&gt;5. Enjoy!</string>
+	<string name="promocode_failure">Your promo code is not available at this moment. Please try again later.</string>
+	<string name="promocode_network_failure">Network connection failure. Please check your connection and try again.</string>
+	<string name="copy_to_clipboard">Copy to clipboard</string>
 
 	<string name="shared_from_fbreader">Shared from &lt;a href=&quot;https://fbreader.org/&quot;&gt;FBReader&lt;/a&gt;</string>
 

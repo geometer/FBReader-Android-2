@@ -1,19 +1,21 @@
 package org.fbreader.plugin.library;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
+import android.app.Application;
 import android.content.*;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.content.pm.*;
 import android.content.res.Configuration;
-import android.net.Uri;
+import android.net.*;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -23,6 +25,8 @@ import android.widget.*;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
+import org.json.simple.JSONValue;
 
 import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.md.MDAlertDialogBuilder;
@@ -87,6 +91,7 @@ public final class LibraryActivity extends FullActivity {
 	private final BooksAdapter myBooksAdapter = new BooksAdapter(this);
 
 	private IabHelper myIabHelper;
+	private volatile String myOrderId;
 
 	private GridView myGrid;
 	private DrawerAdapter myDrawerAdapter;
@@ -160,12 +165,19 @@ public final class LibraryActivity extends FullActivity {
 						myIabHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
 							public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
 								if (result.isSuccess()) {
-									setAdState(
-										(inventory.getPurchase(PURCHASE_ID_V1) != null ||
-										 inventory.getPurchase(PURCHASE_ID_V2) != null ||
-										 inventory.getPurchase(PURCHASE_ID_V2_PLUS) != null)
-											? AdState.removed : AdState.active
-									);
+									Purchase purchase = inventory.getPurchase(PURCHASE_ID_V1);
+									if (purchase == null) {
+										purchase = inventory.getPurchase(PURCHASE_ID_V2);
+									}
+									if (purchase == null) {
+										purchase = inventory.getPurchase(PURCHASE_ID_V2_PLUS);
+									}
+									if (purchase != null) {
+										setAdState(AdState.removed);
+										myOrderId = purchase.getOrderId();
+									} else {
+										setAdState(AdState.active);
+									}
 								}
 							}
 						});
@@ -406,6 +418,8 @@ public final class LibraryActivity extends FullActivity {
 
         final MenuItem buyPremiumItem = menu.findItem(R.id.bks_library_menu_buy_premium);
 		buyPremiumItem.setVisible(myAdState == AdState.active);
+        final MenuItem getPremiumItem = menu.findItem(R.id.bks_library_menu_get_premium);
+		getPremiumItem.setVisible(myOrderId != null);
 
         final MenuItem rescanItem = menu.findItem(R.id.bks_library_menu_rescan);
 		rescanItem.setEnabled(Collection.status().IsComplete);
@@ -486,6 +500,9 @@ public final class LibraryActivity extends FullActivity {
 		} else if (itemId == R.id.bks_library_menu_buy_premium) {
 			showPremiumDialog();
 			return true;
+		} else if (itemId == R.id.bks_library_menu_get_premium) {
+			showPremiumCodeDialog();
+			return true;
 		} else if (itemId == R.id.bks_library_menu_about) {
 			String version;
 			try {
@@ -527,6 +544,101 @@ public final class LibraryActivity extends FullActivity {
 			.setTitle(titleId)
 			.setView(textView)
 			.create().show();
+	}
+
+	private static final String CODE_NETWORK_FAILURE = new String();
+	private String getPremiumCode() {
+		final ConnectivityManager manager =
+			(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+		final NetworkInfo info = manager != null ? manager.getActiveNetworkInfo() : null;
+		if (info == null || !info.isConnected()) {
+			return CODE_NETWORK_FAILURE;
+		}
+
+		final HttpURLConnection connection;
+		try {
+			final String s = "https://books.fbreader.org/promo/code";
+			final URL url = new URL(s.replace("o/", "oz/"));
+			connection = (HttpURLConnection)url.openConnection();
+
+			connection.setDoOutput(true);
+			final StringBuilder buffer = new StringBuilder();
+			buffer.append("user=");
+			buffer.append(URLEncoder.encode(myOrderId, "UTF-8"));
+			final BufferedWriter writer =
+				new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+			buffer.append("&signature=");
+			final Signature[] signatures =
+				getPackageManager().getPackageInfo(
+					getPackageName(), PackageManager.GET_SIGNATURES
+				).signatures;
+			if (signatures.length != 1) {
+				return null;
+			}
+			buffer.append(signatures[0].toCharsString().substring(40, 80));
+			buffer.append("&campaign=bookshelf");
+			writer.write(buffer.toString());
+			writer.flush();
+			writer.close();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return CODE_NETWORK_FAILURE;
+		}
+
+		try {
+			final Object response =
+				JSONValue.parse(new InputStreamReader(connection.getInputStream()));
+			final String code = ((Map<String,String>)response).get("code");
+			return new StringBuilder(code).reverse().toString();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return null;
+		}
+	}
+
+	private void showPremiumCodeDialog() {
+		new Thread() {
+			public void run() {
+				final String code = getPremiumCode();
+				final String text;
+				final boolean error;
+				if (code == null) {
+					text = getResources().getString(R.string.promocode_failure);
+					error = true;
+				} else if (code == CODE_NETWORK_FAILURE) {
+					text = getResources().getString(R.string.promocode_network_failure);
+					error = true;
+				} else {
+					text = getResources().getString(R.string.promocode_instruction, code);
+					error = false;
+				}
+				runOnUiThread(new Runnable() {
+					public void run() {
+						final AlertDialog.Builder builder =
+							new MDAlertDialogBuilder(LibraryActivity.this)
+								.setTitle(R.string.menu_get_premium)
+								.setMessage(Html.fromHtml(text));
+						if (error) {
+							builder.setPositiveButton(
+								R.string.button_ok, null
+							);
+						} else {
+							builder.setPositiveButton(
+								R.string.copy_to_clipboard,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int which) {
+										final ClipboardManager clipboard =
+											(ClipboardManager)getApplicationContext().getSystemService(Application.CLIPBOARD_SERVICE);
+										clipboard.setPrimaryClip(ClipData.newPlainText("FBReader", code));
+									}
+								}
+							);
+						}
+						builder.create().show();
+					}
+				});
+			}
+		}.start();
 	}
 
 	private void showPremiumDialog() {
