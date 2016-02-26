@@ -275,7 +275,7 @@ public class LitResAuthenticationManager extends NetworkAuthenticationManager {
 	}
 
 	@Override
-	public String topupLink(Money sum) {
+	public String topupLink(ZLNetworkContext nc, Money sum) throws ZLNetworkException {
 		final String sid;
 		synchronized (this) {
 			sid = mySidOption.getValue();
@@ -287,7 +287,16 @@ public class LitResAuthenticationManager extends NetworkAuthenticationManager {
 		if (url == null) {
 			return null;
 		}
-		url = ZLNetworkUtil.appendParameter(url, "sid", sid);
+
+		final LitResOnetimeSidXMLReader xmlReader = new LitResOnetimeSidXMLReader();
+		final LitResNetworkRequest request = new LitResNetworkRequest(
+			LitResUtil.url(Link, "pages/catalit_get_onetime_sid/"),
+			xmlReader
+		);
+		request.addPostParameter("sid", sid);
+
+		nc.perform(request);
+		url = ZLNetworkUtil.appendParameter(url, "otsid", xmlReader.Sid);
 		if (sum != null) {
 			url = ZLNetworkUtil.appendParameter(url, "summ", String.valueOf(sum.Amount));
 		}
