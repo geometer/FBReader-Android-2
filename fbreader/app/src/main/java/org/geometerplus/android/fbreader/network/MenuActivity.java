@@ -56,8 +56,9 @@ abstract class MenuActivity extends FBListActivity implements AdapterView.OnItem
 	}
 
 	public final void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		runItem(myInfos.get(position));
-		finish();
+		if (runItem(myInfos.get(position))) {
+			finish();
+		}
 	}
 
 	private boolean finishInitialization() {
@@ -68,8 +69,9 @@ abstract class MenuActivity extends FBListActivity implements AdapterView.OnItem
 				finish();
 				return true;
 			case 1:
-				runItem(myInfos.get(0));
-				finish();
+				if (runItem(myInfos.get(0))) {
+					finish();
+				}
 				return true;
 		}
 	}
@@ -95,7 +97,7 @@ abstract class MenuActivity extends FBListActivity implements AdapterView.OnItem
 
 	protected abstract void init();
 	protected abstract String getAction();
-	protected abstract void runItem(final PluginApi.MenuActionInfo info);
+	protected abstract boolean runItem(final PluginApi.MenuActionInfo info);
 
 	private class ActionListAdapter extends BaseAdapter {
 		public final int getCount() {
