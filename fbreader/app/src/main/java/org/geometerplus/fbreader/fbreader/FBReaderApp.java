@@ -72,6 +72,7 @@ public final class FBReaderApp extends ZLApplication {
 	private String myFootnoteModelId;
 
 	public volatile BookModel Model;
+	private volatile boolean myOpenInProgress = false;
 
 	private ZLTextPosition myJumpEndPosition;
 	private Date myJumpTimeStamp;
@@ -326,28 +327,33 @@ public final class FBReaderApp extends ZLApplication {
 		}
 
 		try {
-			Model = BookModel.createModel(book, plugin);
-			Collection.saveBook(book);
-			ZLTextHyphenator.Instance().load(book.getLanguage());
-			BookTextView.setModel(Model.getTextModel());
-			setBookmarkHighlightings(BookTextView, null);
+			try {
+				myOpenInProgress = true;
+				Model = BookModel.createModel(book, plugin);
+				Collection.saveBook(book);
+				ZLTextHyphenator.Instance().load(book.getLanguage());
+				BookTextView.setModel(Model.getTextModel());
+				setBookmarkHighlightings(BookTextView, null);
 
-			final ZLTextPositionWithTimestamp local =
-				myPositionManager.getLocallyStoredPosition(book);
-			final ZLTextPositionWithTimestamp remote =
-				mySyncData.getAndCleanPosition(Collection.getHash(book, true));
+				final ZLTextPositionWithTimestamp local =
+					myPositionManager.getLocallyStoredPosition(book);
+				final ZLTextPositionWithTimestamp remote =
+					mySyncData.getAndCleanPosition(Collection.getHash(book, true));
 
-			if (remote == null) {
-				if (local != null) {
-					BookTextView.gotoPosition(local.Position);
-				}
-			} else {
-				if (local == null || local.Timestamp < remote.Timestamp) {
-					BookTextView.gotoPosition(remote.Position);
-					savePosition(book, remote, BookTextView.getProgress());
+				if (remote == null) {
+					if (local != null) {
+						BookTextView.gotoPosition(local.Position);
+					}
 				} else {
-					BookTextView.gotoPosition(local.Position);
+					if (local == null || local.Timestamp < remote.Timestamp) {
+						BookTextView.gotoPosition(remote.Position);
+						savePosition(book, remote, BookTextView.getProgress());
+					} else {
+						BookTextView.gotoPosition(local.Position);
+					}
 				}
+			} finally {
+				myOpenInProgress = false;
 			}
 
 			if (bookmark == null) {
@@ -556,6 +562,10 @@ public final class FBReaderApp extends ZLApplication {
 	}
 
 	public void storePosition() {
+		if (myOpenInProgress) {
+			return;
+		}
+
 		final Book book = Model != null ? Model.Book : null;
 		if (book == null || BookTextView == null) {
 			return;

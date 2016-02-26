@@ -22,6 +22,7 @@ package org.geometerplus.fbreader.network.authentication;
 import java.util.*;
 
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
+import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.money.Money;
 
@@ -110,7 +111,7 @@ public abstract class NetworkAuthenticationManager {
 	 * topup account
 	 */
 
-	public String topupLink(Money sum) {
+	public String topupLink(ZLNetworkContext nc, Money sum) throws ZLNetworkException {
 		return null;
 	}
 	public Map<String,String> getTopupData() {

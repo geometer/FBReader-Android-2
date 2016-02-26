@@ -52,6 +52,15 @@ public abstract class BooksDatabase {
 	protected void setSeriesInfo(DbBook book, String series, String index) {
 		book.setSeriesInfoWithNoCheck(series, index);
 	}
+	protected void addLabel(DbBook book, Label label) {
+		book.addLabelWithNoCheck(label);
+	}
+	protected void addUid(DbBook book, UID uid) {
+		book.addUidWithNoCheck(uid);
+	}
+	protected void setProgress(DbBook book, RationalNumber progress) {
+		book.setProgressWithNoCheck(progress);
+	}
 
 	protected abstract void executeAsTransaction(Runnable actions);
 

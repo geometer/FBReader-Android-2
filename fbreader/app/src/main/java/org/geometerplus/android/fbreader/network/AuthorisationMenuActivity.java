@@ -84,7 +84,7 @@ public class AuthorisationMenuActivity extends MenuActivity {
 	}
 
 	@Override
-	protected void runItem(final PluginApi.MenuActionInfo info) {
+	protected boolean runItem(final PluginApi.MenuActionInfo info) {
 		try {
 			final NetworkAuthenticationManager mgr = myLink.authenticationManager();
 			if (info.getId().toString().endsWith("/signIn")) {
@@ -97,5 +97,6 @@ public class AuthorisationMenuActivity extends MenuActivity {
 		} catch (Exception e) {
 			// do nothing
 		}
+		return true;
 	}
 }
