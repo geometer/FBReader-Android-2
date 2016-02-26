@@ -38,8 +38,7 @@ import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationMan
 import org.geometerplus.android.util.PackageUtil;
 
 import org.geometerplus.android.fbreader.api.PluginApi;
-
-import com.fbreader.android.fbreader.network.auth.ActivityNetworkContext;
+import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 
 public class TopupMenuActivity extends MenuActivity {
 	private static final String AMOUNT_KEY = "topup:amount";
