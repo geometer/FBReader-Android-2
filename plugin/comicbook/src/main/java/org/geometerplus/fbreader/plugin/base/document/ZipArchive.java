@@ -25,6 +25,9 @@ public class ZipArchive extends OneLevelImageArchive {
 	}
 
 	private InputStream getInputStream(int pageNo) throws IOException {
+		if (pageNo < 0 || pageNo >= myContents.size()) {
+			return null;
+		}
 		return getInputStream(myContents.get(pageNo));
 	}
 
@@ -39,6 +42,9 @@ public class ZipArchive extends OneLevelImageArchive {
 		InputStream is = null;
 		try {
 			is = getInputStream(pageNo);
+			if (is == null) {
+				return null;
+			}
 			BitmapFactory.decodeStream(is, null, options);
 		} finally {
 			IOUtil.closeQuietly(is);
@@ -51,6 +57,9 @@ public class ZipArchive extends OneLevelImageArchive {
 		InputStream is = null;
 		try {
 			is = getInputStream(pageNo);
+			if (is == null) {
+				return null;
+			}
 			final BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize = scaleFactor;
 			return BitmapFactory.decodeStream(is, null, options);
@@ -66,6 +75,9 @@ public class ZipArchive extends OneLevelImageArchive {
 		InputStream is = null;
 		try {
 			is = getInputStream(0);
+			if (is == null) {
+				return null;
+			}
 			BitmapFactory.decodeStream(is, null, options);
 		} finally {
 			IOUtil.closeQuietly(is);
@@ -81,6 +93,9 @@ public class ZipArchive extends OneLevelImageArchive {
 		}
 		try {
 			is = getInputStream(0);
+			if (is == null) {
+				return null;
+			}
 			return BitmapFactory.decodeStream(is, null, options);
 		} finally {
 			IOUtil.closeQuietly(is);
