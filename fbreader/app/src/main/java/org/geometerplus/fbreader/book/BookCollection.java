@@ -210,7 +210,7 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 		synchronized (myBooksByFile) {
 			final DbBook existing = myBooksByFile.get(book.File);
 			if (existing == null) {
-				if (book.getId() == -1 && book.save(myDatabase, true) == DbBook.WhatIsSaved.Nothing) {
+				if (book.getId() == -1 && book.save(myDatabase) == DbBook.InfoType.Nothing) {
 					return false;
 				}
 
@@ -229,12 +229,14 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 				return true;
 			} else if (force) {
 				existing.updateFrom(book);
-				switch (existing.save(myDatabase, false)) {
-					case Everything:
-						fireBookEvent(BookEvent.Updated, existing);
-						return true;
-					case Progress:
+				switch (existing.save(myDatabase)) {
+					case DbBook.InfoType.Nothing:
+						return false;
+					case DbBook.InfoType.Progress:
 						fireBookEvent(BookEvent.ProgressUpdated, existing);
+						return true;
+					default:
+						fireBookEvent(BookEvent.Updated, existing);
 						return true;
 				}
 			}

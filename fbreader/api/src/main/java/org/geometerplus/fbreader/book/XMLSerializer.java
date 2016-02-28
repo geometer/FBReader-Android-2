@@ -181,7 +181,7 @@ class XMLSerializer extends AbstractSerializer {
 
 		appendTag(
 			buffer, "id", false,
-			"state", String.valueOf(book.mySaveState)
+			"state", String.valueOf(book.myChangedInfo)
 		);
 		buffer.append(String.valueOf(book.getId()));
 		closeTag(buffer, "id");
@@ -556,7 +556,7 @@ class XMLSerializer extends AbstractSerializer {
 		private final StringBuilder mySeriesTitle = new StringBuilder();
 		private final StringBuilder mySeriesIndex = new StringBuilder();
 		private boolean myHasBookmark;
-		private AbstractBook.SaveState mySaveState;
+		private int myChangedInfo;
 		private RationalNumber myProgress;
 
 		private B myBook;
@@ -586,7 +586,7 @@ class XMLSerializer extends AbstractSerializer {
 			myTags.clear();
 			myLabels.clear();
 			myHasBookmark = false;
-			mySaveState = AbstractBook.SaveState.NotSaved;
+			myChangedInfo = AbstractBook.InfoType.Nothing;
 			myProgress = null;
 
 			myState = State.READ_NOTHING;
@@ -615,7 +615,7 @@ class XMLSerializer extends AbstractSerializer {
 			myBook.setSeriesInfoWithNoCheck(string(mySeriesTitle), string(mySeriesIndex));
 			myBook.setProgressWithNoCheck(myProgress);
 			myBook.HasBookmark = myHasBookmark;
-			myBook.mySaveState = mySaveState;
+			myBook.myChangedInfo = myChangedInfo;
 		}
 
 		@Override
@@ -630,12 +630,20 @@ class XMLSerializer extends AbstractSerializer {
 				case READ_ENTRY:
 					if ("id".equals(localName)) {
 						myState = State.READ_ID;
-						try {
-							mySaveState =
-								AbstractBook.SaveState.valueOf(attributes.getValue("state"));
-						} catch (Throwable t) {
-							// communicate with old version of plugin, ignore
-							mySaveState = AbstractBook.SaveState.NotSaved;
+						final String stateString = attributes.getValue("state");
+						if (stateString == null || "NotSaved".equals(stateString)) {
+							myChangedInfo = AbstractBook.InfoType.Everything;
+						} else if ("Saved".equals(stateString)) {
+							myChangedInfo = AbstractBook.InfoType.Nothing;
+						} else if ("ProgressNotSaved".equals(stateString)) {
+							myChangedInfo = AbstractBook.InfoType.Progress;
+						} else {
+							try {
+								myChangedInfo = Integer.parseInt(stateString);
+							} catch (Throwable t) {
+								// communicate with old version of plugin, ignore
+								myChangedInfo = AbstractBook.InfoType.Everything;
+							}
 						}
 					} else if ("title".equals(localName)) {
 						myState = State.READ_TITLE;
