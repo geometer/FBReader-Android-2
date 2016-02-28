@@ -631,24 +631,19 @@ class XMLSerializer extends AbstractSerializer {
 					if ("id".equals(localName)) {
 						myState = State.READ_ID;
 						final String stateString = attributes.getValue("state");
-						switch (attributes.getValue("state")) {
-							case "Saved":
-								myChangedInfo = AbstractBook.InfoType.Nothing;
-								break;
-							case "NotSaved":
+						if (stateString == null || "NotSaved".equals(stateString)) {
+							myChangedInfo = AbstractBook.InfoType.Everything;
+						} else if ("Saved".equals(stateString)) {
+							myChangedInfo = AbstractBook.InfoType.Nothing;
+						} else if ("ProgressNotSaved".equals(stateString)) {
+							myChangedInfo = AbstractBook.InfoType.Progress;
+						} else {
+							try {
+								myChangedInfo = Integer.parseInt(stateString);
+							} catch (Throwable t) {
+								// communicate with old version of plugin, ignore
 								myChangedInfo = AbstractBook.InfoType.Everything;
-								break;
-							case "ProgressNotSaved":
-								myChangedInfo = AbstractBook.InfoType.Progress;
-								break;
-							default:
-								try {
-									myChangedInfo = Integer.parseInt(attributes.getValue("state"));
-								} catch (Throwable t) {
-									// communicate with old version of plugin, ignore
-									myChangedInfo = AbstractBook.InfoType.Everything;
-								}
-								break;
+							}
 						}
 					} else if ("title".equals(localName)) {
 						myState = State.READ_TITLE;
