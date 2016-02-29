@@ -23,13 +23,14 @@ import java.util.*;
 
 import org.json.simple.JSONValue;
 
+import org.fbreader.common.options.SyncOptions;
+
 import org.geometerplus.zlibrary.core.options.*;
 
 import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.book.IBookCollection;
-import org.geometerplus.fbreader.fbreader.options.SyncOptions;
 
 public class SyncData {
 	public final static class ServerBookInfo {

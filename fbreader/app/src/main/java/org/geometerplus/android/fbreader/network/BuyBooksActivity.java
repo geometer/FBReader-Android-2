@@ -31,6 +31,7 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.money.Money;
 
+import org.geometerplus.android.util.UIMessageUtil;
 import org.geometerplus.android.util.UIUtil;
 
 import org.geometerplus.fbreader.network.*;
@@ -129,7 +130,19 @@ public class BuyBooksActivity extends SimpleDialogActivity implements NetworkLib
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		buttonsView().setVisibility(View.VISIBLE);
-		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+			case NetworkLibraryActivity.REQUEST_TOPUP:
+			{
+				final String error = data.getStringExtra(NetworkLibraryActivity.ERROR_KEY);
+				if (error != null) {
+					UIMessageUtil.showMessageText(this, error);
+				}
+				break;
+			}
+			default:
+				super.onActivityResult(requestCode, resultCode, data);
+				break;
+		}
 	}
 
 	private static enum AuthorisationState {

@@ -23,13 +23,13 @@ import android.app.Service;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import org.fbreader.common.options.SyncOptions;
 import org.fbreader.util.ComparisonUtil;
 
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.network.ZLNetworkRequest;
 import org.geometerplus.zlibrary.core.options.ZLEnumOption;
 
-import org.geometerplus.fbreader.fbreader.options.SyncOptions;
 import org.geometerplus.fbreader.network.sync.SyncUtil;
 
 import org.geometerplus.android.fbreader.network.auth.ServiceNetworkContext;

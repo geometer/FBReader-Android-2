@@ -21,10 +21,13 @@ package org.geometerplus.android.fbreader.network;
 
 import java.util.*;
 
+import android.app.Activity;
 import android.content.*;
 import android.net.Uri;
 
 import org.geometerplus.zlibrary.core.money.Money;
+import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
+import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 
 import org.geometerplus.fbreader.network.INetworkLink;
 import org.geometerplus.fbreader.network.NetworkLibrary;
@@ -34,6 +37,7 @@ import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationMan
 import org.geometerplus.android.util.PackageUtil;
 
 import org.geometerplus.android.fbreader.api.PluginApi;
+import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 
 public class TopupMenuActivity extends MenuActivity {
 	private static final String AMOUNT_KEY = "topup:amount";
@@ -44,15 +48,23 @@ public class TopupMenuActivity extends MenuActivity {
 		return link.getUrlInfo(UrlInfo.Type.TopUp) != null;
 	}
 
-	public static void runMenu(Context context, INetworkLink link, Money amount) {
+	public static void runMenu(Activity context, INetworkLink link, Money amount) {
 		final Intent intent =
 			Util.intentByLink(new Intent(context, TopupMenuActivity.class), link);
 		intent.putExtra(AMOUNT_KEY, amount);
-		context.startActivity(intent);
+		context.startActivityForResult(intent, NetworkLibraryActivity.REQUEST_TOPUP);
 	}
+
+	final ActivityNetworkContext myNetworkContext = new ActivityNetworkContext(this);
 
 	private INetworkLink myLink;
 	private Money myAmount;
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		myNetworkContext.onResume();
+	}
 
 	@Override
 	protected void init() {
@@ -75,17 +87,37 @@ public class TopupMenuActivity extends MenuActivity {
 		return Util.TOPUP_ACTION;
 	}
 
+	private void runBrowserPopup() {
+		try {
+			Util.openInBrowser(
+				this,
+				myLink.authenticationManager().topupLink(myNetworkContext, myAmount)
+			);
+		} catch (ZLNetworkException e) {
+			setResult(
+				RESULT_OK,
+				new Intent().putExtra(NetworkLibraryActivity.ERROR_KEY, e.getMessage())
+			);
+		}
+		finish();
+	}
+
 	@Override
-	protected void runItem(final PluginApi.MenuActionInfo info) {
+	protected boolean runItem(final PluginApi.MenuActionInfo info) {
+		setResult(RESULT_OK, null);
+
 		try {
 			doTopup(new Runnable() {
 				public void run() {
 					try {
 						final NetworkAuthenticationManager mgr = myLink.authenticationManager();
 						if (info.getId().toString().endsWith("/browser")) {
-							// TODO: put amount
 							if (mgr != null) {
-								Util.openInBrowser(TopupMenuActivity.this, mgr.topupLink(myAmount));
+								new Thread() {
+									public void run() {
+										runBrowserPopup();
+									}
+								}.start();
 							}
 						} else {
 							final Intent intent = new Intent(getAction(), info.getId());
@@ -100,14 +132,17 @@ public class TopupMenuActivity extends MenuActivity {
 							if (PackageUtil.canBeStarted(TopupMenuActivity.this, intent, true)) {
 								startActivity(intent);
 							}
+							finish();
 						}
 					} catch (ActivityNotFoundException e) {
+						finish();
 					}
 				}
 			});
 		} catch (Exception e) {
-			// do nothing
+			return true;
 		}
+		return false;
 	}
 
 	private void doTopup(final Runnable action) {

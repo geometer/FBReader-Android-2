@@ -26,6 +26,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.KeyEvent;
 
+import org.fbreader.common.options.SyncOptions;
+
 import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.language.Language;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;

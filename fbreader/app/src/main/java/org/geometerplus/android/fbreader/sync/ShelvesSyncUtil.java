@@ -22,10 +22,11 @@ package org.geometerplus.android.fbreader.sync;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
+import org.fbreader.common.options.SyncOptions;
+
 import org.geometerplus.zlibrary.core.network.JsonRequest2;
 
 import org.geometerplus.fbreader.book.*;
-import org.geometerplus.fbreader.fbreader.options.SyncOptions;
 
 class ShelvesSyncUtil {
 	static void sync(SyncNetworkContext context, final IBookCollection<Book> collection) {

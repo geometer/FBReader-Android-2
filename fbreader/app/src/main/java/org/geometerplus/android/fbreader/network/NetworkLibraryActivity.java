@@ -53,12 +53,14 @@ import org.geometerplus.android.util.UIMessageUtil;
 
 public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> implements ListView.OnScrollListener, NetworkLibrary.ChangeListener {
 	public static final int REQUEST_MANAGE_CATALOGS = 1;
-	public static final String ENABLED_CATALOG_IDS_KEY = "android.fbreader.data.enabled_catalogs";
-	public static final String DISABLED_CATALOG_IDS_KEY = "android.fbreader.data.disabled_catalogs";
-
 	public static final int REQUEST_ACCOUNT_PICKER = 2;
 	public static final int REQUEST_AUTHORISATION = 3;
 	public static final int REQUEST_WEB_AUTHORISATION_SCREEN = 4;
+	public static final int REQUEST_TOPUP = 5;
+
+	public static final String ENABLED_CATALOG_IDS_KEY = "android.fbreader.data.enabled_catalogs";
+	public static final String DISABLED_CATALOG_IDS_KEY = "android.fbreader.data.disabled_catalogs";
+	public static final String ERROR_KEY = "android.fbreader.data.error";
 
 	final BookCollectionShadow BookCollection = new BookCollectionShadow();
 	final BookDownloaderServiceConnection Connection = new BookDownloaderServiceConnection();
@@ -211,6 +213,14 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 				final NetworkLibrary library = Util.networkLibrary(this);
 				library.setActiveIds(myIds);
 				library.synchronize();
+				break;
+			}
+			case REQUEST_TOPUP:
+			{
+				final String error = data.getStringExtra(ERROR_KEY);
+				if (error != null) {
+					UIMessageUtil.showMessageText(this, error);
+				}
 				break;
 			}
 		}

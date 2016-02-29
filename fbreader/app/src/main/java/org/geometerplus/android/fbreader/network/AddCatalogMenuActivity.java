@@ -54,7 +54,7 @@ public class AddCatalogMenuActivity extends MenuActivity {
 	}
 
 	@Override
-	protected void runItem(final PluginApi.MenuActionInfo info) {
+	protected boolean runItem(final PluginApi.MenuActionInfo info) {
 		try {
 			startActivity(
 				new Intent(getAction()).addCategory(Intent.CATEGORY_DEFAULT).setData(info.getId())
@@ -62,5 +62,6 @@ public class AddCatalogMenuActivity extends MenuActivity {
 		} catch (ActivityNotFoundException e) {
 		}
 		finish();
+		return false;
 	}
 }

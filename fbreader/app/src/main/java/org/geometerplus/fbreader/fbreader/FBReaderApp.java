@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
+import org.fbreader.common.options.SyncOptions;
 import org.fbreader.util.ComparisonUtil;
 
 import org.geometerplus.zlibrary.core.application.*;
