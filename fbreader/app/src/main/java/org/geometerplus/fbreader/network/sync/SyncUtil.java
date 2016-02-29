@@ -19,9 +19,9 @@
 
 package org.geometerplus.fbreader.network.sync;
 
-import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
+import org.fbreader.common.options.SyncOptions;
 
-import org.geometerplus.fbreader.fbreader.options.SyncOptions;
+import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
 
 public abstract class SyncUtil {
 	public static String getAccountName(ZLNetworkContext context) {

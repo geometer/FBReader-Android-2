@@ -21,10 +21,9 @@ package org.geometerplus.android.fbreader.network;
 
 import java.util.*;
 
+import android.app.Activity;
 import android.content.*;
 import android.net.Uri;
-
-import org.fbreader.md.MDActivity;
 
 import org.geometerplus.zlibrary.core.money.Money;
 import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
@@ -38,8 +37,7 @@ import org.geometerplus.fbreader.network.authentication.NetworkAuthenticationMan
 import org.geometerplus.android.util.PackageUtil;
 
 import org.geometerplus.android.fbreader.api.PluginApi;
-
-import com.fbreader.android.fbreader.network.auth.ActivityNetworkContext;
+import org.geometerplus.android.fbreader.network.auth.ActivityNetworkContext;
 
 public class TopupMenuActivity extends MenuActivity {
 	private static final String AMOUNT_KEY = "topup:amount";
@@ -50,7 +48,7 @@ public class TopupMenuActivity extends MenuActivity {
 		return link.getUrlInfo(UrlInfo.Type.TopUp) != null;
 	}
 
-	public static void runMenu(MDActivity context, INetworkLink link, Money amount) {
+	public static void runMenu(Activity context, INetworkLink link, Money amount) {
 		final Intent intent =
 			Util.intentByLink(new Intent(context, TopupMenuActivity.class), link);
 		intent.putExtra(AMOUNT_KEY, amount);

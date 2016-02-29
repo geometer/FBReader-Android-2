@@ -33,16 +33,15 @@ class LitResOnetimeSidXMLReader extends LitResAuthenticationXMLReader {
 
 	@Override
 	public boolean startElementHandler(String tag, ZLStringMap attributes) {
-		switch (tag.toLowerCase().intern()) {
-			case TAG_AUTHORIZATION_FAILED:
-				setException(new ZLNetworkAuthenticationException());
-				break;
-			case TAG_GOT_SID:
-				Sid = attributes.getValue("otsid");
-				break;
-			default:
+		if (TAG_GOT_SID.equalsIgnoreCase(tag)) {
+			Sid = attributes.getValue("otsid");
+			if (Sid == null) {
 				setException(ZLNetworkException.forCode(NetworkException.ERROR_SOMETHING_WRONG, LitResUtil.HOST_NAME));
-				break;
+			}
+		} else if (TAG_AUTHORIZATION_FAILED.equalsIgnoreCase(tag)) {
+			setException(new ZLNetworkAuthenticationException());
+		} else {
+			setException(ZLNetworkException.forCode(NetworkException.ERROR_SOMETHING_WRONG, LitResUtil.HOST_NAME));
 		}
 		return true;
 	}

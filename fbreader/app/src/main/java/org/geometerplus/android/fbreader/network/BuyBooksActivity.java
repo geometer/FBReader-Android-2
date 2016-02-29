@@ -27,12 +27,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import org.fbreader.reader.android.UIMessageUtil;
-
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.money.Money;
 
+import org.geometerplus.android.util.UIMessageUtil;
 import org.geometerplus.android.util.UIUtil;
 
 import org.geometerplus.fbreader.network.*;
