@@ -132,13 +132,13 @@ public class BuyBooksActivity extends SimpleDialogActivity implements NetworkLib
 		buttonsView().setVisibility(View.VISIBLE);
 		switch (requestCode) {
 			case NetworkLibraryActivity.REQUEST_TOPUP:
-			{
-				final String error = data.getStringExtra(NetworkLibraryActivity.ERROR_KEY);
-				if (error != null) {
-					UIMessageUtil.showMessageText(this, error);
+				if (data != null) {
+					final String error = data.getStringExtra(NetworkLibraryActivity.ERROR_KEY);
+					if (error != null) {
+						UIMessageUtil.showMessageText(this, error);
+					}
 				}
 				break;
-			}
 			default:
 				super.onActivityResult(requestCode, resultCode, data);
 				break;
