@@ -96,6 +96,14 @@ public class LitResAuthenticationManager extends NetworkAuthenticationManager {
 			changed = true;
 			UserNameOption.setValue(username);
 		}
+
+		if (sid == null) {
+			sid = "";
+		}
+		if (userId == null) {
+			userId = "";
+		}
+
 		changed |= !sid.equals(mySidOption.getValue());
 		mySidOption.setValue(sid);
 		changed |= !userId.equals(myUserIdOption.getValue());
