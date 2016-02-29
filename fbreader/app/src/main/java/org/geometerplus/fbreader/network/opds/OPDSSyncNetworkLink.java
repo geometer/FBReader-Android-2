@@ -19,12 +19,12 @@
 
 package org.geometerplus.fbreader.network.opds;
 
+import org.fbreader.common.options.SyncOptions;
+
 import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
 import org.geometerplus.zlibrary.core.network.QuietNetworkContext;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.util.MimeType;
-
-import org.fbreader.common.options.SyncOptions;
 
 import org.geometerplus.fbreader.network.ISyncNetworkLink;
 import org.geometerplus.fbreader.network.NetworkLibrary;

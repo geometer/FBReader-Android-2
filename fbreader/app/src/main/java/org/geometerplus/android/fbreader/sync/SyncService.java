@@ -30,11 +30,12 @@ import android.util.Log;
 
 import org.json.simple.JSONValue;
 
+import org.fbreader.common.options.SyncOptions;
+
 import org.geometerplus.zlibrary.core.network.*;
 import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.ui.android.network.SQLiteCookieDatabase;
 import org.geometerplus.fbreader.book.*;
-import org.fbreader.common.options.SyncOptions;
 import org.geometerplus.fbreader.network.sync.SyncData;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
