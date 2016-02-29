@@ -52,6 +52,7 @@ public class CancelActivity extends FBListActivity {
 		super.onCreate(icicle);
 		setTitleVisible(false);
 		FBReaderUtil.ensureFullscreen(this, getListView());
+
 		myActions.clear();
 		final Intent intent = getIntent();
 		final List<CancelMenuHelper.ActionDescription> actions = intent != null
