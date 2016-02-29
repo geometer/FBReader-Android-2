@@ -37,6 +37,7 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 public class BookCollectionShadow extends AbstractBookCollection<Book> implements ServiceConnection {
 	private volatile Context myContext;
 	private volatile LibraryInterface myInterface;
+	private volatile long myConnectionTimestamp = -1;
 	private final List<Runnable> myOnBindActions = new LinkedList<Runnable>();
 
 	private final BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -71,6 +72,18 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 					myOnBindActions.add(onBindAction);
 				}
 			}
+
+			if (context == null) {
+				return false;
+			}
+
+			final long ts = System.currentTimeMillis();
+			if (myContext == context && ts <= myConnectionTimestamp + 1000) {
+				return true;
+			} else {
+				myConnectionTimestamp = ts;
+			}
+
 			final boolean result = context.bindService(
 				FBReaderIntents.internalIntent(FBReaderIntents.Action.LIBRARY_SERVICE),
 				this,
@@ -78,13 +91,15 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 			);
 			if (result) {
 				myContext = context;
+			} else {
+				myConnectionTimestamp = -1;
 			}
 			return result;
 		}
 	}
 
 	public synchronized void unbind() {
-		if (myContext != null && myInterface != null) {
+		if (myContext != null) {
 			try {
 				myContext.unregisterReceiver(myReceiver);
 			} catch (IllegalArgumentException e) {
@@ -97,9 +112,10 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			myInterface = null;
-			myContext = null;
 		}
+		myInterface = null;
+		myConnectionTimestamp = -1;
+		myContext = null;
 	}
 
 	public synchronized void reset(boolean force) {
@@ -413,13 +429,19 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 		}
 	}
 
-	public synchronized void storePosition(long bookId, ZLTextPositionWithTimestamp position) {
-		if (position != null && myInterface != null) {
-			try {
-				myInterface.storePosition(bookId, new PositionWithTimestamp(position));
-			} catch (RemoteException e) {
-			}
+	public synchronized void storePosition(final long bookId, final ZLTextPositionWithTimestamp position) {
+		if (position == null) {
+			return;
 		}
+
+		bindToService(myContext, new Runnable() {
+			public void run() {
+				try {
+					myInterface.storePosition(bookId, new PositionWithTimestamp(position));
+				} catch (RemoteException e) {
+				}
+			}
+		});
 	}
 
 	public synchronized boolean isHyperlinkVisited(Book book, String linkId) {
@@ -478,15 +500,17 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 		});
 	}
 
-	public synchronized void saveBookmark(Bookmark bookmark) {
-		if (myInterface != null) {
-			try {
-				bookmark.update(SerializerUtil.deserializeBookmark(
-					myInterface.saveBookmark(SerializerUtil.serialize(bookmark))
-				));
-			} catch (RemoteException e) {
+	public synchronized void saveBookmark(final Bookmark bookmark) {
+		bindToService(myContext, new Runnable() {
+			public void run() {
+				try {
+					bookmark.update(SerializerUtil.deserializeBookmark(
+						myInterface.saveBookmark(SerializerUtil.serialize(bookmark))
+					));
+				} catch (RemoteException e) {
+				}
 			}
-		}
+		});
 	}
 
 	public synchronized void deleteBookmark(Bookmark bookmark) {
@@ -621,6 +645,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 	public void onServiceConnected(ComponentName name, IBinder service) {
 		synchronized (this) {
 			myInterface = LibraryInterface.Stub.asInterface(service);
+			myConnectionTimestamp = -1;
 		}
 
 		final List<Runnable> actions;
