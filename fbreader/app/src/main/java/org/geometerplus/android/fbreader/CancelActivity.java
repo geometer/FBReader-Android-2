@@ -20,6 +20,7 @@
 package org.geometerplus.android.fbreader;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -39,45 +40,57 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
 public class CancelActivity extends ListActivity {
-	private BookCollectionShadow myCollection;
+	public static String ACTIONS_KEY = "fbreader.cancel.actions";
+
+	private final BookCollectionShadow myCollection = new BookCollectionShadow();
+	private final List<CancelMenuHelper.ActionDescription> myActions =
+		new ArrayList<CancelMenuHelper.ActionDescription>();
 
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+		myActions.clear();
+		final Intent intent = getIntent();
+		final List<CancelMenuHelper.ActionDescription> actions = intent != null
+			? (List<CancelMenuHelper.ActionDescription>)intent.getSerializableExtra(ACTIONS_KEY)
+			: null;
+		if (actions != null) {
+			myActions.addAll(actions);
+		}
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		// we use this local variable to be sure collection is not null inside the runnable
-		final BookCollectionShadow collection = new BookCollectionShadow();
-		myCollection = collection;
-		collection.bindToService(this, new Runnable() {
-			public void run() {
-				final ActionListAdapter adapter = new ActionListAdapter(
-					new CancelMenuHelper().getActionsList(collection)
-				);
-				setListAdapter(adapter);
-				getListView().setOnItemClickListener(adapter);
-			}
-		});
+		if (!myActions.isEmpty()) {
+			final ActionListAdapter adapter = new ActionListAdapter(myActions);
+			setListAdapter(adapter);
+			getListView().setOnItemClickListener(adapter);
+		} else {
+			myCollection.bindToService(this, new Runnable() {
+				public void run() {
+					myActions.addAll(new CancelMenuHelper().getActionsList(myCollection));
+					final ActionListAdapter adapter = new ActionListAdapter(myActions);
+					setListAdapter(adapter);
+					getListView().setOnItemClickListener(adapter);
+				}
+			});
+		}
 	}
 
 	@Override
-	protected void onStop() {
-		if (myCollection != null) {
-			myCollection.unbind();
-			myCollection = null;
-		}
-		super.onStop();
+	protected void onDestroy() {
+		myCollection.unbind();
+		super.onDestroy();
 	}
 
 	private class ActionListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 		private final List<CancelMenuHelper.ActionDescription> myActions;
 
 		ActionListAdapter(List<CancelMenuHelper.ActionDescription> actions) {
-			myActions = actions;
+			myActions = new ArrayList<CancelMenuHelper.ActionDescription>(actions);
 		}
 
 		public final int getCount() {
@@ -123,7 +136,7 @@ public class CancelActivity extends ListActivity {
 			data.putExtra(FBReaderIntents.Key.TYPE, item.Type.name());
 			if (item instanceof CancelMenuHelper.BookmarkDescription) {
 				FBReaderIntents.putBookmarkExtra(
-					data, ((CancelMenuHelper.BookmarkDescription)item).Bookmark
+					data, ((CancelMenuHelper.BookmarkDescription)item).getBookmark()
 				);
 			}
 			setResult(RESULT_FIRST_USER, data);

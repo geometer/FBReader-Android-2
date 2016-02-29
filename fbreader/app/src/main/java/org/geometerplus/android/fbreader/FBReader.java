@@ -914,7 +914,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		}
 	};
 
-	private BookCollectionShadow getCollection() {
+	BookCollectionShadow getCollection() {
 		return (BookCollectionShadow)myFBReaderApp.Collection;
 	}
 

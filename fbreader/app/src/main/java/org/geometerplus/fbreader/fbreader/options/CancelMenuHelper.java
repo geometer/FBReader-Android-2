@@ -19,6 +19,7 @@
 
 package org.geometerplus.fbreader.fbreader.options;
 
+import java.io.Serializable;
 import java.util.*;
 
 import org.geometerplus.zlibrary.core.options.Config;
@@ -51,7 +52,7 @@ public class CancelMenuHelper {
 		close
 	}
 
-	public static class ActionDescription {
+	public static class ActionDescription implements Serializable {
 		public final ActionType Type;
 		public final String Title;
 		public final String Summary;
@@ -65,11 +66,15 @@ public class CancelMenuHelper {
 	}
 
 	public static class BookmarkDescription extends ActionDescription {
-		public final Bookmark Bookmark;
+		private final String mySerializedBookmark;
 
 		BookmarkDescription(Bookmark b) {
 			super(ActionType.returnTo, b.getText());
-			Bookmark = b;
+			mySerializedBookmark = SerializerUtil.serialize(b);
+		}
+
+		public Bookmark getBookmark() {
+			return SerializerUtil.deserializeBookmark(mySerializedBookmark);
 		}
 	}
 
