@@ -52,13 +52,9 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 		migrate();
 	}
 
-	void close() {
-		IOUtil.closeQuietly(myDatabase);
-	}
-
 	@Override
 	public void finalize() {
-		close();
+		IOUtil.closeQuietly(myDatabase);
 	}
 
 	protected void executeAsTransaction(Runnable actions) {
