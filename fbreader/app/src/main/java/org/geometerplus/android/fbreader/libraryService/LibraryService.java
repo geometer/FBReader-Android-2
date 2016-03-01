@@ -43,6 +43,9 @@ import org.geometerplus.android.fbreader.httpd.DataUtil;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 
 public class LibraryService extends Service {
+	private static SQLiteBooksDatabase ourDatabase;
+	private static final Object ourDatabaseLock = new Object();
+
 	final DataService.Connection DataConnection = new DataService.Connection();
 
 	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
@@ -94,16 +97,12 @@ public class LibraryService extends Service {
 		private final List<FileObserver> myFileObservers = new LinkedList<FileObserver>();
 		private BookCollection myCollection;
 
-		LibraryImplementation(SQLiteBooksDatabase db) {
+		LibraryImplementation(BooksDatabase db) {
 			myDatabase = db;
 			myCollection = new BookCollection(
 				Paths.systemInfo(LibraryService.this), myDatabase, Paths.bookPath()
 			);
 			reset(true);
-		}
-
-		void closeDatabase() {
-			((SQLiteBooksDatabase)myDatabase).close();
 		}
 
 		public void reset(final boolean force) {
@@ -419,7 +418,6 @@ public class LibraryService extends Service {
 		}
 	}
 
-	private final Object myLibraryLock = new Object();
 	private volatile LibraryImplementation myLibrary;
 
 	@Override
@@ -440,13 +438,12 @@ public class LibraryService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		synchronized (myLibraryLock) {
-			if (myLibrary == null) {
-				myLibrary = new LibraryImplementation(
-					new SQLiteBooksDatabase(LibraryService.this)
-				);
+		synchronized (ourDatabaseLock) {
+			if (ourDatabase == null) {
+				ourDatabase = new SQLiteBooksDatabase(LibraryService.this);
 			}
 		}
+		myLibrary = new LibraryImplementation(ourDatabase);
 
 		bindService(
 			new Intent(this, DataService.class),
@@ -459,13 +456,10 @@ public class LibraryService extends Service {
 	public void onDestroy() {
 		unbindService(DataConnection);
 
-		synchronized (myLibraryLock) {
-			if (myLibrary != null) {
-				final LibraryImplementation l = myLibrary;
-				myLibrary = null;
-				l.deactivate();
-				l.closeDatabase();
-			}
+		if (myLibrary != null) {
+			final LibraryImplementation l = myLibrary;
+			myLibrary = null;
+			l.deactivate();
 		}
 		myImageSynchronizer.clear();
 		super.onDestroy();
