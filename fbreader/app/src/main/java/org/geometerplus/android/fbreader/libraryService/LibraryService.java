@@ -31,24 +31,18 @@ import org.geometerplus.zlibrary.core.options.Config;
 
 import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
-
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.httpd.DataService;
 import org.geometerplus.android.fbreader.httpd.DataUtil;
-import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 
 public class LibraryService extends Service {
 	private static SQLiteBooksDatabase ourDatabase;
 	private static final Object ourDatabaseLock = new Object();
 
 	final DataService.Connection DataConnection = new DataService.Connection();
-
-	private final AndroidImageSynchronizer myImageSynchronizer = new AndroidImageSynchronizer(this);
 
 	private static final class Observer extends FileObserver {
 		private static final int MASK =
@@ -461,7 +455,6 @@ public class LibraryService extends Service {
 			myLibrary = null;
 			l.deactivate();
 		}
-		myImageSynchronizer.clear();
 		super.onDestroy();
 	}
 }
