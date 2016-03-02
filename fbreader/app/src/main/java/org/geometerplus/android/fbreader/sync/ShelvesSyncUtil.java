@@ -120,10 +120,13 @@ class ShelvesSyncUtil {
 				for (Book b : books) {
 					for (Label bookLabel: b.labels()) {
 						if (l.equals(bookLabel.Name)) {
-							infos.add(createMap(
-								"uid", bookLabel.Uid,
-								"book", collection.getHash(b, true)
-							));
+							final String hash = collection.getHash(b, true);
+							if (bookLabel.Uid != null && hash != null) {
+								infos.add(createMap(
+									"uid", bookLabel.Uid,
+									"book", hash
+								));
+							}
 							break;
 						}
 					}
