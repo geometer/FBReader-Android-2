@@ -158,7 +158,16 @@ public abstract class MainActivity extends FBActivity {
 			R.string.desc_show_book_menu,
 			R.string.desc_hide_book_menu
 		);
-		myDrawerLayout.setDrawerListener(myDrawerToggle);
+		getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				if (myDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+					myDrawerLayout.closeDrawer(GravityCompat.START);
+				} else {
+					myDrawerLayout.openDrawer(GravityCompat.START);
+				}
+			}
+		});
+
 		myDrawerLayout.setDrawerShadow(R.drawable.shadow_right_6dp, GravityCompat.START);
 	}
 

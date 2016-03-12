@@ -11,7 +11,6 @@ buildscript {
 apply plugin: 'com.android.library'
 
 dependencies {
-	compile 'com.android.support:appcompat-v7:23.+'
 	compile project(':third-party/android-numberpicker')
 	compile project(':third-party/materialloadingprogressbar')
 	compile project(':fbreader/util')
