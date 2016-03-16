@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.*;
 
 import org.fbreader.reader.AbstractReader;
+import org.fbreader.reader.android.view.AndroidFontUtil;
 import org.fbreader.reader.network.sync.SyncData;
 import org.fbreader.reader.options.CancelMenuHelper;
 import org.fbreader.reader.options.ColorProfile;
@@ -19,8 +20,8 @@ import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.util.RationalNumber;
+import org.geometerplus.zlibrary.core.view.ZLViewEnums;
 import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
-import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.fbreader.TapZoneMap;
 import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
@@ -612,5 +613,10 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 	@Override
 	public void closeWindow() {
 		getActivity().closeApplication();
+	}
+
+	@Override
+	public ZLViewEnums.Animation getAnimationType() {
+		return PageTurningOptions.Animation.getValue();
 	}
 }

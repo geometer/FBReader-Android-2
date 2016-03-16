@@ -31,6 +31,7 @@ import org.geometerplus.zlibrary.core.application.*;
 import org.geometerplus.zlibrary.core.drm.FileEncryptionInfo;
 import org.geometerplus.zlibrary.core.drm.EncryptionMethod;
 import org.geometerplus.zlibrary.core.util.*;
+import org.geometerplus.zlibrary.core.view.ZLViewEnums;
 
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
@@ -737,6 +738,15 @@ public final class FBReaderApp extends ZLApplication {
 			case Updated:
 				onBookUpdated(book);
 				break;
+		}
+	}
+
+	@Override
+	public ZLViewEnums.Animation getAnimationType() {
+		if (ViewOptions.YotaDrawOnBackScreen.getValue()) {
+			return ZLViewEnums.Animation.none;
+		} else {
+			return PageTurningOptions.Animation.getValue();
 		}
 	}
 }

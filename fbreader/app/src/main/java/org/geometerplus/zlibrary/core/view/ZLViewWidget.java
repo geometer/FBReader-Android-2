@@ -25,9 +25,9 @@ public interface ZLViewWidget {
 
 	void startManualScrolling(int x, int y, ZLView.Direction direction);
 	void scrollManuallyTo(int x, int y);
-	void startAnimatedScrolling(ZLView.PageIndex pageIndex, int x, int y, ZLView.Direction direction, int speed);
-	void startAnimatedScrolling(ZLView.PageIndex pageIndex, ZLView.Direction direction, int speed);
-	void startAnimatedScrolling(int x, int y, int speed);
+	void startAnimatedScrolling(ZLView.PageIndex pageIndex, int x, int y, ZLView.Direction direction);
+	void startAnimatedScrolling(ZLView.PageIndex pageIndex, ZLView.Direction direction);
+	void startAnimatedScrolling(int x, int y);
 
 	void setScreenBrightness(int percent, boolean showPercent);
 	int getScreenBrightness();

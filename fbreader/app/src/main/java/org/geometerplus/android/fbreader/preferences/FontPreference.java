@@ -23,10 +23,10 @@ import java.util.ArrayList;
 
 import android.content.Context;
 
+import org.fbreader.reader.android.view.AndroidFontUtil;
+
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-
-import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 
 class FontPreference extends SingleChoicePreference implements ReloadablePreference {
 	private final ZLStringOption myOption;

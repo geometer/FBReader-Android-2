@@ -39,6 +39,7 @@ import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.md.MDAlertDialogBuilder;
 import org.fbreader.reader.AbstractReader;
 import org.fbreader.reader.ActionCode;
+import org.fbreader.reader.android.view.AndroidFontUtil;
 import org.fbreader.reader.options.CancelMenuHelper;
 import org.fbreader.util.Boolean3;
 import org.fbreader.util.Pair;
@@ -56,7 +57,6 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
-import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 
 import org.geometerplus.android.fbreader.MenuData;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;

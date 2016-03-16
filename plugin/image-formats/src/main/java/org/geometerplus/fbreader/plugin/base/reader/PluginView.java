@@ -18,13 +18,13 @@ import android.view.*;
 import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.reader.*;
 import org.fbreader.reader.android.MainView;
+import org.fbreader.reader.android.animation.*;
+import org.fbreader.reader.android.view.*;
 import org.fbreader.reader.options.PageTurningOptions;
 
 import org.geometerplus.zlibrary.core.util.BitmapUtil;
 import org.geometerplus.zlibrary.core.util.ZLColor;
 import org.geometerplus.zlibrary.core.view.*;
-import org.geometerplus.zlibrary.ui.android.view.*;
-import org.geometerplus.zlibrary.ui.android.view.animation.*;
 import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.plugin.base.*;
@@ -110,8 +110,6 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 		return height - myHDiff;
 	}
 
-	private AnimationProvider myAnimationProvider;
-
 	public TOCTree getCurrentTOCElement(int pageNo) {
 		return TOCTreeUtil.findTreeByReference(getTOCTree(), pageNo);
 	}
@@ -132,8 +130,6 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	private ChangeListener myListener;
 	private boolean myPendingDoubleTap;
 	private boolean myLongClickPerformed;
-
-	private ZLViewEnums.Animation myAnimationType = ZLViewEnums.Animation.none;
 
 	private final int myDpi;
 	private int myAverageBgColor;
@@ -243,9 +239,7 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 			myHShift = 0;
 		}
 
-		if (myAnimationProvider != null) {
-			getAnimationProvider().terminate();
-		}
+		getAnimationProvider().terminate();
 		myDocument.init(this, getWidth(), getMainAreaHeight());
 		if (myDocument.fullyInitialized()) {
 			myAverageBgColor = DocumentUtil.getAverageBgColor();
@@ -999,7 +993,7 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	}
 
 	private void doInPageScrollingStep() {
-		if (myAnimationType == ZLViewEnums.Animation.none) {
+		if (getAnimationType() == ZLViewEnums.Animation.none) {
 			stopInPageScrolling();
 			return;
 		}
@@ -1027,36 +1021,29 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 
 	private void onDrawInScrolling(Canvas canvas, Paint bmpPaint) {
 		final AnimationProvider animator = getAnimationProvider();
-		final AnimationProvider.Mode mode = animator.getMode();
-		animator.doStep();
-		if (animator.inProgress()) {
-			final int count = canvas.save();
-			canvas.translate(myScrollMarginX, myScrollMarginY);
-			canvas.clipRect(0, 0, getWidth() - 2 * myScrollMarginX, getMainAreaHeight() - 2 * myScrollMarginY);
-			animator.draw(canvas);
-			canvas.restoreToCount(count);
-			if (animator.getMode().Auto) {
-				postInvalidate();
+		switch (animator.getMode()) {
+			default:
+			{
+				final int count = canvas.save();
+				canvas.translate(myScrollMarginX, myScrollMarginY);
+				canvas.clipRect(0, 0, getWidth() - 2 * myScrollMarginX, getMainAreaHeight() - 2 * myScrollMarginY);
+				animator.draw(canvas);
+				canvas.restoreToCount(count);
+				break;
 			}
-		} else {
-			switch (mode) {
-				case AnimatedScrollingForward:
-				{
-					final ZLViewEnums.PageIndex index = animator.getPageToScrollTo();
-					onScrollingFinished(index);
-					break;
-				}
-				case AnimatedScrollingBackward:
-					onScrollingFinished(ZLViewEnums.PageIndex.current);
-					break;
-				case ManualScrolling:
-					break;
-				case NoScrolling:
-					break;
-				default:
-					break;
+			case TerminatedScrollingForward:
+			{
+				final ZLViewEnums.PageIndex index = animator.getPageToScrollTo();
+				onScrollingFinished(index);
+				animator.terminate2();
+				drawBitmap(canvas, 0, 0, ZLViewEnums.PageIndex.current, bmpPaint);
+				break;
 			}
-			drawBitmap(canvas, 0, 0, ZLViewEnums.PageIndex.current, bmpPaint);
+			case TerminatedScrollingBackward:
+				onScrollingFinished(ZLViewEnums.PageIndex.current);
+				animator.terminate2();
+				drawBitmap(canvas, 0, 0, ZLViewEnums.PageIndex.current, bmpPaint);
+				break;
 		}
 	}
 
@@ -1422,14 +1409,13 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 		return false;
 	}
 
-	private void startAnimatedScrolling(int x, int y, int speed) {
+	private void startAnimatedScrolling(int x, int y) {
 		final AnimationProvider animator = getAnimationProvider();
 		if (!canScroll(animator.getPageToScrollTo(x, y))) {
 			animator.terminate();
 			return;
 		}
-		animator.startAnimatedScrolling(x, y, speed);
-		postInvalidate();
+		animator.startAnimatedScrolling(x, y);
 	}
 
 	private void startAnimatedScrolling(ZLViewEnums.PageIndex pageIndex) {
@@ -1444,10 +1430,7 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 
 		final PageHolder page = getCurrentPage();
 		animator.setup(direction, (int)(getWidth() - page.getShiftX() * 2), (int)(getMainAreaHeight() - page.getShiftY() * 2), myColorLevel);
-		animator.startAnimatedScrolling(pageIndex, null, null, options.AnimationSpeed.getValue());
-		if (animator.getMode().Auto) {
-			postInvalidate();
-		}
+		animator.startAnimatedScrolling(pageIndex, null, null);
 	}
 
 	public void gotoPrevPage() {
@@ -1528,7 +1511,7 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 					x = Math.min(Math.max(0, x), (int)(getWidth() - page.getShiftX() * 2 - 1));
 					y -= page.getShiftY();
 					y = Math.min(Math.max(0, y), (int)(getMainAreaHeight() - page.getShiftY() * 2 - 1));
-					startAnimatedScrolling(x, y, getReader().PageTurningOptions.AnimationSpeed.getValue());
+					startAnimatedScrolling(x, y);
 				}
 		}
 		mySlideMode = SlideMode.stopped;
@@ -1594,39 +1577,9 @@ public class PluginView extends MainView implements View.OnLongClickListener, Bi
 	private void onFingerDoubleTap(int x, int y) {
 	}
 
-	protected final BitmapManager getBitmapManager() {
+	@Override
+	public final BitmapManager getBitmapManager() {
 		return this;
-	}
-
-	private int myStoredLayerType = -1;
-	private AnimationProvider getAnimationProvider() {
-		final ZLViewEnums.Animation type = getReader().PageTurningOptions.Animation.getValue();
-		if (myAnimationProvider == null || myAnimationType != type) {
-			myAnimationType = type;
-			if (myStoredLayerType != -1) {
-				setLayerType(myStoredLayerType, null);
-			}
-			switch (type) {
-				case none:
-					myAnimationProvider = new NoneAnimationProvider(getBitmapManager());
-					break;
-				case curl:
-					myStoredLayerType = getLayerType();
-					myAnimationProvider = new CurlAnimationProvider(getBitmapManager());
-					setLayerType(LAYER_TYPE_SOFTWARE, null);
-					break;
-				case slide:
-					myAnimationProvider = new SlideAnimationProvider(getBitmapManager());
-					break;
-				case slideOldStyle:
-					myAnimationProvider = new SlideOldStyleAnimationProvider(getBitmapManager());
-					break;
-				case shift:
-					myAnimationProvider = new ShiftAnimationProvider(getBitmapManager());
-					break;
-			}
-		}
-		return myAnimationProvider;
 	}
 
 	public boolean canScroll(ZLViewEnums.PageIndex index) {

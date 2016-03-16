@@ -246,9 +246,7 @@ public final class FBView extends ZLTextView {
 					break;
 				case pageTurning:
 					if (isFlickScrollingEnabled()) {
-						myReader.getViewWidget().startAnimatedScrolling(
-							x, y, myReader.PageTurningOptions.AnimationSpeed.getValue()
-						);
+						myReader.getViewWidget().startAnimatedScrolling(x, y);
 					}
 			}
 		}
@@ -804,15 +802,6 @@ public final class FBView extends ZLTextView {
 				return ScrollbarMode.asPosition;
 			case ViewOptions.Scrollbar.SHOW_AS_PROGRESS:
 				return ScrollbarMode.asProgress;
-		}
-	}
-
-	@Override
-	public Animation getAnimationType() {
-		if (myViewOptions.YotaDrawOnBackScreen.getValue()) {
-			return Animation.none;
-		} else {
-			return myReader.PageTurningOptions.Animation.getValue();
 		}
 	}
 

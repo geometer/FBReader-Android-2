@@ -52,8 +52,6 @@ abstract public class ZLView implements ZLViewEnums {
 
 	abstract public FooterArea getFooterArea();
 
-	public abstract Animation getAnimationType();
-
 	abstract public void preparePage(ZLPaintContext context, PageIndex pageIndex);
 	abstract public void paint(ZLPaintContext context, PageIndex pageIndex);
 	abstract public void onScrollingFinished(PageIndex pageIndex);

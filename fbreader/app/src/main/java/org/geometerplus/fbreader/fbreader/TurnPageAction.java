@@ -48,15 +48,13 @@ class TurnPageAction extends FBReaderApp.Action<FBReaderApp> {
 				myForward ? FBView.PageIndex.next : FBView.PageIndex.previous,
 				x, y,
 				preferences.Horizontal.getValue()
-					? FBView.Direction.rightToLeft : FBView.Direction.up,
-				preferences.AnimationSpeed.getValue()
+					? FBView.Direction.rightToLeft : FBView.Direction.up
 			);
 		} else {
 			Reader.getViewWidget().startAnimatedScrolling(
 				myForward ? FBView.PageIndex.next : FBView.PageIndex.previous,
 				preferences.Horizontal.getValue()
-					? FBView.Direction.rightToLeft : FBView.Direction.up,
-				preferences.AnimationSpeed.getValue()
+					? FBView.Direction.rightToLeft : FBView.Direction.up
 			);
 		}
 	}
