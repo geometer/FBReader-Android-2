@@ -24,9 +24,9 @@ import android.graphics.*;
 import android.graphics.drawable.*;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.SeekBar;
 
 import org.fbreader.md.MDDialogPreference;
-import org.fbreader.md.widget.Slider;
 
 import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
@@ -37,7 +37,7 @@ class AnimationSpeedPreference extends MDDialogPreference {
 	private final ZLIntegerRangeOption myOption;
 	private final ZLResource myResource;
 
-	private Slider mySlider;
+	private SeekBar mySlider;
 
 	AnimationSpeedPreference(Context context, ZLResource resource, String resourceKey, ZLIntegerRangeOption option) {
 		super(context);
@@ -58,9 +58,9 @@ class AnimationSpeedPreference extends MDDialogPreference {
 
 	@Override
 	protected void onBindDialogView(View view) {
-		mySlider = (Slider)view.findViewById(R.id.animation_speed_slider);
+		mySlider = (SeekBar)view.findViewById(R.id.animation_speed_slider);
 		mySlider.setMax(myOption.MaxValue - myOption.MinValue);
-		mySlider.setValue(myOption.getValue() - myOption.MinValue);
+		mySlider.setProgress(myOption.getValue() - myOption.MinValue);
 		((TextView)view.findViewById(R.id.slow)).setText(myResource.getResource("slow").getValue());
 		((TextView)view.findViewById(R.id.fast)).setText(myResource.getResource("fast").getValue());
 		super.onBindDialogView(view);
@@ -68,6 +68,6 @@ class AnimationSpeedPreference extends MDDialogPreference {
 
 	@Override
 	protected void onPositiveDialogResult() {
-		myOption.setValue(myOption.MinValue + mySlider.getValue());
+		myOption.setValue(myOption.MinValue + mySlider.getProgress());
 	}
 }

@@ -22,7 +22,6 @@ package org.geometerplus.android.fbreader;
 import android.view.View;
 import android.widget.*;
 
-import org.fbreader.md.widget.Slider;
 import org.fbreader.reader.TOCTree;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
@@ -79,10 +78,10 @@ final class NavigationPopup {
 		activity.getLayoutInflater().inflate(R.layout.navigation_panel, root);
 		myWindow = (NavigationWindow)root.findViewById(R.id.navigation_panel);
 
-		final Slider slider = (Slider)myWindow.findViewById(R.id.navigation_slider);
+		final SeekBar slider = (SeekBar)myWindow.findViewById(R.id.navigation_slider);
 		final TextView text = (TextView)myWindow.findViewById(R.id.navigation_text);
 
-		slider.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+		slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			private void gotoPage(int page) {
 				final ZLTextView view = myFBReader.getTextView();
 				if (page == 1) {
@@ -94,11 +93,20 @@ final class NavigationPopup {
 				myFBReader.getViewWidget().repaint();
 			}
 
-			public void onValueChanged(int progress) {
+			public void onProgressChanged(SeekBar slider, int progress, boolean fromUser) {
+				if (!fromUser) {
+					return;
+				}
 				final int page = progress + 1;
 				final int pagesNumber = slider.getMax() + 1;
 				gotoPage(page);
 				text.setText(makeProgressText(page, pagesNumber));
+			}
+
+			public void onStartTrackingTouch(SeekBar slider) {
+			}
+
+			public void onStopTrackingTouch(SeekBar slider) {
 			}
 		});
 
@@ -118,15 +126,15 @@ final class NavigationPopup {
 	}
 
 	private void setupNavigation() {
-		final Slider slider = (Slider)myWindow.findViewById(R.id.navigation_slider);
+		final SeekBar slider = (SeekBar)myWindow.findViewById(R.id.navigation_slider);
 		final TextView text = (TextView)myWindow.findViewById(R.id.navigation_text);
 
 		final ZLTextView textView = myFBReader.getTextView();
 		final ZLTextView.PagePosition pagePosition = textView.pagePosition();
 
-		if (slider.getMax() != pagePosition.Total - 1 || slider.getValue() != pagePosition.Current - 1) {
+		if (slider.getMax() != pagePosition.Total - 1 || slider.getProgress() != pagePosition.Current - 1) {
 			slider.setMax(pagePosition.Total - 1);
-			slider.setValue(pagePosition.Current - 1);
+			slider.setProgress(pagePosition.Current - 1);
 			text.setText(makeProgressText(pagePosition.Current, pagePosition.Total));
 		}
 

@@ -22,7 +22,6 @@ package org.geometerplus.fbreader.plugin.base;
 import android.view.View;
 import android.widget.*;
 
-import org.fbreader.md.widget.Slider;
 import org.fbreader.reader.TOCTree;
 
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;
@@ -36,7 +35,7 @@ final class NavigationPopup implements ThumbnailView.PageChangeListener {
 	private Button myResetButton;
 	private PluginView myPDFReader;
 	private TextView myText;
-	private Slider mySlider;
+	private SeekBar mySlider;
 	private View myView;
 
 	private ThumbnailView myThumbs;
@@ -79,19 +78,28 @@ final class NavigationPopup implements ThumbnailView.PageChangeListener {
 		myWindow = (NavigationWindow)root.findViewById(R.id.fmt_navigation_panel);
 		myView = myWindow.findViewById(R.id.fmt_navigation_layout);
 
-		mySlider = (Slider)myView.findViewById(R.id.fmt_navigation_slider);
+		mySlider = (SeekBar)myView.findViewById(R.id.fmt_navigation_slider);
 		myText = (TextView)myView.findViewById(R.id.fmt_navigation_text);
 
-		mySlider.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+		mySlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			private void gotoPage(int page) {
 				myThumbs.setPage(page);
 			}
 
-			public void onValueChanged(int progress) {
+			public void onProgressChanged(SeekBar slider, int progress, boolean fromUser) {
+				if (!fromUser) {
+					return;
+				}
 				final int page = progress + 1;
 				final int pagesNumber = mySlider.getMax() + 1;
-				myText.setText(makeProgressText(page, pagesNumber));
 				gotoPage(progress);
+				myText.setText(makeProgressText(page, pagesNumber));
+			}
+
+			public void onStartTrackingTouch(SeekBar slider) {
+			}
+
+			public void onStopTrackingTouch(SeekBar slider) {
 			}
 		});
 
@@ -116,15 +124,15 @@ final class NavigationPopup implements ThumbnailView.PageChangeListener {
 			return;
 		}
 
-		final Slider slider = (Slider)window.findViewById(R.id.fmt_navigation_slider);
+		final SeekBar slider = (SeekBar)window.findViewById(R.id.fmt_navigation_slider);
 		final TextView text = (TextView)window.findViewById(R.id.fmt_navigation_text);
 
 		int max = myPDFReader.getPagesNum() - 1;
 		int curr = myPDFReader.getCurPageNo();
 
-		if (slider.getMax() != max || slider.getValue() != curr) {
+		if (slider.getMax() != max || slider.getProgress() != curr) {
 			slider.setMax(max);
-			slider.setValue(curr);
+			slider.setProgress(curr);
 			text.setText(makeProgressText(curr + 1, max + 1));
 		}
 
@@ -147,7 +155,7 @@ final class NavigationPopup implements ThumbnailView.PageChangeListener {
 
 	@Override
 	public void onPageChanged(int no) {
-		mySlider.setValue(no);
+		mySlider.setProgress(no);
 		final int page = no + 1;
 		final int pagesNumber = mySlider.getMax() + 1;
 		myText.setText(makeProgressText(page, pagesNumber));
