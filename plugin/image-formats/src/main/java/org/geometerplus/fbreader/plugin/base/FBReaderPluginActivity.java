@@ -263,15 +263,13 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 		return myViewHolder.onKeyUpInternal(keyCode, event) || super.onKeyUp(keyCode, event);
 	}
 
-	/*
-	@Override
+	//@Override
 	protected void closeApplication() {
 		final Intent i = FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.CLOSE);
 		i.putExtra(FBReaderIntents.Key.TYPE, "close");
 		startActivity(i);
 		finish();
 	}
-	*/
 
 	@Override
 	protected void openPreviousBook() {
