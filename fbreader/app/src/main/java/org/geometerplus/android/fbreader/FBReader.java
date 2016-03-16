@@ -35,6 +35,8 @@ import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.reader.ActionCode;
 import org.fbreader.reader.android.MainActivity;
 import org.fbreader.reader.android.UIMessageUtil;
+import org.fbreader.reader.options.CancelMenuHelper;
+import org.fbreader.reader.options.ColorProfile;
 import org.fbreader.util.Boolean3;
 
 import com.yotadevices.fbreader.FBReaderYotaService;
@@ -59,8 +61,6 @@ import org.geometerplus.fbreader.Paths;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.bookmodel.BookModel;
 import org.geometerplus.fbreader.fbreader.*;
-import org.geometerplus.fbreader.fbreader.options.CancelMenuHelper;
-import org.fbreader.common.options.ColorProfile;
 import org.geometerplus.fbreader.formats.ExternalFormatPlugin;
 import org.geometerplus.fbreader.formats.PluginCollection;
 import org.geometerplus.fbreader.tips.TipsManager;
@@ -302,7 +302,6 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 		myFBReaderApp.addAction(ActionCode.OPEN_VIDEO, new OpenVideoAction(this));
 		myFBReaderApp.addAction(ActionCode.HIDE_TOAST, new HideToastAction(this));
 
-		myFBReaderApp.addAction(ActionCode.SHOW_CANCEL_MENU, new ShowCancelMenuAction(this));
 		myFBReaderApp.addAction(ActionCode.OPEN_START_SCREEN, new StartScreenAction(this));
 
 		myFBReaderApp.addAction(ActionCode.SET_SCREEN_ORIENTATION_SYSTEM, new SetScreenOrientationAction(this, ZLibrary.SCREEN_ORIENTATION_SYSTEM));
@@ -697,30 +696,12 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 						fbreader.storePosition();
 					}
 				}
-			case REQUEST_CANCEL_MENU:
-				runCancelAction(data);
-				break;
 		}
 	}
 
-	private void runCancelAction(Intent intent) {
-		final CancelMenuHelper.ActionType type;
-		try {
-			type = CancelMenuHelper.ActionType.valueOf(
-				intent.getStringExtra(FBReaderIntents.Key.TYPE)
-			);
-		} catch (Exception e) {
-			// invalid (or null) type value
-			return;
-		}
-		Bookmark bookmark = null;
-		if (type == CancelMenuHelper.ActionType.returnTo) {
-			bookmark = FBReaderIntents.getBookmarkExtra(intent);
-			if (bookmark == null) {
-				return;
-			}
-		}
-		myFBReaderApp.runCancelAction(type, bookmark);
+	@Override
+	protected void openPreviousBook() {
+		getReader().openBook(getCollection().getRecentBook(1), null, null, null);
 	}
 
 	@Override
@@ -759,12 +740,13 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 
 	private NavigationPopup myNavigationPopup;
 
-	public boolean barsAreShown() {
+	@Override
+	public final boolean barsAreShown() {
 		return myNavigationPopup != null;
 	}
 
 	@Override
-	protected final void hideBars() {
+	public final void hideBars() {
 		closeDrawer();
 
 		if (myNavigationPopup != null) {
@@ -829,7 +811,8 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 		}
 	}
 
-	BookCollectionShadow getCollection() {
+	@Override
+	public final BookCollectionShadow getCollection() {
 		return (BookCollectionShadow)myFBReaderApp.Collection;
 	}
 

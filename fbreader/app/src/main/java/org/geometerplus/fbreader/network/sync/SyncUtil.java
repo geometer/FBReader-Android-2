@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.network.sync;
 
-import org.fbreader.common.options.SyncOptions;
+import org.fbreader.reader.options.SyncOptions;
 
 import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
 

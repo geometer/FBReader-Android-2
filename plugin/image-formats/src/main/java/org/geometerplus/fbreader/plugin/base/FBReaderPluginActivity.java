@@ -14,6 +14,7 @@ import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.plugin.format.base.R;
 import org.fbreader.reader.AbstractReader;
 import org.fbreader.reader.android.MainActivity;
+import org.fbreader.reader.options.CancelMenuHelper;
 
 import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
@@ -26,9 +27,9 @@ import org.geometerplus.fbreader.plugin.base.tree.TOCActivity;
 import org.geometerplus.android.fbreader.SimplePopupWindow;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
+import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
 public abstract class FBReaderPluginActivity extends MainActivity {
-
 	static abstract class PopupPanel implements View.OnClickListener {
 		protected volatile SimplePopupWindow myWindow;
 
@@ -273,20 +274,18 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 	*/
 
 	@Override
+	protected void openPreviousBook() {
+		final Intent i = FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.CLOSE);
+		i.putExtra(FBReaderIntents.Key.TYPE, "previousBook");
+		startActivity(i);
+		finish();
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 			default:
 				super.onActivityResult(requestCode, resultCode, data);
-				break;
-			case REQUEST_CANCEL_MENU:
-				if (resultCode != RESULT_CANCELED && resultCode != -1) {
-					final Intent i = FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.CLOSE);
-					i.putExtra(
-						FBReaderIntents.Key.TYPE, data.getStringExtra(FBReaderIntents.Key.TYPE)
-					);
-					startActivity(i);
-					finish();
-				}
 				break;
 			case REQUEST_TOC:
 				if (resultCode != RESULT_CANCELED) {
@@ -341,7 +340,12 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 	private boolean myActionBarIsVisible = true;
 
 	@Override
-	protected final void hideBars() {
+	public final boolean barsAreShown() {
+		return myNavigationPopup != null;
+	}
+
+	@Override
+	public final void hideBars() {
 		if (myNavigationPopup != null) {
 			myNavigationPopup.stopNavigation();
 			myNavigationPopup = null;
@@ -491,6 +495,11 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 	@Override
 	public final AbstractReader getReader() {
 		return myViewHolder;
+	}
+
+	@Override
+	public final BookCollectionShadow getCollection() {
+		return myViewHolder.Collection;
 	}
 
 	public final DocumentHolder createDocument(Book book) {

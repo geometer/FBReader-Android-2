@@ -39,6 +39,7 @@ import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.md.MDAlertDialogBuilder;
 import org.fbreader.reader.AbstractReader;
 import org.fbreader.reader.ActionCode;
+import org.fbreader.reader.options.CancelMenuHelper;
 import org.fbreader.util.Boolean3;
 import org.fbreader.util.Pair;
 import org.fbreader.util.android.DrawableUtil;
@@ -61,6 +62,7 @@ import org.geometerplus.android.fbreader.MenuData;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.api.MenuNode;
 import org.geometerplus.android.fbreader.dict.DictionaryUtil;
+import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 import org.geometerplus.android.util.DeviceType;
 
@@ -440,6 +442,7 @@ public abstract class MainActivity extends FBActivity {
 		reader.addAction(ActionCode.SHARE_BOOK, new ShareBookAction(this));
 		reader.addAction(ActionCode.OPEN_WEB_HELP, new OpenWebHelpAction(this));
 		reader.addAction(ActionCode.SHOW_WHATSNEW_DIALOG, new ShowWhatsNewDialogAction(this));
+		reader.addAction(ActionCode.SHOW_CANCEL_MENU, new CancelAction(this));
 		reader.addAction(ActionCode.INSTALL_PREMIUM, new ShowPremiumDialogAction(this, false));
 		reader.addAction(ActionCode.OPEN_PREMIUM, new ShowPremiumDialogAction(this, true));
 	}
@@ -503,8 +506,51 @@ public abstract class MainActivity extends FBActivity {
 			case REQUEST_DICTIONARY_EXTRA:
 				DictionaryUtil.onActivityResult(this, requestCode, resultCode, data);
 				break;
+			case REQUEST_CANCEL_MENU:
+				if (resultCode == RESULT_OK && data != null) {
+					runCancelAction(data);
+				}
+				break;
 		}
 	}
+
+	protected final void runCancelAction(Intent data) {
+		final CancelMenuHelper.ActionType type;
+		try {
+			type = CancelMenuHelper.ActionType.valueOf(
+				data.getStringExtra(FBReaderIntents.Key.TYPE)
+			);
+		} catch (Exception e) {
+			// invalid (or null) type value
+			return;
+		}
+
+		switch (type) {
+			case library:
+				getReader().runAction(ActionCode.SHOW_LIBRARY);
+				break;
+			case networkLibrary:
+				getReader().runAction(ActionCode.SHOW_NETWORK_LIBRARY);
+				break;
+			case previousBook:
+				openPreviousBook();
+				break;
+			case returnTo:
+			{
+				final Bookmark bookmark = FBReaderIntents.getBookmarkExtra(data);
+				if (bookmark != null) {
+					getCollection().deleteBookmark(bookmark);
+					getReader().gotoBookmark(bookmark);
+				}
+				break;
+			}
+			case close:
+				getReader().closeWindow();
+				break;
+		}
+	}
+
+	protected abstract void openPreviousBook();
 
 	public ZLAndroidLibrary getZLibrary() {
 		return FBReaderUtil.getZLibrary(this);
@@ -701,6 +747,7 @@ public abstract class MainActivity extends FBActivity {
 	}
 
 	protected abstract AbstractReader getReader();
+	public abstract BookCollectionShadow getCollection();
 
 	public final void showBookmarkToast(final Bookmark bookmark) {
 		final SuperActivityToast toast = new SuperActivityToast(this, SuperToast.Type.BUTTON);
@@ -722,7 +769,8 @@ public abstract class MainActivity extends FBActivity {
 		showToast(toast);
 	}
 
-	protected abstract void hideBars();
+	public abstract boolean barsAreShown();
+	public abstract void hideBars();
 
 	public final void setOrientation(String optionValue) {
 		final int orientation;

@@ -36,14 +36,15 @@ import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.*;
 
-import org.fbreader.common.options.SyncOptions;
 import org.fbreader.reader.ActionCode;
+import org.fbreader.reader.network.sync.SyncData;
+import org.fbreader.reader.options.CancelMenuHelper;
+import org.fbreader.reader.options.SyncOptions;
 
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.bookmodel.*;
 import org.geometerplus.fbreader.fbreader.options.*;
 import org.geometerplus.fbreader.formats.*;
-import org.geometerplus.fbreader.network.sync.SyncData;
 import org.geometerplus.fbreader.util.*;
 
 public final class FBReaderApp extends ZLApplication {
@@ -386,6 +387,7 @@ public final class FBReaderApp extends ZLApplication {
 		return bookmarks;
 	}
 
+	@Override
 	public boolean jumpBack() {
 		try {
 			if (getTextView() != BookTextView) {
@@ -416,6 +418,11 @@ public final class FBReaderApp extends ZLApplication {
 			myJumpEndPosition = null;
 			myJumpTimeStamp = null;
 		}
+	}
+
+	@Override
+	public void gotoBookmark(Bookmark bookmark) {
+		gotoBookmark(bookmark, true);
 	}
 
 	private void gotoBookmark(Bookmark bookmark, boolean exactly) {
@@ -588,29 +595,9 @@ public final class FBReaderApp extends ZLApplication {
 		}
 	}
 
+	@Override
 	public boolean hasCancelActions() {
 		return new CancelMenuHelper().getActionsList(Collection).size() > 1;
-	}
-
-	public void runCancelAction(CancelMenuHelper.ActionType type, Bookmark bookmark) {
-		switch (type) {
-			case library:
-				runAction(ActionCode.SHOW_LIBRARY);
-				break;
-			case networkLibrary:
-				runAction(ActionCode.SHOW_NETWORK_LIBRARY);
-				break;
-			case previousBook:
-				openBook(Collection.getRecentBook(1), null, null, null);
-				break;
-			case returnTo:
-				Collection.deleteBookmark(bookmark);
-				gotoBookmark(bookmark, true);
-				break;
-			case close:
-				closeWindow();
-				break;
-		}
 	}
 
 	private synchronized void updateInvisibleBookmarksList(Bookmark b) {

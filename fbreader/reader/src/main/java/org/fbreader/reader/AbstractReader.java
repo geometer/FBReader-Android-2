@@ -22,11 +22,10 @@ package org.fbreader.reader;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.fbreader.common.options.*;
+import org.fbreader.reader.options.*;
 import org.fbreader.util.Boolean3;
 
-import org.geometerplus.fbreader.book.IBookCollection;
-import org.geometerplus.fbreader.book.Book;
+import org.geometerplus.fbreader.book.*;
 
 public abstract class AbstractReader implements IBookCollection.Listener<Book> {
 	public static abstract class Action<T extends AbstractReader> {
@@ -102,8 +101,16 @@ public abstract class AbstractReader implements IBookCollection.Listener<Book> {
 	}
 
 	public abstract Book getCurrentBook();
+	public abstract boolean jumpBack();
+
+	public void gotoBookmark(Bookmark bookmark) {
+		// TODO: implement, currently implemented in FBReaderApp only
+	}
 
 	public abstract void storePosition();
+
+	public abstract void closeWindow();
+	public abstract boolean hasCancelActions();
 
 	protected final void resetActionCount() {
 		myActionCount = 0;

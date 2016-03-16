@@ -152,12 +152,12 @@ public abstract class ZLApplication extends AbstractReader {
 		return runAction(keyBindings().getBinding(key, longPress));
 	}
 
-	public boolean closeWindow() {
+	@Override
+	public void closeWindow() {
 		onWindowClosing();
 		if (myWindow != null) {
 			myWindow.close();
 		}
-		return true;
 	}
 
 	public void onWindowClosing() {

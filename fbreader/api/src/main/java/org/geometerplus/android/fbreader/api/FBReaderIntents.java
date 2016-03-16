@@ -78,6 +78,7 @@ public abstract class FBReaderIntents {
 		String BOOKMARK                         = "fbreader.bookmark";
 		String PLUGIN                           = "fbreader.plugin";
 		String TYPE                             = "fbreader.type";
+		String CANCEL_ACTIONS                   = "fbreader.cancel.actions";
 	}
 
 	public static void initPremium() {

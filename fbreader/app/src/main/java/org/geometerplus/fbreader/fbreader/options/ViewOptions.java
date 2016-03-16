@@ -23,7 +23,7 @@ import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.*;
 import org.geometerplus.zlibrary.text.view.style.ZLTextStyleCollection;
 
-import org.fbreader.common.options.ColorProfile;
+import org.fbreader.reader.options.ColorProfile;
 
 import org.geometerplus.fbreader.fbreader.FBView;
 
