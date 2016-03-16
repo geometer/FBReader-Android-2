@@ -28,21 +28,18 @@ import android.widget.*;
 import android.view.*;
 
 import org.fbreader.common.android.FBListActivity;
-import org.fbreader.util.android.ViewUtil;
 import org.fbreader.common.android.FBReaderUtil;
+import org.fbreader.reader.options.CancelMenuHelper;
+import org.fbreader.util.android.ViewUtil;
 
 import org.geometerplus.zlibrary.core.options.Config;
 
 import org.geometerplus.zlibrary.ui.android.R;
 
-import org.geometerplus.fbreader.fbreader.options.CancelMenuHelper;
-
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
 public class CancelActivity extends FBListActivity {
-	public static String ACTIONS_KEY = "fbreader.cancel.actions";
-
 	private final BookCollectionShadow myCollection = new BookCollectionShadow();
 	private final List<CancelMenuHelper.ActionDescription> myActions =
 		new ArrayList<CancelMenuHelper.ActionDescription>();
@@ -56,7 +53,7 @@ public class CancelActivity extends FBListActivity {
 		myActions.clear();
 		final Intent intent = getIntent();
 		final List<CancelMenuHelper.ActionDescription> actions = intent != null
-			? (List<CancelMenuHelper.ActionDescription>)intent.getSerializableExtra(ACTIONS_KEY)
+			? (List<CancelMenuHelper.ActionDescription>)intent.getSerializableExtra(FBReaderIntents.Key.CANCEL_ACTIONS)
 			: null;
 		if (actions != null) {
 			myActions.addAll(actions);
@@ -137,7 +134,7 @@ public class CancelActivity extends FBListActivity {
 					data, ((CancelMenuHelper.BookmarkDescription)item).getBookmark()
 				);
 			}
-			setResult(RESULT_FIRST_USER, data);
+			setResult(RESULT_OK, data);
 			finish();
 		}
 	}

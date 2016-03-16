@@ -490,24 +490,6 @@ public class Actions {
 		}
 	}
 
-	static class CancelMenuAction extends ViewHolder.Action<ViewHolder> {
-		protected CancelMenuAction(ViewHolder viewHolder) {
-			super(viewHolder);
-		}
-
-		@Override
-		protected void run(Object... params) {
-			if (Reader.getActivity().hideSearchItem()) {
-				return;
-			}
-
-			Reader.getActivity().startActivityForResult(
-				FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.CANCEL_MENU),
-				FBReaderPluginActivity.REQUEST_CANCEL_MENU
-			);
-		}
-	}
-
 	static class ExitAction extends ViewHolder.Action<ViewHolder> {
 		protected ExitAction(ViewHolder viewHolder) {
 			super(viewHolder);

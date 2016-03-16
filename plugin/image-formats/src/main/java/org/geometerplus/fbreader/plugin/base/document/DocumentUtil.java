@@ -11,7 +11,7 @@ import org.geometerplus.zlibrary.core.util.BitmapUtil;
 import org.geometerplus.zlibrary.core.view.ZLPaintContext;
 import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
-import org.fbreader.common.options.ColorProfile;
+import org.fbreader.reader.options.ColorProfile;
 
 import org.geometerplus.fbreader.plugin.base.SettingsHolder;
 import org.geometerplus.fbreader.plugin.base.reader.PluginView;

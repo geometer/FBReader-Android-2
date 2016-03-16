@@ -34,7 +34,7 @@ import org.geometerplus.zlibrary.core.util.ZLColor;
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
-import org.fbreader.common.options.ColorProfile;
+import org.fbreader.reader.options.ColorProfile;
 
 public class BackgroundPreference extends Preference {
 	static final String VALUE_KEY = "fbreader.background.value";

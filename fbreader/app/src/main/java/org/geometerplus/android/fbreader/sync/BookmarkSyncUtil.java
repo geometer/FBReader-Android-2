@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader.sync;
 
 import java.util.*;
 
-import org.fbreader.common.options.SyncOptions;
+import org.fbreader.reader.options.SyncOptions;
 import org.fbreader.util.ComparisonUtil;
 
 import org.geometerplus.zlibrary.core.network.JsonRequest2;

@@ -5,8 +5,8 @@ import java.util.*;
 import android.graphics.*;
 import android.support.v4.util.LruCache;
 
-import org.fbreader.common.options.ColorProfile;
 import org.fbreader.reader.TOCTree;
+import org.fbreader.reader.options.ColorProfile;
 
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.util.*;

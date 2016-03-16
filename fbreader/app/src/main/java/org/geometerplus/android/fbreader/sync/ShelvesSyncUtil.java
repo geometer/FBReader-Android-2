@@ -22,7 +22,7 @@ package org.geometerplus.android.fbreader.sync;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-import org.fbreader.common.options.SyncOptions;
+import org.fbreader.reader.options.SyncOptions;
 
 import org.geometerplus.zlibrary.core.network.JsonRequest2;
 

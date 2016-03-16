@@ -17,21 +17,21 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.android.fbreader;
+package org.fbreader.reader.android;
 
 import java.util.ArrayList;
 
 import android.content.Intent;
 
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.fbreader.fbreader.options.CancelMenuHelper;
+import org.fbreader.reader.AbstractReader;
+import org.fbreader.reader.options.CancelMenuHelper;
 
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 
-class ShowCancelMenuAction extends FBReader.Action<FBReader,FBReaderApp> {
-	ShowCancelMenuAction(FBReader baseActivity) {
-		super(baseActivity);
+class CancelAction extends MainActivity.Action<MainActivity,AbstractReader> {
+	CancelAction(MainActivity activity) {
+		super(activity);
 	}
 
 	@Override
@@ -42,6 +42,7 @@ class ShowCancelMenuAction extends FBReader.Action<FBReader,FBReaderApp> {
 
 		if (BaseActivity.barsAreShown()) {
 			BaseActivity.hideBars();
+			//return;
 		}
 
 		if (Reader.jumpBack()) {
@@ -49,7 +50,8 @@ class ShowCancelMenuAction extends FBReader.Action<FBReader,FBReaderApp> {
 		}
 
 		if (Reader.hasCancelActions()) {
-			final Intent intent = new Intent(BaseActivity, CancelActivity.class);
+			final Intent intent =
+				FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.CANCEL_MENU);
 			final BookCollectionShadow collection = BaseActivity.getCollection();
 			collection.bindToService(BaseActivity, new Runnable() {
 				public void run() {
@@ -57,8 +59,8 @@ class ShowCancelMenuAction extends FBReader.Action<FBReader,FBReaderApp> {
 						new ArrayList<CancelMenuHelper.ActionDescription>(
 							new CancelMenuHelper().getActionsList(collection)
 						);
-					intent.putExtra(CancelActivity.ACTIONS_KEY, actions);
-					BaseActivity.startActivityForResult(intent, FBReader.REQUEST_CANCEL_MENU);
+					intent.putExtra(FBReaderIntents.Key.CANCEL_ACTIONS, actions);
+					BaseActivity.startActivityForResult(intent, MainActivity.REQUEST_CANCEL_MENU);
 				}
 			});
 		} else {

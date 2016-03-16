@@ -23,7 +23,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-import org.fbreader.common.options.SyncOptions;
+import org.fbreader.reader.options.SyncOptions;
 
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.core.library.ZLibrary;

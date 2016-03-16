@@ -15,7 +15,6 @@
 		<item name="popupTheme">@style/FBReaderMD.MainMenu</item>
 		<item name="listProgressIndicatorStyle">@style/FBReaderMD.ListProgressIndicator</item>
 		<item name="numberPickerStyle">@style/FBReaderMD.NumberPicker.Dark</item>
-		<item name="sliderStyle">@style/FBReaderMD.Slider</item>
 		<item name="alertDialogTheme">@style/FBReaderMD.Dialog</item>
 		<item name="android:buttonStyle">@style/FBReaderMD.Button</item>
 	</style>
@@ -35,7 +34,6 @@
 		<item name="popupTheme">@style/FBReaderMD.MainMenu</item>
 		<item name="listProgressIndicatorStyle">@style/FBReaderMD.ListProgressIndicator</item>
 		<item name="numberPickerStyle">@style/FBReaderMD.NumberPicker.Dark</item>
-		<item name="sliderStyle">@style/FBReaderMD.Slider</item>
 		<item name="alertDialogTheme">@style/FBReaderMD.Dialog</item>
 		<item name="android:buttonStyle">@style/FBReaderMD.Button</item>
 	</style>
@@ -76,17 +74,6 @@
 		<item name="mlpb_background_color">?attr/colorPrimary</item>
 		<item name="mlpb_progress_color">?android:attr/textColorPrimary</item>
 		<item name="android:visibility">gone</item>
-	</style>
-
-	<style name="FBReaderMD.Slider" parent="android:Widget">
-		<item name="activeSectionColor">?attr/colorAccent</item>
-		<item name="inactiveSectionColor">?android:attr/textColorPrimary</item>
-		<item name="sliderLineWidth">2dp</item>
-		<item name="activeBallRadius">9dp</item>
-		<item name="ballHighlightingRadius">20dp</item>
-		<item name="ballHighlightingColor">#44888888</item>
-		<item name="sliderMinWidth">80dp</item>
-		<item name="sliderMinHeight">48dp</item>
 	</style>
 
 	<style name="FBReaderMD.Button" parent="Widget.AppCompat.Button">

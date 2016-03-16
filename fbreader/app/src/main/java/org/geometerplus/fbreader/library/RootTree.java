@@ -21,7 +21,7 @@ package org.geometerplus.fbreader.library;
 
 import java.util.List;
 
-import org.fbreader.common.options.SyncOptions;
+import org.fbreader.reader.options.SyncOptions;
 
 import org.geometerplus.fbreader.book.IBookCollection;
 import org.geometerplus.fbreader.formats.PluginCollection;

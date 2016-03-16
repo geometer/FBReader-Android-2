@@ -17,7 +17,7 @@
  * 02110-1301, USA.
  */
 
-package org.fbreader.common.options;
+package org.fbreader.reader.options;
 
 import org.geometerplus.zlibrary.core.options.*;
 import org.fbreader.common.DurationEnum;

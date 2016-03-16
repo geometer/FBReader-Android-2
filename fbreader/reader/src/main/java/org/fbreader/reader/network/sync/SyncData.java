@@ -17,13 +17,13 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.fbreader.network.sync;
+package org.fbreader.reader.network.sync;
 
 import java.util.*;
 
 import org.json.simple.JSONValue;
 
-import org.fbreader.common.options.SyncOptions;
+import org.fbreader.reader.options.SyncOptions;
 
 import org.geometerplus.zlibrary.core.options.*;
 

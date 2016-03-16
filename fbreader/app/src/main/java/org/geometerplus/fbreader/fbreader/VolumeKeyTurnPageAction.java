@@ -19,7 +19,7 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import org.fbreader.common.options.PageTurningOptions;
+import org.fbreader.reader.options.PageTurningOptions;
 
 class VolumeKeyTurnPageAction extends FBReaderApp.Action<FBReaderApp> {
 	private final boolean myForward;

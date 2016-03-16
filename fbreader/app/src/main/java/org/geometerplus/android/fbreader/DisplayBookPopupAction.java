@@ -31,6 +31,7 @@ import android.support.v7.app.AlertDialog;
 import android.widget.*;
 
 import org.fbreader.md.MDAlertDialogBuilder;
+import org.fbreader.reader.options.ColorProfile;
 
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.network.QuietNetworkContext;
@@ -42,7 +43,6 @@ import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.fbreader.book.Book;
 import org.geometerplus.fbreader.fbreader.BookElement;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.fbreader.common.options.ColorProfile;
 import org.geometerplus.fbreader.network.opds.OPDSBookItem;
 import org.geometerplus.fbreader.network.urlInfo.BookUrlInfo;
 import org.geometerplus.fbreader.network.urlInfo.UrlInfo;

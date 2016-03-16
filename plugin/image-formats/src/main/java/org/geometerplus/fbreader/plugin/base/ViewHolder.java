@@ -10,8 +10,10 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.*;
 
-import org.fbreader.common.options.ColorProfile;
 import org.fbreader.reader.AbstractReader;
+import org.fbreader.reader.network.sync.SyncData;
+import org.fbreader.reader.options.CancelMenuHelper;
+import org.fbreader.reader.options.ColorProfile;
 
 import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
@@ -21,7 +23,6 @@ import org.geometerplus.zlibrary.text.view.ZLTextPositionWithTimestamp;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.fbreader.TapZoneMap;
-import org.geometerplus.fbreader.network.sync.SyncData;
 import org.geometerplus.fbreader.plugin.base.document.DocumentHolder;
 import org.geometerplus.fbreader.plugin.base.reader.*;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
@@ -180,7 +181,6 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		addAction(ActionCode.VOLUME_KEY_SCROLL_BACK, new Actions.PrevPageAction(this));
 		addAction(ActionCode.VOLUME_KEY_SCROLL_FORWARD, new Actions.NextPageAction(this));
 		addAction(ActionCode.SHOW_MENU, new Actions.ShowMenuAction(this));
-		addAction(ActionCode.SHOW_CANCEL_MENU, new Actions.CancelMenuAction(this));
 		addAction(ActionCode.EXIT, new Actions.ExitAction(this));
 
 		addAction(ActionCode.CROP, new Actions.CropAction(this));
@@ -596,5 +596,21 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		if (local == null || local.Timestamp < fromServer.Timestamp) {
 			myActivity.getPluginView().gotoPage(fromServer.Position.ParagraphIndex, false);
 		}
+	}
+
+	@Override
+	public boolean jumpBack() {
+		// TODO: implement
+		return false;
+	}
+
+	@Override
+	public boolean hasCancelActions() {
+		return new CancelMenuHelper().getActionsList(Collection).size() > 1;
+	}
+
+	@Override
+	public void closeWindow() {
+		getActivity().closeApplication();
 	}
 }

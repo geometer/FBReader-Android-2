@@ -1,9 +1,10 @@
 package org.geometerplus.fbreader.plugin.base;
 
+import org.fbreader.reader.options.ColorProfile;
+
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.*;
 import org.geometerplus.zlibrary.core.view.ZLViewEnums;
-import org.fbreader.common.options.ColorProfile;
 
 public class SettingsHolder {
 	SettingsHolder(ZLibrary zlibrary) {
