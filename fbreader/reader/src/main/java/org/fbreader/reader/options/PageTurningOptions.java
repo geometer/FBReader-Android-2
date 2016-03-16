@@ -32,7 +32,7 @@ public class PageTurningOptions {
 	public final ZLEnumOption<ZLViewEnums.Animation> Animation =
 		new ZLEnumOption<ZLViewEnums.Animation>("Scrolling", "Animation", ZLViewEnums.Animation.slide);
 	public final ZLIntegerRangeOption AnimationSpeed =
-		new ZLIntegerRangeOption("Scrolling", "AnimationSpeed", 1, 10, 8);
+		new ZLIntegerRangeOption("Scrolling", "AnimationSpeed", 1, 15, 8);
 
 	public final ZLBooleanOption Horizontal =
 		new ZLBooleanOption("Scrolling", "Horizontal", true);

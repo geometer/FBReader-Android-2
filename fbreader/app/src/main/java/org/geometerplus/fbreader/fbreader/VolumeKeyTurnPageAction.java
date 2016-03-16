@@ -35,8 +35,7 @@ class VolumeKeyTurnPageAction extends FBReaderApp.Action<FBReaderApp> {
 		Reader.getViewWidget().startAnimatedScrolling(
 			myForward ? FBView.PageIndex.next : FBView.PageIndex.previous,
 			preferences.Horizontal.getValue()
-				? FBView.Direction.rightToLeft : FBView.Direction.up,
-			preferences.AnimationSpeed.getValue()
+				? FBView.Direction.rightToLeft : FBView.Direction.up
 		);
 	}
 }

@@ -25,6 +25,8 @@ import java.util.HashMap;
 import org.fbreader.reader.options.*;
 import org.fbreader.util.Boolean3;
 
+import org.geometerplus.zlibrary.core.view.ZLViewEnums;
+
 import org.geometerplus.fbreader.book.*;
 
 public abstract class AbstractReader implements IBookCollection.Listener<Book> {
@@ -123,4 +125,6 @@ public abstract class AbstractReader implements IBookCollection.Listener<Book> {
 	// method from IBookCollection.Listener
 	public void onBuildEvent(IBookCollection.Status status) {
 	}
+
+	public abstract ZLViewEnums.Animation getAnimationType();
 }

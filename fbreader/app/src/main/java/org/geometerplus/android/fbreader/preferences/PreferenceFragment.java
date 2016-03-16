@@ -46,9 +46,9 @@ import org.geometerplus.zlibrary.text.view.style.*;
 
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
-import org.geometerplus.zlibrary.ui.android.view.ZLAndroidPaintContext;
 
 import org.fbreader.reader.ActionCode;
+import org.fbreader.reader.android.view.ZLAndroidPaintContext;
 import org.fbreader.reader.network.sync.SyncData;
 import org.fbreader.reader.options.*;
 

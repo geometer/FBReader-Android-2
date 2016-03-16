@@ -29,9 +29,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
-
+import org.fbreader.reader.AbstractReader;
 import org.fbreader.reader.R;
+import org.fbreader.reader.android.animation.*;
+
+import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
+import org.geometerplus.zlibrary.core.view.ZLViewEnums;
 
 public abstract class MainView extends View {
 	protected Integer myColorLevel;
@@ -167,5 +170,52 @@ public abstract class MainView extends View {
 		return null;
 	}
 
+	public AbstractReader getReader() {
+		final MainActivity activity = getActivity();
+		return activity != null ? activity.getReader() : null;
+	}
+
 	public abstract void setPreserveSize(boolean preserve, int statusBarHeight);
+
+	private AnimationProvider myAnimationProvider;
+	private ZLViewEnums.Animation myAnimationType;
+	private int myStoredLayerType = -1;
+
+	protected final ZLViewEnums.Animation getAnimationType() {
+		final AbstractReader reader = getReader();
+		return reader != null ? reader.getAnimationType() : ZLViewEnums.Animation.none;
+	}
+
+	protected final AnimationProvider getAnimationProvider() {
+		final ZLViewEnums.Animation type = getAnimationType();
+
+		if (myAnimationProvider == null || myAnimationType != type) {
+			myAnimationType = type;
+			if (myStoredLayerType != -1) {
+				setLayerType(myStoredLayerType, null);
+			}
+			switch (type) {
+				case none:
+					myAnimationProvider = new NoneAnimationProvider(this);
+					break;
+				case curl:
+					myStoredLayerType = getLayerType();
+					myAnimationProvider = new CurlAnimationProvider(this);
+					setLayerType(LAYER_TYPE_SOFTWARE, null);
+					break;
+				case slide:
+					myAnimationProvider = new SlideAnimationProvider(this);
+					break;
+				case slideOldStyle:
+					myAnimationProvider = new SlideOldStyleAnimationProvider(this);
+					break;
+				case shift:
+					myAnimationProvider = new ShiftAnimationProvider(this);
+					break;
+			}
+		}
+		return myAnimationProvider;
+	}
+
+	public abstract BitmapManager getBitmapManager();
 }

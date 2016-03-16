@@ -21,8 +21,9 @@ package org.geometerplus.zlibrary.ui.android.view;
 
 import android.graphics.*;
 
+import org.fbreader.reader.android.animation.BitmapManager;
+
 import org.geometerplus.zlibrary.core.view.ZLView;
-import org.geometerplus.zlibrary.ui.android.view.animation.BitmapManager;
 
 final class BitmapManagerImpl implements BitmapManager {
 	private final int SIZE = 2;

@@ -246,9 +246,7 @@ public final class FBView extends ZLTextView {
 					break;
 				case pageTurning:
 					if (isFlickScrollingEnabled()) {
-						myReader.getViewWidget().startAnimatedScrolling(
-							x, y, myReader.PageTurningOptions.AnimationSpeed.getValue()
-						);
+						myReader.getViewWidget().startAnimatedScrolling(x, y);
 					}
 			}
 		}
@@ -796,11 +794,6 @@ public final class FBView extends ZLTextView {
 			case ViewOptions.Scrollbar.SHOW_AS_PROGRESS:
 				return ScrollbarMode.asProgress;
 		}
-	}
-
-	@Override
-	public Animation getAnimationType() {
-		return myReader.PageTurningOptions.Animation.getValue();
 	}
 
 	@Override
