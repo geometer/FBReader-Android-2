@@ -256,7 +256,7 @@ class BookmarkSyncUtil {
 					String hash = myHashByBookId.get(b.BookId);
 					if (hash == null) {
 						final Book book = collection.getBookById(b.BookId);
-						hash = book != null ? collection.getHash(book, false) : "";
+						hash = book != null ? collection.getHash(book) : "";
 						myHashByBookId.put(b.BookId, hash);
 					}
 					return "".equals(hash) ? null : hash;

@@ -38,7 +38,7 @@ class ShelvesSyncUtil {
 			) {
 				@Override
 				public void processResponse(Object response) {
-					updateLocalBookmarks(collection, (Map<String,Object>)response, deleted);
+					updateLocalLabels(collection, (Map<String,Object>)response, deleted);
 				}
 			});
 		} catch (Throwable t) {
@@ -46,7 +46,7 @@ class ShelvesSyncUtil {
 		}
 	}
 
-	private static void updateLocalBookmarks(IBookCollection<Book> collection, Map<String,Object> data, List<String> deleted) {
+	private static void updateLocalLabels(IBookCollection<Book> collection, Map<String,Object> data, List<String> deleted) {
 		for (Map<String,Object> labelInfo : (List<Map<String,Object>>)data.get("labels")) {
 			final String name = (String)labelInfo.get("name");
 			if (name == null) {
@@ -120,7 +120,7 @@ class ShelvesSyncUtil {
 				for (Book b : books) {
 					for (Label bookLabel: b.labels()) {
 						if (l.equals(bookLabel.Name)) {
-							final String hash = collection.getHash(b, true);
+							final String hash = collection.getHash(b);
 							if (bookLabel.Uid != null && hash != null) {
 								infos.add(createMap(
 									"uid", bookLabel.Uid,

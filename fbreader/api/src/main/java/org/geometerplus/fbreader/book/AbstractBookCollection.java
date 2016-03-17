@@ -66,7 +66,7 @@ public abstract class AbstractBookCollection<B extends AbstractBook> implements 
 			return true;
 		}
 
-		final String hash0 = getHash(b0, false);
-		return hash0 != null && hash0.equals(getHash(b1, false));
+		final String hash0 = getHash(b0);
+		return hash0 != null && hash0.equals(getHash(b1));
 	}
 }
