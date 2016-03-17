@@ -780,6 +780,7 @@ public final class FBView extends ZLTextView {
 		if (start == null || end == null) {
 			return null;
 		}
+
 		final TextBuildTraverser traverser = new TextBuildTraverser(this);
 		traverser.traverse(start, end);
 		return new FixedTextSnippet(start, end, traverser.getText());
