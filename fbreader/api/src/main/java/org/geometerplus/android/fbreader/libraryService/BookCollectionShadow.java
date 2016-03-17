@@ -61,7 +61,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 	};
 
 	public synchronized boolean bindToService(Context context, Runnable onBindAction) {
-		if (myInterface != null && myContext == context) {
+		if (myInterface != null && context != null && myContext == context) {
 			if (onBindAction != null) {
 				Config.Instance().runOnConnect(onBindAction);
 			}
