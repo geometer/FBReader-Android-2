@@ -261,8 +261,17 @@ public final class FBReaderApp extends ZLApplication {
 		return bookmark;
 	}
 
+	private BookmarkHighlighting createBookmarkHighlighting(ZLTextView view, Bookmark bookmark) {
+		final HighlightingStyle style = Collection.getHighlightingStyle(bookmark.getStyleId());
+		return new BookmarkHighlighting(view, bookmark, style);
+	}
+
 	private void setBookmarkHighlightings(ZLTextView view, String modelId) {
 		view.removeHighlightings(BookmarkHighlighting.class);
+		final HashMap<Integer,HighlightingStyle> styles = new HashMap<Integer,HighlightingStyle>();
+		for (HighlightingStyle s : Collection.highlightingStyles()) {
+			styles.put(s.Id, s);
+		}
 		for (BookmarkQuery query = new BookmarkQuery(Model.Book, 20); ; query = query.next()) {
 			final List<Bookmark> bookmarks = Collection.bookmarks(query);
 			if (bookmarks.isEmpty()) {
@@ -273,7 +282,9 @@ public final class FBReaderApp extends ZLApplication {
 					BookmarkUtil.findEnd(b, view);
 				}
 				if (ComparisonUtil.equal(modelId, b.ModelId)) {
-					view.addHighlighting(new BookmarkHighlighting(view, Collection, b));
+					view.addHighlighting(
+						new BookmarkHighlighting(view, b, styles.get(b.getStyleId()))
+					);
 				}
 			}
 		}
@@ -434,7 +445,7 @@ public final class FBReaderApp extends ZLApplication {
 				BookTextView.gotoPosition(bookmark);
 			} else {
 				BookTextView.gotoHighlighting(
-					new BookmarkHighlighting(BookTextView, Collection, bookmark)
+					createBookmarkHighlighting(BookTextView, bookmark)
 				);
 			}
 			setView(BookTextView);
@@ -444,7 +455,7 @@ public final class FBReaderApp extends ZLApplication {
 				FootnoteView.gotoPosition(bookmark);
 			} else {
 				FootnoteView.gotoHighlighting(
-					new BookmarkHighlighting(FootnoteView, Collection, bookmark)
+					createBookmarkHighlighting(FootnoteView, bookmark)
 				);
 			}
 			setView(FootnoteView);

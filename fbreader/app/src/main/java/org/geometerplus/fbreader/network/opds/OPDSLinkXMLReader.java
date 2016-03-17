@@ -36,7 +36,6 @@ import org.geometerplus.fbreader.network.urlInfo.*;
 class OPDSLinkXMLReader extends OPDSXMLReader implements OPDSConstants {
 	private static class FeedHandler extends AbstractOPDSFeedHandler {
 		private final NetworkLibrary myLibrary;
-
 		private final List<INetworkLink> myLinks = new LinkedList<INetworkLink>();
 
 		private String myAuthenticationType;

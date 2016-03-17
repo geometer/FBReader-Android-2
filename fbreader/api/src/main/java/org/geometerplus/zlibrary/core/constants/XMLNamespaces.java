@@ -38,4 +38,9 @@ public interface XMLNamespaces {
 	String XMLEncryption = "http://www.w3.org/2001/04/xmlenc#";
 	String XMLDigitalSignature = "http://www.w3.org/2000/09/xmldsig#";
 	String EpubContainer = "urn:oasis:names:tc:opendocument:xmlns:container";
+
+	String Xmp = "adobe:ns:meta/";
+	String Rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+	String CalibreXmp = "http://calibre-ebook.com/xmp-namespace";
+	String CalibreXmpSeriesIndex = "http://calibre-ebook.com/xmp-namespace-series-index";
 }
