@@ -378,7 +378,7 @@ public class SyncService extends Service implements IBookCollection.Listener<Boo
 
 	private Status uploadBookToServerInternal(Book book) {
 		final File file = BookUtil.fileByBook(book).getPhysicalFile().javaFile();
-		final String hash = myCollection.getHash(book, false);
+		final String hash = myCollection.getHash(book);
 		final boolean force = book.hasLabel(Book.SYNC_TOSYNC_LABEL);
 		if (hash == null) {
 			return Status.HashNotComputed;

@@ -61,7 +61,7 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 	};
 
 	public synchronized boolean bindToService(Context context, Runnable onBindAction) {
-		if (myInterface != null && myContext == context) {
+		if (myInterface != null && context != null && myContext == context) {
 			if (onBindAction != null) {
 				Config.Instance().runOnConnect(onBindAction);
 			}
@@ -389,12 +389,12 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 		}
 	}
 
-	public String getHash(Book book, boolean force) {
+	public String getHash(Book book) {
 		if (myInterface == null) {
 			return null;
 		}
 		try {
-			return myInterface.getHash(SerializerUtil.serialize(book), force);
+			return myInterface.getHash(SerializerUtil.serialize(book), true);
 		} catch (RemoteException e) {
 			return null;
 		}
@@ -665,6 +665,17 @@ public class BookCollectionShadow extends AbstractBookCollection<Book> implement
 
 	// method from ServiceConnection interface
 	public synchronized void onServiceDisconnected(ComponentName name) {
+		if (myContext != null) {
+			try {
+				myContext.unregisterReceiver(myReceiver);
+			} catch (IllegalArgumentException e) {
+				// called before regisration, that's ok
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		myInterface = null;
+		myConnectionTimestamp = -1;
 	}
 
 	public Book createBook(long id, String url, String title, String encoding, String language) {

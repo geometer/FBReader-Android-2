@@ -587,7 +587,7 @@ public final class ViewHolder extends AbstractReader implements PluginView.Chang
 		}
 
 		final ZLTextPositionWithTimestamp fromServer =
-			mySyncData.getAndCleanPosition(Collection.getHash(myBook, true));
+			mySyncData.getAndCleanPosition(Collection.getHash(myBook));
 		if (fromServer == null) {
 			return;
 		}
