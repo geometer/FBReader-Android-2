@@ -12,11 +12,11 @@ import android.net.SSLCertificateSocketFactory;
 import android.os.Build;
 
 import org.apache.http.conn.scheme.LayeredSocketFactory;
-import org.apache.http.conn.ssl.StrictHostnameVerifier;
+import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 import org.apache.http.params.HttpParams;
 
 public class TlsSniSocketFactory implements LayeredSocketFactory {
-	final static HostnameVerifier ourHostnameVerifier = new StrictHostnameVerifier();
+	final static HostnameVerifier ourHostnameVerifier = new BrowserCompatHostnameVerifier();
 
 	@Override
 	public Socket connectSocket(Socket s, String host, int port, InetAddress localAddress, int localPort, HttpParams params) throws IOException {
