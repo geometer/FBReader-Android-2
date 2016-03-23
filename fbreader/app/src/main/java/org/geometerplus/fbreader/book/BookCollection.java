@@ -500,7 +500,7 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 						processFilesQueue();
 					}
 					for (DbBook book : new ArrayList<DbBook>(myBooksByFile.values())) {
-						getHash(book);
+						getHash(book, false);
 					}
 				}
 			}
@@ -542,7 +542,7 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 				final DbBook book = getBookByFile(file);
 				if (book != null) {
 					saveBook(book);
-					getHash(book);
+					getHash(book, false);
 				}
 			}
 
@@ -833,28 +833,40 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 		myDatabase.setOptionValue(DEFAULT_STYLE_ID_KEY, String.valueOf(styleId));
 	}
 
-	public String getHash(DbBook book) {
+	public String getHash(DbBook book, boolean force) {
 		final ZLPhysicalFile file = book.File.getPhysicalFile();
 		if (file == null) {
 			return ZERO_HASH;
 		}
-		String hash = myDatabase.getHash(book.getId(), file.javaFile().lastModified());
+		String hash = null;
+		try {
+			hash = myDatabase.getHash(book.getId(), file.javaFile().lastModified());
+		} catch (BooksDatabase.NotAvailable e) {
+			if (!force) {
+				return null;
+			}
+		}
 		if (hash == null) {
-			//if (!force) {
-			//	return null;
-			//}
 			final UID uid = BookUtil.createUid(book.File, "SHA-1");
 			if (uid == null) {
 				return null;
 			}
 			hash = uid.Id.toLowerCase();
-			myDatabase.setHash(book.getId(), hash);
+			try {
+				myDatabase.setHash(book.getId(), hash);
+			} catch (BooksDatabase.NotAvailable e) {
+				// ignore
+			}
 		}
 		return hash;
 	}
 
 	public void setHash(DbBook book, String hash) {
-		myDatabase.setHash(book.getId(), hash);
+		try {
+			myDatabase.setHash(book.getId(), hash);
+		} catch (BooksDatabase.NotAvailable e) {
+			// ignore
+		}
 	}
 
 	public List<FormatDescriptor> formats() {

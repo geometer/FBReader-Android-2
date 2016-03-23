@@ -78,7 +78,7 @@ public interface IBookCollection<B extends AbstractBook> extends AbstractSeriali
 	boolean canRemoveBook(B book, boolean deleteFromDisk);
 	void removeBook(B book, boolean deleteFromDisk);
 
-	String getHash(B book);
+	String getHash(B book, boolean force);
 	void setHash(B book, String hash);
 	boolean sameBook(B book0, B book1);
 

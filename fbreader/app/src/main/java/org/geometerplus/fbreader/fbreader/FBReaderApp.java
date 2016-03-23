@@ -351,7 +351,7 @@ public final class FBReaderApp extends ZLApplication {
 				final ZLTextPositionWithTimestamp local =
 					myPositionManager.getLocallyStoredPosition(book);
 				final ZLTextPositionWithTimestamp remote =
-					mySyncData.getAndCleanPosition(Collection.getHash(book));
+					mySyncData.getAndCleanPosition(Collection.getHash(book, true));
 
 				if (remote == null) {
 					if (local != null) {
@@ -505,7 +505,7 @@ public final class FBReaderApp extends ZLApplication {
 		}
 
 		final ZLTextPositionWithTimestamp remote =
-			mySyncData.getAndCleanPosition(Collection.getHash(book));
+			mySyncData.getAndCleanPosition(Collection.getHash(book, true));
 		if (remote == null) {
 			return;
 		}
@@ -566,7 +566,7 @@ public final class FBReaderApp extends ZLApplication {
 
 	private ZLTextPositionWithTimestamp getStoredPosition(Book book) {
 		final ZLTextPositionWithTimestamp fromServer =
-			mySyncData.getAndCleanPosition(Collection.getHash(book));
+			mySyncData.getAndCleanPosition(Collection.getHash(book, true));
 		final ZLTextPositionWithTimestamp local =
 			myPositionManager.getLocallyStoredPosition(book);
 		myPositionManager.resetPositionCache(book);

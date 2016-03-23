@@ -386,7 +386,7 @@ public class LibraryService extends Service {
 		}
 
 		public String getHash(String book, boolean force) {
-			return myCollection.getHash(SerializerUtil.deserializeBook(book, myCollection));
+			return myCollection.getHash(SerializerUtil.deserializeBook(book, myCollection), force);
 		}
 
 		public void setHash(String book, String hash) {

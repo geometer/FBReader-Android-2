@@ -33,6 +33,9 @@ public abstract class BooksDatabase {
 		int Opened = 1;
 	}
 
+	public static final class NotAvailable extends Exception {
+	}
+
 	protected DbBook createBook(long id, long fileId, String title, String encoding, String language) {
 		final FileInfoSet infos = new FileInfoSet(this, fileId);
 		return createBook(id, infos.getFile(fileId), title, encoding, language);
@@ -151,8 +154,8 @@ public abstract class BooksDatabase {
 	protected abstract Collection<String> loadVisitedHyperlinks(long bookId);
 	protected abstract void addVisitedHyperlink(long bookId, String hyperlinkId);
 
-	protected abstract String getHash(long bookId, long lastModified);
-	protected abstract void setHash(long bookId, String hash);
+	protected abstract String getHash(long bookId, long lastModified) throws NotAvailable;
+	protected abstract void setHash(long bookId, String hash) throws NotAvailable;
 	protected abstract List<Long> bookIdsByHash(String hash);
 
 	protected abstract String getOptionValue(String name);
