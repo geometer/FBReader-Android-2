@@ -350,7 +350,11 @@ public abstract class MainActivity extends FBActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.search_only, menu);
 		mySearchItem = menu.findItem(R.id.menu_search_item);
-		mySearchItem.setVisible(false);
+		if (myOpenSearchView) {
+			openSearchViewInternal();
+		} else {
+			mySearchItem.setVisible(false);
+		}
 		addMenuNodes(menu, MenuData.topLevelNodes(MenuData.Location.toolbarOrMainMenu), true);
 		addMenuNodes(menu, MenuData.topLevelNodes(MenuData.Location.mainMenu), false);
 		return true;
@@ -370,10 +374,20 @@ public abstract class MainActivity extends FBActivity {
 		return mySearchItem != null;
 	}
 
+	private volatile boolean myOpenSearchView = false;
+
 	public void openSearchView() {
 		if (mySearchItem == null) {
 			return;
 		}
+		if (!barsAreShown()) {
+			showBars();
+		}
+		myOpenSearchView = true;
+		openSearchViewInternal();
+	}
+
+	private void openSearchViewInternal() {
 		mySearchItem.setVisible(true);
 		final SearchView searchView = (SearchView)mySearchItem.getActionView();
 		if (searchView == null) {
@@ -408,6 +422,8 @@ public abstract class MainActivity extends FBActivity {
 	}
 
 	public boolean hideSearchItem() {
+		myOpenSearchView = false;
+
 		final MenuItem searchItem = mySearchItem;
 		if (searchItem == null || !searchItem.isVisible()) {
 			return false;
@@ -779,6 +795,7 @@ public abstract class MainActivity extends FBActivity {
 	}
 
 	public abstract boolean barsAreShown();
+	public abstract void showBars();
 	public abstract void hideBars();
 
 	public final void setOrientation(String optionValue) {
