@@ -45,8 +45,6 @@ import org.geometerplus.android.util.SQLiteUtil;
 
 final class SQLiteBooksDatabase extends BooksDatabase {
 	private final SQLiteDatabase myDatabase;
-	private final HashMap<String,SQLiteStatement> myStatements =
-		new HashMap<String,SQLiteStatement>();
 
 	SQLiteBooksDatabase(Context context) {
 		myDatabase = context.openOrCreateDatabase("books.db", Context.MODE_PRIVATE, null);
@@ -207,18 +205,18 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 
 	@Override
 	protected DbBook loadBook(long bookId) {
-		DbBook book = null;
 		final Cursor cursor = myDatabase.rawQuery("SELECT file_id,title,encoding,language FROM Books WHERE book_id=? LIMIT 1", new String[] { String.valueOf(bookId) });
 		try {
 			if (cursor.moveToNext()) {
-				book = createBook(
+				return createBook(
 					bookId, cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)
 				);
+			} else {
+				return null;
 			}
 		} finally {
 			cursor.close();
 		}
-		return book;
 	}
 
 	@Override
@@ -1273,25 +1271,35 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 	}
 
 	@Override
-	protected String getHash(long bookId, long lastModified) {
-		final Cursor cursor = myDatabase.rawQuery(
-			"SELECT hash FROM BookHash WHERE book_id=? AND timestamp>? LIMIT 1",
-			new String[] { String.valueOf(bookId), String.valueOf(lastModified) }
-		);
+	protected String getHash(long bookId, long lastModified) throws NotAvailable {
 		try {
-			return cursor.moveToNext() ? cursor.getString(0) : null;
-		} finally {
-			cursor.close();
+			releaseMemory();
+
+			final Cursor cursor = myDatabase.rawQuery(
+				"SELECT hash FROM BookHash WHERE book_id=? AND timestamp>? LIMIT 1",
+				new String[] { String.valueOf(bookId), String.valueOf(lastModified) }
+			);
+			try {
+				return cursor.moveToNext() ? cursor.getString(0) : null;
+			} finally {
+				cursor.close();
+			}
+		} catch (Throwable t) {
+			throw new NotAvailable();
 		}
 	}
 
 	@Override
-	protected void setHash(long bookId, String hash) {
-		final ContentValues values = new ContentValues();
-		values.put("book_id", bookId);
-		values.put("timestamp", System.currentTimeMillis());
-		values.put("hash", hash);
-		myDatabase.insertWithOnConflict("BookHash", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+	protected void setHash(long bookId, String hash) throws NotAvailable {
+		try {
+			final ContentValues values = new ContentValues();
+			values.put("book_id", bookId);
+			values.put("timestamp", System.currentTimeMillis());
+			values.put("hash", hash);
+			myDatabase.insertWithOnConflict("BookHash", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+		} catch (Throwable t) {
+			throw new NotAvailable();
+		}
 	}
 
 	@Override
