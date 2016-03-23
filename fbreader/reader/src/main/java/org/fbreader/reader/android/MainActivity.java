@@ -35,10 +35,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
 
+import org.fbreader.common.android.FBActivity;
 import org.fbreader.common.android.FBReaderUtil;
 import org.fbreader.md.MDAlertDialogBuilder;
-import org.fbreader.reader.AbstractReader;
-import org.fbreader.reader.ActionCode;
+import org.fbreader.reader.*;
+import org.fbreader.reader.BuildConfig;
 import org.fbreader.reader.android.view.AndroidFontUtil;
 import org.fbreader.reader.options.CancelMenuHelper;
 import org.fbreader.util.Boolean3;
@@ -65,9 +66,6 @@ import org.geometerplus.android.fbreader.dict.DictionaryUtil;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.android.fbreader.util.AndroidImageSynchronizer;
 import org.geometerplus.android.util.DeviceType;
-
-import org.fbreader.common.android.FBActivity;
-import org.fbreader.reader.R;
 
 import org.geometerplus.fbreader.book.*;
 import org.geometerplus.fbreader.formats.IFormatPluginCollection;
@@ -104,8 +102,8 @@ public abstract class MainActivity extends FBActivity {
 
 	private volatile Book myCurrentBook;
 
-	private PowerManager.WakeLock myWakeLock;
-	private boolean myWakeLockToCreate;
+	private volatile PowerManager.WakeLock myWakeLock;
+	private volatile boolean myWakeLockToCreate;
 
 	private ZLStringOption myTextSearchPatternOption =
 		new ZLStringOption("TextSearch", "Pattern", "");
@@ -457,7 +455,6 @@ public abstract class MainActivity extends FBActivity {
 	protected void onResume() {
 		super.onResume();
 
-		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		Config.Instance().runOnConnect(new Runnable() {
 			public void run() {
 				myDrawerLayout.setDrawerLockMode(
@@ -471,21 +468,28 @@ public abstract class MainActivity extends FBActivity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		switchWakeLock(hasFocus &&
-			getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() <
-			getMainView().getBatteryLevel()
-		);
+
+		if (hasFocus) {
+			switchWakeLock(
+				getZLibrary().BatteryLevelToTurnScreenOffOption.getValue() <
+				getMainView().getBatteryLevel()
+			);
+			registerReceiver(
+				myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+			);
+		} else {
+			try {
+				unregisterReceiver(myBatteryInfoReceiver);
+			} catch (IllegalArgumentException e) {
+				// myBatteryInfoReceiver was not registered
+			}
+			switchWakeLock(false);
+		}
 	}
 
 	@Override
 	protected void onPause() {
 		closeDrawer();
-
-		try {
-			unregisterReceiver(myBatteryInfoReceiver);
-		} catch (IllegalArgumentException e) {
-			// myBatteryInfoReceiver was not registered
-		}
 
 		super.onPause();
 	}
@@ -720,6 +724,11 @@ public abstract class MainActivity extends FBActivity {
 				myWakeLockToCreate = true;
 			}
 		} else {
+			if (myWakeLockToCreate) {
+				synchronized (this) {
+					myWakeLockToCreate = false;
+				}
+			}
 			if (myWakeLock != null) {
 				synchronized (this) {
 					if (myWakeLock != null) {
