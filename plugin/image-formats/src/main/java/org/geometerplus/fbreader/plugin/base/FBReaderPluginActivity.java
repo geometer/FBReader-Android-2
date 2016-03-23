@@ -373,7 +373,8 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 		}
 	}
 
-	void showBars() {
+	@Override
+	public final void showBars() {
 		setStatusBarVisible(true);
 		showBarsInternal();
 

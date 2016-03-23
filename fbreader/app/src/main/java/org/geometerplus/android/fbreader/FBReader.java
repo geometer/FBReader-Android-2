@@ -769,7 +769,8 @@ public final class FBReader extends MainActivity implements ZLApplicationWindow,
 		setStatusBarVisible(false);
 	}
 
-	void showBars() {
+	@Override
+	public final void showBars() {
 		setStatusBarVisible(true);
 
 		setTitleVisible(true);
