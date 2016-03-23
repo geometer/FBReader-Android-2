@@ -207,7 +207,7 @@ public abstract class AnimationProvider implements Animator.AnimatorListener {
 
 	protected void terminateAnimator(Animator animator) {
 		if (animator != null) {
-			animator.pause();
+			//animator.pause();
 			animator.removeAllListeners();
 		}
 	}
