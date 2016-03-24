@@ -134,7 +134,7 @@ public class CancelActivity extends FBListActivity {
 					data, ((CancelMenuHelper.BookmarkDescription)item).getBookmark()
 				);
 			}
-			setResult(RESULT_OK, data);
+			setResult(RESULT_FIRST_USER, data);
 			finish();
 		}
 	}
