@@ -527,7 +527,7 @@ public abstract class MainActivity extends FBActivity {
 				DictionaryUtil.onActivityResult(this, requestCode, resultCode, data);
 				break;
 			case REQUEST_CANCEL_MENU:
-				if (resultCode == RESULT_OK && data != null) {
+				if (resultCode != RESULT_CANCELED && data != null) {
 					runCancelAction(data);
 				}
 				break;
