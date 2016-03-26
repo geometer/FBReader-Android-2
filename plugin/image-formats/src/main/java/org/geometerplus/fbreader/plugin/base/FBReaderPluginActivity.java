@@ -344,6 +344,8 @@ public abstract class FBReaderPluginActivity extends MainActivity {
 
 	@Override
 	public final void hideBars() {
+		hideSearchItem();
+
 		if (myNavigationPopup != null) {
 			myNavigationPopup.stopNavigation();
 			myNavigationPopup = null;
