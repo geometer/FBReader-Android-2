@@ -25,6 +25,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+import org.fbreader.util.IOUtil;
+
 import org.geometerplus.zlibrary.core.filesystem.*;
 import org.geometerplus.zlibrary.core.language.Language;
 
@@ -89,12 +91,7 @@ public abstract class BookUtil {
 		} catch (NoSuchAlgorithmException e) {
 			return null;
 		} finally {
-			if (stream != null) {
-				try {
-					stream.close();
-				} catch (IOException e) {
-				}
-			}
+			IOUtil.closeQuietly(stream);
 		}
 	}
 

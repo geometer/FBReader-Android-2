@@ -3,6 +3,8 @@ package org.amse.ys.zip;
 import java.io.*;
 import java.util.*;
 
+import org.fbreader.util.IOUtil;
+
 import org.geometerplus.zlibrary.core.util.InputStreamHolder;
 
 public final class ZipFile {
@@ -104,14 +106,34 @@ public final class ZipFile {
 		Decompressor.storeDecompressor(decompressor);
 	}
 
-	private final Queue<MyBufferedInputStream> myStoredStreams = new LinkedList<MyBufferedInputStream>();
+	private volatile LinkedList<MyBufferedInputStream> myStoredStreams;
+
+	public synchronized void setCacheable(boolean cacheable) {
+		if (cacheable) {
+			if (myStoredStreams == null) {
+				myStoredStreams = new LinkedList<MyBufferedInputStream>();
+			}
+		} else {
+			if (myStoredStreams != null) {
+				for (MyBufferedInputStream stream : myStoredStreams) {
+					IOUtil.closeQuietly(stream);
+				}
+				myStoredStreams = null;
+			}
+		}
+	}
 
 	synchronized void storeBaseStream(MyBufferedInputStream baseStream) {
-		myStoredStreams.add(baseStream);
+		if (myStoredStreams != null) {
+			myStoredStreams.add(baseStream);
+		} else {
+			IOUtil.closeQuietly(baseStream);
+		}
 	}
 
 	synchronized MyBufferedInputStream getBaseStream() throws IOException {
-		final MyBufferedInputStream stored = myStoredStreams.poll();
+		final MyBufferedInputStream stored =
+			myStoredStreams != null ? myStoredStreams.poll() : null;
 		if (stored != null) {
 			return stored;
 		}
