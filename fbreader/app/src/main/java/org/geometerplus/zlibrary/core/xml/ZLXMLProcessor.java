@@ -22,6 +22,8 @@ package org.geometerplus.zlibrary.core.xml;
 import java.util.*;
 import java.io.*;
 
+import org.fbreader.util.IOUtil;
+
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 
 public abstract class ZLXMLProcessor {
@@ -66,14 +68,11 @@ public abstract class ZLXMLProcessor {
 	}
 
 	public static void read(ZLXMLReader xmlReader, ZLFile file, int bufferSize) throws IOException {
-		InputStream stream = file.getInputStream();
+		final InputStream stream = file.getInputStream();
 		try {
 			read(xmlReader, stream, bufferSize);
 		} finally {
-			try {
-				stream.close();
-			} catch (IOException e) {
-			}
+			IOUtil.closeQuietly(stream);
 		}
 	}
 }

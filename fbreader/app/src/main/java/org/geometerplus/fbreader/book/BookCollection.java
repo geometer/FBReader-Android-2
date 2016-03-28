@@ -539,10 +539,15 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 				// collect books from archives
 				// rescan files and check book id
 				filesToRemove.remove(file);
-				final DbBook book = getBookByFile(file);
-				if (book != null) {
-					saveBook(book);
-					getHash(book, false);
+				file.setCached(true);
+				try {
+					final DbBook book = getBookByFile(file);
+					if (book != null) {
+						saveBook(book);
+						getHash(book, false);
+					}
+				} finally {
+					file.setCached(false);
 				}
 			}
 
@@ -594,13 +599,17 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 				if (file == null) {
 					continue;
 				}
-				if (!fileInfos.check(file, true)) {
-					try {
-						BookUtil.readMetainfo(book, PluginCollection);
-						saveBook(book);
-					} catch (BookReadingException e) {
-						doAdd = false;
+				file.setCached(true);
+				try {
+					if (!fileInfos.check(file, true)) {
+						try {
+							BookUtil.readMetainfo(book, PluginCollection);
+							saveBook(book);
+						} catch (BookReadingException e) {
+							doAdd = false;
+						}
 					}
+				} finally {
 					file.setCached(false);
 				}
 				if (doAdd) {
@@ -623,13 +632,17 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 			if (physicalFiles.contains(file)) {
 				continue;
 			}
-			collectBooks(
-				file, fileInfos,
-				savedBooksByFileId, orphanedBooksByFileId,
-				newBooks,
-				!fileInfos.check(file, true)
-			);
-			file.setCached(false);
+			file.setCached(true);
+			try {
+				collectBooks(
+					file, fileInfos,
+					savedBooksByFileId, orphanedBooksByFileId,
+					newBooks,
+					!fileInfos.check(file, true)
+				);
+			} finally {
+				file.setCached(false);
+			}
 		}
 
 		// Step 3: add help file
@@ -676,7 +689,6 @@ public class BookCollection extends AbstractBookCollection<DbBook> {
 					fileQueue.add((ZLPhysicalFile)file);
 				}
 			} else {
-				entry.setCached(true);
 				fileList.add(entry);
 			}
 		}
