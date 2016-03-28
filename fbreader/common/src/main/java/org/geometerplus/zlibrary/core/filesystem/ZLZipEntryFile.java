@@ -27,7 +27,7 @@ import org.amse.ys.zip.*;
 final class ZLZipEntryFile extends ZLArchiveEntryFile {
 	static List<ZLFile> archiveEntries(ZLFile archive) {
 		try {
-			final ZipFile zf = ZLZipEntryFile.getZipFile(archive);
+			final ZipFile zf = getZipFile(archive);
 			final Collection<LocalFileHeader> headers = zf.headers();
 			if (!headers.isEmpty()) {
 				ArrayList<ZLFile> entries = new ArrayList<ZLFile>(headers.size());
@@ -49,6 +49,7 @@ final class ZLZipEntryFile extends ZLArchiveEntryFile {
 			if (zf == null) {
 				zf = new ZipFile(file);
 				if (file.isCached()) {
+					zf.setCacheable(true);
 					ourZipFileMap.put(file, zf);
 				}
 			}
@@ -57,7 +58,10 @@ final class ZLZipEntryFile extends ZLArchiveEntryFile {
 	}
 
 	static void removeFromCache(ZLFile file) {
-		ourZipFileMap.remove(file);
+		final ZipFile zipFile = ourZipFileMap.remove(file);
+		if (zipFile != null) {
+			zipFile.setCacheable(false);
+		}
 	}
 
 	ZLZipEntryFile(ZLFile parent, String name) {
