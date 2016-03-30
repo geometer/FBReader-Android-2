@@ -31,7 +31,7 @@ import org.apache.http.client.AuthenticationHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.*;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -359,8 +359,17 @@ public class ZLNetworkManager {
 					};
 				}
 			};
-			httpClient.getConnectionManager().getSchemeRegistry()
-				.register(new Scheme("https", new TlsSniSocketFactory(), 443));
+
+			final SchemeRegistry registry = httpClient.getConnectionManager().getSchemeRegistry();
+			final Scheme httpsScheme = registry.get("https");
+			if (httpsScheme != null) {
+				final SocketFactory original = httpsScheme.getSocketFactory();
+				if (original instanceof LayeredSocketFactory) {
+					final LayeredSocketFactory layered = (LayeredSocketFactory)original;
+					registry.register(new Scheme("https", new TlsSniSocketFactory(layered), 443));
+				}
+			}
+
 			final HttpRequestBase httpRequest;
 			if (request instanceof ZLNetworkRequest.Get) {
 				httpRequest = new HttpGet(request.URL);
