@@ -1,4 +1,4 @@
-// code from http://blog.dev001.net/post/67082904181/android-using-sni-and-tlsv12-with-apache
+// based on code from http://blog.dev001.net/post/67082904181/android-using-sni-and-tlsv12-with-apache
 
 package android.patches;
 
@@ -18,24 +18,38 @@ import org.apache.http.params.HttpParams;
 public class TlsSniSocketFactory implements LayeredSocketFactory {
 	final static HostnameVerifier ourHostnameVerifier = new BrowserCompatHostnameVerifier();
 
+	private final LayeredSocketFactory myBase;
+
+	public TlsSniSocketFactory(LayeredSocketFactory base) {
+		myBase = base;
+	}
+
 	@Override
-	public Socket connectSocket(Socket s, String host, int port, InetAddress localAddress, int localPort, HttpParams params) throws IOException {
-		return null;
+	public Socket connectSocket(Socket sock, String host, int port, InetAddress localAddress, int localPort, HttpParams params) throws IOException {
+		return myBase.connectSocket(sock, host, port, localAddress, localPort, params);
 	}
 
 	@Override
 	public Socket createSocket() throws IOException {
-		return null;
+		return myBase.createSocket();
 	}
 
 	@Override
-	public boolean isSecure(Socket s) throws IllegalArgumentException {
-		return (s instanceof SSLSocket) && ((SSLSocket)s).isConnected();
+	public boolean isSecure(Socket sock) throws IllegalArgumentException {
+		return myBase.isSecure(sock);
 	}
 
 	// TLS layer
 	@Override
 	public Socket createSocket(Socket plainSocket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
+		try {
+			return myBase.createSocket(plainSocket, host, port, autoClose);
+		} catch (SSLPeerUnverifiedException e) {
+			return createSocketInternal(plainSocket, host, port, autoClose);
+		}
+	}
+
+	private Socket createSocketInternal(Socket plainSocket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
 		if (autoClose) {
 			// we don't need the plainSocket
 			plainSocket.close();
