@@ -141,23 +141,29 @@ public final class ConfigShadow extends Config implements ServiceConnection {
 	}
 
 	@Override
-	protected void setValueInternal(String group, String name, String value) {
-		if (myInterface != null) {
-			try {
-				myInterface.setValue(group, name, value);
-			} catch (RemoteException e) {
+	protected void setValueInternal(final String group, final String name, final String value) {
+		runOnConnect(new Runnable() {
+			public void run() {
+				try {
+					myInterface.setValue(group, name, value);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		}
+		});
 	}
 
 	@Override
-	protected void unsetValueInternal(String group, String name) {
-		if (myInterface != null) {
-			try {
-				myInterface.unsetValue(group, name);
-			} catch (RemoteException e) {
+	protected void unsetValueInternal(final String group, final String name) {
+		runOnConnect(new Runnable() {
+			public void run() {
+				try {
+					myInterface.unsetValue(group, name);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		}
+		});
 	}
 
 	@Override
@@ -206,5 +212,6 @@ public final class ConfigShadow extends Config implements ServiceConnection {
 	// method from ServiceConnection interface
 	public synchronized void onServiceDisconnected(ComponentName name) {
 		myContext.unregisterReceiver(myReceiver);
+		myInterface = null;
 	}
 }

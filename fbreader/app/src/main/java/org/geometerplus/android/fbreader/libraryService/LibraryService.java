@@ -39,7 +39,7 @@ import org.geometerplus.android.fbreader.httpd.DataService;
 import org.geometerplus.android.fbreader.httpd.DataUtil;
 
 public class LibraryService extends Service {
-	private static SQLiteBooksDatabase ourDatabase;
+	private static volatile SQLiteBooksDatabase ourDatabase;
 	private static final Object ourDatabaseLock = new Object();
 
 	final DataService.Connection DataConnection = new DataService.Connection();

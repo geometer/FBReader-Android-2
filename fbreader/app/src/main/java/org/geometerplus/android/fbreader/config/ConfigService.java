@@ -24,25 +24,21 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class ConfigService extends Service {
-	private ConfigInterface.Stub myConfig;
+	private static volatile SQLiteConfig ourConfig;
+	private static final Object ourConfigLock = new Object();
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		return myConfig;
+		return ourConfig;
 	}
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		myConfig = new SQLiteConfig(this);
-	}
-
-	@Override
-	public void onDestroy() {
-		if (myConfig != null) {
-			// TODO: close db
-			myConfig = null;
+		synchronized (ourConfigLock) {
+			if (ourConfig == null) {
+				ourConfig = new SQLiteConfig(this);
+			}
 		}
-		super.onDestroy();
 	}
 }

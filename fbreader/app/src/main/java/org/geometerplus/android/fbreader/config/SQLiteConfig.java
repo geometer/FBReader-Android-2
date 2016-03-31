@@ -32,19 +32,22 @@ import org.geometerplus.android.fbreader.api.FBReaderIntents;
 
 final class SQLiteConfig extends ConfigInterface.Stub {
 	private final Service myService;
-
 	private final SQLiteDatabase myDatabase;
 
 	public SQLiteConfig(Service service) {
 		myService = service;
 		myDatabase = service.openOrCreateDatabase("config.db", Context.MODE_PRIVATE, null);
-		switch (myDatabase.getVersion()) {
+		migrate(myDatabase);
+	}
+
+	private void migrate(SQLiteDatabase db) {
+		switch (db.getVersion()) {
 			case 0:
-				myDatabase.execSQL("CREATE TABLE IF NOT EXISTS config (groupName VARCHAR, name VARCHAR, value VARCHAR, PRIMARY KEY(groupName, name) )");
+				db.execSQL("CREATE TABLE IF NOT EXISTS config (groupName VARCHAR, name VARCHAR, value VARCHAR, PRIMARY KEY(groupName, name) )");
 				break;
 			case 1:
-				myDatabase.beginTransaction();
-				final SQLiteStatement removeStatement = myDatabase.compileStatement(
+				db.beginTransaction();
+				final SQLiteStatement removeStatement = db.compileStatement(
 					"DELETE FROM config WHERE name = ? AND groupName LIKE ?"
 				);
 				try {
@@ -62,16 +65,18 @@ final class SQLiteConfig extends ConfigInterface.Stub {
 				} finally {
 					removeStatement.close();
 				}
-				myDatabase.execSQL(
+				db.execSQL(
 					"DELETE FROM config WHERE name LIKE 'Entry%' AND groupName LIKE '/%'"
 				);
-				myDatabase.setTransactionSuccessful();
-				myDatabase.endTransaction();
-				myDatabase.execSQL("VACUUM");
+				db.setTransactionSuccessful();
+				db.endTransaction();
+				db.execSQL("VACUUM");
 				SQLiteDatabase.releaseMemory();
+				System.gc();
+				System.gc();
 				break;
 		}
-		myDatabase.setVersion(2);
+		db.setVersion(2);
 	}
 
 	@Override
