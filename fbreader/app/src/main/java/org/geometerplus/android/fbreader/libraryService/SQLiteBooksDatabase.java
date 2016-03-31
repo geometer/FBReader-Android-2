@@ -1322,18 +1322,18 @@ final class SQLiteBooksDatabase extends BooksDatabase {
 	protected void deleteBook(long bookId) {
 		myDatabase.beginTransaction();
 		final String[] params = new String[] { String.valueOf(bookId) };
-		myDatabase.delete("BookHistory", "book_id=", params);
-		myDatabase.delete("BookHash", "book_id=", params);
-		myDatabase.delete("BookAuthor", "book_id=", params);
-		myDatabase.delete("BookLabel", "book_id=", params);
-		myDatabase.delete("BookReadingProgress", "book_id=", params);
-		myDatabase.delete("BookSeries", "book_id=", params);
-		myDatabase.delete("BookState", "book_id=", params);
-		myDatabase.delete("BookTag", "book_id=", params);
-		myDatabase.delete("BookUid", "book_id=", params);
-		myDatabase.delete("Bookmarks", "book_id=", params);
-		myDatabase.delete("VisitedHyperlinks", "book_id=", params);
-		myDatabase.delete("Books", "book_id=", params);
+		myDatabase.delete("BookHistory", "book_id=?", params);
+		myDatabase.delete("BookHash", "book_id=?", params);
+		myDatabase.delete("BookAuthor", "book_id=?", params);
+		myDatabase.delete("BookLabel", "book_id=?", params);
+		myDatabase.delete("BookReadingProgress", "book_id=?", params);
+		myDatabase.delete("BookSeries", "book_id=?", params);
+		myDatabase.delete("BookState", "book_id=?", params);
+		myDatabase.delete("BookTag", "book_id=?", params);
+		myDatabase.delete("BookUid", "book_id=?", params);
+		myDatabase.delete("Bookmarks", "book_id=?", params);
+		myDatabase.delete("VisitedHyperlinks", "book_id=?", params);
+		myDatabase.delete("Books", "book_id=?", params);
 		myDatabase.setTransactionSuccessful();
 		myDatabase.endTransaction();
 	}
