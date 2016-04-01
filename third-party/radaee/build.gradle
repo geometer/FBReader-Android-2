@@ -10,10 +10,6 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-dependencies {
-    compile files('libs/com.radaee.view.jar')
-}
-
 android {
 	compileSdkVersion 23
 	buildToolsVersion '23.0.1'
