@@ -157,5 +157,5 @@ android.applicationVariants.all { variant ->
 		throw new IllegalArgumentException('Unsupported version format: ' + version)
 	}
 
-	variant.mergedFlavor.versionCode = baseCode + 30 + abiVersion
+	variant.mergedFlavor.versionCode = baseCode + 40 + abiVersion
 }
