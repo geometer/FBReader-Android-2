@@ -1,12 +1,5 @@
 package com.radaee.pdf;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
-import com.radaee.viewlib.BuildConfig;
-import com.radaee.viewlib.R;
-
 import android.app.Activity;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
@@ -15,6 +8,13 @@ import android.graphics.Bitmap;
 //import android.net.wifi.WifiInfo;
 //import android.net.wifi.WifiManager;
 import android.os.Environment;
+
+import com.radaee.viewlib.BuildConfig;
+import com.radaee.viewlib.R;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 /**
  * class for Global setting.
@@ -376,7 +376,7 @@ public class Global
 		if (!files.exists())// not exist? make it!
 			files.mkdir();
 		Resources res = act.getResources();
-        load_std_font( res, R.raw.rdf008, 8, new File(files, "rdf008") );
+        //load_std_font( res, R.raw.rdf008, 8, new File(files, "rdf008") );
         load_std_font( res, R.raw.rdf013, 13, new File(files, "rdf013") );
 		load_cmyk_icc( res, R.raw.cmyk_rgb, new File(files, "cmyk_rgb") );
 		load_cmaps( res, R.raw.cmaps, new File(files, "cmaps"), R.raw.umaps, new File(files, "umaps") );
@@ -439,6 +439,7 @@ public class Global
         load_truetype_font( res, R.raw.cousineb, new File(files, "cousineb.ttf") );
         load_truetype_font( res, R.raw.cousinei, new File(files, "cousinei.ttf") );
         load_truetype_font( res, R.raw.cousinebi, new File(files, "cousinebi.ttf") );
+        load_truetype_font( res, R.raw.symbol, new File(files, "symbol.ttf") );//Symbol Neu for Powerline
 		fontfileListEnd();
         fontfileMapping("Arial",                    "Arimo");
         fontfileMapping("Arial Bold",              "Arimo Bold");
@@ -514,16 +515,16 @@ public class Global
         fontfileMapping("TimesNewRomanPSMT-Bold",          "Tinos Bold");
         fontfileMapping("TimesNewRomanPSMT-BoldItalic",   "Tinos Bold Italic");
         fontfileMapping("TimesNewRomanPSMT-Italic",        "Tinos Italic");
-        fontfileMapping("Courier",                    "Cousine");
-        fontfileMapping("Courier Bold",              "Cousine Bold");
-        fontfileMapping("Courier BoldItalic",       "Cousine Bold Italic");
-        fontfileMapping("Courier Italic",            "Cousine Italic");
-        fontfileMapping("Courier,Bold",              "Cousine Bold");
-        fontfileMapping("Courier,BoldItalic",       "Cousine Bold Italic");
-        fontfileMapping("Courier,Italic",            "Cousine Italic");
-        fontfileMapping("Courier-Bold",              "Cousine Bold");
-        fontfileMapping("Courier-BoldItalic",       "Cousine Bold Italic");
-        fontfileMapping("Courier-Italic",            "Cousine Italic");
+        fontfileMapping("Courier",                        "Cousine");
+        fontfileMapping("Courier Bold",                  "Cousine Bold");
+        fontfileMapping("Courier BoldItalic",           "Cousine Bold Italic");
+        fontfileMapping("Courier Italic",                "Cousine Italic");
+        fontfileMapping("Courier,Bold",                  "Cousine Bold");
+        fontfileMapping("Courier,BoldItalic",           "Cousine Bold Italic");
+        fontfileMapping("Courier,Italic",                "Cousine Italic");
+        fontfileMapping("Courier-Bold",                  "Cousine Bold");
+        fontfileMapping("Courier-BoldItalic",           "Cousine Bold Italic");
+        fontfileMapping("Courier-Italic",                "Cousine Italic");
         fontfileMapping("Courier New",                    "Cousine");
         fontfileMapping("Courier New Bold",              "Cousine Bold");
         fontfileMapping("Courier New BoldItalic",       "Cousine Bold Italic");
@@ -534,16 +535,20 @@ public class Global
         fontfileMapping("Courier New-Bold",              "Cousine Bold");
         fontfileMapping("Courier New-BoldItalic",       "Cousine Bold Italic");
         fontfileMapping("Courier New-Italic",            "Cousine Italic");
-        fontfileMapping("CourierNew",                    "Cousine");
-        fontfileMapping("CourierNew Bold",              "Cousine Bold");
-        fontfileMapping("CourierNew BoldItalic",       "Cousine Bold Italic");
-        fontfileMapping("CourierNew Italic",            "Cousine Italic");
-        fontfileMapping("CourierNew,Bold",              "Cousine Bold");
-        fontfileMapping("CourierNew,BoldItalic",       "Cousine Bold Italic");
-        fontfileMapping("CourierNew,Italic",            "Cousine Italic");
-        fontfileMapping("CourierNew-Bold",              "Cousine Bold");
-        fontfileMapping("CourierNew-BoldItalic",       "Cousine Bold Italic");
-        fontfileMapping("CourierNew-Italic",            "Cousine Italic");
+        fontfileMapping("CourierNew",                     "Cousine");
+        fontfileMapping("CourierNew Bold",               "Cousine Bold");
+        fontfileMapping("CourierNew BoldItalic",        "Cousine Bold Italic");
+        fontfileMapping("CourierNew Italic",             "Cousine Italic");
+        fontfileMapping("CourierNew,Bold",               "Cousine Bold");
+        fontfileMapping("CourierNew,BoldItalic",        "Cousine Bold Italic");
+        fontfileMapping("CourierNew,Italic",             "Cousine Italic");
+        fontfileMapping("CourierNew-Bold",               "Cousine Bold");
+        fontfileMapping("CourierNew-BoldItalic",        "Cousine Bold Italic");
+        fontfileMapping("CourierNew-Italic",             "Cousine Italic");
+        fontfileMapping("Symbol",                          "Symbol Neu for Powerline");
+        fontfileMapping("Symbol,Bold",                    "Symbol Neu for Powerline");
+        fontfileMapping("Symbol,BoldItalic",             "Symbol Neu for Powerline");
+        fontfileMapping("Symbol,Italic",                  "Symbol Neu for Powerline");
         //fontfileMapping("TimesNewRoman", "Times New Roman");
 
 		String face_name = null;
