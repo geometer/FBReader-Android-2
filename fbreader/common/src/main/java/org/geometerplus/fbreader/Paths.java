@@ -27,8 +27,7 @@ import android.os.Environment;
 
 import org.fbreader.util.IOUtil;
 
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
-import org.geometerplus.zlibrary.core.options.ZLStringListOption;
+import org.geometerplus.zlibrary.core.options.*;
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 
 public abstract class Paths {
@@ -174,12 +173,18 @@ public abstract class Paths {
 		return cardDirectory() + "/Books";
 	}
 
-	private static ZLStringListOption pathOption(String key, String defaultDirectory) {
+	private static ZLStringListOption pathOption(String key, final String defaultDirectory) {
 		final ZLStringListOption option = new ZLStringListOption(
 			"Files", key, Collections.<String>emptyList(), "\n"
 		);
 		if (option.getValue().isEmpty()) {
-			option.setValue(Collections.singletonList(defaultDirectory));
+			Config.Instance().runOnConnect(new Runnable() {
+				public void run() {
+					if (option.getValue().isEmpty()) {
+						option.setValue(Collections.singletonList(defaultDirectory));
+					}
+				}
+			});
 		}
 		return option;
 	}
