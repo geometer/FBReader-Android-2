@@ -73,6 +73,7 @@ public class ColorProfile {
 	public final ZLColorOption FooterNGForegroundOption;
 	public final ZLColorOption FooterNGForegroundUnreadOption;
 
+	/*
 	private ColorProfile(String name, ColorProfile base) {
 		this(name);
 		WallpaperOption.setValue(base.WallpaperOption.getValue());
@@ -90,6 +91,7 @@ public class ColorProfile {
 		FooterNGForegroundOption.setValue(base.FooterNGForegroundOption.getValue());
 		FooterNGForegroundUnreadOption.setValue(base.FooterNGForegroundUnreadOption.getValue());
 	}
+	*/
 
 	private static ZLColorOption createOption(String profileName, String optionName, int r, int g, int b) {
 		return new ZLColorOption("Colors", profileName + ':' + optionName, new ZLColor(r, g, b));

@@ -49,12 +49,6 @@ public class FooterOptions {
 		ShowProgress = new ZLEnumOption<ProgressDisplayType>(
 			"Options", prefix + "DisplayProgressInFooter", ProgressDisplayType.asPages
 		);
-		final ZLBooleanOption oldShowProgress =
-			new ZLBooleanOption("Options", prefix + "ShowProgressInFooter", true);
-		if (!oldShowProgress.getValue()) {
-			oldShowProgress.setValue(true);
-			ShowProgress.setValue(ProgressDisplayType.dontDisplay);
-		}
 		Font = new ZLStringOption("Options", prefix + "FooterFont", "Droid Sans");
 	}
 
