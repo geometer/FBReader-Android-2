@@ -19,8 +19,8 @@
 
 package org.geometerplus.android.fbreader;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.*;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,11 +52,28 @@ public class CancelActivity extends FBListActivity {
 
 		myActions.clear();
 		final Intent intent = getIntent();
-		final List<CancelMenuHelper.ActionDescription> actions = intent != null
-			? (List<CancelMenuHelper.ActionDescription>)intent.getSerializableExtra(FBReaderIntents.Key.CANCEL_ACTIONS)
-			: null;
-		if (actions != null) {
-			myActions.addAll(actions);
+
+		final List<Map<String,String>> maps =
+			(List<Map<String,String>>)intent.getSerializableExtra(
+				FBReaderIntents.Key.CANCEL_ACTIONS
+			);
+		if (maps != null) {
+			for (Map<String,String> m : maps) {
+				final CancelMenuHelper.ActionDescription description =
+					CancelMenuHelper.ActionDescription.fromMap(m);
+				if (description != null) {
+					myActions.add(description);
+				}
+			}
+		}
+		if (myActions.isEmpty()) {
+			final List<CancelMenuHelper.ActionDescription> actions =
+				(List<CancelMenuHelper.ActionDescription>)intent.getSerializableExtra(
+					FBReaderIntents.Key.CANCEL_ACTIONS_OBSOLETE
+				);
+			if (actions != null) {
+				myActions.addAll(actions);
+			}
 		}
 	}
 
