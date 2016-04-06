@@ -40,7 +40,6 @@ public abstract class FBReaderIntents {
 		public static String EXTERNAL_LIBRARY                 = "android.fbreader.action.EXTERNAL_LIBRARY";
 		public static String TABLE_OF_CONTENTS                = "android.fbreader.action.TABLE_OF_CONTENTS";
 		public static String BOOKMARKS                        = "android.fbreader.action.BOOKMARKS";
-		public static String EXTERNAL_BOOKMARKS               = "android.fbreader.action.EXTERNAL_BOOKMARKS";
 		public static String PREFERENCES                      = "android.fbreader.action.PREFERENCES";
 		public static String NETWORK_LIBRARY                  = "android.fbreader.action.NETWORK_LIBRARY";
 		public static String OPEN_NETWORK_CATALOG             = "android.fbreader.action.OPEN_NETWORK_CATALOG";
@@ -78,7 +77,8 @@ public abstract class FBReaderIntents {
 		String BOOKMARK                         = "fbreader.bookmark";
 		String PLUGIN                           = "fbreader.plugin";
 		String TYPE                             = "fbreader.type";
-		String CANCEL_ACTIONS                   = "fbreader.cancel.actions";
+		String CANCEL_ACTIONS                   = "fbreader.cancel.action.list";
+		String CANCEL_ACTIONS_OBSOLETE          = "fbreader.cancel.actions";
 	}
 
 	public static void initPremium() {

@@ -58,10 +58,37 @@ public class CancelMenuHelper {
 		public final String Summary;
 
 		ActionDescription(ActionType type, String summary) {
-			final ZLResource resource = ZLResource.resource("cancelMenu");
+			this(
+				type,
+				ZLResource.resource("cancelMenu").getResource(type.toString()).getValue(),
+				summary
+			);
+		}
+
+		private ActionDescription(ActionType type, String title, String summary) {
 			Type = type;
-			Title = resource.getResource(type.toString()).getValue();
+			Title = title;
 			Summary = summary;
+		}
+
+		public final HashMap<String,String> toMap() {
+			final HashMap<String,String> map = new HashMap<String,String>();
+			map.put("type", String.valueOf(Type));
+			map.put("title", Title);
+			map.put("summary", Summary);
+			return map;
+		}
+
+		public static ActionDescription fromMap(Map<String,String> map) {
+			try {
+				return new ActionDescription(
+					ActionType.valueOf(map.get("type")),
+					map.get("title"),
+					map.get("summary")
+				);
+			} catch (Exception e) {
+				return null;
+			}
 		}
 	}
 

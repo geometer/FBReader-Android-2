@@ -19,7 +19,7 @@
 
 package org.fbreader.reader.android;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import android.content.Intent;
 
@@ -55,11 +55,14 @@ class CancelAction extends MainActivity.Action<MainActivity,AbstractReader> {
 			final BookCollectionShadow collection = BaseActivity.getCollection();
 			collection.bindToService(BaseActivity, new Runnable() {
 				public void run() {
-					final ArrayList<CancelMenuHelper.ActionDescription> actions =
-						new ArrayList<CancelMenuHelper.ActionDescription>(
-							new CancelMenuHelper().getActionsList(collection)
-						);
-					intent.putExtra(FBReaderIntents.Key.CANCEL_ACTIONS, actions);
+					final List<CancelMenuHelper.ActionDescription> actions =
+						new CancelMenuHelper().getActionsList(collection);
+					final ArrayList<HashMap<String,String>> maps =
+						new ArrayList<HashMap<String,String>>(actions.size());
+					for (CancelMenuHelper.ActionDescription a : actions) {
+						maps.add(a.toMap());
+					}
+					intent.putExtra(FBReaderIntents.Key.CANCEL_ACTIONS, maps);
 					BaseActivity.startActivityForResult(intent, MainActivity.REQUEST_CANCEL_MENU);
 				}
 			});
