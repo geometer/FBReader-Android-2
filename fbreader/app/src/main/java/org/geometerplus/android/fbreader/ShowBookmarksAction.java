@@ -40,22 +40,8 @@ class ShowBookmarksAction extends FBReader.Action<FBReader,FBReaderApp> {
 
 	@Override
 	protected void run(Object ... params) {
-		final Intent externalIntent =
-			new Intent(FBReaderIntents.Action.EXTERNAL_BOOKMARKS);
-		final Intent internalIntent =
+		final Intent intent =
 			new Intent(BaseActivity.getApplicationContext(), BookmarksActivity.class);
-		if (PackageUtil.canBeStarted(BaseActivity, externalIntent, true)) {
-			try {
-				startBookmarksActivity(externalIntent);
-			} catch (ActivityNotFoundException e) {
-				startBookmarksActivity(internalIntent);
-			}
-		} else {
-			startBookmarksActivity(internalIntent);
-		}
-	}
-
-	private void startBookmarksActivity(Intent intent) {
 		FBReaderIntents.putBookExtra(intent, Reader.getCurrentBook());
 		FBReaderIntents.putBookmarkExtra(intent, Reader.createBookmark(80, true));
 		BaseActivity.startActivity(intent);
