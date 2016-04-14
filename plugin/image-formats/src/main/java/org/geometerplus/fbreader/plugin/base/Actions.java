@@ -339,26 +339,11 @@ public class Actions {
 				true
 			);
 
-			final Intent externalIntent =
-				new Intent(FBReaderIntents.Action.EXTERNAL_BOOKMARKS)
-					.addCategory(Intent.CATEGORY_DEFAULT);
-			FBReaderIntents.putBookExtra(externalIntent, book);
-			FBReaderIntents.putBookmarkExtra(externalIntent, bookmark);
-
-			final Intent internalIntent =
+			final Intent intent =
 				FBReaderIntents.defaultInternalIntent(FBReaderIntents.Action.BOOKMARKS);
-			FBReaderIntents.putBookExtra(internalIntent, book);
-			FBReaderIntents.putBookmarkExtra(internalIntent, bookmark);
-
-			if (canBeStarted(Reader.getActivity(), externalIntent)) {
-				try {
-					Reader.getActivity().startActivity(externalIntent);
-				} catch (ActivityNotFoundException e) {
-					Reader.getActivity().startActivity(internalIntent);
-				}
-			} else {
-				Reader.getActivity().startActivity(internalIntent);
-			}
+			FBReaderIntents.putBookExtra(intent, book);
+			FBReaderIntents.putBookmarkExtra(intent, bookmark);
+			Reader.getActivity().startActivity(intent);
 			Reader.getActivity().overridePendingTransition(0, 0);
 		}
 	}
