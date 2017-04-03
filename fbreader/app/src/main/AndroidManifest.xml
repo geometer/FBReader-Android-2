@@ -197,7 +197,7 @@
 				<action android:name="android.fbreader.action.CONFIG_SERVICE"/>
 			</intent-filter>
 		</service>
-		<service android:name="org.geometerplus.android.fbreader.sync.SyncService" android:launchMode="singleTask" android:process=":synchroniser">
+		<service android:name="org.geometerplus.android.fbreader.sync.SyncService" android:launchMode="singleTask" android:process=":networkLibrary">
 			<intent-filter>
 				<action android:name="android.fbreader.action.sync.START"/>
 			</intent-filter>
@@ -234,7 +234,7 @@
 			android:theme="@style/FBReader.Activity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 		/>
-		<activity android:name="org.geometerplus.android.fbreader.preferences.PreferenceActivity" android:theme="@style/FBReader.Activity" android:configChanges="orientation|keyboardHidden|screenSize" android:process=":preferences">
+		<activity android:name="org.geometerplus.android.fbreader.preferences.PreferenceActivity" android:theme="@style/FBReader.Activity" android:configChanges="orientation|keyboardHidden|screenSize" android:process=":networkLibrary">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW"/>
 				<category android:name="android.intent.category.DEFAULT"/>
