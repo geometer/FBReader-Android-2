@@ -29,6 +29,10 @@ import org.apache.http.cookie.Cookie;
 import org.geometerplus.zlibrary.core.options.ZLStringOption;
 
 public abstract class ZLNetworkContext implements ZLNetworkManager.BearerAuthenticator {
+	public static interface OnError {
+		void run(ZLNetworkException e);
+	}
+
 	private final ZLNetworkManager myManager = ZLNetworkManager.Instance();
 
 	protected ZLNetworkContext() {
@@ -72,6 +76,19 @@ public abstract class ZLNetworkContext implements ZLNetworkManager.BearerAuthent
 
 	public final void perform(ZLNetworkRequest request) throws ZLNetworkException {
 		perform(request, 30000, 15000);
+	}
+
+	public void perform(ZLNetworkRequest request, Runnable onSuccess, OnError onError) {
+		try {
+			perform(request);
+			if (onSuccess != null) {
+				onSuccess.run();
+			}
+		} catch (ZLNetworkException e) {
+			if (onError != null) {
+				onError.run(e);
+			}
+		}
 	}
 
 	public final boolean performQuietly(ZLNetworkRequest request) {
