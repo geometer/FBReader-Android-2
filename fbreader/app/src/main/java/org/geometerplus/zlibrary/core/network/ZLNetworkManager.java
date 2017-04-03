@@ -450,7 +450,7 @@ public class ZLNetworkManager {
 			} else {
 				code = ZLNetworkException.ERROR_CONNECT_TO_HOST;
 			}
-			throw ZLNetworkException.forCode(code, ZLNetworkUtil.hostFromUrl(request.URL), e);
+			throw ZLNetworkException.forCode(code, request.host(), e);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ZLNetworkException(e.getMessage(), e);

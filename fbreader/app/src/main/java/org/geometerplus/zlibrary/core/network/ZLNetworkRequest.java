@@ -23,6 +23,8 @@ import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.geometerplus.zlibrary.core.util.ZLNetworkUtil;
+
 public abstract class ZLNetworkRequest {
 	public static abstract class Get extends ZLNetworkRequest {
 		protected Get(String url) {
@@ -88,6 +90,10 @@ public abstract class ZLNetworkRequest {
 
 	public String getURL() {
 		return URL;
+	}
+
+	public String host() {
+		return ZLNetworkUtil.hostFromUrl(URL);
 	}
 
 	public boolean isQuiet() {
