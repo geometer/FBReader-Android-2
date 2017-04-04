@@ -113,4 +113,12 @@ public abstract class AndroidNetworkContext extends ZLNetworkContext {
 		
 		super.perform(request, socketTimeout, connectionTimeout);
 	}
+
+	public static void setAccountName(String host, Map map) {
+		final Object user = map.get("user");
+		final Object realm = map.get("realm");
+		if (host != null && user instanceof String && realm instanceof String) {
+			setAccountName(host, (String)realm, (String)user);
+		}
+	}
 }
