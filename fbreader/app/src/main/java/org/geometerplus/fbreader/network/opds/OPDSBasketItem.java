@@ -37,9 +37,12 @@ class OPDSBasketItem extends BasketItem {
 	}
 
 	@Override
-	public void loadChildren(NetworkItemsLoader loader) throws ZLNetworkException {
+	public void loadChildren(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError) {
 		final List<String> ids = bookIds();
 		if (ids.isEmpty()) {
+			if (onSuccess != null) {
+				onSuccess.run();
+			}
 			return;
 		}
 
@@ -48,17 +51,23 @@ class OPDSBasketItem extends BasketItem {
 				loader.onNewItem(getBook(id));
 			}
 			loader.Tree.confirmAllItems();
+			if (onSuccess != null) {
+				onSuccess.run();
+			}
 			return;
 		}
 
 		final OPDSNetworkLink opdsLink = (OPDSNetworkLink)Link;
 		String url = opdsLink.getUrl(UrlInfo.Type.ListBooks);
 		if (url == null) {
+			if (onSuccess != null) {
+				onSuccess.run();
+			}
 			return;
 		}
 		url = url.replace("{ids}", MiscUtil.join(ids, ","));
 
 		final OPDSCatalogItem.State state = opdsLink.createOperationData(loader);
-		doLoadChildren(state, opdsLink.createNetworkData(url, state));
+		doLoadChildren(state, opdsLink.createNetworkData(url, state), onSuccess, onError);
 	}
 }

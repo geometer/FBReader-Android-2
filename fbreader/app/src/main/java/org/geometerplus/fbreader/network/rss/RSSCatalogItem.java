@@ -21,8 +21,7 @@ package org.geometerplus.fbreader.network.rss;
 
 import java.util.HashSet;
 
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.network.ZLNetworkRequest;
+import org.geometerplus.zlibrary.core.network.*;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
 import org.geometerplus.fbreader.network.*;
@@ -47,21 +46,23 @@ public class RSSCatalogItem extends NetworkURLCatalogItem {
 	}
 
 	@Override
-	public void loadChildren(NetworkItemsLoader loader) throws ZLNetworkException {
-
+	public void loadChildren(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError) {
 		final RSSNetworkLink rssLink = (RSSNetworkLink)Link;
 		myLoadingState = rssLink.createOperationData(loader);
 
-		doLoadChildren(rssLink.createNetworkData(getCatalogUrl(), myLoadingState));
+		doLoadChildren(rssLink.createNetworkData(getCatalogUrl(), myLoadingState), onSuccess, onError);
 	}
 
-	private void doLoadChildren(ZLNetworkRequest networkRequest) throws ZLNetworkException {
-		try {
-			super.doLoadChildren(myLoadingState, networkRequest);
-		} catch (ZLNetworkException e) {
-			myLoadingState = null;
-			throw e;
-		}
+	private void doLoadChildren(ZLNetworkRequest networkRequest, Runnable onSuccess, final ZLNetworkContext.OnError onError) {
+		super.doLoadChildren(
+			myLoadingState, networkRequest, onSuccess, new ZLNetworkContext.OnError() {
+				public void run(ZLNetworkException e) {
+					myLoadingState = null;
+					if (onError != null) {
+						onError.run(e);
+					}
+				}
+			}
+		);
 	}
-
 }

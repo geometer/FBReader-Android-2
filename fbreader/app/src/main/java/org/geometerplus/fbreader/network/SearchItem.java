@@ -54,7 +54,10 @@ public abstract class SearchItem extends NetworkCatalogItem {
 	}
 
 	@Override
-	public void loadChildren(NetworkItemsLoader loader) throws ZLNetworkException {
+	public void loadChildren(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError) {
+		if (onSuccess != null) {
+			onSuccess.run();
+		}
 	}
 
 	public abstract void runSearch(ZLNetworkContext context, NetworkItemsLoader loader, String pattern) throws ZLNetworkException;

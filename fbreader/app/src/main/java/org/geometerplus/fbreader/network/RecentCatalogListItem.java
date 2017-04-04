@@ -19,6 +19,7 @@
 
 package org.geometerplus.fbreader.network;
 
+import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
@@ -50,11 +51,14 @@ public class RecentCatalogListItem extends NetworkCatalogItem {
 	}
 
 	@Override
-	public void loadChildren(NetworkItemsLoader loader) throws ZLNetworkException {
+	public void loadChildren(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError) {
 		// TODO: implement
 		for (int i = 0; i < 5; ++i) {
 			loader.onNewItem(new RecentCatalogItem("Catalog " + i, "Visited ..."));
 		}
 		loader.Tree.confirmAllItems();
+		if (onSuccess != null) {
+			onSuccess.run();
+		}
 	}
 }

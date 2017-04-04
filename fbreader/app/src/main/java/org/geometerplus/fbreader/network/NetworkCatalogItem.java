@@ -81,7 +81,7 @@ public abstract class NetworkCatalogItem extends NetworkItem {
 
 	public abstract boolean canBeOpened();
 
-	public abstract void loadChildren(NetworkItemsLoader loader) throws ZLNetworkException;
+	public abstract void loadChildren(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError);
 
 	public boolean supportsResumeLoading() {
 		return false;
@@ -91,7 +91,10 @@ public abstract class NetworkCatalogItem extends NetworkItem {
 		return false;
 	}
 
-	public void resumeLoading(NetworkItemsLoader loader) throws ZLNetworkException {
+	public void resumeLoading(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError) {
+		if (onSuccess != null) {
+			onSuccess.run();
+		}
 	}
 
 	public int getFlags() {
@@ -141,10 +144,22 @@ public abstract class NetworkCatalogItem extends NetworkItem {
 	 *
 	 * @throws ZLNetworkException when network operation couldn't be completed
 	 */
-	protected final void doLoadChildren(NetworkOperationData data, ZLNetworkRequest networkRequest) throws ZLNetworkException {
+	protected final void doLoadChildren(final NetworkOperationData data, ZLNetworkRequest networkRequest, final Runnable onSuccess, ZLNetworkContext.OnError onError) {
 		if (networkRequest != null) {
-			data.Loader.NetworkContext.perform(networkRequest);
-			data.Loader.confirmInterruption();
+			data.Loader.NetworkContext.perform(
+				networkRequest,
+				new Runnable() {
+					public void run() {
+						data.Loader.confirmInterruption();
+						if (onSuccess != null) {
+							onSuccess.run();
+						}
+					}
+				},
+				onError
+			);
+		} else if (onSuccess != null) {
+			onSuccess.run();
 		}
 	}
 }

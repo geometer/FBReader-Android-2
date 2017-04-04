@@ -21,8 +21,7 @@ package org.geometerplus.fbreader.network.opds;
 
 import java.util.*;
 
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.network.ZLNetworkRequest;
+import org.geometerplus.zlibrary.core.network.*;
 import org.geometerplus.zlibrary.core.util.MimeType;
 
 import org.geometerplus.fbreader.network.*;
@@ -60,13 +59,17 @@ public class OPDSCatalogItem extends NetworkURLCatalogItem {
 		return collection;
 	}
 
-	private void doLoadChildren(ZLNetworkRequest networkRequest) throws ZLNetworkException {
-		try {
-			super.doLoadChildren(myLoadingState, networkRequest);
-		} catch (ZLNetworkException e) {
-			myLoadingState = null;
-			throw e;
-		}
+	private void doLoadChildren(ZLNetworkRequest networkRequest, Runnable onSuccess, final ZLNetworkContext.OnError onError) {
+		super.doLoadChildren(
+			myLoadingState, networkRequest, onSuccess, new ZLNetworkContext.OnError() {
+				public void run(ZLNetworkException e) {
+					myLoadingState = null;
+					if (onError != null) {
+						onError.run(e);
+					}
+				}
+			}
+		);
 	}
 
 	@Override
@@ -75,13 +78,13 @@ public class OPDSCatalogItem extends NetworkURLCatalogItem {
 	}
 
 	@Override
-	public final void loadChildren(NetworkItemsLoader loader) throws ZLNetworkException{
+	public final void loadChildren(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError) {
 		final OPDSNetworkLink opdsLink = (OPDSNetworkLink)Link;
 
 		myLoadingState = opdsLink.createOperationData(loader);
 
 		doLoadChildren(
-			opdsLink.createNetworkData(getCatalogUrl(), myLoadingState)
+			opdsLink.createNetworkData(getCatalogUrl(), myLoadingState), onSuccess, onError
 		);
 	}
 
@@ -96,11 +99,13 @@ public class OPDSCatalogItem extends NetworkURLCatalogItem {
 	}
 
 	@Override
-	public final void resumeLoading(NetworkItemsLoader loader) throws ZLNetworkException {
+	public final void resumeLoading(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError) {
 		if (canResumeLoading()) {
 			myLoadingState.Loader = loader;
-			ZLNetworkRequest networkRequest = myLoadingState.resume();
-			doLoadChildren(networkRequest);
+			final ZLNetworkRequest networkRequest = myLoadingState.resume();
+			doLoadChildren(networkRequest, onSuccess, onError);
+		} else if (onSuccess != null) {
+			onSuccess.run();
 		}
 	}
 }

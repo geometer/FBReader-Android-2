@@ -22,8 +22,7 @@ package org.geometerplus.fbreader.network.authentication.litres;
 import java.util.*;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.network.ZLNetworkAuthenticationException;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
+import org.geometerplus.zlibrary.core.network.*;
 
 import org.geometerplus.fbreader.network.*;
 import org.geometerplus.fbreader.network.urlInfo.UrlInfoCollection;
@@ -64,11 +63,14 @@ abstract class SortedCatalogItem extends NetworkCatalogItem {
 	}
 
 	@Override
-	public void loadChildren(NetworkItemsLoader loader) throws ZLNetworkException {
+	public void loadChildren(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError) {
 		for (NetworkItem child : myChildren) {
 			loader.onNewItem(child);
 		}
 		loader.Tree.confirmAllItems();
+		if (onSuccess != null) {
+			onSuccess.run();
+		}
 	}
 }
 
@@ -169,7 +171,20 @@ public class LitResBookshelfItem extends NetworkURLCatalogItem {
 	}
 
 	@Override
-	public void loadChildren(NetworkItemsLoader loader) throws ZLNetworkException {
+	public void loadChildren(NetworkItemsLoader loader, Runnable onSuccess, ZLNetworkContext.OnError onError) {
+		try {
+			_loadChildren(loader);
+			if (onSuccess != null) {
+				onSuccess.run();
+			}
+		} catch (ZLNetworkException e) {
+			if (onError != null) {
+				onError.run(e);
+			}
+		}
+	}
+
+	private void _loadChildren(NetworkItemsLoader loader) throws ZLNetworkException {
 		final LitResAuthenticationManager mgr =
 			(LitResAuthenticationManager)Link.authenticationManager();
 
