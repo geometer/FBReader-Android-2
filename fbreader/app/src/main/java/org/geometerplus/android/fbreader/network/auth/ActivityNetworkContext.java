@@ -34,8 +34,21 @@ import org.geometerplus.android.fbreader.network.NetworkLibraryActivity;
 import org.geometerplus.android.util.OrientationUtil;
 
 public final class ActivityNetworkContext extends AndroidNetworkContext {
+	private class DelayedAction {
+		public final ZLNetworkRequest Request;
+		public final Runnable OnSuccess;
+		public final OnError OnError;
+
+		public DelayedAction(ZLNetworkRequest request, Runnable onSuccess, OnError onError) {
+			Request = request;
+			OnSuccess = onSuccess;
+			OnError = onError;
+		}
+	}
+
 	private final Activity myActivity;
 	private volatile boolean myAuthorizationConfirmed;
+	private volatile DelayedAction myDelayed;
 
 	private volatile String myAccountName;
 
@@ -101,6 +114,24 @@ public final class ActivityNetworkContext extends AndroidNetworkContext {
 			try {
 				wait();
 			} catch (InterruptedException e) {
+			}
+		}
+	}
+
+	@Override
+	public final void perform(ZLNetworkRequest request, Runnable onSuccess, OnError onError) {
+		myDelayed = new DelayedAction(request, onSuccess, onError);
+		try {
+			perform(request);
+			myDelayed = null;
+			if (onSuccess != null) {
+				onSuccess.run();
+			}
+		} catch (ZLNetworkException e) {
+			final DelayedAction action = myDelayed;
+			myDelayed = null;
+			if (action != null && action.OnError != null) {
+				action.OnError.run(e);
 			}
 		}
 	}
