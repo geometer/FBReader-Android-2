@@ -59,17 +59,6 @@ public abstract class ZLNetworkContext implements ZLNetworkManager.BearerAuthent
 		return null;
 	}
 
-	@Override
-	public String getAccountName(String host, String realm) {
-		final String accountName = getAccountOption(host, realm).getValue();
-		return "".equals(accountName) ? null : accountName;
-	}
-
-	@Override
-	public void setAccountName(String host, String realm, String accountName) {
-		getAccountOption(host, realm).setValue(accountName != null ? accountName : "");
-	}
-
 	protected void perform(ZLNetworkRequest request, int socketTimeout, int connectionTimeout) throws ZLNetworkException {
 		myManager.perform(request, this, socketTimeout, connectionTimeout);
 	}
@@ -154,7 +143,16 @@ public abstract class ZLNetworkContext implements ZLNetworkManager.BearerAuthent
 		}, 0, 0);
 	}
 
-	private ZLStringOption getAccountOption(String host, String realm) {
+	public static String getAccountName(String host, String realm) {
+		final String accountName = getAccountOption(host, realm).getValue();
+		return "".equals(accountName) ? null : accountName;
+	}
+
+	public static void setAccountName(String host, String realm, String accountName) {
+		getAccountOption(host, realm).setValue(accountName != null ? accountName : "");
+	}
+
+	private static ZLStringOption getAccountOption(String host, String realm) {
 		return new ZLStringOption("auth", host + ":" + realm, "");
 	}
 }

@@ -30,8 +30,7 @@ import org.fbreader.common.options.SyncOptions;
 
 import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.language.Language;
-import org.geometerplus.zlibrary.core.network.ZLNetworkException;
-import org.geometerplus.zlibrary.core.network.JsonRequest;
+import org.geometerplus.zlibrary.core.network.*;
 import org.geometerplus.zlibrary.core.options.*;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 
@@ -164,7 +163,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			{
 				if (syncOptions.Enabled.getValue()) {
 					setChecked(true);
-					setOnSummary(SyncUtil.getAccountName(myNetworkContext));
+					setOnSummary(SyncUtil.getAccountName());
 				} else {
 					setChecked(false);
 				}
@@ -190,31 +189,33 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 
 				UIUtil.createExecutor(PreferenceActivity.this, "tryConnect").execute(new Runnable() {
 					public void run() {
-						try {
-							myNetworkContext.perform(
-								new JsonRequest(SyncOptions.BASE_URL + "login/test") {
-									@Override
-									public void processResponse(Object response) {
-										final String account = (String)((Map)response).get("user");
-										syncOptions.Enabled.setValue(account != null);
-										enableSynchronisation();
-										runOnUiThread(new Runnable() {
-											public void run() {
-												setOnSummary(account);
-												syncPreferences.run();
-											}
-										});
-									}
+						myNetworkContext.perform(
+							new JsonRequest(SyncOptions.BASE_URL + "login/test") {
+								@Override
+								public void processResponse(Object response) {
+									final String account = (String)((Map)response).get("user");
+									syncOptions.Enabled.setValue(account != null);
+									enableSynchronisation();
+									runOnUiThread(new Runnable() {
+										public void run() {
+											setOnSummary(account);
+											syncPreferences.run();
+										}
+									});
 								}
-							);
-						} catch (ZLNetworkException e) {
-							e.printStackTrace();
-							runOnUiThread(new Runnable() {
-								public void run() {
-									setChecked(false);
+							},
+							null,
+							new ZLNetworkContext.OnError() {
+								public void run(ZLNetworkException e) {
+									e.printStackTrace();
+									runOnUiThread(new Runnable() {
+										public void run() {
+											setChecked(false);
+										}
+									});
 								}
-							});
-						}
+							}
+						);
 					}
 				}, null);
 			}

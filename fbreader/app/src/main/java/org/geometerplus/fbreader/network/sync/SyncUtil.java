@@ -24,8 +24,8 @@ import org.fbreader.common.options.SyncOptions;
 import org.geometerplus.zlibrary.core.network.ZLNetworkContext;
 
 public abstract class SyncUtil {
-	public static String getAccountName(ZLNetworkContext context) {
-		return context.getAccountName(SyncOptions.DOMAIN, SyncOptions.REALM);
+	public static String getAccountName() {
+		return ZLNetworkContext.getAccountName(SyncOptions.DOMAIN, SyncOptions.REALM);
 	}
 
 	public static void logout(ZLNetworkContext context) {

@@ -167,9 +167,6 @@ public class ZLNetworkManager {
 
 	static interface BearerAuthenticator {
 		Map<String,String> authenticate(URI uri, String realm, Map<String,String> params);
-
-		String getAccountName(String host, String realm);
-		void setAccountName(String host, String realm, String accountName);
 	}
 
 	volatile CredentialsCreator myCredentialsCreator;
@@ -478,7 +475,7 @@ public class ZLNetworkManager {
 			if (error != null) {
 				throw new ZLNetworkAuthenticationException(error, e);
 			}
-			authenticator.setAccountName(request.getURI().getHost(), e.Realm, response.get("user"));
+			ZLNetworkContext.setAccountName(request.getURI().getHost(), e.Realm, response.get("user"));
 			return client.execute(request, context);
 		}
 	}
