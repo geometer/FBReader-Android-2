@@ -55,7 +55,7 @@ public abstract class NetworkLibraryActivity extends TreeActivity<NetworkTree> i
 	public static final int REQUEST_MANAGE_CATALOGS = 1;
 	public static final int REQUEST_ACCOUNT_PICKER = 2;
 	public static final int REQUEST_AUTHORISATION = 3;
-	public static final int REQUEST_WEB_AUTHORISATION_SCREEN = 4;
+	public static final int REQUEST_AUTHORISATION_WEB = 4;
 	public static final int REQUEST_TOPUP = 5;
 
 	public static final String ENABLED_CATALOG_IDS_KEY = "android.fbreader.data.enabled_catalogs";

@@ -19,46 +19,58 @@
 
 package org.geometerplus.android.fbreader.network.auth;
 
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
+import android.net.*;
 
 import org.geometerplus.zlibrary.core.network.*;
+import org.geometerplus.zlibrary.ui.android.BuildConfig;
 
 public abstract class AndroidNetworkContext extends ZLNetworkContext {
 	private volatile ConnectivityManager myConnectivityManager;
 
+	protected void throwIfError(Map<String,String> response) throws ZLNetworkAuthenticationException {
+		final String error = response.get("error");
+		if (error != null) {
+			throw new ZLNetworkAuthenticationException(error);
+		}
+	}
+
 	@Override
-	public Map<String,String> authenticate(URI uri, String realm, Map<String,String> params) {
+	public void authenticate(URI uri, String realm, Map<String,String> params) throws ZLNetworkAuthenticationException {
+		final Map<String,String> result = _authenticate(uri, realm, params);
+		throwIfError(result);
+		setAccountName(uri.getHost(), result);
+	}
+
+	private Map<String,String> _authenticate(URI uri, String realm, Map<String,String> params) throws ZLNetworkAuthenticationException {
 		if (!"https".equalsIgnoreCase(uri.getScheme())) {
-			return errorMap("Connection is not secure");
+			throw new ZLNetworkAuthenticationException("Connection is not secure");
 		}
 
-		String authUrl = null;
-		final String account = getAccountName(uri.getHost(), realm);
-		if (account != null) {
-			final String urlWithAccount = params.get("auth-url-web-with-email");
-			if (urlWithAccount != null) {
-				authUrl = url(uri, urlWithAccount.replace("{email}", account));
-			}
-		} else {
-			authUrl = url(uri, params, "auth-url-web");
+		final Uri authUri;
+		try {
+			final String salt = new BigInteger(100, new Random()).toString(32);
+			getContext().getSharedPreferences("fbreader.auth", 0).edit()
+				.putString("salt", salt)
+				.putString("claim-token-url", url(uri, params, "auth-url-web-claim-token"))
+				.commit();
+			String authUrl = url(uri, params, "auth-url-web-token");
+			authUrl = authUrl.replace("@key@", BuildConfig.FBNETWORK_KEY);
+			authUrl = authUrl.replace("@salt@", salt);
+			authUri = Uri.parse(authUrl);
+		} catch (Throwable t) {
+			throw new ZLNetworkAuthenticationException("No data for web authentication");
 		}
-		final String completeUrl = url(uri, params, "complete-url-web");
-		final String verificationUrl = url(uri, params, "verification-url");
-		if (authUrl == null || completeUrl == null || verificationUrl == null) {
-			return errorMap("No data for web authentication");
-		}
-		return authenticateWeb(uri, realm, authUrl, completeUrl, verificationUrl);
+		return authenticateWeb(realm, authUri);
 	}
 
 	protected abstract Context getContext();
-	protected abstract Map<String,String> authenticateWeb(URI uri, String realm, String authUrl, String completeUrl, String verificationUrl);
+	protected abstract Map<String,String> authenticateWeb(String realm, Uri uri) throws ZLNetworkAuthenticationException;
 
 	protected Map<String,String> errorMap(String message) {
 		return Collections.singletonMap("error", message);
@@ -110,7 +122,7 @@ public abstract class AndroidNetworkContext extends ZLNetworkContext {
 			request.doAfter(false);
 			throw ZLNetworkException.forCode("networkNotAvailable");
 		}
-		
+
 		super.perform(request, socketTimeout, connectionTimeout);
 	}
 
