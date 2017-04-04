@@ -44,21 +44,30 @@ class Searcher extends NetworkItemsLoader {
 	}
 
 	@Override
-	public void load() throws ZLNetworkException {
-		final SearchItem item = (SearchItem)Tree.Item;
-		if (myPattern.equals(item.getPattern())) {
-			if (Tree.hasChildren()) {
-				myItemFound = true;
-				Tree.Library.fireModelChangedEvent(
-					NetworkLibrary.ChangeListener.Code.Found, Tree
-				);
+	public void load(Runnable onSuccess, ZLNetworkContext.OnError onError) {
+		try {
+			final SearchItem item = (SearchItem)Tree.Item;
+			if (myPattern.equals(item.getPattern())) {
+				if (Tree.hasChildren()) {
+					myItemFound = true;
+					Tree.Library.fireModelChangedEvent(
+						NetworkLibrary.ChangeListener.Code.Found, Tree
+					);
+				} else {
+					Tree.Library.fireModelChangedEvent(
+						NetworkLibrary.ChangeListener.Code.NotFound
+					);
+				}
 			} else {
-				Tree.Library.fireModelChangedEvent(
-					NetworkLibrary.ChangeListener.Code.NotFound
-				);
+				item.runSearch(NetworkContext, this, myPattern);
 			}
-		} else {
-			item.runSearch(NetworkContext, this, myPattern);
+			if (onSuccess != null) {
+				onSuccess.run();
+			}
+		} catch (ZLNetworkException e) {
+			if (onError != null) {
+				onError.run(e);
+			}
 		}
 	}
 

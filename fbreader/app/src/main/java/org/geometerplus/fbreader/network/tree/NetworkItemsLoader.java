@@ -62,12 +62,18 @@ public abstract class NetworkItemsLoader implements Runnable {
 				return;
 			}
 
-			try {
-				load();
-				onFinish(null, isLoadingInterrupted());
-			} catch (ZLNetworkException e) {
-				onFinish(e, isLoadingInterrupted());
-			}
+			load(
+				new Runnable() {
+					public void run() {
+						onFinish(null, isLoadingInterrupted());
+					}
+				},
+				new ZLNetworkContext.OnError() {
+					public void run(ZLNetworkException e) {
+						onFinish(e, isLoadingInterrupted());
+					}
+				}
+			);
 		} finally {
 			library.removeStoredLoader(Tree);
 			library.fireModelChangedEvent(NetworkLibrary.ChangeListener.Code.SomeCode);
@@ -134,5 +140,5 @@ public abstract class NetworkItemsLoader implements Runnable {
 
 	protected abstract void onFinish(ZLNetworkException exception, boolean interrupted);
 	protected abstract void doBefore() throws ZLNetworkException;
-	protected abstract void load() throws ZLNetworkException;
+	protected abstract void load(Runnable onSuccess, ZLNetworkContext.OnError onError);
 }

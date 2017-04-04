@@ -59,11 +59,11 @@ class CatalogExpander extends NetworkItemsLoader {
 	}
 
 	@Override
-	public void load() throws ZLNetworkException {
+	public void load(Runnable onSuccess, ZLNetworkContext.OnError onError) {
 		if (myResumeNotLoad) {
-			Tree.Item.resumeLoading(this);
+			Tree.Item.resumeLoading(this, onSuccess, onError);
 		} else {
-			Tree.Item.loadChildren(this);
+			Tree.Item.loadChildren(this, onSuccess, onError);
 		}
 	}
 
