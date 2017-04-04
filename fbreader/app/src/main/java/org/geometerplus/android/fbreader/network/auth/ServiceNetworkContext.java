@@ -45,14 +45,10 @@ public class ServiceNetworkContext extends AndroidNetworkContext {
 	}
 
 	@Override
-	protected Map<String,String> authenticateWeb(URI uri, String realm, String authUrl, String completeUrl, String verificationUrl) {
+	protected Map<String,String> authenticateWeb(String realm, Uri uri) {
 		final NotificationManager notificationManager =
 			(NotificationManager)myService.getSystemService(Context.NOTIFICATION_SERVICE);
-		final Intent intent = new Intent(myService, WebAuthorisationScreen.class);
-		intent.setData(Uri.parse(authUrl));
-		intent.putExtra(WebAuthorisationScreen.COMPLETE_URL_KEY, completeUrl);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.addFlags(Intent.FLAG_FROM_BACKGROUND);
+		final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 		final PendingIntent pendingIntent = PendingIntent.getActivity(myService, 0, intent, 0);
 		final String text =
 			ZLResource.resource("dialog")

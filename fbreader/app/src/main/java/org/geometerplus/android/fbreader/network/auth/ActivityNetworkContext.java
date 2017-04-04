@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import org.geometerplus.zlibrary.core.network.*;
@@ -64,61 +65,44 @@ public final class ActivityNetworkContext extends AndroidNetworkContext {
 	}
 
 	public synchronized void onResume() {
-		notifyAll();
+		final DelayedAction action = myDelayed;
+		if (action == null) {
+			return;
+		}
+
+		cookieStore().reset();
+		myDelayed = null;
+		new AsyncTask<Void,Void,Void>() {
+			@Override
+			protected Void doInBackground(Void ... params) {
+				try {
+					perform(action.Request);
+					if (action.OnSuccess != null) {
+						action.OnSuccess.run();
+					}
+				} catch (ZLNetworkException e) {
+					if (action.OnError != null) {
+						action.OnError.run(e);
+					}
+				}
+				return null;
+			}
+		}.execute();
 	}
 
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		boolean processed = true;
-		try {
-			switch (requestCode) {
-				default:
-					processed = false;
-					break;
-				case NetworkLibraryActivity.REQUEST_ACCOUNT_PICKER:
-					if (resultCode == Activity.RESULT_OK && data != null) {
-						myAccountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-					} else {
-						myAccountName = null;
-					}
-					break;
-				case NetworkLibraryActivity.REQUEST_AUTHORISATION:
-					if (resultCode == Activity.RESULT_OK) {
-						myAuthorizationConfirmed = true;
-					}
-					break;
-				case NetworkLibraryActivity.REQUEST_WEB_AUTHORISATION_SCREEN:
-					cookieStore().reset();
-					break;
-			}
-		} finally {
-			if (processed) {
-				synchronized (this) {
-					notifyAll();
-				}
-			}
-			return processed;
-		}
+		return false;
 	}
 
 	@Override
-	protected Map<String,String> authenticateWeb(URI uri, String realm, String authUrl, String completeUrl, String verificationUrl) {
-		System.err.println("+++ WEB AUTH +++");
-		final Intent intent = new Intent(myActivity, WebAuthorisationScreen.class);
-		intent.setData(Uri.parse(authUrl));
-		intent.putExtra(WebAuthorisationScreen.COMPLETE_URL_KEY, completeUrl);
-		startActivityAndWait(intent, NetworkLibraryActivity.REQUEST_WEB_AUTHORISATION_SCREEN);
-		System.err.println("--- WEB AUTH ---");
-		return verify(verificationUrl);
-	}
-
-	private void startActivityAndWait(Intent intent, int requestCode) {
-		synchronized (this) {
-			OrientationUtil.startActivityForResult(myActivity, intent, requestCode);
-			try {
-				wait();
-			} catch (InterruptedException e) {
-			}
+	protected Map<String,String> authenticateWeb(String realm, Uri uri) throws ZLNetworkAuthenticationException {
+		if (myDelayed == null) {
+			throw new ZLNetworkAuthenticationException();
 		}
+
+		final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+		myActivity.startActivity(intent);
+		throw new AuthorizationInProgressException();
 	}
 
 	@Override
@@ -130,6 +114,7 @@ public final class ActivityNetworkContext extends AndroidNetworkContext {
 			if (onSuccess != null) {
 				onSuccess.run();
 			}
+		} catch (AuthorizationInProgressException e) {
 		} catch (ZLNetworkException e) {
 			final DelayedAction action = myDelayed;
 			myDelayed = null;
