@@ -34,6 +34,9 @@ import org.geometerplus.android.fbreader.network.NetworkLibraryActivity;
 import org.geometerplus.android.util.OrientationUtil;
 
 public final class ActivityNetworkContext extends AndroidNetworkContext {
+	private static class AuthorizationInProgressException extends ZLNetworkAuthenticationException {
+	}
+
 	private class DelayedAction {
 		public final ZLNetworkRequest Request;
 		public final Runnable OnSuccess;
