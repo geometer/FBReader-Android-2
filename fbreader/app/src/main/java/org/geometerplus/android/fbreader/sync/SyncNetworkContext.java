@@ -51,7 +51,7 @@ class SyncNetworkContext extends ServiceNetworkContext {
 		if (!canPerformRequest()) {
 			throw new SynchronizationDisabledException();
 		}
-		final String accountName = SyncUtil.getAccountName(this);
+		final String accountName = SyncUtil.getAccountName();
 		if (!ComparisonUtil.equal(myAccountName, accountName)) {
 			reloadCookie();
 			myAccountName = accountName;

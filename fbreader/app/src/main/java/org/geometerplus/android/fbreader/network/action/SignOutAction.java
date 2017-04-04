@@ -46,7 +46,7 @@ public class SignOutAction extends Action {
 
 		final INetworkLink link = tree.getLink();
 		if (link instanceof ISyncNetworkLink) {
-			return ((ISyncNetworkLink)link).isLoggedIn(myNetworkContext);
+			return ((ISyncNetworkLink)link).isLoggedIn();
 		}
 
 		final NetworkAuthenticationManager mgr = link.authenticationManager();
@@ -82,7 +82,7 @@ public class SignOutAction extends Action {
 	private String accountName(NetworkTree tree) {
 		final INetworkLink link = tree.getLink();
 		if (link instanceof ISyncNetworkLink) {
-			return SyncUtil.getAccountName(myNetworkContext);
+			return SyncUtil.getAccountName();
 		}
 
 		final NetworkAuthenticationManager mgr = link.authenticationManager();

@@ -164,7 +164,7 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 			{
 				if (syncOptions.Enabled.getValue()) {
 					setChecked(true);
-					setOnSummary(SyncUtil.getAccountName(myNetworkContext));
+					setOnSummary(SyncUtil.getAccountName());
 				} else {
 					setChecked(false);
 				}
