@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Armenian zlibrary resources, by Yavruhrat, Marat Yavrumyan -->
 <!-- Updated by Yavruhrat, Marat Yavrumyan 2015/05/17 -->
+<!-- Updated by Yavruhrat, Marat Yavrumyan 2016/12/13 -->
 <resources>
 	<node name="dialog">
 		<node name="button">
@@ -43,7 +44,7 @@
 		<node name="de-traditional" value="գերմաներեն (հին ուղղագրությամբ)"/>
 		<node name="el" value="հունարեն"/>
 		<node name="en" value="անգլերեն"/>
-		<node name="en_US" value="English (US)" toBeTranslated="true"/>
+		<node name="en_US" value="անգլերեն (ԱՄՆ)"/>
 		<node name="eo" value="էսպերանտո"/>
 		<node name="es" value="իսպաներեն"/>
 		<node name="eu" value="բասկերեն"/>
@@ -78,7 +79,7 @@
 		<node name="any" value="ցանկացած"/>
 		<node name="other" value="այլ"/>
 		<node name="multi" value="բազմալեզու"/>
-		<node name="system" value="Սարքավորման լեզվով"/>
+		<node name="system" value="Սարքում ընտրված լեզվով"/>
 	</node>
 	<node name="boolean3">
 		<node name="on" value="միացնել"/>

@@ -259,6 +259,11 @@
 		<node name="editBookmark" value="Upravit záložku"/>
 		<node name="deleteBookmark" value="Odstranit záložku"/>
 		<node name="search" value="Hledat"/>
+		<node name="order">
+			<node name="byCreationTime" value="By creation time" toBeTranslated="true"/>
+			<node name="byAccessTime" value="By access time" toBeTranslated="true"/>
+			<node name="byPageNo" value="By page number" toBeTranslated="true"/>
+		</node>
 	</node>
 	<node name="editBookmark">
 		<node name="text" value="Text"/>
@@ -341,6 +346,7 @@
 		<node name="help" value="Nápověda"/>
 		<node name="plugins" value="Doplňky"/>
 		<node name="gotoPageNumber" value="Přejít na stránku…"/>
+		<node name="readAloud" value="Číst nahlas…"/>
 	</node>
 	<node name="BookInfo">
 		<node name="fileName" value="Název souboru"/>
@@ -530,108 +536,42 @@
 			<node name="verticalAlignment" value="Svislé zarovnání"/>
 			<node name="more" value="Další styly">
 				<node name="summary" value="Oddělené nastavení pro názvy, mota atd."/>
-				<node name="Regular Paragraph" value="Běžný odstavec">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Regular Paragraph" value="Běžný odstavec"/>
 				<node name="xhtml-tag-p" value="Odstavec EPub">
 					<node name="summary" value="Obsah kódu značky XHTML &lt;p&gt;"/>
 				</node>
-				<node name="Title" value="Název">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Section Title" value="Název části">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Poem Title" value="Název básně">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subtitle" value="Podtitul">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Annotation" value="Anotace">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Epigraph" value="Moto">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Stanza" value="Sloka">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Verse" value="Verš">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Preformatted text" value="Předformátovaný text">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Image" value="Obrázek">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Cite" value="Citát">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Author" value="Autor">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Date" value="Datum">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Internal Hyperlink" value="Vnitřní odkaz">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Footnote" value="Poznámka pod čarou">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Emphasis" value="Zvýraznění">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Strong" value="Silně">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subscript" value="Dolní index">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Superscript" value="Horní index">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Code" value="Kód">
-					<node name="summary" value=""/>
-				</node>
-				<node name="StrikeThrough" value="Přeškrtnutí">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Italic" value="Kurzíva">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Bold" value="Tučné">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition" value="Definice">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition Description" value="Popis definice">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 1" value="Hlavička 1">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 2" value="Hlavička 2">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 3" value="Hlavička 3">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 4" value="Hlavička 4">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 5" value="Hlavička 5">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 6" value="Hlavička 6">
-					<node name="summary" value=""/>
-				</node>
-				<node name="External Hyperlink" value="Vnější odkaz">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Title" value="Název"/>
+				<node name="Section Title" value="Název části"/>
+				<node name="Poem Title" value="Název básně"/>
+				<node name="Subtitle" value="Podtitul"/>
+				<node name="Annotation" value="Anotace"/>
+				<node name="Epigraph" value="Moto"/>
+				<node name="Stanza" value="Sloka"/>
+				<node name="Verse" value="Verš"/>
+				<node name="Preformatted text" value="Předformátovaný text"/>
+				<node name="Image" value="Obrázek"/>
+				<node name="Cite" value="Citát"/>
+				<node name="Author" value="Autor"/>
+				<node name="Date" value="Datum"/>
+				<node name="Internal Hyperlink" value="Vnitřní odkaz"/>
+				<node name="Footnote" value="Poznámka pod čarou"/>
+				<node name="Emphasis" value="Zvýraznění"/>
+				<node name="Strong" value="Silně"/>
+				<node name="Subscript" value="Dolní index"/>
+				<node name="Superscript" value="Horní index"/>
+				<node name="Code" value="Kód"/>
+				<node name="StrikeThrough" value="Přeškrtnutí"/>
+				<node name="Italic" value="Kurzíva"/>
+				<node name="Bold" value="Tučné"/>
+				<node name="Definition" value="Definice"/>
+				<node name="Definition Description" value="Popis definice"/>
+				<node name="Header 1" value="Hlavička 1"/>
+				<node name="Header 2" value="Hlavička 2"/>
+				<node name="Header 3" value="Hlavička 3"/>
+				<node name="Header 4" value="Hlavička 4"/>
+				<node name="Header 5" value="Hlavička 5"/>
+				<node name="Header 6" value="Hlavička 6"/>
+				<node name="External Hyperlink" value="Vnější odkaz"/>
 			</node>
 		</node>
 		<node name="toast" value="Automaticky otevíraná okna">
@@ -776,6 +716,12 @@
 				<node name="summaryOn" value="Posouvat stránky vodorovně"/>
 				<node name="summaryOff" value="Posouvat stránky svisle"/>
 			</node>
+			<node name="tapToScrollForward" value="Tap to scroll forward" toBeTranslated="true">
+				<node name="right_to_left" value="Right third of the screen" toBeTranslated="true"/>
+				<node name="left_to_right" value="Left third of the screen" toBeTranslated="true"/>
+				<node name="up" value="Bottom third of the screen" toBeTranslated="true"/>
+				<node name="down" value="Top third of the screen" toBeTranslated="true"/>
+			</node>
 		</node>
 		<node name="tapZones" value="Oblasti dotyku">
 			<node name="summary" value="Akce pro dotyk prstem"/>
@@ -891,6 +837,20 @@
 				<node name="summaryOff" value="Nezobrazovat"/>
 			</node>
 		</node>
+		<node name="twitter" value="Integrace Twitteru">
+			<node name="summary" value="Jak tweetovat z FBReaderu"/>
+			<node name="enableTwitter" value="Povolit tweety">
+				<node name="summaryOn" value="Zobrazit odkaz na Twitter na konci knihy"/>
+				<node name="summaryOff" value="Nezobrazovat odkaz na Twitter"/>
+			</node>
+			<node name="tweetText" value="Text tweetu">
+				<node name="hint" value="Použijte %title% pro název knihy, %authors% pro seznam autorů"/>
+			</node>
+			<node name="coverInTweet" value="Přidat obálku knihy do tweetu">
+				<node name="summaryOn" value="Tweetovat text a obrázek obálky knihy"/>
+				<node name="summaryOff" value="Tweetovat pouze text"/>
+			</node>
+		</node>
 		<node name="about" value="O aplikaci FBReader">
 			<node name="summary" value="Informace o verzi, kontakty"/>
 			<node name="version" value="Verze"/>
@@ -909,7 +869,40 @@
 			<node name="facebook" value="FBReader na Facebooku">
 				<node name="url" value="https://facebook.com/fbreader"/>
 			</node>
+			<node name="telegram" value="Přidat kanál Telegramu">
+				<node name="url" value="https://telegram.me/fbreader"/>
+			</node>
 			<node name="thirdParty" value="Knihovny třetích stran"/>
+			<node name="development" value="Možnosti vývojáře">
+				<node name="summary" value="Používejte opatrně ;)"/>
+				<node name="forceWebAuth" value="Vynutit webové ověření">
+					<node name="summaryOn" value="Použít webové ověření, i když jsou dostupné Služby Google"/>
+					<node name="summaryOff" value="Použít Služby Google, když jsou dostupné"/>
+				</node>
+				<node name="showChangeNotifications" value="Notify about file modifications" toBeTranslated="true">
+					<node name="allFiles" value="Always" toBeTranslated="true"/>
+					<node name="bookFolders" value="For files in book folders only" toBeTranslated="true"/>
+					<node name="noFiles" value="Never" toBeTranslated="true"/>
+				</node>
+				<node name="showOpenPremiumSuggestion" value="“Open Premium” dialog" toBeTranslated="true">
+					<node name="summaryOn" value="Show each time you start FBReader from launcher" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not show" toBeTranslated="true"/>
+				</node>
+				<node name="logFileScanning" value="Log file scanning" toBeTranslated="true">
+					<node name="summaryOn" value="Create a log record each time the app scans a file for extracting book info" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not log" toBeTranslated="true"/>
+				</node>
+				<node name="copyLogs" value="Kopírovat soubory protokolů">
+					<node name="summary" value="Zkopíruje soubory *.log do %s"/>
+				</node>
+				<node name="deleteLogs" value="Vymazat protokoly"/>
+				<node name="copyDatabase" value="Kopírovat databázi knih">
+					<node name="summary" value="Zkopíruje soubor books.db do %s"/>
+				</node>
+				<node name="scanFailures" value="Scan failures list" toBeTranslated="true">
+					<node name="summary" value="List of files FBReader couldn't scan" toBeTranslated="true"/>
+				</node>
+			</node>
 		</node>
 		<node name="eink" value="Displej s elektronickým inkoustem">
 			<node name="summary" value="Specifické možnosti pro displej s elektronickým inkoustem"/>
@@ -919,6 +912,7 @@
 			</node>
 			<node name="interval" value="Počet ryclých aktualizací mezi úplnými obnoveními"/>
 		</node>
+		<node name="lockedOption" value="Nainstalujte Prémiovou edici pro odemčení této volby"/>
 	</node>
 	<node name="dialog">
 		<node name="button">
@@ -946,8 +940,9 @@
 			<node name="removeFromFavorites" value="Odebrat z oblíbených"/>
 			<node name="markAsRead" value="Označit jako přečtené"/>
 			<node name="markAsUnread" value="Označit jako nepřečtené"/>
-			<node name="plugin" value="Plugin" toBeTranslated="true"/>
-			<node name="premium" value="Premium" toBeTranslated="true"/>
+			<node name="plugin" value="Doplněk"/>
+			<node name="premium" value="Premium"/>
+			<node name="clear" value="Clear" toBeTranslated="true"/>
 		</node>
 		<node name="gotoPage" value="Přejít na stránku"/>
 		<node name="plugin">
@@ -1180,9 +1175,6 @@
 	</node>
 	<node name="plugins" value="Instalovat doplňky">
 		<node name="noMorePlugins" value="Bohužel, právě nemáme žádné nové doplňky"/>
-		<node name="litres" value="LitRes">
-			<node name="summary" value="Ruské knihkupectví"/>
-		</node>
 		<node name="tts_plus" value="TTS+">
 			<node name="summary" value="Čte nahlas"/>
 		</node>
@@ -1197,9 +1189,6 @@
 		</node>
 		<node name="opds_server" value="OPDS Server">
 			<node name="summary" value="Dodá knihy z vašeho zařízení"/>
-		</node>
-		<node name="widgets" value="Widgety">
-			<node name="summary" value="Přidá knihy na domovskou obrazovku"/>
 		</node>
 		<node name="pdf" value="PDF">
 			<node name="summary" value="Čte knihy ve formátu PDF"/>
@@ -1264,5 +1253,31 @@
 			<node name="book" value="Číst knihu"/>
 			<node name="library" value="Otevřít knihovnu"/>
 		</node>
+	</node>
+	<node name="modifiedBook">
+		<node name="notification">
+			<node name="title" value="Změněný soubor knihy"/>
+			<node name="message" value="Soubor %s byl změněn"/>
+		</node>
+		<node name="dialog">
+			<node name="title" value="%s změněn"/>
+			<node name="message" value="Soubor „%s“ byl změněn. Zvolte akci ze seznamu."/>
+			<node name="createNew" value="Vytvořit novou knihu „%s“ ze souboru"/>
+			<node name="linkExisting" value="Propojit soubor s existujícím „%s“"/>
+			<node name="updateMetainfo" value="Propojit s existující knihou, aktualizovat metainformace ze souboru"/>
+			<node name="removeFromLibrary" value="Odebrat soubor z knihovny"/>
+		</node>
+	</node>
+	<node name="twitter">
+		<node name="link" value="Tweetujte, co máte dočteno!"/>
+		<node name="tweet" value="Dočtena kniha „%title%“ v @fbreader"/>
+		<node name="missingApp" value="Aplikace Twitter není nainstalována"/>
+	</node>
+	<node name="goodreads">
+		<node name="link" value="Share your reading experience on Goodreads!" toBeTranslated="true"/>
+	</node>
+	<node name="networkError">
+		<node name="noNetworkConnection" value="Síť není dostupná. Zkontrolujte své připojení a zkuste to znovu."/>
+		<node name="syncServerFailure" value="Selhání připojení serveru. Zkuste to znovu později."/>
 	</node>
 </resources>

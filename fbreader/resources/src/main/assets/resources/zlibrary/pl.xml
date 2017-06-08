@@ -22,7 +22,7 @@
 			<node name="invalidURL" value="Nieprawidłowy URL"/>
 			<node name="hostCantBeReached" value="Serwer %s&#10;jest niedostępny"/>
 			<node name="connectionRefused" value="Połączenie zostało odrzucone przez&#10;%s"/>
-			<node name="networkNotAvailable" value="Network is not available" toBeTranslated="true"/>
+			<node name="networkNotAvailable" value="Sieć jest niedostępna"/>
 		</node>
 	</node>
 	<node name="color">
@@ -32,51 +32,51 @@
 	</node>
 	<node name="language">
 		<node name="ar" value="Arabski"/>
-		<node name="be" value="Belarusian" toBeTranslated="true"/>
-		<node name="bg" value="Bulgarian" toBeTranslated="true"/>
-		<node name="ca" value="Catalan" toBeTranslated="true"/>
+		<node name="be" value="Białoruski"/>
+		<node name="bg" value="Bułgarski"/>
+		<node name="ca" value="Kataloński"/>
 		<node name="cs" value="Czeski"/>
-		<node name="da" value="Danish" toBeTranslated="true"/>
+		<node name="da" value="Duński"/>
 		<node name="de" value="Niemiecki"/>
 		<node name="de-traditional" value="Niemiecki (ortografia tradycyjna)"/>
 		<node name="el" value="Grecki"/>
 		<node name="en" value="Angielski"/>
-		<node name="en_US" value="English (US)" toBeTranslated="true"/>
+		<node name="en_US" value="Angielski (US)"/>
 		<node name="eo" value="Esperanto"/>
 		<node name="es" value="Hiszpański"/>
-		<node name="eu" value="Basque" toBeTranslated="true"/>
-		<node name="fa" value="Persian" toBeTranslated="true"/>
+		<node name="eu" value="Baskijski"/>
+		<node name="fa" value="Perski"/>
 		<node name="fi" value="Fiński"/>
 		<node name="fr" value="Francuski"/>
-		<node name="gl" value="Galician" toBeTranslated="true"/>
+		<node name="gl" value="Galijski"/>
 		<node name="he" value="Hebrajski"/>
 		<node name="hu" value="Węgierski"/>
-		<node name="hy" value="Armenian" toBeTranslated="true"/>
+		<node name="hy" value="Armeński"/>
 		<node name="id" value="Indonezyjski"/>
 		<node name="it" value="Włoski"/>
-		<node name="ja" value="Japanese" toBeTranslated="true"/>
-		<node name="ka" value="Georgian" toBeTranslated="true"/>
-		<node name="ko" value="Korean" toBeTranslated="true"/>
+		<node name="ja" value="Japoński"/>
+		<node name="ka" value="Gruziński"/>
+		<node name="ko" value="Korean"/>
 		<node name="lt" value="Litewski"/>
 		<node name="nb" value="Norweski"/>
 		<node name="nl" value="Niderlandzki"/>
 		<node name="pl" value="Polski"/>
 		<node name="pt" value="Portugalski"/>
-		<node name="ro" value="Romanian" toBeTranslated="true"/>
+		<node name="ro" value="Rumuński"/>
 		<node name="ru" value="Rosyjski"/>
-		<node name="sr" value="Serbian" toBeTranslated="true"/>
+		<node name="sr" value="Serbski"/>
 		<node name="sv" value="Szwedzki"/>
-		<node name="ta" value="Tamil" toBeTranslated="true"/>
+		<node name="ta" value="Tamilski"/>
 		<node name="th" value="Tajski"/>
 		<node name="tr" value="Turecki"/>
 		<node name="uk" value="Ukraiński"/>
 		<node name="vi" value="Wietnamski"/>
 		<node name="zh" value="Chiński"/>
-		<node name="zh_TW" value="Chinese (traditional)" toBeTranslated="true"/>
-		<node name="any" value="Any" toBeTranslated="true"/>
+		<node name="zh_TW" value="Chiński (tradycyjny)"/>
+		<node name="any" value="Dowolny"/>
 		<node name="other" value="Inny"/>
 		<node name="multi" value="Wielojęzyczny"/>
-		<node name="system" value="System" toBeTranslated="true"/>
+		<node name="system" value="wg systemu"/>
 	</node>
 	<node name="boolean3">
 		<node name="on" value="włączone"/>

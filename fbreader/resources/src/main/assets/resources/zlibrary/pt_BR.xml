@@ -11,16 +11,16 @@
 		<node name="networkError">
 			<node name="title" value="Erro de rede"/>
 			<node name="unknownErrorMessage" value="Erro desconhecido"/>
-			<node name="operationTimedOutMessage" value="O tempo de operação esgotou"/>
-			<node name="somethingWrongMessage" value="Aconteceu um erro com %s"/>
+			<node name="operationTimedOutMessage" value="Tempo de operação esgotou"/>
+			<node name="somethingWrongMessage" value="Algo está errado para %s"/>
 			<node name="couldntCreateDirectoryMessage" value="Não foi possível criar o diretório %s"/>
-			<node name="couldntCreateFileMessage" value="Não foi possível criar o ficheiro %s"/>
-			<node name="couldntConnectMessage" value="Não foi possível ligar ao servidor %s"/>
-			<node name="couldntResolveHostMessage" value="Não foi possível mapear o IP do servidor %s"/>
+			<node name="couldntCreateFileMessage" value="Não foi possível criar o arquivo %s"/>
+			<node name="couldntConnectMessage" value="Não foi possível ligar ao host %s"/>
+			<node name="couldntResolveHostMessage" value="Não foi possível resolver host %s"/>
 			<node name="authenticationFailed" value="Falha na autenticação"/>
 			<node name="unsupportedProtocol" value="Protocolo não suportado"/>
 			<node name="invalidURL" value="URL inválido"/>
-			<node name="hostCantBeReached" value="Não foi possível alcançar o servidor %s"/>
+			<node name="hostCantBeReached" value="Host %s não pode ser alcançado"/>
 			<node name="connectionRefused" value="A ligação foi recusada por %s"/>
 			<node name="networkNotAvailable" value="Rede não disponível"/>
 		</node>
@@ -40,8 +40,8 @@
 		<node name="de" value="Alemão"/>
 		<node name="de-traditional" value="Alemão (ortografia tradicional)"/>
 		<node name="el" value="Grego"/>
-		<node name="en" value="Inglês (GB)"/>
-		<node name="en_US" value="Inglês (EUA)"/>
+		<node name="en" value="Inglês"/>
+		<node name="en_US" value="English (US)" toBeTranslated="true"/>
 		<node name="eo" value="Esperanto"/>
 		<node name="es" value="Espanhol"/>
 		<node name="eu" value="Basco"/>
@@ -60,24 +60,8 @@
 		<node name="lt" value="Lituano"/>
 		<node name="nb" value="Norueguês"/>
 		<node name="nl" value="Holandês"/>
-		<node name="pl" value="Polaco"/>
-		<node name="pt" value="Português (Portugal)"/>
-		<node name="ro" value="Romanian" toBeTranslated="true"/>
-		<node name="ru" value="Russian" toBeTranslated="true"/>
-		<node name="sr" value="Serbian" toBeTranslated="true"/>
-		<node name="sv" value="Swedish" toBeTranslated="true"/>
-		<node name="ta" value="Tamil" toBeTranslated="true"/>
-		<node name="th" value="Thai" toBeTranslated="true"/>
-		<node name="tr" value="Turkish" toBeTranslated="true"/>
-		<node name="uk" value="Ukrainian" toBeTranslated="true"/>
-		<node name="vi" value="Vietnamese" toBeTranslated="true"/>
-		<node name="zh" value="Chinese" toBeTranslated="true"/>
-		<node name="zh_TW" value="Chinese (traditional)" toBeTranslated="true"/>
-		<node name="any" value="Any" toBeTranslated="true"/>
-		<node name="other" value="Other" toBeTranslated="true"/>
-		<node name="multi" value="Multilanguage" toBeTranslated="true"/>
-		<node name="system" value="System" toBeTranslated="true"/>
-		<node name="pt_BR" value="Português (Brasil)"/>
+		<node name="pl" value="Polonês"/>
+		<node name="pt" value="Português"/>
 		<node name="ro" value="Romeno"/>
 		<node name="ru" value="Russo"/>
 		<node name="sr" value="Sérvio"/>
@@ -87,8 +71,8 @@
 		<node name="tr" value="Turco"/>
 		<node name="uk" value="Ucraniano"/>
 		<node name="vi" value="Vietnamita"/>
-		<node name="zh" value="Chinês (Simplificado)"/>
-		<node name="zh_TW" value="Chinês (Tradicional)"/>
+		<node name="zh" value="Chinês"/>
+		<node name="zh_TW" value="Chinês (tradicional)"/>
 		<node name="any" value="Qualquer"/>
 		<node name="other" value="Outro"/>
 		<node name="multi" value="Multi-idioma"/>
@@ -100,6 +84,6 @@
 		<node name="unchanged" value="Inalterado"/>
 	</node>
 	<node name="keyOptionView">
-		<node name="actionFor" value="Ação para tecla"/>
+		<node name="actionFor" value="Ação para Tecla"/>
 	</node>
 </resources>

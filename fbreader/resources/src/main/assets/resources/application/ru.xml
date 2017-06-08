@@ -255,6 +255,11 @@
 		<node name="editBookmark" value="Поправить закладку"/>
 		<node name="deleteBookmark" value="Стереть закладку"/>
 		<node name="search" value="Поиск"/>
+		<node name="order">
+			<node name="byCreationTime" value="По времени создания"/>
+			<node name="byAccessTime" value="По времени обращения"/>
+			<node name="byPageNo" value="По номеру страницы"/>
+		</node>
 	</node>
 	<node name="editBookmark">
 		<node name="text" value="Текст"/>
@@ -337,6 +342,7 @@
 		<node name="help" value="Помощь"/>
 		<node name="plugins" value="Дополнительные модули"/>
 		<node name="gotoPageNumber" value="На страницу…"/>
+		<node name="readAloud" value="Read aloud…" toBeTranslated="true"/>
 	</node>
 	<node name="BookInfo">
 		<node name="fileName" value="Файл"/>
@@ -526,108 +532,42 @@
 			<node name="verticalAlignment" value="Смещение по вертикали"/>
 			<node name="more" value="Другие стили">
 				<node name="summary" value="Отдельные настройки для заголовков, эпиграфов и т.д."/>
-				<node name="Regular Paragraph" value="Обычный текст">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Regular Paragraph" value="Обычный текст"/>
 				<node name="xhtml-tag-p" value="Текст ePub">
 					<node name="summary" value="Содержимое тега &lt;p&gt; в файлах XHTML"/>
 				</node>
-				<node name="Title" value="Заголовок">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Section Title" value="Название главы">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Poem Title" value="Название стихотворения">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subtitle" value="Подзаголовок">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Annotation" value="Аннотация">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Epigraph" value="Эпиграф">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Stanza" value="Строфа">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Verse" value="Стихи">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Preformatted text" value="Текст внутри &lt;pre&gt;">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Image" value="Рисунок">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Cite" value="Цитата">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Author" value="Имя автора">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Date" value="Дата">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Internal Hyperlink" value="Ссылка">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Footnote" value="Сноска">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Emphasis" value="Выделение (emphasis)">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Strong" value="Выделение (strong)">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subscript" value="Нижний индекс">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Superscript" value="Верхний индекс">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Code" value="Текст программы">
-					<node name="summary" value=""/>
-				</node>
-				<node name="StrikeThrough" value="Зачёркнутый текст">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Italic" value="Курсив">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Bold" value="Жирный текст">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition" value="Определение">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition Description" value="Текст определения">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 1" value="Текст внутри &lt;h1&gt;">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 2" value="Текст внутри &lt;h2&gt;">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 3" value="Текст внутри &lt;h3&gt;">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 4" value="Текст внутри &lt;h4&gt;">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 5" value="Текст внутри &lt;h5&gt;">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 6" value="Текст внутри &lt;h6&gt;">
-					<node name="summary" value=""/>
-				</node>
-				<node name="External Hyperlink" value="Внешняя ссылка">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Title" value="Заголовок"/>
+				<node name="Section Title" value="Название главы"/>
+				<node name="Poem Title" value="Название стихотворения"/>
+				<node name="Subtitle" value="Подзаголовок"/>
+				<node name="Annotation" value="Аннотация"/>
+				<node name="Epigraph" value="Эпиграф"/>
+				<node name="Stanza" value="Строфа"/>
+				<node name="Verse" value="Стихи"/>
+				<node name="Preformatted text" value="Текст внутри &lt;pre&gt;"/>
+				<node name="Image" value="Рисунок"/>
+				<node name="Cite" value="Цитата"/>
+				<node name="Author" value="Имя автора"/>
+				<node name="Date" value="Дата"/>
+				<node name="Internal Hyperlink" value="Ссылка"/>
+				<node name="Footnote" value="Сноска"/>
+				<node name="Emphasis" value="Выделение (emphasis)"/>
+				<node name="Strong" value="Выделение (strong)"/>
+				<node name="Subscript" value="Нижний индекс"/>
+				<node name="Superscript" value="Верхний индекс"/>
+				<node name="Code" value="Текст программы"/>
+				<node name="StrikeThrough" value="Зачёркнутый текст"/>
+				<node name="Italic" value="Курсив"/>
+				<node name="Bold" value="Жирный текст"/>
+				<node name="Definition" value="Определение"/>
+				<node name="Definition Description" value="Текст определения"/>
+				<node name="Header 1" value="Текст внутри &lt;h1&gt;"/>
+				<node name="Header 2" value="Текст внутри &lt;h2&gt;"/>
+				<node name="Header 3" value="Текст внутри &lt;h3&gt;"/>
+				<node name="Header 4" value="Текст внутри &lt;h4&gt;"/>
+				<node name="Header 5" value="Текст внутри &lt;h5&gt;"/>
+				<node name="Header 6" value="Текст внутри &lt;h6&gt;"/>
+				<node name="External Hyperlink" value="Внешняя ссылка"/>
 			</node>
 		</node>
 		<node name="toast" value="Всплывающие окошки">
@@ -772,6 +712,12 @@
 				<node name="summaryOn" value="При листании страница движется по горизонтали"/>
 				<node name="summaryOff" value="При листании страница движется по вертикали"/>
 			</node>
+			<node name="tapToScrollForward" value="Листание вперёд касанием">
+				<node name="right_to_left" value="Правой трети экрана"/>
+				<node name="left_to_right" value="Левой трети экрана"/>
+				<node name="up" value="Нижней трети экрана"/>
+				<node name="down" value="Верхней трети экрана"/>
+			</node>
 		</node>
 		<node name="tapZones" value="Tap zones" toBeTranslated="true">
 			<node name="summary" value="Finger tap actions" toBeTranslated="true"/>
@@ -887,6 +833,20 @@
 				<node name="summaryOff" value="Не показывать"/>
 			</node>
 		</node>
+		<node name="twitter" value="Интеграция с Twitter">
+			<node name="summary" value="Как отправлять твиты"/>
+			<node name="enableTwitter" value="Включить отправку твитов">
+				<node name="summaryOn" value="Показывать пункт для отправки твита в конце книги"/>
+				<node name="summaryOff" value="Не показывать пункт для отправки твита"/>
+			</node>
+			<node name="tweetText" value="Текст твита">
+				<node name="hint" value="%title% означает название книги, %authors% – список авторов"/>
+			</node>
+			<node name="coverInTweet" value="Добавлять обложку в твит">
+				<node name="summaryOn" value="Публиковать текст и картинку"/>
+				<node name="summaryOff" value="Публиковать только текст"/>
+			</node>
+		</node>
 		<node name="about" value="О программе FBReader">
 			<node name="summary" value="Версия, контакты"/>
 			<node name="version" value="Версия"/>
@@ -905,7 +865,40 @@
 			<node name="facebook" value="Страница FBReader на Facebook">
 				<node name="url" value="https://facebook.com/fbreader"/>
 			</node>
+			<node name="telegram" value="Добавьте канал Telegram">
+				<node name="url" value="https://telegram.me/fbreader"/>
+			</node>
 			<node name="thirdParty" value="Сторонние библиотеки"/>
+			<node name="development" value="Developer options" toBeTranslated="true">
+				<node name="summary" value="Будьте аккуратны ;)"/>
+				<node name="forceWebAuth" value="Force web authentication" toBeTranslated="true">
+					<node name="summaryOn" value="Use web auth even if Google services are available" toBeTranslated="true"/>
+					<node name="summaryOff" value="Use Google auth if available" toBeTranslated="true"/>
+				</node>
+				<node name="showChangeNotifications" value="Notify about file modifications" toBeTranslated="true">
+					<node name="allFiles" value="Always" toBeTranslated="true"/>
+					<node name="bookFolders" value="For files in book folders only" toBeTranslated="true"/>
+					<node name="noFiles" value="Never" toBeTranslated="true"/>
+				</node>
+				<node name="showOpenPremiumSuggestion" value="“Open Premium” dialog" toBeTranslated="true">
+					<node name="summaryOn" value="Show each time you start FBReader from launcher" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not show" toBeTranslated="true"/>
+				</node>
+				<node name="logFileScanning" value="Log file scanning" toBeTranslated="true">
+					<node name="summaryOn" value="Create a log record each time the app scans a file for extracting book info" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not log" toBeTranslated="true"/>
+				</node>
+				<node name="copyLogs" value="Copy log files" toBeTranslated="true">
+					<node name="summary" value="Copies *.log files to %s" toBeTranslated="true"/>
+				</node>
+				<node name="deleteLogs" value="Clear logs" toBeTranslated="true"/>
+				<node name="copyDatabase" value="Copy books database" toBeTranslated="true">
+					<node name="summary" value="Copies books.db file to %s" toBeTranslated="true"/>
+				</node>
+				<node name="scanFailures" value="Scan failures list" toBeTranslated="true">
+					<node name="summary" value="List of files FBReader couldn't scan" toBeTranslated="true"/>
+				</node>
+			</node>
 		</node>
 		<node name="eink" value="Экран e-ink">
 			<node name="summary" value="Настройки для экрана с электронными чернилами"/>
@@ -915,6 +908,7 @@
 			</node>
 			<node name="interval" value="После скольки быстрых перерисовок обновлять экран полностью"/>
 		</node>
+		<node name="lockedOption" value="Эта опция доступна только в FBReader Premium"/>
 	</node>
 	<node name="dialog">
 		<node name="button">
@@ -944,6 +938,7 @@
 			<node name="markAsUnread" value="Пометить как непрочтённое"/>
 			<node name="plugin" value="Модуль"/>
 			<node name="premium" value="Premium"/>
+			<node name="clear" value="Clear" toBeTranslated="true"/>
 		</node>
 		<node name="gotoPage" value="На страницу"/>
 		<node name="plugin">
@@ -1000,7 +995,7 @@
 		<node name="waitMessage">
 			<node name="translating" value="Идёт перевод…"/>
 			<node name="tryConnect" value="Устанавливается соединение. Подождите, пожалуйста…"/>
-			<node name="downloadingBook" value="Загужается книга «%s»"/>
+			<node name="downloadingBook" value="Загружается книга «%s»"/>
 			<node name="search" value="Идет поиск. Подождите, пожалуйста…"/>
 			<node name="loadInfo" value="Загружается информация. Подождите, пожалуйста…"/>
 			<node name="loadingBook" value="Открывается книга. Подождите, пожалуйста…"/>
@@ -1180,9 +1175,6 @@
 	</node>
 	<node name="plugins" value="Дополнительные модули">
 		<node name="noMorePlugins" value="Извините, но прямо сейчас у нас нет новых модулей"/>
-		<node name="litres" value="ЛитРес">
-			<node name="summary" value="Дополнительные возможности при покупке в магазине ЛитРес"/>
-		</node>
 		<node name="tts_plus" value="TTS+">
 			<node name="summary" value="Чтение вслух"/>
 		</node>
@@ -1197,9 +1189,6 @@
 		</node>
 		<node name="opds_server" value="Сервер OPDS">
 			<node name="summary" value="Раздача книг другим устройствам"/>
-		</node>
-		<node name="widgets" value="Виджеты">
-			<node name="summary" value="Книги прямо на домашнем экране устройства"/>
 		</node>
 		<node name="pdf" value="PDF">
 			<node name="summary" value="Чтение файлов PDF"/>
@@ -1263,6 +1252,32 @@
 			<node name="book" value="Читать книгу"/>
 			<node name="library" value="Открыть библиотеку"/>
 		</node>
+	</node>
+	<node name="modifiedBook">
+		<node name="notification">
+			<node name="title" value="Изменён файл книги"/>
+			<node name="message" value="Поменялось содержимое файла %s"/>
+		</node>
+		<node name="dialog">
+			<node name="title" value="%s изменён"/>
+			<node name="message" value="Содержимое файла “%s” поменялось. Выберите, что следует сделать."/>
+			<node name="createNew" value="Создать новую книгу из файла “%s”"/>
+			<node name="linkExisting" value="Привязать файл к книге “%s”"/>
+			<node name="updateMetainfo" value="Привязать файл, обновить информацию из файла"/>
+			<node name="removeFromLibrary" value="Удалить файл из библиотеки"/>
+		</node>
+	</node>
+	<node name="twitter">
+		<node name="link" value="Расскажите о прочитанной книге!"/>
+		<node name="tweet" value="«%title%» Прочитано в @fbreader_ru"/>
+		<node name="missingApp" value="Приложение Twitter не установлено"/>
+	</node>
+	<node name="goodreads">
+		<node name="link" value="Share your reading experience on Goodreads!" toBeTranslated="true"/>
+	</node>
+	<node name="networkError">
+		<node name="noNetworkConnection" value="Сеть недоступна. Пожалуйста, проверьте соединение и попробуйте ещё раз."/>
+		<node name="syncServerFailure" value="Не удалось соединиться с сервером. Пожалуйста, попробуйте ещё раз через некоторое время."/>
 	</node>
 	<node name="dictionary">
 		<node name="Yandex.Translate" value="Яндекс.Переводчик"/>

@@ -25,7 +25,8 @@
 		<node name="nb" value="Norsk"/>
 		<node name="nl" value="Nederlands"/>
 		<node name="pl" value="Polski"/>
-		<node name="pt" value="Português"/>
+		<node name="pt" value="Português (Portugal)"/>
+		<node name="pt_BR" value="Português (Brasil)"/>
 		<node name="ro" value="Romana"/>
 		<node name="ru" value="Русский"/>
 		<node name="sr" value="Српски"/>
@@ -34,6 +35,6 @@
 		<node name="uk" value="Українська"/>
 		<node name="vi" value="Tiếng Việt"/>
 		<node name="zh" value="简体中文"/>
-		<node name="zh_TW" value="Chinese (traditional)" toBeTranslated="true"/>
+		<node name="zh_TW" value="中文(繁體)"/>
 	</node>
 </resources>
