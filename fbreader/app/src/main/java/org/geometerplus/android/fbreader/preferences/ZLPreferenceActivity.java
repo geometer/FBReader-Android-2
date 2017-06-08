@@ -46,7 +46,10 @@ abstract class ZLPreferenceActivity extends android.preference.PreferenceActivit
 			Resource = root.getResource(resourceKey);
 			myScreen = getPreferenceManager().createPreferenceScreen(ZLPreferenceActivity.this);
 			myScreen.setTitle(Resource.getValue());
-			myScreen.setSummary(Resource.getResource("summary").getValue());
+			final ZLResource summaryResource = Resource.getResource("summary");
+			if (summaryResource.hasValue()) {
+				myScreen.setSummary(summaryResource.getValue());
+			}
 		}
 
 		public void setSummary(CharSequence summary) {
