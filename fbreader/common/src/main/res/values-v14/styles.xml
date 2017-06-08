@@ -1,8 +1,8 @@
 <resources>
-  <style name="FBReader.Activity" parent="android:Theme.DeviceDefault">
+  <style name="FBReader.Activity" parent="android:Theme.DeviceDefault.Light">
 	</style>
-  <style name="FBReader.Activity.NoActionBar" parent="android:Theme.DeviceDefault.NoActionBar">
+  <style name="FBReader.Activity.NoActionBar" parent="android:Theme.DeviceDefault.Light.NoActionBar">
 	</style>
-  <style name="FBReader.Dialog" parent="android:Theme.DeviceDefault.Dialog">
+  <style name="FBReader.Dialog" parent="android:Theme.DeviceDefault.Light.Dialog">
 	</style>
 </resources>
