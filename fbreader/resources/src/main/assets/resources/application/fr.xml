@@ -243,6 +243,11 @@
 		<node name="editBookmark" value="Modifier le marque-page"/>
 		<node name="deleteBookmark" value="Supprimer le marque-page"/>
 		<node name="search" value="Rechercher"/>
+		<node name="order">
+			<node name="byCreationTime" value="By creation time" toBeTranslated="true"/>
+			<node name="byAccessTime" value="By access time" toBeTranslated="true"/>
+			<node name="byPageNo" value="By page number" toBeTranslated="true"/>
+		</node>
 	</node>
 	<node name="editBookmark">
 		<node name="text" value="Text" toBeTranslated="true"/>
@@ -325,6 +330,7 @@
 		<node name="help" value="Aide"/>
 		<node name="plugins" value="Installer des plugins"/>
 		<node name="gotoPageNumber" value="Aller à la Page…"/>
+		<node name="readAloud" value="Read aloud…" toBeTranslated="true"/>
 	</node>
 	<node name="BookInfo">
 		<node name="fileName" value="Nom du fichier"/>
@@ -514,108 +520,42 @@
 			<node name="verticalAlignment" value="Alignement vertical"/>
 			<node name="more" value="Plus de styles">
 				<node name="summary" value="Paramètres de configuration des titres, épigraphes etc."/>
-				<node name="Regular Paragraph" value="Paragraphe normal">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Regular Paragraph" value="Paragraphe normal"/>
 				<node name="xhtml-tag-p" value="Paragraphe EPUB">
 					<node name="summary" value="&lt;p&gt; contenu balise XHTML"/>
 				</node>
-				<node name="Title" value="Titre">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Section Title" value="Titre de section">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Poem Title" value="Titre de poême">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subtitle" value="Sous-titre">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Annotation" value="Annotation">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Epigraph" value="Epigraphe">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Stanza" value="Strophe">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Verse" value="Vers">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Preformatted text" value="Texte préformatté">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Image" value="Image">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Cite" value="Citation">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Author" value="Auteur">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Date" value="Date">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Internal Hyperlink" value="Lien interne">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Footnote" value="Bas de page">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Emphasis" value="Emphase">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Strong" value="Fort">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subscript" value="Indice">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Superscript" value="Exposant">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Code" value="Code">
-					<node name="summary" value=""/>
-				</node>
-				<node name="StrikeThrough" value="Texte barré">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Italic" value="Italique">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Bold" value="Gras">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition" value="Définition">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition Description" value="Définition Description">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 1" value="Entête 1">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 2" value="Entête 2">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 3" value="Entête 3">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 4" value="Entête 4">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 5" value="Entête 5">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 6" value="Entête 6">
-					<node name="summary" value=""/>
-				</node>
-				<node name="External Hyperlink" value="Lien externe">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Title" value="Titre"/>
+				<node name="Section Title" value="Titre de section"/>
+				<node name="Poem Title" value="Titre de poême"/>
+				<node name="Subtitle" value="Sous-titre"/>
+				<node name="Annotation" value="Annotation"/>
+				<node name="Epigraph" value="Epigraphe"/>
+				<node name="Stanza" value="Strophe"/>
+				<node name="Verse" value="Vers"/>
+				<node name="Preformatted text" value="Texte préformatté"/>
+				<node name="Image" value="Image"/>
+				<node name="Cite" value="Citation"/>
+				<node name="Author" value="Auteur"/>
+				<node name="Date" value="Date"/>
+				<node name="Internal Hyperlink" value="Lien interne"/>
+				<node name="Footnote" value="Bas de page"/>
+				<node name="Emphasis" value="Emphase"/>
+				<node name="Strong" value="Fort"/>
+				<node name="Subscript" value="Indice"/>
+				<node name="Superscript" value="Exposant"/>
+				<node name="Code" value="Code"/>
+				<node name="StrikeThrough" value="Texte barré"/>
+				<node name="Italic" value="Italique"/>
+				<node name="Bold" value="Gras"/>
+				<node name="Definition" value="Définition"/>
+				<node name="Definition Description" value="Définition Description"/>
+				<node name="Header 1" value="Entête 1"/>
+				<node name="Header 2" value="Entête 2"/>
+				<node name="Header 3" value="Entête 3"/>
+				<node name="Header 4" value="Entête 4"/>
+				<node name="Header 5" value="Entête 5"/>
+				<node name="Header 6" value="Entête 6"/>
+				<node name="External Hyperlink" value="Lien externe"/>
 			</node>
 		</node>
 		<node name="toast" value="Pop-ups" toBeTranslated="true">
@@ -760,6 +700,12 @@
 				<node name="summaryOn" value="Défilement des pages horizontalement"/>
 				<node name="summaryOff" value="Défilement des pages verticalement"/>
 			</node>
+			<node name="tapToScrollForward" value="Tap to scroll forward" toBeTranslated="true">
+				<node name="right_to_left" value="Right third of the screen" toBeTranslated="true"/>
+				<node name="left_to_right" value="Left third of the screen" toBeTranslated="true"/>
+				<node name="up" value="Bottom third of the screen" toBeTranslated="true"/>
+				<node name="down" value="Top third of the screen" toBeTranslated="true"/>
+			</node>
 		</node>
 		<node name="tapZones" value="Zones d'appui">
 			<node name="summary" value="Actions lors d'un appui du doigt"/>
@@ -875,6 +821,20 @@
 				<node name="summaryOff" value="Pas d'astuces"/>
 			</node>
 		</node>
+		<node name="twitter" value="Twitter integration" toBeTranslated="true">
+			<node name="summary" value="How to tweet from FBReader" toBeTranslated="true"/>
+			<node name="enableTwitter" value="Enable tweets" toBeTranslated="true">
+				<node name="summaryOn" value="Show twitter link at end of book" toBeTranslated="true"/>
+				<node name="summaryOff" value="Do not show twitter link" toBeTranslated="true"/>
+			</node>
+			<node name="tweetText" value="Tweet text" toBeTranslated="true">
+				<node name="hint" value="Use %title% for the book title, %authors% for authors list" toBeTranslated="true"/>
+			</node>
+			<node name="coverInTweet" value="Add book cover to tweet" toBeTranslated="true">
+				<node name="summaryOn" value="Tweet text and book cover image" toBeTranslated="true"/>
+				<node name="summaryOff" value="Tweet text only" toBeTranslated="true"/>
+			</node>
+		</node>
 		<node name="about" value="À propos de FBReader">
 			<node name="summary" value="Numéro de version, contact"/>
 			<node name="version" value="Version"/>
@@ -893,7 +853,40 @@
 			<node name="facebook" value="FBReader sur Facebook">
 				<node name="url" value="https://facebook.com/fbreader"/>
 			</node>
+			<node name="telegram" value="Add Telegram channel" toBeTranslated="true">
+				<node name="url" value="https://telegram.me/fbreader" toBeTranslated="true"/>
+			</node>
 			<node name="thirdParty" value="Libraries tierces"/>
+			<node name="development" value="Developer options" toBeTranslated="true">
+				<node name="summary" value="Use carefully ;)" toBeTranslated="true"/>
+				<node name="forceWebAuth" value="Force web authentication" toBeTranslated="true">
+					<node name="summaryOn" value="Use web auth even if Google services are available" toBeTranslated="true"/>
+					<node name="summaryOff" value="Use Google auth if available" toBeTranslated="true"/>
+				</node>
+				<node name="showChangeNotifications" value="Notify about file modifications" toBeTranslated="true">
+					<node name="allFiles" value="Always" toBeTranslated="true"/>
+					<node name="bookFolders" value="For files in book folders only" toBeTranslated="true"/>
+					<node name="noFiles" value="Never" toBeTranslated="true"/>
+				</node>
+				<node name="showOpenPremiumSuggestion" value="“Open Premium” dialog" toBeTranslated="true">
+					<node name="summaryOn" value="Show each time you start FBReader from launcher" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not show" toBeTranslated="true"/>
+				</node>
+				<node name="logFileScanning" value="Log file scanning" toBeTranslated="true">
+					<node name="summaryOn" value="Create a log record each time the app scans a file for extracting book info" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not log" toBeTranslated="true"/>
+				</node>
+				<node name="copyLogs" value="Copy log files" toBeTranslated="true">
+					<node name="summary" value="Copies *.log files to %s" toBeTranslated="true"/>
+				</node>
+				<node name="deleteLogs" value="Clear logs" toBeTranslated="true"/>
+				<node name="copyDatabase" value="Copy books database" toBeTranslated="true">
+					<node name="summary" value="Copies books.db file to %s" toBeTranslated="true"/>
+				</node>
+				<node name="scanFailures" value="Scan failures list" toBeTranslated="true">
+					<node name="summary" value="List of files FBReader couldn't scan" toBeTranslated="true"/>
+				</node>
+			</node>
 		</node>
 		<node name="eink" value="Écran E-ink">
 			<node name="summary" value="Options spécifiques aux écrans E-ink"/>
@@ -903,6 +896,7 @@
 			</node>
 			<node name="interval" value="Nombre de MAJ rapides entre rafraîchissements complets"/>
 		</node>
+		<node name="lockedOption" value="Install Premium Edition to unlock this option" toBeTranslated="true"/>
 	</node>
 	<node name="dialog">
 		<node name="button">
@@ -932,6 +926,7 @@
 			<node name="markAsUnread" value="Marquer comme non lu"/>
 			<node name="plugin" value="Plugin" toBeTranslated="true"/>
 			<node name="premium" value="Premium" toBeTranslated="true"/>
+			<node name="clear" value="Clear" toBeTranslated="true"/>
 		</node>
 		<node name="gotoPage" value="Aller à la Page"/>
 		<node name="plugin">
@@ -1164,9 +1159,6 @@
 	</node>
 	<node name="plugins" value="Installer des plugins">
 		<node name="noMorePlugins" value="Désolé, pas de nouveaux plugins pour le moment."/>
-		<node name="litres" value="LitRes">
-			<node name="summary" value="Librairie Russe"/>
-		</node>
 		<node name="tts_plus" value="TTS+">
 			<node name="summary" value="Lire à voix haute"/>
 		</node>
@@ -1181,9 +1173,6 @@
 		</node>
 		<node name="opds_server" value="Serveur OPDS">
 			<node name="summary" value="Servir des livres depuis votre périphérique"/>
-		</node>
-		<node name="widgets" value="Widgets">
-			<node name="summary" value="Ajouter les livres sur votre écran d'accueil"/>
 		</node>
 		<node name="pdf" value="PDF">
 			<node name="summary" value="Lire des livres au format PDF"/>
@@ -1248,5 +1237,31 @@
 			<node name="book" value="Read book" toBeTranslated="true"/>
 			<node name="library" value="Open library" toBeTranslated="true"/>
 		</node>
+	</node>
+	<node name="modifiedBook">
+		<node name="notification">
+			<node name="title" value="Modified book file" toBeTranslated="true"/>
+			<node name="message" value="File %s has been changed" toBeTranslated="true"/>
+		</node>
+		<node name="dialog">
+			<node name="title" value="%s modified" toBeTranslated="true"/>
+			<node name="message" value="File “%s” has been changed. Please choose an action from the list." toBeTranslated="true"/>
+			<node name="createNew" value="Create new book “%s” from the file" toBeTranslated="true"/>
+			<node name="linkExisting" value="Link the file to existing “%s”" toBeTranslated="true"/>
+			<node name="updateMetainfo" value="Link to the existing book, update metainfo from the file" toBeTranslated="true"/>
+			<node name="removeFromLibrary" value="Remove the file from the library" toBeTranslated="true"/>
+		</node>
+	</node>
+	<node name="twitter">
+		<node name="link" value="Tweet what you have read!" toBeTranslated="true"/>
+		<node name="tweet" value="I've read “%title%” in @fbreader" toBeTranslated="true"/>
+		<node name="missingApp" value="Twitter app is not installed" toBeTranslated="true"/>
+	</node>
+	<node name="goodreads">
+		<node name="link" value="Share your reading experience on Goodreads!" toBeTranslated="true"/>
+	</node>
+	<node name="networkError">
+		<node name="noNetworkConnection" value="Network is not available. Please check your connection and try again" toBeTranslated="true"/>
+		<node name="syncServerFailure" value="Server connection failure. Please try again later" toBeTranslated="true"/>
 	</node>
 </resources>

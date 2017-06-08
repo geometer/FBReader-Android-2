@@ -248,6 +248,11 @@
 		<node name="editBookmark" value="تعديل العلامة المرجعية"/>
 		<node name="deleteBookmark" value="حذف العلامة المرجعية"/>
 		<node name="search" value="بحث"/>
+		<node name="order">
+			<node name="byCreationTime" value="By creation time" toBeTranslated="true"/>
+			<node name="byAccessTime" value="By access time" toBeTranslated="true"/>
+			<node name="byPageNo" value="By page number" toBeTranslated="true"/>
+		</node>
 	</node>
 	<node name="editBookmark">
 		<node name="text" value="Text" toBeTranslated="true"/>
@@ -330,6 +335,7 @@
 		<node name="help" value="مساعدة"/>
 		<node name="plugins" value="تنصيب اضافة"/>
 		<node name="gotoPageNumber" value="انتقل الى الصفحة..."/>
+		<node name="readAloud" value="Read aloud…" toBeTranslated="true"/>
 	</node>
 	<node name="BookInfo">
 		<node name="fileName" value="اسم الملف"/>
@@ -519,108 +525,42 @@
 			<node name="verticalAlignment" value="Vertical alignment" toBeTranslated="true"/>
 			<node name="more" value="مزيد...">
 				<node name="summary" value="اعدادات العناوين وغيرها"/>
-				<node name="Regular Paragraph" value="Regular Paragraph" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Regular Paragraph" value="Regular Paragraph" toBeTranslated="true"/>
 				<node name="xhtml-tag-p" value="EPub Paragraph" toBeTranslated="true">
 					<node name="summary" value="&lt;p&gt; XHTML tag content" toBeTranslated="true"/>
 				</node>
-				<node name="Title" value="Title" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Section Title" value="Section Title" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Poem Title" value="Poem Title" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subtitle" value="Subtitle" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Annotation" value="Annotation" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Epigraph" value="Epigraph" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Stanza" value="Stanza" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Verse" value="Verse" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Preformatted text" value="Preformatted text" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Image" value="Image" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Cite" value="Cite" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Author" value="Author" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Date" value="Date" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Internal Hyperlink" value="Internal hyperlink" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Footnote" value="Footnote" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Emphasis" value="Emphasis" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Strong" value="Strong" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subscript" value="Subscript" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Superscript" value="Superscript" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Code" value="Code" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="StrikeThrough" value="Strikethrough" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Italic" value="Italic" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Bold" value="Bold" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition" value="Definition" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition Description" value="Definition description" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 1" value="Header 1" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 2" value="Header 2" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 3" value="Header 3" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 4" value="Header 4" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 5" value="Header 5" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 6" value="Header 6" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
-				<node name="External Hyperlink" value="External hyperlink" toBeTranslated="true">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Title" value="Title" toBeTranslated="true"/>
+				<node name="Section Title" value="Section Title" toBeTranslated="true"/>
+				<node name="Poem Title" value="Poem Title" toBeTranslated="true"/>
+				<node name="Subtitle" value="Subtitle" toBeTranslated="true"/>
+				<node name="Annotation" value="Annotation" toBeTranslated="true"/>
+				<node name="Epigraph" value="Epigraph" toBeTranslated="true"/>
+				<node name="Stanza" value="Stanza" toBeTranslated="true"/>
+				<node name="Verse" value="Verse" toBeTranslated="true"/>
+				<node name="Preformatted text" value="Preformatted text" toBeTranslated="true"/>
+				<node name="Image" value="Image" toBeTranslated="true"/>
+				<node name="Cite" value="Cite" toBeTranslated="true"/>
+				<node name="Author" value="Author" toBeTranslated="true"/>
+				<node name="Date" value="Date" toBeTranslated="true"/>
+				<node name="Internal Hyperlink" value="Internal hyperlink" toBeTranslated="true"/>
+				<node name="Footnote" value="Footnote" toBeTranslated="true"/>
+				<node name="Emphasis" value="Emphasis" toBeTranslated="true"/>
+				<node name="Strong" value="Strong" toBeTranslated="true"/>
+				<node name="Subscript" value="Subscript" toBeTranslated="true"/>
+				<node name="Superscript" value="Superscript" toBeTranslated="true"/>
+				<node name="Code" value="Code" toBeTranslated="true"/>
+				<node name="StrikeThrough" value="Strikethrough" toBeTranslated="true"/>
+				<node name="Italic" value="Italic" toBeTranslated="true"/>
+				<node name="Bold" value="Bold" toBeTranslated="true"/>
+				<node name="Definition" value="Definition" toBeTranslated="true"/>
+				<node name="Definition Description" value="Definition description" toBeTranslated="true"/>
+				<node name="Header 1" value="Header 1" toBeTranslated="true"/>
+				<node name="Header 2" value="Header 2" toBeTranslated="true"/>
+				<node name="Header 3" value="Header 3" toBeTranslated="true"/>
+				<node name="Header 4" value="Header 4" toBeTranslated="true"/>
+				<node name="Header 5" value="Header 5" toBeTranslated="true"/>
+				<node name="Header 6" value="Header 6" toBeTranslated="true"/>
+				<node name="External Hyperlink" value="External hyperlink" toBeTranslated="true"/>
 			</node>
 		</node>
 		<node name="toast" value="Pop-ups" toBeTranslated="true">
@@ -765,6 +705,12 @@
 				<node name="summaryOn" value="تمرير الصفحات عموديا"/>
 				<node name="summaryOff" value="تمرير الصفحات أفقيا"/>
 			</node>
+			<node name="tapToScrollForward" value="Tap to scroll forward" toBeTranslated="true">
+				<node name="right_to_left" value="Right third of the screen" toBeTranslated="true"/>
+				<node name="left_to_right" value="Left third of the screen" toBeTranslated="true"/>
+				<node name="up" value="Bottom third of the screen" toBeTranslated="true"/>
+				<node name="down" value="Top third of the screen" toBeTranslated="true"/>
+			</node>
 		</node>
 		<node name="tapZones" value="Tap zones" toBeTranslated="true">
 			<node name="summary" value="Finger tap actions" toBeTranslated="true"/>
@@ -880,6 +826,20 @@
 				<node name="summaryOff" value="لا تعرض التلميحات"/>
 			</node>
 		</node>
+		<node name="twitter" value="Twitter integration" toBeTranslated="true">
+			<node name="summary" value="How to tweet from FBReader" toBeTranslated="true"/>
+			<node name="enableTwitter" value="Enable tweets" toBeTranslated="true">
+				<node name="summaryOn" value="Show twitter link at end of book" toBeTranslated="true"/>
+				<node name="summaryOff" value="Do not show twitter link" toBeTranslated="true"/>
+			</node>
+			<node name="tweetText" value="Tweet text" toBeTranslated="true">
+				<node name="hint" value="Use %title% for the book title, %authors% for authors list" toBeTranslated="true"/>
+			</node>
+			<node name="coverInTweet" value="Add book cover to tweet" toBeTranslated="true">
+				<node name="summaryOn" value="Tweet text and book cover image" toBeTranslated="true"/>
+				<node name="summaryOff" value="Tweet text only" toBeTranslated="true"/>
+			</node>
+		</node>
 		<node name="about" value="حول البرنامج">
 			<node name="summary" value="رقم الإصدار، راسلنا"/>
 			<node name="version" value="الإصدار"/>
@@ -898,7 +858,40 @@
 			<node name="facebook" value="تابعنا على الفايسبوك">
 				<node name="url" value="https://facebook.com/fbreader"/>
 			</node>
+			<node name="telegram" value="Add Telegram channel" toBeTranslated="true">
+				<node name="url" value="https://telegram.me/fbreader" toBeTranslated="true"/>
+			</node>
 			<node name="thirdParty" value="Third-party libraries" toBeTranslated="true"/>
+			<node name="development" value="Developer options" toBeTranslated="true">
+				<node name="summary" value="Use carefully ;)" toBeTranslated="true"/>
+				<node name="forceWebAuth" value="Force web authentication" toBeTranslated="true">
+					<node name="summaryOn" value="Use web auth even if Google services are available" toBeTranslated="true"/>
+					<node name="summaryOff" value="Use Google auth if available" toBeTranslated="true"/>
+				</node>
+				<node name="showChangeNotifications" value="Notify about file modifications" toBeTranslated="true">
+					<node name="allFiles" value="Always" toBeTranslated="true"/>
+					<node name="bookFolders" value="For files in book folders only" toBeTranslated="true"/>
+					<node name="noFiles" value="Never" toBeTranslated="true"/>
+				</node>
+				<node name="showOpenPremiumSuggestion" value="“Open Premium” dialog" toBeTranslated="true">
+					<node name="summaryOn" value="Show each time you start FBReader from launcher" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not show" toBeTranslated="true"/>
+				</node>
+				<node name="logFileScanning" value="Log file scanning" toBeTranslated="true">
+					<node name="summaryOn" value="Create a log record each time the app scans a file for extracting book info" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not log" toBeTranslated="true"/>
+				</node>
+				<node name="copyLogs" value="Copy log files" toBeTranslated="true">
+					<node name="summary" value="Copies *.log files to %s" toBeTranslated="true"/>
+				</node>
+				<node name="deleteLogs" value="Clear logs" toBeTranslated="true"/>
+				<node name="copyDatabase" value="Copy books database" toBeTranslated="true">
+					<node name="summary" value="Copies books.db file to %s" toBeTranslated="true"/>
+				</node>
+				<node name="scanFailures" value="Scan failures list" toBeTranslated="true">
+					<node name="summary" value="List of files FBReader couldn't scan" toBeTranslated="true"/>
+				</node>
+			</node>
 		</node>
 		<node name="eink" value="E-ink screen" toBeTranslated="true">
 			<node name="summary" value="Specific options for e-ink screens" toBeTranslated="true"/>
@@ -908,6 +901,7 @@
 			</node>
 			<node name="interval" value="Number of fast updates between complete refreshes" toBeTranslated="true"/>
 		</node>
+		<node name="lockedOption" value="Install Premium Edition to unlock this option" toBeTranslated="true"/>
 	</node>
 	<node name="dialog">
 		<node name="button">
@@ -937,6 +931,7 @@
 			<node name="markAsUnread" value="تعليم كغير مقروء"/>
 			<node name="plugin" value="Plugin" toBeTranslated="true"/>
 			<node name="premium" value="Premium" toBeTranslated="true"/>
+			<node name="clear" value="Clear" toBeTranslated="true"/>
 		</node>
 		<node name="gotoPage" value="Go to page" toBeTranslated="true"/>
 		<node name="plugin">
@@ -1169,9 +1164,6 @@
 	</node>
 	<node name="plugins" value="Install plugins" toBeTranslated="true">
 		<node name="noMorePlugins" value="We have no new plugins at the moment, sorry" toBeTranslated="true"/>
-		<node name="litres" value="LitRes" toBeTranslated="true">
-			<node name="summary" value="Russian book store" toBeTranslated="true"/>
-		</node>
 		<node name="tts_plus" value="TTS+" toBeTranslated="true">
 			<node name="summary" value="Read aloud" toBeTranslated="true"/>
 		</node>
@@ -1186,9 +1178,6 @@
 		</node>
 		<node name="opds_server" value="OPDS Server" toBeTranslated="true">
 			<node name="summary" value="Allow your device to act as server" toBeTranslated="true"/>
-		</node>
-		<node name="widgets" value="Widgets" toBeTranslated="true">
-			<node name="summary" value="Add books to your home screen" toBeTranslated="true"/>
 		</node>
 		<node name="pdf" value="PDF" toBeTranslated="true">
 			<node name="summary" value="Read books in PDF format" toBeTranslated="true"/>
@@ -1253,5 +1242,31 @@
 			<node name="book" value="Read book" toBeTranslated="true"/>
 			<node name="library" value="Open library" toBeTranslated="true"/>
 		</node>
+	</node>
+	<node name="modifiedBook">
+		<node name="notification">
+			<node name="title" value="Modified book file" toBeTranslated="true"/>
+			<node name="message" value="File %s has been changed" toBeTranslated="true"/>
+		</node>
+		<node name="dialog">
+			<node name="title" value="%s modified" toBeTranslated="true"/>
+			<node name="message" value="File “%s” has been changed. Please choose an action from the list." toBeTranslated="true"/>
+			<node name="createNew" value="Create new book “%s” from the file" toBeTranslated="true"/>
+			<node name="linkExisting" value="Link the file to existing “%s”" toBeTranslated="true"/>
+			<node name="updateMetainfo" value="Link to the existing book, update metainfo from the file" toBeTranslated="true"/>
+			<node name="removeFromLibrary" value="Remove the file from the library" toBeTranslated="true"/>
+		</node>
+	</node>
+	<node name="twitter">
+		<node name="link" value="Tweet what you have read!" toBeTranslated="true"/>
+		<node name="tweet" value="I've read “%title%” in @fbreader" toBeTranslated="true"/>
+		<node name="missingApp" value="Twitter app is not installed" toBeTranslated="true"/>
+	</node>
+	<node name="goodreads">
+		<node name="link" value="Share your reading experience on Goodreads!" toBeTranslated="true"/>
+	</node>
+	<node name="networkError">
+		<node name="noNetworkConnection" value="Network is not available. Please check your connection and try again" toBeTranslated="true"/>
+		<node name="syncServerFailure" value="Server connection failure. Please try again later" toBeTranslated="true"/>
 	</node>
 </resources>

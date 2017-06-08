@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Basque FBReaderJ resources, by Bixerdo for librezale.org -->
+<!-- Basque FBReaderJ resources, by Bixerdo for librezale.eus -->
 <resources>
 	<node name="library" value="FBReader Liburutegia">
 		<node name="unknownAuthor" value="Egile ezezaguna"/>
-		<node name="booksWithNoTags" value="Etiketa gabeko liburuak"/>
+		<node name="booksWithNoTags" value="Etiketarik gabeko liburuak"/>
 		<node name="demo" value="lagina"/>
 		<node name="byAuthor" value="Egileagatik">
 			<node name="summary" value="Egileagatik sailkatutako liburuak"/>
@@ -18,36 +18,36 @@
 			<node name="summary" value="Etiketagatik sailkatutako liburuak"/>
 		</node>
 		<node name="recent" value="Azkenak">
-			<node name="summary" value="Oraintsu zabaldutako liburuak"/>
+			<node name="summary" value="Berriki irekitako liburuak"/>
 		</node>
 		<node name="favorites" value="Gogokoak">
-			<node name="summary" value="Aukeratutako nire liburuak"/>
+			<node name="summary" value="Nire libururik gogokoenak"/>
 		</node>
-		<node name="chooseView" value="Choose view" toBeTranslated="true"/>
-		<node name="wideCardsView" value="Wide cards" toBeTranslated="true"/>
-		<node name="smallCardsView" value="Small cards" toBeTranslated="true"/>
-		<node name="tinyCardsView" value="Tiny cards" toBeTranslated="true"/>
-		<node name="coversView" value="Covers" toBeTranslated="true"/>
-		<node name="oldView" value="Classic" toBeTranslated="true"/>
-		<node name="bookshelfView" value="Bookshelf view" toBeTranslated="true">
-			<node name="summary" value="Switch to thumbnail view" toBeTranslated="true"/>
+		<node name="chooseView" value="Aukeratu ikuspegia"/>
+		<node name="wideCardsView" value="Txartel zabalak"/>
+		<node name="smallCardsView" value="Txartel txikiak"/>
+		<node name="tinyCardsView" value="Txartel oso txikiak"/>
+		<node name="coversView" value="Azalak"/>
+		<node name="oldView" value="Ikuspegi klasikoa"/>
+		<node name="bookshelfView" value="Apalategi ikuspegia">
+			<node name="summary" value="Aldatu koadro txikien ikuspegira"/>
 		</node>
 		<node name="found" value="Aurkituta">
 			<node name="summary" value="%s bilaketaren emaitzak"/>
 		</node>
-		<node name="sync" value="Synchronisation" toBeTranslated="true">
-			<node name="summary" value="Books by synchronisation status" toBeTranslated="true"/>
-			<node name="sync-success" value="Synchronised" toBeTranslated="true">
-				<node name="summary" value="Books successfully uploaded to the server" toBeTranslated="true"/>
+		<node name="sync" value="Sinkronizazioa">
+			<node name="summary" value="Sinkronizazio-egoeraren araberako liburuak"/>
+			<node name="sync-success" value="Sinkronizaturik">
+				<node name="summary" value="Liburuak egoki kargatu dira zerbitzarian"/>
 			</node>
-			<node name="sync-failure" value="Synchronisation failed" toBeTranslated="true">
-				<node name="summary" value="Books not uploaded to the server due to errors" toBeTranslated="true"/>
+			<node name="sync-failure" value="Sinkronizazioak huts egin du">
+				<node name="summary" value="Erroreak gertatu dira liburuak zerbitzarian kargatzerakoan"/>
 			</node>
-			<node name="sync-deleted" value="Deleted from server" toBeTranslated="true">
-				<node name="summary" value="Books no longer accessible from the server" toBeTranslated="true"/>
+			<node name="sync-deleted" value="Zerbitzaritik ezabatuta">
+				<node name="summary" value="Liburuok ez daude zerbitzarian eskuragarri"/>
 			</node>
-			<node name="sync-tosync" value="Not synchronised yet" toBeTranslated="true">
-				<node name="summary" value="Books yet to be uploaded to the server" toBeTranslated="true"/>
+			<node name="sync-tosync" value="Oraindik sinkronizatu gabe">
+				<node name="summary" value="Liburuok ez dira oraindik zerbitzarian kargatu"/>
 			</node>
 		</node>
 		<node name="fileTree" value="Fitxategi zuhaitza">
@@ -56,16 +56,16 @@
 		<node name="fileTreeRoot" value="Gailua">
 			<node name="summary" value="Fitxategi-sistema osoa"/>
 		</node>
-		<node name="fileTreeCard" value="Memoria txartela">
-			<node name="withIndex" value="Memory card No %s" toBeTranslated="true"/>
-			<node name="summary" value="Gailuan txertaturiko memoria txartela"/>
+		<node name="fileTreeCard" value="Memoria-txartela">
+			<node name="withIndex" value="%s zenbakidun memoria-txartela"/>
+			<node name="summary" value="Gailuan txertaturiko memoria-txartela"/>
 		</node>
 		<node name="fileTreeLibrary" value="FBReader liburutegia">
 			<node name="summary" value="FBReadereko liburuen direktorioa"/>
 		</node>
 		<node name="localSearch" value="Bilatu"/>
-		<node name="rescan" value="Berreskaneatu"/>
-		<node name="openBook" value="Zabaldu liburua"/>
+		<node name="rescan" value="Berriro eskaneatu"/>
+		<node name="openBook" value="Ireki liburua"/>
 		<node name="showBookInfo" value="Liburuaren infoa"/>
 		<node name="shareBook" value="Partekatu liburua"/>
 		<node name="deleteBook" value="Ezabatu liburua"/>
@@ -74,13 +74,13 @@
 		<node name="removeFromRecents" value="Kendu azkenaldikoen zerrendatik"/>
 		<node name="markAsRead" value="Markatu irakurria bezala"/>
 		<node name="markAsUnread" value="Markatu irakurri gabea bezala"/>
-		<node name="deleteAll" value="Delete all" toBeTranslated="true"/>
-		<node name="uploadAgain" value="Upload again" toBeTranslated="true"/>
-		<node name="tryAgain" value="Try again" toBeTranslated="true"/>
+		<node name="deleteAll" value="Ezabatu dena"/>
+		<node name="uploadAgain" value="Kargatu berriro"/>
+		<node name="tryAgain" value="Saiatu berriro"/>
 	</node>
 	<node name="networkLibrary" value="FBReadereko sare-liburutegia">
-		<node name="sync" value="FBReader® book network" toBeTranslated="true">
-			<node name="summary" value="My personal catalogue" toBeTranslated="true"/>
+		<node name="sync" value="FBReader® liburu-sarea">
+			<node name="summary" value="Nire katalogo pertsonala"/>
 		</node>
 		<node name="byAuthor" value="Egileagatik">
 			<node name="summary" value="Egileagatik sailkatutako liburuak"/>
@@ -89,7 +89,7 @@
 			<node name="summary" value="Izenburuagatik sailkatutako liburuak"/>
 		</node>
 		<node name="byDate" value="Datagatik">
-			<node name="summary" value="Datagatik sailkatutako liburuak"/>
+			<node name="summary" value="Erosketa datagatik sailkatutako liburuak"/>
 		</node>
 		<node name="bySeries" value="Sailagatik">
 			<node name="summary" value="Sailagatik sailkatutako liburuak"/>
@@ -103,15 +103,15 @@
 			<node name="summary" value="%s bilaketaren emaitzak"/>
 		</node>
 		<node name="recent" value="Azkenaldiko katalogoak">
-			<node name="summary" value="Duela gutxi bisitaturiko katalogoak"/>
+			<node name="summary" value="Duela gutxi arakatutako katalogoak"/>
 		</node>
 		<node name="openCatalog" value="Zabaldu katalogoa"/>
 		<node name="networkSearch" value="Bilatu"/>
 		<node name="showResults" value="Erakutsi emaitzak"/>
 		<node name="showBooks" value="Erakutsi liburuak"/>
 		<node name="download" value="Deskargatu"/>
-		<node name="read" value="Irakurri kopia lokala"/>
-		<node name="delete" value="Ezabatu kopia lokala"/>
+		<node name="read" value="Irakurri deskargatutako kopia"/>
+		<node name="delete" value="Ezabatu deskargatutako kopia"/>
 		<node name="readDemo" value="Irakurri lagina"/>
 		<node name="deleteDemo" value="Ezabatu lagina"/>
 		<node name="downloadDemo" value="Deskargatu lagina"/>
@@ -124,10 +124,10 @@
 		<node name="openInBrowser" value="Ireki nabigatzailean"/>
 		<node name="stopLoading" value="Gelditu karga"/>
 		<node name="stopSearching" value="Gelditu bilaketa"/>
-		<node name="signIn" value="Sartu"/>
+		<node name="signIn" value="Hasi saioa"/>
 		<node name="signOut" value="Irten (%s)"/>
-		<node name="signUp" value="Sign up" toBeTranslated="true"/>
-		<node name="quickBuy" value="Quick buy" toBeTranslated="true"/>
+		<node name="signUp" value="Izena eman"/>
+		<node name="quickBuy" value="Erosketa azkarra"/>
 		<node name="topup" value="Kontua bete (unekoa: %s)"/>
 		<node name="topupTitle" value="Kontua bete"/>
 		<node name="topupViaBrowser" value="Ireki orria nabigatzailean"/>
@@ -151,12 +151,12 @@
 		<node name="addCustomCatalogSummary" value="Eskuz gehitu pertsonalizatutako OPDS motako katalogoa"/>
 		<node name="disableCatalog" value="Ezgaitu katalogoa"/>
 		<node name="confirmQuestions">
-			<node name="read" value="Kopia lokala irakurri nahi duzu?"/>
-			<node name="download" value="Liburu hau deskargatu nahi duzu?"/>
-			<node name="readDemo" value="Lagina irakurri nahi duzu?"/>
-			<node name="downloadDemo" value="Lagina deskargatu nahi duzu?"/>
-			<node name="buy" value="Liburu hau erosi nahi duzu? (%s)"/>
-			<node name="openInBrowser" value="Katalogo hau nabigatzailean ireki nahi duzu?"/>
+			<node name="read" value="Deskargatutako kopia irakurri nahi duzu?"/>
+			<node name="download" value="Nahi duzu liburua deskargatu?"/>
+			<node name="readDemo" value="Nahi duzu lagina irakurri?"/>
+			<node name="downloadDemo" value="Nahi duzu lagina deskargatu?"/>
+			<node name="buy" value="Nahi duzu liburua erosi? (%s)"/>
+			<node name="openInBrowser" value="Nahi duzu esteka nabigatzailean ireki?"/>
 		</node>
 		<node name="downloadingCatalogs" value="Katalogoak deskargatzen"/>
 		<!-- used as notification title -->
@@ -174,8 +174,8 @@
 		<node name="menu">
 			<node name="openRoot" value="Katalogo Nagusia"/>
 			<node name="networkSearch" value="Bilatu"/>
-			<node name="reload" value="Birkargatu"/>
-			<node name="signIn" value="Sartu"/>
+			<node name="reload" value="Kargatu berriro"/>
+			<node name="signIn" value="Hasi saioa"/>
 			<node name="signUp" value="Izena eman"/>
 			<node name="signOut" value="Irten (%s)"/>
 			<node name="topup" value="Bete kontua"/>
@@ -183,7 +183,7 @@
 			<node name="refreshCatalogsList" value="Freskatu katalogoak"/>
 			<node name="manageCatalogs" value="Kudeatu katalogoak"/>
 			<node name="clearBasket" value="Hutsitu saskia"/>
-			<node name="buyAllBooks" value="Liburu guztiak erosi"/>
+			<node name="buyAllBooks" value="Erosi liburu guztiak"/>
 		</node>
 	</node>
 	<node name="buyBook">
@@ -195,7 +195,7 @@
 		<node name="notAuthorised" value="Baimena behar duzu"/>
 		<node name="noAccountInformation" value="Ezin izan da kontuaren egoera kargatu"/>
 		<node name="unsufficientFunds" value="Erosketa honen kostua %0 da eta %1 baino ez duzu kontuan"/>
-		<node name="zeroFunds" value="Eroskera honen kostua %0 da"/>
+		<node name="zeroFunds" value="Erosketaren kostua %0 da"/>
 	</node>
 	<node name="bookInfo">
 		<node name="bookInfo" value="Liburuaren infoa"/>
@@ -208,7 +208,7 @@
 			<node condition="value 1" value="Egilea:"/>
 		</node>
 		<node name="series" value="Saila:"/>
-		<node name="indexInSeries" value="Sailaren adierazlea:"/>
+		<node name="indexInSeries" value="Sailaren zenbakia:"/>
 		<node name="tags" value="Etiketak:">
 			<node condition="value 1" value="Etiketa:"/>
 		</node>
@@ -230,12 +230,12 @@
 	<node name="bookDownloader">
 		<node name="downloadCompleteTicker" value="Liburua deskargatu da"/>
 		<node name="downloadFailedTicker" value="Errorea liburua deskargatzerakoan"/>
-		<node name="downloadComplete" value="Deskarga osatua"/>
-		<node name="downloadFailed" value="Huts egin du deskargak"/>
-		<node name="downloadStarted" value="Liburua deskargatzen hasi da"/>
-		<node name="alreadyDownloading" value="Liburua deskargatzen ari da"/>
-		<node name="cannotCreateDirectory" value="Ezin izan da %s direktorioa sortu"/>
-		<node name="cannotCreateFile" value="Ezin izan da %s fitxategia sortu"/>
+		<node name="downloadComplete" value="Deskarga burutu da"/>
+		<node name="downloadFailed" value="Deskargak huts egin du"/>
+		<node name="downloadStarted" value="Liburuaren deskarga hssi da"/>
+		<node name="alreadyDownloading" value="Liburuaren deskarga abian da"/>
+		<node name="cannotCreateDirectory" value="Ezin izan da sortu %s direktorioa"/>
+		<node name="cannotCreateFile" value="Ezin izan da sortu %s fitxategia"/>
 	</node>
 	<node name="tocView">
 		<node name="expandTree" value="Zabaldu zuhaitza"/>
@@ -250,18 +250,23 @@
 		<node name="editBookmark" value="Aldatu laster-marka"/>
 		<node name="deleteBookmark" value="Ezabatu laster-marka"/>
 		<node name="search" value="Bilatu"/>
+		<node name="order">
+			<node name="byCreationTime" value="By creation time" toBeTranslated="true"/>
+			<node name="byAccessTime" value="By access time" toBeTranslated="true"/>
+			<node name="byPageNo" value="By page number" toBeTranslated="true"/>
+		</node>
 	</node>
 	<node name="editBookmark">
-		<node name="text" value="Text" toBeTranslated="true"/>
-		<node name="style" value="Style" toBeTranslated="true"/>
-		<node name="delete" value="Delete" toBeTranslated="true"/>
+		<node name="text" value="Testua"/>
+		<node name="style" value="Estiloa"/>
+		<node name="delete" value="Ezabatu"/>
 		<node name="deleteBookmark" value="Ezabatu laster-marka"/>
-		<node name="saveText" value="Save text" toBeTranslated="true"/>
-		<node name="editStyle" value="Aldatu estiloa…"/>
+		<node name="saveText" value="Gorde testua"/>
+		<node name="editStyle" value="Editatu estiloa…"/>
 	</node>
 	<node name="toast">
-		<node name="more" value="More" toBeTranslated="true"/>
-		<node name="offline" value="Offline" toBeTranslated="true"/>
+		<node name="more" value="Gehiago"/>
+		<node name="offline" value="Lineaz kanpo"/>
 	</node>
 	<node name="cancelMenu">
 		<node name="library" value="Ireki liburutegia"/>
@@ -273,9 +278,9 @@
 		<node name="close" value="Itxi FBReader"/>
 	</node>
 	<node name="style" value="%s estiloa"/>
-	<node name="editStyle" value="Edit style" toBeTranslated="true">
+	<node name="editStyle" value="Editatu estiloa">
 		<node name="name" value="Estiloaren izena"/>
-		<node name="invisible" value="Ikusezin">
+		<node name="invisible" value="Ikusezina">
 			<node name="summaryOn" value="Ez nabarmendu laster-markak"/>
 			<node name="summaryOff" value="Nabarmendu laster-markak"/>
 		</node>
@@ -286,31 +291,31 @@
 		<node name="textInBuffer" value="&#10;%s paperontzira kopiatuta"/>
 	</node>
 	<node name="sharing">
-		<node name="sharedFrom" value="&lt;a href=&quot;https://fbreader.org/&quot;&gt;FBReader&lt;/a&gt; (e)tik partekatua"/>
+		<node name="sharedFrom" value="&lt;a href=&quot;http://fbreader.org/&quot;&gt;FBReader&lt;/a&gt; (e)tik partekatua"/>
 	</node>
 	<node name="menu">
-		<node name="installPremium" value="Upgrade to Premium" toBeTranslated="true"/>
-		<node name="openPremium" value="Open FBReader Premium" toBeTranslated="true"/>
-		<node name="premium" value="FBReader Premium dialog" toBeTranslated="true"/>
-		<node name="whatsnew" value="What's new" toBeTranslated="true"/>
-		<node name="openStartScreen" value="Start screen" toBeTranslated="true"/>
+		<node name="installPremium" value="Eguneratu Premium-era"/>
+		<node name="openPremium" value="Ireki FBReader Premium"/>
+		<node name="premium" value="FBReader Premium elkarrizketa-koadroa"/>
+		<node name="whatsnew" value="Zer berri"/>
+		<node name="openStartScreen" value="Hasiera pantaila"/>
 		<node name="preferences" value="Hobespenak"/>
 		<node name="bookInfo" value="Liburuaren infoa"/>
 		<node name="library" value="Liburutegia"/>
 		<node name="toc" value="Aurkibidea"/>
 		<node name="day" value="Eguna"/>
 		<node name="night" value="Gaua"/>
-		<node name="dayNight" value="Day/Night" toBeTranslated="true"/>
+		<node name="dayNight" value="Eguna/Gaua"/>
 		<node name="yotaSwitchToBackScreen" value="Aldatu atzeko pantailara"/>
 		<node name="yotaSwitchToFrontScreen" value="Aldatu aurreko pantailara"/>
 		<node name="networkLibrary" value="Sareko liburutegia"/>
 		<node name="navigate" value="Nabigatu">
 			<node name="toc" value="Aurkibidea"/>
 			<node name="gotoHome" value="Joan Dokumentuaren Hasierara"/>
-			<node name="gotoSectionStart" value="Joan Testu Atalaren Hasierara"/>
-			<node name="gotoSectionEnd" value="Joan Testu Atalaren Bukaerara"/>
-			<node name="nextTOCSection" value="Joan Aurkibidearen Hurrengo Elementura"/>
-			<node name="previousTOCSection" value="Joan Aurkibidearen Aurreko Elementura"/>
+			<node name="gotoSectionStart" value="Joan testu-sekzioaren hasierara"/>
+			<node name="gotoSectionEnd" value="Joan testu-sekzioaren bukaerara"/>
+			<node name="nextTOCSection" value="Joan Aurkibidearen hurrengo elementura"/>
+			<node name="previousTOCSection" value="Joan Aurkibidearen aurreko elementura"/>
 			<node name="undo" value="Desegin"/>
 			<node name="redo" value="Berregin"/>
 		</node>
@@ -319,19 +324,20 @@
 		<node name="rotate" value="Biratu pantaila"/>
 		<node name="screenOrientation" value="Pantailaren orientazioa"/>
 		<node name="screenOrientationSystem" value="Sistema"/>
-		<node name="screenOrientationSensor" value="Gailuaren orientazioaren araberakoa"/>
+		<node name="screenOrientationSensor" value="Automatikoki biratu"/>
 		<node name="screenOrientationPortrait" value="Bertikala"/>
 		<node name="screenOrientationLandscape" value="Horizontala"/>
 		<node name="screenOrientationReversePortrait" value="Alderantzizko bertikala"/>
 		<node name="screenOrientationReverseLandscape" value="Alderantzizko horizontala"/>
 		<node name="increaseFont" value="Handitu letra-tipoa"/>
 		<node name="decreaseFont" value="Txikitu letra-tipoa"/>
-		<node name="changeFontSize" value="Zoom in/out" toBeTranslated="true"/>
+		<node name="changeFontSize" value="Handitu/Txikitu letra-tipoa"/>
 		<node name="toggleFullscreen" value="Pantaila osoan"/>
 		<node name="bookmarks" value="Laster-markak"/>
 		<node name="help" value="Laguntza"/>
-		<node name="plugins" value="Instalatu gehigarriak"/>
-		<node name="gotoPageNumber" value="Joan Orrira…"/>
+		<node name="plugins" value="Instalatu pluginak"/>
+		<node name="gotoPageNumber" value="Orri honetara joan…"/>
+		<node name="readAloud" value="Read aloud…" toBeTranslated="true"/>
 	</node>
 	<node name="BookInfo">
 		<node name="fileName" value="Fitxategiaren izena"/>
@@ -342,47 +348,47 @@
 		<node name="tags" value="Etiketa(k)"/>
 		<node name="series" value="Saila"/>
 	</node>
-	<node name="Preferences" value="FBReader settings" toBeTranslated="true">
-		<node name="sync" value="Synchronisation" toBeTranslated="true">
-			<node name="summary" value="Book network settings" toBeTranslated="true"/>
-			<node name="site" value="Read more about synchronisation" toBeTranslated="true">
-				<node name="url" value="https://books.fbreader.org/help.html" toBeTranslated="true"/>
+	<node name="Preferences" value="FBReaderren ezarpenak">
+		<node name="sync" value="Sinkronizazioa">
+			<node name="summary" value="Liburu-sarearen ezarpenak"/>
+			<node name="site" value="Sinkronizarioari buruz gehiago irakurri (ENG)">
+				<node name="url" value="https://books.fbreader.org/help.html"/>
 			</node>
-			<node name="enable" value="Enable synchronisation" toBeTranslated="true">
-				<node name="summaryOn" value="Synchronise my library with FBReader book network server" toBeTranslated="true"/>
-				<node name="summaryOnWithAccount" value="Synchronise my library as %s" toBeTranslated="true"/>
-				<node name="summaryOff" value="Do not synchronise my library with FBReader book network server" toBeTranslated="true"/>
+			<node name="enable" value="Gaitu sinkronizazioa">
+				<node name="summaryOn" value="Sinkronizatu nire liburutegia FBReader liburu-sarearen zerbitzariarekin"/>
+				<node name="summaryOnWithAccount" value="%s bezala sinkronizatu nire liburutegia"/>
+				<node name="summaryOff" value="Ez sinkronizatu nire liburutegia FBReader liburu-sarearen zerbitzariarekin"/>
 			</node>
 			<node name="values">
-				<node name="always" value="Always" toBeTranslated="true"/>
-				<node name="viaWifi" value="If device is connected via Wi-Fi" toBeTranslated="true"/>
-				<node name="never" value="Never" toBeTranslated="true"/>
+				<node name="always" value="Beti"/>
+				<node name="viaWifi" value="Gailua Wi-Fi bitartez konektaturik baldin badago"/>
+				<node name="never" value="Inoiz ez"/>
 			</node>
-			<node name="uploadAllBooks" value="Upload all books to server" toBeTranslated="true"/>
-			<node name="downloadAllBooks" value="Download all books from server" toBeTranslated="true"/>
-			<node name="downloadCurrentBook" value="Download current book from server" toBeTranslated="true"/>
-			<node name="positions" value="Synchronise reading positions" toBeTranslated="true"/>
-			<node name="bookmarks" value="Synchronise bookmarks" toBeTranslated="true"/>
-			<node name="customShelves" value="Synchronise custom shelves" toBeTranslated="true"/>
-			<node name="metainfo" value="Synchronise metainfo (title, tags, etc.)" toBeTranslated="true"/>
-			<node name="changeCurrentBook" value="Change current book" toBeTranslated="true">
-				<node name="summaryOn" value="Open same book on all devices" toBeTranslated="true"/>
-				<node name="summaryOff" value="Synchronise reading positions, but do not open same book on all devices" toBeTranslated="true"/>
+			<node name="uploadAllBooks" value="Kargatu liburu guztiak zerbitzarian"/>
+			<node name="downloadAllBooks" value="Deskargatu liburu guztiak zerbitzaritik"/>
+			<node name="downloadCurrentBook" value="Deskargatu uneko liburua zerbitzaritik"/>
+			<node name="positions" value="Sinkronizatu irakurketa-kokapenak"/>
+			<node name="bookmarks" value="Sinkronizatu laster-markak"/>
+			<node name="customShelves" value="Sinkronizatu apalategi pertsonalizatuak"/>
+			<node name="metainfo" value="Sinkronizatu metainfoa (izenburua, etiketak, etab.)"/>
+			<node name="changeCurrentBook" value="Aldatu uneko liburua">
+				<node name="summaryOn" value="Ireki liburu bera gailu guztietan"/>
+				<node name="summaryOff" value="Sinkronizatu irakurketa-kokapenak, baina ez ireki liburu bera gailu guztietan"/>
 			</node>
 		</node>
 		<node name="directories" value="Direktorioak">
 			<node name="summary" value="Fitxategiak bilatzeko direktorioak"/>
-			<node name="bookPath" value="Liburuen direktorioak">
-				<node name="chooserTitle" value="Liburuen direktorioa"/>
+			<node name="bookPath" value="Non bilatu liburuak">
+				<node name="chooserTitle" value="Liburuen karpeta"/>
 			</node>
-			<node name="downloadDir" value="Where to store downloaded books" toBeTranslated="true">
-				<node name="chooserTitle" value="Liburuen direktorioa"/>
+			<node name="downloadDir" value="Non gorde deskargatutako liburuak">
+				<node name="chooserTitle" value="Liburuen karpeta"/>
 			</node>
-			<node name="fontPath" value="Letra-tipoen direktorioak">
-				<node name="chooserTitle" value="Letra-tipoen direktorioa"/>
+			<node name="fontPath" value="Non bilatu letra-tipoak">
+				<node name="chooserTitle" value="Letra-tipoen karpeta"/>
 			</node>
-			<node name="tempDir" value="Behin-behineko fitxategien direktorioa">
-				<node name="chooserTitle" value="Temp files folder" toBeTranslated="true"/>
+			<node name="tempDir" value="Non gorde aldi baterako fitxategiak">
+				<node name="chooserTitle" value="Aldi baterako fitxategien karpeta"/>
 			</node>
 		</node>
 		<node name="appearance" value="Itxura">
@@ -390,7 +396,7 @@
 			<node name="language" value="Interfazearen hizkuntza"/>
 			<node name="screenOrientation" value="Pantailaren orientazioa">
 				<node name="system" value="Sistema"/>
-				<node name="sensor" value="Gailuaren orientazioaren araberakoa"/>
+				<node name="sensor" value="Automatikoki biratu"/>
 				<node name="portrait" value="Bertikala"/>
 				<node name="landscape" value="Horizontala"/>
 				<node name="reversePortrait" value="Alderantzizko bertikala"/>
@@ -402,22 +408,22 @@
 			</node>
 			<node name="showStatusBar" value="Erakutsi egoera barra">
 				<node name="summaryOn" value="Erakutsi egoera barra irakurri moduan dagoenean"/>
-				<node name="summaryOff" value="Gorde egoera barra irakurri moduan dagoenean"/>
+				<node name="summaryOff" value="Ezkutatu egoera barra irakurri moduan dagoenean"/>
 			</node>
 			<node name="showActionBar" value="Erakutsi ekintza barra">
 				<node name="summaryOn" value="Erakutsi ekintza barra irakurri moduan dagoenean"/>
-				<node name="summaryOff" value="Gorde egoera barra irakurri moduan dagoenean"/>
+				<node name="summaryOff" value="Ezkutatu egoera barra irakurri moduan dagoenean"/>
 			</node>
-			<node name="showStatusBarWhenMenuIsActive" value="Erakutsi egoera barra menua piztuta dagoenean">
+			<node name="showStatusBarWhenMenuIsActive" value="Erakutsi/Ezkutatu egoera barra menua piztuta dagoenean">
 				<node name="summaryOn" value="Erakutsi egoera barra menua pizterakoan"/>
-				<node name="summaryOff" value="Gorde egoera barra menua pizterakoan"/>
+				<node name="summaryOff" value="Ezkutatu egoera barra menua pizterakoan"/>
 			</node>
 			<node name="fullscreenMode" value="Pantaila osoa">
 				<node name="summaryOn" value="Ezkutatu nabigazio-aukerak"/>
 				<node name="summaryOff" value="Erakutsi nabigazio-aukerak"/>
 			</node>
 			<node name="disableButtonLights" value="Ezgaitu botoien argia irakurtzerakoan">
-				<node name="summaryOn" value="Ezgaitu botoien argiak (gailu batzuetan ez du balio)"/>
+				<node name="summaryOn" value="Ezgaitu botoien argiak (gailu gehienetan)"/>
 				<node name="summaryOff" value="Ez saiatu botoien argiak ezgaitzen"/>
 			</node>
 			<node name="twoColumnView" value="Zutabe biko bista">
@@ -430,17 +436,17 @@
 			</node>
 			<node name="dontTurnScreenOff" value="Eragotzi pantaila esekitzea">
 				<node name="0" value="Beti"/>
-				<node name="25" value="Bateriaren karga ehuneko 25ekoa baino gehiago den bitartean"/>
-				<node name="50" value="Bateriaren karga ehuneko 50ekoa baino gehiago den bitartean"/>
+				<node name="25" value="Bateriaren karga 25%% baino gehiago den bitartean"/>
+				<node name="50" value="Bateriaren karga 50%% baino gehiago den bitartean"/>
 				<node name="100" value="Inoiz ez"/>
 			</node>
 			<node name="dontTurnScreenOffDuringCharging" value="Eragotzi pantaila esekitzea kargatzerakoan">
 				<node name="summaryOn" value="Pantaila esekitzea eragotzi gailua kargatzen baldin badago"/>
-				<node name="summaryOff" value="Pantaila eseki gailua kargatzen baldin badago ere"/>
+				<node name="summaryOff" value="Pantaila esekitzea baimendu gailua kargatzen baldin badago"/>
 			</node>
-			<node name="enableBookMenuSwipeGesture" value="Enable swipe gesture for the book menu" toBeTranslated="true">
-				<node name="summaryOn" value="Swipe in from the left edge to open book menu" toBeTranslated="true"/>
-				<node name="summaryOff" value="Use three-line (“hamburger”) button to open book menu" toBeTranslated="true"/>
+			<node name="enableBookMenuSwipeGesture" value="Gaitu pasatzeko mugimendua liburuaren menurako">
+				<node name="summaryOn" value="Pasatu hatza ezkerreko ertzatik liburuaren menua irekitzeko"/>
+				<node name="summaryOff" value="Hiru lerrodun (hanburgesa) botoia erabili liburuaren menua irekitzeko"/>
 			</node>
 		</node>
 		<node name="text" value="Testua">
@@ -463,16 +469,16 @@
 					<node name="summaryOn" value="Optimizazioa gaituta dago"/>
 					<node name="summaryOff" value="Optimizazioa ezgaituta dago"/>
 				</node>
-				<node name="subpixel" value="Subpixelak leundu">
-					<node name="summaryOn" value="Subpixelak leuntzea gaituta dago"/>
-					<node name="summaryOff" value="Subpixelak leuntzea ezgaituta dago"/>
+				<node name="subpixel" value="Subpixelen leuntzea">
+					<node name="summaryOn" value="Subpixelen leuntzea gaituta dago"/>
+					<node name="summaryOff" value="Subpixelen leuntzea ezgaituta dago"/>
 				</node>
 			</node>
 			<node name="font" value="Letra-tipoaren familia">
 				<node name="inherit" value="&lt;aldaketarik gabe&gt;"/>
 			</node>
 			<node name="fontSize" value="Letra-tipoaren tamaina"/>
-			<node name="fontStyle" value="Letra-tipo estiloa">
+			<node name="fontStyle" value="Letra-tipoaren estiloa">
 				<node name="regular" value="Normala"/>
 				<node name="bold" value="Lodia"/>
 				<node name="italic" value="Etzana"/>
@@ -488,10 +494,10 @@
 				<node name="normal" value="normala"/>
 				<node name="inherit" value="&lt;aldaketarik gabe&gt;"/>
 			</node>
-			<node name="textDecoration" value="Text decoration" toBeTranslated="true">
-				<node name="inherit" value="&lt;unchanged&gt;" toBeTranslated="true"/>
-				<node name="none" value="no decorations" toBeTranslated="true"/>
-				<node name="underline" value="azpimarratua"/>
+			<node name="textDecoration" value="Testu-dekorazioa">
+				<node name="inherit" value="&lt;aldaketarik gabe&gt;"/>
+				<node name="none" value="dekoraziorik ez"/>
+				<node name="underline" value="azpimarratuta"/>
 				<node name="line-through" value="marratua"/>
 			</node>
 			<node name="lineSpacing" value="Lerro arteko tartea">
@@ -518,129 +524,63 @@
 			<node name="spaceAfter" value="Hutsunea ostean"/>
 			<node name="leftIndent" value="Koska ezkerrera"/>
 			<node name="rightIndent" value="Koska eskumara"/>
-			<node name="verticalAlignment" value="Vertical alignment" toBeTranslated="true"/>
+			<node name="verticalAlignment" value="Lerrokatze bertikala"/>
 			<node name="more" value="Estilo gehiago">
 				<node name="summary" value="Izenburu, epigrafe, eta abarren hobespen bereziak"/>
-				<node name="Regular Paragraph" value="Paragrafo arrunta">
-					<node name="summary" value=""/>
+				<node name="Regular Paragraph" value="Paragrafo arrunta"/>
+				<node name="xhtml-tag-p" value="EPub paragrafoa">
+					<node name="summary" value="&lt;p&gt; XHTML tag edukia"/>
 				</node>
-				<node name="xhtml-tag-p" value="EPub Paragraph" toBeTranslated="true">
-					<node name="summary" value="&lt;p&gt; XHTML tag content" toBeTranslated="true"/>
-				</node>
-				<node name="Title" value="Izenburua">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Section Title" value="Atal izenburua">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Poem Title" value="Poema izenburua">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subtitle" value="Azpizenburua">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Annotation" value="Oharra">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Epigraph" value="Epigrafea">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Stanza" value="Ahapaldia">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Verse" value="Bertsoa">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Preformatted text" value="Formateaturiko testua">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Image" value="irudia">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Cite" value="Aipamena">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Author" value="Egilea">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Date" value="Data">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Internal Hyperlink" value="Barne lotura">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Footnote" value="Oin-oharra">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Emphasis" value="Enfasia">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Strong" value="Enfasi lodia">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subscript" value="Azpindizea">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Superscript" value="Goi-indizea">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Code" value="Kodea">
-					<node name="summary" value=""/>
-				</node>
-				<node name="StrikeThrough" value="Marratua">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Italic" value="Etzana">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Bold" value="Lodia">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition" value="Definizioa">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition Description" value="Definizioaren deskribapena">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 1" value="Goiburua 1">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 2" value="Goiburua 2">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 3" value="Goiburua 3">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 4" value="Goiburua 4">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 5" value="Goiburua 5">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 6" value="Goiburua 6">
-					<node name="summary" value=""/>
-				</node>
-				<node name="External Hyperlink" value="Kanpo lotura">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Title" value="Izenburua"/>
+				<node name="Section Title" value="Atal izenburua"/>
+				<node name="Poem Title" value="Poema izenburua"/>
+				<node name="Subtitle" value="Azpizenburua"/>
+				<node name="Annotation" value="Oharra"/>
+				<node name="Epigraph" value="Epigrafea"/>
+				<node name="Stanza" value="Ahapaldia"/>
+				<node name="Verse" value="Bertsoa"/>
+				<node name="Preformatted text" value="Aurrez formatua emandako testua"/>
+				<node name="Image" value="Irudia"/>
+				<node name="Cite" value="Aipamena"/>
+				<node name="Author" value="Egilea"/>
+				<node name="Date" value="Data"/>
+				<node name="Internal Hyperlink" value="Barneko hiperesteka"/>
+				<node name="Footnote" value="Oin-oharra"/>
+				<node name="Emphasis" value="Enfasia"/>
+				<node name="Strong" value="Enfasi lodia"/>
+				<node name="Subscript" value="Azpindizea"/>
+				<node name="Superscript" value="Goi-indizea"/>
+				<node name="Code" value="Kodea"/>
+				<node name="StrikeThrough" value="Marratua"/>
+				<node name="Italic" value="Etzana"/>
+				<node name="Bold" value="Lodia"/>
+				<node name="Definition" value="Definizioa"/>
+				<node name="Definition Description" value="Definizioaren deskribapena"/>
+				<node name="Header 1" value="Goiburua 1"/>
+				<node name="Header 2" value="Goiburua 2"/>
+				<node name="Header 3" value="Goiburua 3"/>
+				<node name="Header 4" value="Goiburua 4"/>
+				<node name="Header 5" value="Goiburua 5"/>
+				<node name="Header 6" value="Goiburua 6"/>
+				<node name="External Hyperlink" value="Kanpoko hiperesteka"/>
 			</node>
 		</node>
-		<node name="toast" value="Pop-ups" toBeTranslated="true">
-			<node name="summary" value="Footnote windows, etc." toBeTranslated="true"/>
-			<node name="showFootnoteToast" value="Show linked text in a popup" toBeTranslated="true">
-				<node name="never" value="Never" toBeTranslated="true"/>
-				<node name="footnotesOnly" value="For footnotes only" toBeTranslated="true"/>
-				<node name="footnotesAndSuperscripts" value="For footnotes and superscript links" toBeTranslated="true"/>
-				<node name="allInternalLinks" value="For all internal links" toBeTranslated="true"/>
+		<node name="toast" value="Laster-leihoak">
+			<node name="summary" value="Oin-oharren leiohoak, etab."/>
+			<node name="showFootnoteToast" value="Erakutsi estekatutako testua laster-leiho batean">
+				<node name="never" value="Inoiz ez"/>
+				<node name="footnotesOnly" value="Oin-oharrak baino ez"/>
+				<node name="footnotesAndSuperscripts" value="Oin-oharrentzako eta goi-indizetako estekkentzako"/>
+				<node name="allInternalLinks" value="Barneko lotura guztientzako"/>
 			</node>
-			<node name="footnoteToastDuration" value="How long to display link popup" toBeTranslated="true"/>
-			<node name="fontSizePercent" value="Font size (percent from regular text)" toBeTranslated="true"/>
+			<node name="footnoteToastDuration" value="Iraupena estekaren laster-leihoa bistaratzeko"/>
+			<node name="fontSizePercent" value="Letra-tipoaren tamaina (testu normalarekiko portzentaian)"/>
 		</node>
 		<node name="css" value="CSS">
 			<node name="summary" value="CSSetan zehaztutako balioak aplikatu/baztertu"/>
-			<node name="fontFamily" value="Font family" toBeTranslated="true">
-				<node name="summaryOn" value="Use font family defined in CSS" toBeTranslated="true"/>
-				<node name="summaryOff" value="Ignore font family defined in CSS" toBeTranslated="true"/>
+			<node name="fontFamily" value="Letra-tipoaren familia">
+				<node name="summaryOn" value="Erabili CSSetan zehaztutako letra-tipoaren familia"/>
+				<node name="summaryOff" value="Baztertu CSSetan zehaztutako letra-tipoaren familia"/>
 			</node>
 			<node name="fontSize" value="Letra-tipoaren tamaina">
 				<node name="summaryOn" value="Aplikatu CSSetan zehaztutako letra-tipoaren tamaina"/>
@@ -650,45 +590,45 @@
 				<node name="summaryOn" value="Aplikatu CSSetan zehaztutako testu-lerrokatzea"/>
 				<node name="summaryOff" value="Baztertu CSSetan zehaztutako testu-lerrokatzea"/>
 			</node>
-			<node name="margins" value="Margins" toBeTranslated="true">
-				<node name="summaryOn" value="Apply margins defined in CSS" toBeTranslated="true"/>
-				<node name="summaryOff" value="Ignore margins defined in CSS" toBeTranslated="true"/>
+			<node name="margins" value="Marjinak">
+				<node name="summaryOn" value="Aplikatu CSSetan zehaztutako marjinak"/>
+				<node name="summaryOff" value="Baztertu CSSetan zehaztutako marjinak"/>
 			</node>
 		</node>
 		<node name="colors" value="Koloreak eta atzeko irudiak">
 			<node name="summary" value="Kolore ezarpenak"/>
 			<node name="background" value="Atzeko planoa">
 				<node name="chooser">
-					<node name="solidColor" value="Solid colour…" toBeTranslated="true"/>
-					<node name="predefined" value="Predefined texture…" toBeTranslated="true"/>
-					<node name="selectFile" value="Select file…" toBeTranslated="true"/>
+					<node name="solidColor" value="Kolore lisoa…"/>
+					<node name="predefined" value="Aurrez definitutako testura…"/>
+					<node name="selectFile" value="Aukeratu fitxategia…"/>
 				</node>
-				<node name="solidColor" value="Kolore betea"/>
+				<node name="solidColor" value="Kolore lisoa"/>
 				<node name="leather" value="Larrua"/>
 				<node name="sepia" value="Sepia"/>
 				<node name="wood" value="Zura"/>
-				<node name="sand" value="Sand" toBeTranslated="true"/>
-				<node name="hardpaper" value="Hard paper" toBeTranslated="true"/>
+				<node name="sand" value="Area"/>
+				<node name="hardpaper" value="Kartoia"/>
 			</node>
-			<node name="fillMode" value="Fill mode" toBeTranslated="true">
-				<node name="tile" value="Tile" toBeTranslated="true"/>
-				<node name="tileMirror" value="Mirrored tile" toBeTranslated="true"/>
-				<node name="fullscreen" value="Fullscreen" toBeTranslated="true"/>
-				<node name="stretch" value="Stretch to fill screen" toBeTranslated="true"/>
-				<node name="tileVertically" value="Stretch horizontally, tile vertically" toBeTranslated="true"/>
-				<node name="tileHorizontally" value="Stretch vertically, tile horizontally" toBeTranslated="true"/>
+			<node name="fillMode" value="Bete">
+				<node name="tile" value="Lauza"/>
+				<node name="tileMirror" value="Islatutako lauza"/>
+				<node name="fullscreen" value="Pantaila osoa"/>
+				<node name="stretch" value="Hedatu pantaila bete arte"/>
+				<node name="tileVertically" value="Hedatu horizontalki, lauzatu bertikalki"/>
+				<node name="tileHorizontally" value="Hedatu bertikalki, lauzatu horizontalki"/>
 			</node>
 			<node name="selectionBackground" value="Hautaketaren atzeko planoa"/>
 			<node name="selectionForeground" value="Hautatutako testua"/>
 			<node name="text" value="Testu normala"/>
-			<node name="hyperlink" value="Lotura testua"/>
-			<node name="hyperlinkVisited" value="Bisitatutako lotura testua"/>
-			<node name="highlightingForeground" value="Search results" toBeTranslated="true"/>
-			<node name="highlightingBackground" value="Bilaketaren emaitzaren atzeko planoa"/>
-			<node name="footerOldStyle" value="Footer (old style)" toBeTranslated="true"/>
-			<node name="footerBackground" value="Footer background" toBeTranslated="true"/>
-			<node name="footerForeground" value="Footer text" toBeTranslated="true"/>
-			<node name="footerForegroundUnread" value="Footer line" toBeTranslated="true"/>
+			<node name="hyperlink" value="Estekaren testua"/>
+			<node name="hyperlinkVisited" value="Bisitatutako estekaren testua"/>
+			<node name="highlightingForeground" value="Bilaketaren emaitzak"/>
+			<node name="highlightingBackground" value="Bilaketaren emaitzen atzeko planoa"/>
+			<node name="footerOldStyle" value="Oin-oharra (estilo zaharran)"/>
+			<node name="footerBackground" value="Oin-oharraren atzeko planoa"/>
+			<node name="footerForeground" value="Oin-oharraren testua"/>
+			<node name="footerForegroundUnread" value="Oin-oharraren lerroa"/>
 		</node>
 		<node name="margins" value="Marjinak">
 			<node name="summary" value="Testuaren marjinak"/>
@@ -705,23 +645,23 @@
 				<node name="show" value="Irristari bertikala"/>
 				<node name="showAsProgress" value="Aurrerapen-barra bertikala"/>
 				<node name="showAsFooter" value="Oin-ohar horizontala"/>
-				<node name="showAsFooterOldStyle" value="Horizontal footer (old style)" toBeTranslated="true"/>
+				<node name="showAsFooterOldStyle" value="Oin-ohar horizontala (estilo zaharran)"/>
 			</node>
 			<node name="footerHeight" value="Oin-oharraren altuera"/>
-			<node name="footerOldStyleColor" value="Footer (old style) colour" toBeTranslated="true"/>
-			<node name="footerBackgroundColor" value="Footer background colour" toBeTranslated="true"/>
-			<node name="footerForegroundColor" value="Footer text colour" toBeTranslated="true"/>
-			<node name="footerForegroundUnreadColor" value="Footer line colour" toBeTranslated="true"/>
+			<node name="footerOldStyleColor" value="Oin-oharraren kolorea (estilo zaharran)"/>
+			<node name="footerBackgroundColor" value="Oin-oharraren atzeko planoaren kolorea"/>
+			<node name="footerForegroundColor" value="Oin-oharraren testuaren kolorea"/>
+			<node name="footerForegroundUnreadColor" value="Oin-oharraren lerroaren kolorea"/>
 			<node name="tocMarks" value="Erakutsi aurkibidearen laster-markak">
 				<node name="summaryOn" value="Erakutsi aurkibidearen laster-markak oin-barran"/>
 				<node name="summaryOff" value="Ez erakutsi aurkibidearen laster-markak oin-barran"/>
 			</node>
-			<node name="tocMarksMaxNumber" value="Maximum number of TOC marks to display" toBeTranslated="true"/>
-			<node name="showProgress" value="Show reading progress" toBeTranslated="true">
-				<node name="dontDisplay" value="Do not show" toBeTranslated="true"/>
-				<node name="asPages" value="As page number" toBeTranslated="true"/>
-				<node name="asPercentage" value="As percentage" toBeTranslated="true"/>
-				<node name="asPagesAndPercentage" value="As page number and percentage" toBeTranslated="true"/>
+			<node name="tocMarksMaxNumber" value="Gehienez erakutsiko diren aurkibidearen laster-markak"/>
+			<node name="showProgress" value="Erakutsi irakurketa-progresioa">
+				<node name="dontDisplay" value="Ez erakutsi"/>
+				<node name="asPages" value="Orri zenbaki bezala"/>
+				<node name="asPercentage" value="Ehuneko bezala"/>
+				<node name="asPagesAndPercentage" value="Orri zenbaki eta ehuneko bezala"/>
 			</node>
 			<node name="showBattery" value="Erakutsi bateriaren karga">
 				<node name="summaryOn" value="Erakutsi bateriaren karga oinean"/>
@@ -756,7 +696,7 @@
 				<node name="none" value="Pasatu orriak animaziorik gabe"/>
 				<node name="curl" value="Orria kizkurtu"/>
 				<node name="slide" value="Orria irristatu"/>
-				<node name="slideOldStyle" value="Slide animation (old style)" toBeTranslated="true"/>
+				<node name="slideOldStyle" value="Orria irristatu (estilo zaharran)"/>
 				<node name="shift" value="Orria altzatu"/>
 			</node>
 			<node name="animationSpeed" value="Animazioaren abiadura">
@@ -766,6 +706,12 @@
 			<node name="horizontal" value="Mugimendu horizontala">
 				<node name="summaryOn" value="Mugitu orriak horizontalki"/>
 				<node name="summaryOff" value="Mugitu orriak bertikalki"/>
+			</node>
+			<node name="tapToScrollForward" value="Tap to scroll forward" toBeTranslated="true">
+				<node name="right_to_left" value="Right third of the screen" toBeTranslated="true"/>
+				<node name="left_to_right" value="Left third of the screen" toBeTranslated="true"/>
+				<node name="up" value="Bottom third of the screen" toBeTranslated="true"/>
+				<node name="down" value="Top third of the screen" toBeTranslated="true"/>
 			</node>
 		</node>
 		<node name="tapZones" value="Kolpetxo guneak">
@@ -778,20 +724,20 @@
 				<node name="custom" value="Pertsonalizatua…"/>
 			</node>
 		</node>
-		<node name="dictionary" value="Dictionary &amp; translator" toBeTranslated="true">
-			<node name="summary" value="Translation settings" toBeTranslated="true"/>
-			<node name="dictionary" value="Look up single word in" toBeTranslated="true"/>
-			<node name="translator" value="Translate phrases via" toBeTranslated="true"/>
-			<node name="translateOffline" value="Google Translate: use offline translator (if installed)" toBeTranslated="true">
-				<node name="always" value="Always" toBeTranslated="true"/>
-				<node name="onError" value="Automatically, if online translation fails" toBeTranslated="true"/>
-				<node name="ask" value="Ask if online translation fails" toBeTranslated="true"/>
-				<node name="never" value="Never" toBeTranslated="true"/>
+		<node name="dictionary" value="Hiztegia eta itzultzailea">
+			<node name="summary" value="Itzulpenaren ezarpenak"/>
+			<node name="dictionary" value="Bilatu hitz soltea hemen"/>
+			<node name="translator" value="Itzuli esaldiak honen bitartez"/>
+			<node name="translateOffline" value="Google Translate: erabili lineaz kanpoko itzultzailea (instalaturik balego)">
+				<node name="always" value="Beti"/>
+				<node name="onError" value="Automatikoki, onlineko itzulpenak huts egiten badu"/>
+				<node name="ask" value="Itaundu onlineko itzulpenak huts egiten badu"/>
+				<node name="never" value="Inoiz ez"/>
 			</node>
-			<node name="translationToastDuration" value="How long to show translation popup" toBeTranslated="true"/>
-			<node name="errorToastDuration" value="How long to show error message" toBeTranslated="true"/>
-			<node name="sourceLanguage" value="Translate from" toBeTranslated="true">
-				<node name="detect" value="Automatically detect language" toBeTranslated="true"/>
+			<node name="translationToastDuration" value="Iraupena laster-leihoa erakusteko"/>
+			<node name="errorToastDuration" value="Iraupena errore-mezua erakusteko"/>
+			<node name="sourceLanguage" value="Itzuli hemendik">
+				<node name="detect" value="Automatikoki detektatu hizkuntza"/>
 			</node>
 			<node name="targetLanguage" value="Itzuli honetara">
 				<node name="any" value="hizkuntza guztiak"/>
@@ -821,28 +767,28 @@
 				<node name="all" value="Denak"/>
 			</node>
 			<node name="matchBackground" value="Parekatu atzeko planoko intentsitatea">
-				<node name="summaryOn" value="Doitu irudiaren kolorea atzeko planokoaren arabera"/>
+				<node name="summaryOn" value="Doitu irudiaren kolorea atzeko planora"/>
 				<node name="summaryOff" value="Ez doitu irudiaren kolorea"/>
 			</node>
 		</node>
-		<node name="menu" value="Menu" toBeTranslated="true">
-			<node name="summary" value="Configure main screen menu" toBeTranslated="true"/>
-			<node name="backgroundCover" value="Use book cover as background" toBeTranslated="true">
-				<node name="summaryOn" value="Show cover in the book menu" toBeTranslated="true"/>
-				<node name="summaryOff" value="Keep background clear" toBeTranslated="true"/>
+		<node name="menu" value="Menu">
+			<node name="summary" value="Konfiguratu pantaila nagusiko menua"/>
+			<node name="backgroundCover" value="Erabili liburuaren azala atzeko planoko irudi gisa">
+				<node name="summaryOn" value="Erakutsi liburuaren azala liburuaren menuan"/>
+				<node name="summaryOff" value="Mantendu garbi atzeko planoa"/>
 			</node>
-			<node name="bookMenuStatusItem" value="Status item" toBeTranslated="true">
-				<node name="summaryOn" value="Show status item in the book menu" toBeTranslated="true"/>
-				<node name="summaryOff" value="Hide status item" toBeTranslated="true"/>
+			<node name="bookMenuStatusItem" value="Elementuaren egoera">
+				<node name="summaryOn" value="Erakutsi elementuaren egoera liburuaren menuan"/>
+				<node name="summaryOff" value="Ezkutatu elementuaren egoera"/>
 			</node>
-			<node name="items" value="Menu items" toBeTranslated="true">
-				<node name="summary" value="Change items order" toBeTranslated="true"/>
-				<node name="bookMenuUpperSection" value="Book menu (upper section)" toBeTranslated="true"/>
-				<node name="bookMenuLowerSection" value="Book menu (lower section)" toBeTranslated="true"/>
-				<node name="toolbarOrMainMenu" value="Toolbar or main menu" toBeTranslated="true"/>
-				<node name="mainMenu" value="Main menu" toBeTranslated="true"/>
-				<node name="enabled" value="Enabled" toBeTranslated="true"/>
-				<node name="disabled" value="Disabled" toBeTranslated="true"/>
+			<node name="items" value="Menuaren elementuak">
+				<node name="summary" value="Aldatu elementuen ordena"/>
+				<node name="bookMenuUpperSection" value="Liburuaren menua (goiko atalean)"/>
+				<node name="bookMenuLowerSection" value="Liburuaren menua (beheko atalean)"/>
+				<node name="toolbarOrMainMenu" value="Tresna-barra edo menu nagusia"/>
+				<node name="mainMenu" value="Menu nagusia"/>
+				<node name="enabled" value="Gaituta"/>
+				<node name="disabled" value="Ezgaituta"/>
 			</node>
 		</node>
 		<node name="cancelMenu" value="Utzi menua">
@@ -879,41 +825,89 @@
 			<node name="summary" value="Eguneko aholkuaren ezarpenak"/>
 			<node name="showTips" value="Erakutsi aholkuak">
 				<node name="summaryOn" value="Erakutsi eguneko aholkua"/>
-				<node name="summaryOff" value="Ez erakutsi"/>
+				<node name="summaryOff" value="Ez erakutsi eguneko aholkua"/>
+			</node>
+		</node>
+		<node name="twitter" value="Twitter integration" toBeTranslated="true">
+			<node name="summary" value="How to tweet from FBReader" toBeTranslated="true"/>
+			<node name="enableTwitter" value="Enable tweets" toBeTranslated="true">
+				<node name="summaryOn" value="Show twitter link at end of book" toBeTranslated="true"/>
+				<node name="summaryOff" value="Do not show twitter link" toBeTranslated="true"/>
+			</node>
+			<node name="tweetText" value="Tweet text" toBeTranslated="true">
+				<node name="hint" value="Use %title% for the book title, %authors% for authors list" toBeTranslated="true"/>
+			</node>
+			<node name="coverInTweet" value="Add book cover to tweet" toBeTranslated="true">
+				<node name="summaryOn" value="Tweet text and book cover image" toBeTranslated="true"/>
+				<node name="summaryOff" value="Tweet text only" toBeTranslated="true"/>
 			</node>
 		</node>
 		<node name="about" value="FBReader-i buruz">
-			<node name="summary" value="Bertsioaren infoa, kontaktuak"/>
+			<node name="summary" value="Bertsioaren infoa, kontaktuak, etab."/>
 			<node name="version" value="Bertsioa"/>
-			<node name="site" value="Webgunea bisitatu">
+			<node name="site" value="Bisitatu webgunea">
 				<node name="url" value="https://fbreader.org/"/>
 			</node>
 			<node name="email" value="Bidali posta elektronikoa">
 				<node name="url" value="mailto:contact@fbreader.org"/>
 			</node>
-			<node name="googleplus" value="Join FBReader Google+ community" toBeTranslated="true">
+			<node name="googleplus" value="Batu FBReader-en Google+ komunitatera">
 				<node name="url" value="https://plus.google.com/communities/115894899404862312312"/>
 			</node>
 			<node name="twitter" value="Twitter-en jarraitu">
 				<node name="url" value="https://twitter.com/fbreader"/>
 			</node>
-			<node name="facebook" value="FBReader on Facebook" toBeTranslated="true">
+			<node name="facebook" value="FBReader Facebook-en">
 				<node name="url" value="https://facebook.com/fbreader"/>
 			</node>
-			<node name="thirdParty" value="Third-party libraries" toBeTranslated="true"/>
+			<node name="telegram" value="Add Telegram channel" toBeTranslated="true">
+				<node name="url" value="https://telegram.me/fbreader" toBeTranslated="true"/>
+			</node>
+			<node name="thirdParty" value="Hirugarrenen liburutegiak"/>
+			<node name="development" value="Developer options" toBeTranslated="true">
+				<node name="summary" value="Use carefully ;)" toBeTranslated="true"/>
+				<node name="forceWebAuth" value="Force web authentication" toBeTranslated="true">
+					<node name="summaryOn" value="Use web auth even if Google services are available" toBeTranslated="true"/>
+					<node name="summaryOff" value="Use Google auth if available" toBeTranslated="true"/>
+				</node>
+				<node name="showChangeNotifications" value="Notify about file modifications" toBeTranslated="true">
+					<node name="allFiles" value="Always" toBeTranslated="true"/>
+					<node name="bookFolders" value="For files in book folders only" toBeTranslated="true"/>
+					<node name="noFiles" value="Never" toBeTranslated="true"/>
+				</node>
+				<node name="showOpenPremiumSuggestion" value="“Open Premium” dialog" toBeTranslated="true">
+					<node name="summaryOn" value="Show each time you start FBReader from launcher" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not show" toBeTranslated="true"/>
+				</node>
+				<node name="logFileScanning" value="Log file scanning" toBeTranslated="true">
+					<node name="summaryOn" value="Create a log record each time the app scans a file for extracting book info" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not log" toBeTranslated="true"/>
+				</node>
+				<node name="copyLogs" value="Copy log files" toBeTranslated="true">
+					<node name="summary" value="Copies *.log files to %s" toBeTranslated="true"/>
+				</node>
+				<node name="deleteLogs" value="Clear logs" toBeTranslated="true"/>
+				<node name="copyDatabase" value="Copy books database" toBeTranslated="true">
+					<node name="summary" value="Copies books.db file to %s" toBeTranslated="true"/>
+				</node>
+				<node name="scanFailures" value="Scan failures list" toBeTranslated="true">
+					<node name="summary" value="List of files FBReader couldn't scan" toBeTranslated="true"/>
+				</node>
+			</node>
 		</node>
 		<node name="eink" value="E-ink pantaila">
 			<node name="summary" value="E-ink pantailentzako aukera bereziak"/>
 			<node name="enableFastRefresh" value="Berritze azkarra">
-				<node name="summaryOn" value="Pantaila azkar berritu (ez oso garbia)"/>
-				<node name="summaryOff" value="Pantaila osoan berritu (garbia baina motela)"/>
+				<node name="summaryOn" value="Erabili pantailaren berritze azkarra (azkarra baina ez oso garbia)"/>
+				<node name="summaryOff" value="Erabili pantailaren berritze osoa (garbia baina motela)"/>
 			</node>
-			<node name="interval" value="Osoan berritu arteko berritze azkarren kopurua"/>
+			<node name="interval" value="Berritze osoen arteko berritze azkarren kopurua"/>
 		</node>
+		<node name="lockedOption" value="Install Premium Edition to unlock this option" toBeTranslated="true"/>
 	</node>
 	<node name="dialog">
 		<node name="button">
-			<node name="noThanks" value="No, thanks" toBeTranslated="true"/>
+			<node name="noThanks" value="Ez, eskerrik asko"/>
 			<node name="install" value="Instalatu"/>
 			<node name="update" value="Eguneratu"/>
 			<node name="skip" value="Saltatu"/>
@@ -937,80 +931,81 @@
 			<node name="removeFromFavorites" value="Kendu gogokoetatik"/>
 			<node name="markAsRead" value="Markatu irakurria bezala"/>
 			<node name="markAsUnread" value="Markatu ez irakurria bezala"/>
-			<node name="plugin" value="Plugin" toBeTranslated="true"/>
-			<node name="premium" value="Premium" toBeTranslated="true"/>
+			<node name="plugin" value="Plugin"/>
+			<node name="premium" value="Premium"/>
+			<node name="clear" value="Clear" toBeTranslated="true"/>
 		</node>
-		<node name="gotoPage" value="Joan Orrira"/>
+		<node name="gotoPage" value="Joan orri honetara"/>
 		<node name="plugin">
-			<node name="installTitle" value="Instalatu gehigarria"/>
-			<node name="updateTitle" value="Eguneratu gehigarria"/>
-			<node name="dontAskAgain" value="Ez berriro itaundu"/>
+			<node name="installTitle" value="Instalatu plugina"/>
+			<node name="updateTitle" value="Eguneratu plugina"/>
+			<node name="dontAskAgain" value="Ez galdetu berriro"/>
 		</node>
 		<node name="backgroundAuthentication">
-			<node name="message" value="Authentication required" toBeTranslated="true"/>
+			<node name="message" value="Autentifikatu egin behar da"/>
 		</node>
-		<node name="missingDictionary" value="Missing %s" toBeTranslated="true">
-			<node name="install" value="Install %s" toBeTranslated="true"/>
-			<node name="configure" value="Configure translation" toBeTranslated="true"/>
-			<node name="skip" value="Skip" toBeTranslated="true"/>
+		<node name="missingDictionary" value="%s falta da">
+			<node name="install" value="Instalatu %s"/>
+			<node name="configure" value="Konfiguratu itzulpena"/>
+			<node name="skip" value="Saltatu"/>
 		</node>
 		<node name="installDictionary">
 			<node name="title" value="Instalatu hiztegia"/>
 			<node name="message" value="Nahi al duzu %s instalatu?"/>
 		</node>
 		<node name="deleteBookBox">
-			<node name="message" value="Liburuaren fitxategia behin betiko ezabatuko da. Ziur zaude?"/>
+			<node name="message" value="Fitxategia behin betiko ezabatuko da. Ziur zaude?"/>
 		</node>
 		<node name="deleteMultipleBookBox">
-			<node name="title" value="Delete books" toBeTranslated="true"/>
-			<node name="message" value="%s files will be removed permanently. Are you sure?" toBeTranslated="true"/>
+			<node name="title" value="Ezabatu liburuak"/>
+			<node name="message" value="%s fitxategiak behin betiko ezabatuko dira. Ziur zaude?"/>
 		</node>
 		<node name="redownloadFileBox">
 			<node name="message" value="Fitxategia dagoeneko badago. Berriro deskargatu?"/>
 		</node>
 		<node name="litresUserRegistration">
-			<node name="title" value="Register User" toBeTranslated="true"/>
-			<node name="login" value="Username" toBeTranslated="true"/>
-			<node name="password" value="Password" toBeTranslated="true"/>
-			<node name="confirmPassword" value="Password&#10;confirmation" toBeTranslated="true"/>
-			<node name="email" value="Email" toBeTranslated="true"/>
+			<node name="title" value="Register User"/>
+			<node name="login" value="Username"/>
+			<node name="password" value="Password"/>
+			<node name="confirmPassword" value="Password&#10;confirmation"/>
+			<node name="email" value="Posta elektronikoa"/>
 		</node>
 		<node name="litresAutoSignIn">
-			<node name="title" value="Signing in" toBeTranslated="true"/>
-			<node name="email" value="Email" toBeTranslated="true"/>
+			<node name="title" value="Hasi saioa"/>
+			<node name="email" value="Posta elektronikoa"/>
 			<node name="actions">
-				<node name="title" value="Unable to sign in with email&#10;%s" toBeTranslated="true"/>
-				<node name="recover" value="Recover account information" toBeTranslated="true"/>
-				<node name="signIn" value="Sign in manually" toBeTranslated="true"/>
-				<node name="anotherEmail" value="Select another email" toBeTranslated="true"/>
+				<node name="title" value="Ezin izan da saioa hasi %s posta elektronikoarekin"/>
+				<node name="recover" value="Berreskuratu kontuaren informazioa"/>
+				<node name="signIn" value="Hasi saioa eskuz"/>
+				<node name="anotherEmail" value="Aukeratu beste posta elektroniko bat"/>
 			</node>
-			<node name="signedIn" value="You are signed in with email address %s." toBeTranslated="true"/>
-			<node name="registrationSuccessful" value="We created a LitRes account for you. Detailed information has been sent to %s." toBeTranslated="true"/>
-			<node name="passwordSent" value="Your account information was sent to %s. Please check your mailbox." toBeTranslated="true"/>
+			<node name="signedIn" value="Saioa hasi duzu %s helbide elektronikoarekin."/>
+			<node name="registrationSuccessful" value="LitRes kontua sortu dizugu. Informazio xehatua bidali da %s(e)ra."/>
+			<node name="passwordSent" value="Kontuaren informazioa %s(e)ra bidali da. Begiratu postontzian, mesedez."/>
 		</node>
 		<node name="waitMessage">
-			<node name="translating" value="Translation in progress…" toBeTranslated="true"/>
-			<node name="tryConnect" value="Trying to connect. Please wait…" toBeTranslated="true"/>
-			<node name="downloadingBook" value="Deskargatzen liburua %s"/>
-			<node name="search" value="Bilatzen. Itxaron, mesedez…"/>
+			<node name="translating" value="Itzulpena abian…"/>
+			<node name="tryConnect" value="Konektatzen saiatzen. Itxaron mesedez…"/>
+			<node name="downloadingBook" value="Deskargatzen “%s” liburua"/>
+			<node name="search" value="Bilatzen. Itxaron mesedez…"/>
 			<node name="loadInfo" value="Informazioa kargatzen. Itxaron mesedez…"/>
 			<node name="loadingBook" value="Liburua irekitzen. Itxaron mesedez…"/>
 			<node name="loadingBookList" value="Liburutegia irekitzen. Itxaron mesedez…"/>
 			<node name="creatingBooksDatabase" value="Liburuen datu-basea sortzen. Itxaron mesedez…"/>
 			<node name="updatingBooksDatabase" value="Liburuen datu-basea eguneratzen. Itxaron mesedez…"/>
 			<node name="loadingNetworkLibrary" value="Sareko liburutegia irekitzen. Itxaron mesedez…"/>
-			<node name="authentication" value="Egiaztatzen. Itxaron mesedez…"/>
+			<node name="authentication" value="Autentifikatzen. Itxaron mesedez…"/>
 			<node name="signOut" value="Irtetzen. Itxaron mesedez…"/>
 			<node name="purchaseBook" value="Liburua erosten. Itxaron mesedez…"/>
 			<node name="loadingCatalogInfo" value="Katalogoaren informazioa kargatzen. Itxaron mesedez…"/>
 			<node name="loadingNetworkBookInfo" value="Liburuaren informazioa kargatzen. Itxaron mesedez…"/>
 			<node name="updatingCatalogsList" value="Katalogoen zerrenda eguneratzen. Itxaron mesedez…"/>
 			<node name="updatingAccountInformation" value="Kontuaren informazioa eguneratzen. Itxaron mesedez…"/>
-			<node name="initDRMEngine" value="Initialising DRM engine. Please wait…" toBeTranslated="true"/>
-			<node name="acquireLicence" value="Acquiring licence. Please wait…" toBeTranslated="true"/>
-			<node name="registerUser" value="Registering new account. Please wait…" toBeTranslated="true"/>
-			<node name="autoSignIn" value="Signing in. Please wait…" toBeTranslated="true"/>
-			<node name="recoverPassword" value="Recovering password. Please wait…" toBeTranslated="true"/>
+			<node name="initDRMEngine" value="DRM motorra abiarazten. Itxaron mesedez…"/>
+			<node name="acquireLicence" value="Lizentzia eskuratzen. Itxaron mesedez…"/>
+			<node name="registerUser" value="Kontu berria erregistratzen. Itxaron mesedez…"/>
+			<node name="autoSignIn" value="Saioa hasten. Itxaron mesedez…"/>
+			<node name="recoverPassword" value="Pasahitza berreskuratzen. Itxaron mesedez…"/>
 		</node>
 		<node name="networkError">
 			<node name="internalError" value="Zerbitzariaren barneko errorea"/>
@@ -1024,21 +1019,21 @@
 			<node name="notAnOPDS" value="Hau ez da OPDS motako katalogo bat"/>
 			<node name="noRequiredInformation" value="Eskatutako informazioa ez dago katalogoan zehaztuta"/>
 			<node name="cacheDirectoryError" value="Ezin izan da cacheko direktorioa sortu"/>
-			<node name="usernameAlreadyInUse" value="Username already in use" toBeTranslated="true"/>
-			<node name="usernameNotSpecified" value="Username should not be blank" toBeTranslated="true"/>
-			<node name="passwordNotSpecified" value="Password should not be blank" toBeTranslated="true"/>
-			<node name="passwordsDoNotMatch" value="The two passwords do not match" toBeTranslated="true"/>
-			<node name="emailNotSpecified" value="Email address is blank" toBeTranslated="true"/>
-			<node name="emailAlreadyInUse" value="Email address is already in use" toBeTranslated="true"/>
-			<node name="invalidEMail" value="Invalid email address" toBeTranslated="true"/>
-			<node name="tooManyRegistrations" value="Too many registrations from your IP address;&#10;please try again in a few minutes" toBeTranslated="true"/>
+			<node name="usernameAlreadyInUse" value="Erabiltzaile-izen hori badago dagoeneko"/>
+			<node name="usernameNotSpecified" value="Ezin da erabiltzaile-izena hutsik utzi"/>
+			<node name="passwordNotSpecified" value="Ezin da pasahitza hutsik utzi"/>
+			<node name="passwordsDoNotMatch" value="Pasahitz biek ez dute bat egiten"/>
+			<node name="emailNotSpecified" value="Posta elektronikoa hutsik utzi duzu"/>
+			<node name="emailAlreadyInUse" value="Posta elektroniko hori badago dagoeneko"/>
+			<node name="invalidEMail" value="Baliogabeko posta elektronikoa"/>
+			<node name="tooManyRegistrations" value="Izen-emate saiakera gehiegi IP helbide horretatik;&#10; saiatu berriro minutu batzu barru"/>
 		</node>
 		<node name="AuthenticationDialog">
 			<node name="title" value="Egiaztatzea"/>
 			<node name="unencryptedWarning" value="Pasahitza zifratu gabe bidaliko da"/>
 			<node name="login" value="Erabiltzailea"/>
 			<node name="password" value="Pasahitza"/>
-			<node name="loginIsEmpty" value="Erabiltzaile izenak ezin du hutsik egon"/>
+			<node name="loginIsEmpty" value="Ezin da erabiltzaile-izena hutsik utzi"/>
 			<node name="register" value="Izena eman"/>
 		</node>
 		<node name="CustomCatalogDialog">
@@ -1065,87 +1060,87 @@
 			<node name="more" value="Hurrengo aholkua"/>
 		</node>
 		<node name="screenHint">
-			<node name="message1" value="FBReader works in fullscreen mode by default. Tap the centre third of the screen now to show controls. You can change this in the “Appearance” section of the Settings dialog." toBeTranslated="true"/>
-			<node name="message2" value="Well done! Now tap the centre third of the screen again to hide the controls and this hint. If you want to keep controls on the screen while reading, select the “Show action bar” option in “Appearance” in Settings." toBeTranslated="true"/>
+			<node name="message1" value="FBReaderrek pantaila osoan lan egiten du modu lehenetsian. Pantailaren erdiguneko herena ikutu kontrolak erakusteko. Ezarpen hau aldatzeko jo Ezarpenak elkarrizketaren “Itxura” atalera."/>
+			<node name="message2" value="Oso ondo! Orain, berriro ikutu pantailaren erdiguneko herena kontrolak eta aholku hau ezkutatzeko. Kontrolak agerian nahi badituzu irakurtzen zauden bitartean, Ezarpenak elkarrizketaren “Itxura” ataleko “Erakutsi ekintza-barra” aukera hautatu."/>
 		</node>
 		<node name="folderList">
-			<node name="addFolder" value="Add folder" toBeTranslated="true"/>
-			<node name="removeDialog" value="Remove folder" toBeTranslated="true">
-				<node name="message" value="Remove “%s” from the list?" toBeTranslated="true"/>
+			<node name="addFolder" value="Gehitu karpeta"/>
+			<node name="removeDialog" value="Kendu karpeta">
+				<node name="message" value="“%s” kendu zerrendatik?"/>
 			</node>
-			<node name="duplicate" value="“%s” is already in the list" toBeTranslated="true"/>
+			<node name="duplicate" value="“%s” dagoeneko zerrendan dago"/>
 		</node>
 		<node name="editList">
-			<node name="edit" value="Edit" toBeTranslated="true"/>
-			<node name="remove" value="Remove" toBeTranslated="true"/>
+			<node name="edit" value="Editatu"/>
+			<node name="remove" value="Kendu"/>
 		</node>
-		<node name="editTags" value="Tags" toBeTranslated="true">
-			<node name="addTag" value="Add tag" toBeTranslated="true"/>
-			<node name="editTag" value="Edit tag" toBeTranslated="true"/>
-			<node name="removeTag" value="Remove tag" toBeTranslated="true">
-				<node name="message" value="Remove tag “%s” from the list?" toBeTranslated="true"/>
+		<node name="editTags" value="Etiketak">
+			<node name="addTag" value="Gehitu etiketa"/>
+			<node name="editTag" value="Editatu etiketa"/>
+			<node name="removeTag" value="Kendu etiketa">
+				<node name="message" value="Kendu “%s” etiketa zerrendatik?"/>
 			</node>
 		</node>
-		<node name="editAuthors" value="Authors" toBeTranslated="true">
-			<node name="addAuthor" value="Add author" toBeTranslated="true"/>
-			<node name="editAuthor" value="Edit author" toBeTranslated="true"/>
-			<node name="removeAuthor" value="Remove author" toBeTranslated="true">
-				<node name="message" value="Remove author “%s” from the list?" toBeTranslated="true"/>
+		<node name="editAuthors" value="Egileak">
+			<node name="addAuthor" value="Gehitu egilea"/>
+			<node name="editAuthor" value="Editatu egilea"/>
+			<node name="removeAuthor" value="Kendu egilea">
+				<node name="message" value="Kendu “%s” egilea zerrendatik?"/>
 			</node>
 		</node>
 		<node name="fileChooser">
-			<node name="root" value="Root" toBeTranslated="true"/>
-			<node name="newFolder" value="New folder" toBeTranslated="true"/>
-			<node name="folderNameHint" value="Folder name" toBeTranslated="true"/>
+			<node name="root" value="Erroa"/>
+			<node name="newFolder" value="Karpeta berria"/>
+			<node name="folderNameHint" value="Karpetaren izena"/>
 			<node name="menu">
-				<node name="origin" value="Origin" toBeTranslated="true"/>
-				<node name="reload" value="Reload" toBeTranslated="true"/>
+				<node name="origin" value="Jatorria"/>
+				<node name="reload" value="Kargatu berriro"/>
 			</node>
-			<node name="sortBy" value="Sort by" toBeTranslated="true">
-				<node name="name" value="Name" toBeTranslated="true"/>
-				<node name="size" value="Size" toBeTranslated="true"/>
-				<node name="date" value="Date" toBeTranslated="true"/>
+			<node name="sortBy" value="Ordenatu honela">
+				<node name="name" value="Izena"/>
+				<node name="size" value="Tamaina"/>
+				<node name="date" value="Data"/>
 			</node>
-			<node name="permissionDenied" value="Permission denied" toBeTranslated="true"/>
+			<node name="permissionDenied" value="Baimena ukatu da"/>
 		</node>
-		<node name="missingPlugin" value="Missing plugin" toBeTranslated="true">
-			<node name="message" value="Plugin for %s files is not installed. Install now?" toBeTranslated="true"/>
+		<node name="missingPlugin" value="Plugina falta da">
+			<node name="message" value="%s fitxategietarako plugina instalatu gabe dago. Instalatu orain?"/>
 		</node>
-		<node name="licensing" value="Not licensed" toBeTranslated="true">
-			<node name="message" value="%s is not licensed. Purchase on Google Play now?" toBeTranslated="true"/>
+		<node name="licensing" value="Lizentziarik gabe">
+			<node name="message" value="%s lizentziarik gabe dago. Erosi Google Playn orain?"/>
 		</node>
-		<node name="retryLicensing" value="Licence verification" toBeTranslated="true">
-			<node name="message" value="Cannot verify %s licence. Try again?" toBeTranslated="true"/>
+		<node name="retryLicensing" value="Lizentzia egiaztatu">
+			<node name="message" value="Ezin da %s lizentzia egiaztatu. Saiatu berriro?"/>
 		</node>
 	</node>
 	<node name="errorMessage">
-		<node name="nativeCodeFailure" value="Error %s in native code while reading '%s'" toBeTranslated="true"/>
-		<node name="errorReadingFile" value="Errorea gertatu da '%s' (r)ren irakurketa bitartean"/>
-		<node name="errorReadingZip" value="Errorea gertatu da '%s' (r)en erauzketa bitartean"/>
-		<node name="pluginNotFound" value="Ez dago gehigarririk '%s' (r)entzat"/>
-		<node name="unknownPluginType" value="Gehigarri mota ezezaguna: %s"/>
-		<node name="fileNotFound" value="Aurkitzen ez den fitxategia: %s"/>
-		<node name="unsupportedEncryptionMethod" value="File %s encryption method is not supported by FBReader. Some pages are not readable" toBeTranslated="true"/>
-		<node name="opfFileNotFound" value="Ez da OPF aurkitzen %s (e)n"/>
-		<node name="unsupportedFileFormat" value="Ez da onartzen  '%s' (r)en fitxategi formatua"/>
-		<node name="errorParsingRtf" value="RTF prozesatzerakoan hemen: %s"/>
-		<node name="cannotRunAndroidMarket" value="Ezin izan da Google Play-ra sartu. %s eskuz instalatu, mesedez"/>
-		<node name="textNotFound" value="Ez dago bat egiten duen testurik liburuan, barkatu"/>
-		<node name="bookNotFound" value="Ez dago bat egiten duen libururik liburutegian, barkatu"/>
-		<node name="bookmarkNotFound" value="Ez dago bat egiten duen laster-markarik, barkatu"/>
-		<node name="cannotOpenBook" value="Ezin da liburua une honetan ireki, barkatu"/>
-		<node name="dictionaryIsNotInstalled" value="Ez dago hiztegia instalaturik, barkatu"/>
-		<node name="permissionDenied" value="Baimena ezeztatu egin da, barkatu"/>
-		<node name="noFavorites" value="Zure gogokoen zerrenda hutsik dago, barkatu"/>
-		<node name="noSeries" value="Ez dago libururik sailetan, barkatu"/>
-		<node name="emptyCatalog" value="Katalogoa hutsik dago, barkatu"/>
-		<node name="emptyBasket" value="Saskia hutsik dago, barkatu"/>
-		<node name="emptyNetworkSearchResults" value="Ez da libururik aurkitu, barkatu"/>
-		<node name="videoServiceNotWorking" value="Video service is not available" toBeTranslated="true"/>
-		<node name="videoPlayerNotFound" value="No video player installed on this device" toBeTranslated="true"/>
-		<node name="bookIsMissingTitle" value="Missing book" toBeTranslated="true"/>
-		<node name="bookIsMissing" value="Book '%s' is not found on the device" toBeTranslated="true"/>
-		<node name="downloadFailed" value="Huts egin du deskargak"/>
+		<node name="nativeCodeFailure" value="%s errorea jatorrizko kodean '%s' irakurtzerakoan"/>
+		<node name="errorReadingFile" value="Errorea gertatu da '%s' irakurtzerakoan"/>
+		<node name="errorReadingZip" value="Errorea gertatu da '%s' ateratzerakoan"/>
+		<node name="pluginNotFound" value="Ez dago pluginik '%s'(e)rako"/>
+		<node name="unknownPluginType" value="Plugin mota ezezaguna: %s"/>
+		<node name="fileNotFound" value="Fitxategia ez da aurkitu: %s"/>
+		<node name="unsupportedEncryptionMethod" value="FBReaderrek ez du onartzen %s fitxategiaren enkriptatze-metodoa. Orri batzuk ezin daitezke irakurri"/>
+		<node name="opfFileNotFound" value="Ezin da OPF aurkitu %s(e)n"/>
+		<node name="unsupportedFileFormat" value="Ez da onartzen fitxategi-formatua '%s'(e)rako"/>
+		<node name="errorParsingRtf" value="Rtf analizatzerakoan errorea hemen: %s"/>
+		<node name="cannotRunAndroidMarket" value="Ezin da Google Play atzitu. Instalatu %s eskuz"/>
+		<node name="textNotFound" value="Ez da aurkitu bat datorren testurik"/>
+		<node name="bookNotFound" value="Ez dago bat datorren libururik liburutegian"/>
+		<node name="bookmarkNotFound" value="Ez dago bat datorren laster-markarik"/>
+		<node name="cannotOpenBook" value="Ezin da liburua ireki momentu honetan"/>
+		<node name="dictionaryIsNotInstalled" value="Hiztegia ez dago instalaturik"/>
+		<node name="permissionDenied" value="Baimena ukatu da"/>
+		<node name="noFavorites" value="Gogokoen zerrenda hutsik dago"/>
+		<node name="noSeries" value="Ez dago libururik serietan"/>
+		<node name="emptyCatalog" value="Katalogoa hutsik dago"/>
+		<node name="emptyBasket" value="Otarrea hutsik dago"/>
+		<node name="emptyNetworkSearchResults" value="Ez da libururik aurkitu"/>
+		<node name="videoServiceNotWorking" value="Bideo zerbitzua ez dago eskuragarri"/>
+		<node name="videoPlayerNotFound" value="Ez dago bideo-erreproduzigailurik instalatuta gailu honetan"/>
+		<node name="bookIsMissingTitle" value="Liburua falta da"/>
+		<node name="bookIsMissing" value="Ezin da '%s' liburua aurkitu gailuan"/>
+		<node name="downloadFailed" value="Deskargak huts egin du"/>
 	</node>
 	<node name="external">
 		<node name="browser" value="Nabigatzailea"/>
@@ -1154,11 +1149,11 @@
 	<node name="crash">
 		<node name="fixBooksDirectory">
 			<node name="title" value="FBReader arazoa"/>
-			<node name="text" value="Cannot write to FBReader cache. Please check that your memory card is inserted correctly, or select another directory." toBeTranslated="true"/>
+			<node name="text" value="Ezin da idatzi FBReaderren cachean. Egiaztatu memoria-txartela egoki txertatuta dagoen edo beste direktorioren bat aukeratu."/>
 		</node>
 		<node name="missingNativeLibrary">
 			<node name="title" value="FBReader arazoa"/>
-			<node name="text" value="FBReader-ek ezin izan du bertako liburutegia kargatu. Baliteke egoki kargatuta ez izatea. Arazoa jarraitu ezkero saiatu FBReader berriro instalatzen, mesedez."/>
+			<node name="text" value="FBReaderrek ezin du kargatu jatorrizko liburutegia. Arazoa konpontzen ez bada instalatu berriro FBReader"/>
 		</node>
 	</node>
 	<node name="error">
@@ -1169,91 +1164,111 @@
 	<node name="links">
 		<node name="faqPage" value="https://fbreader.org/faq-page"/>
 	</node>
-	<node name="plugins" value="Instalatu gehigarriak">
-		<node name="noMorePlugins" value="Oraingoz ez dugu gehigarri berririk, barkatu"/>
-		<node name="litres" value="LitRes">
-			<node name="summary" value="Liburu-denda errusiarra"/>
-		</node>
+	<node name="plugins" value="Instalatu pluginak">
+		<node name="noMorePlugins" value="Plugin berririk ez oraingoz"/>
 		<node name="tts_plus" value="TTS+">
 			<node name="summary" value="Ozen irakurri"/>
 		</node>
-		<node name="calibre_server_integration" value="Calibre connection" toBeTranslated="true">
-			<node name="summary" value="Connect to Calibre server in your local network" toBeTranslated="true"/>
+		<node name="calibre_server_integration" value="calibrerekin konektatu">
+			<node name="summary" value="Konektatu calibre zerbitzariarekin zure sare lokalean"/>
 		</node>
 		<node name="local_opds_scanner" value="Bertako OPDS Eskanerra">
-			<node name="summary" value="Bilatu liburuak bertako sarean"/>
+			<node name="summary" value="Bilatu liburuak sare lokalean"/>
 		</node>
 		<node name="bookshelf" value="Apalategia">
-			<node name="summary" value="Iruditxoen liburutegi-bista"/>
+			<node name="summary" value="Koadro txikien liburutegi-bista"/>
 		</node>
 		<node name="opds_server" value="OPDS Zerbitzaria">
-			<node name="summary" value="Gailutik eskeini liburuak"/>
-		</node>
-		<node name="widgets" value="Widgetak">
-			<node name="summary" value="Gehitu liburuak hasiera pantailara"/>
+			<node name="summary" value="Gailua zerbitzari modura erabili"/>
 		</node>
 		<node name="pdf" value="PDF">
-			<node name="summary" value="PDF formatuan dauden liburuak irakurri"/>
+			<node name="summary" value="Irakurri liburuak PDF formatuan"/>
 		</node>
-		<node name="djvu" value="DjVu" toBeTranslated="true">
-			<node name="summary" value="Read books in DjVu format" toBeTranslated="true"/>
+		<node name="djvu" value="DjVu">
+			<node name="summary" value="Irakurri liburuak DjVu formatuan"/>
 		</node>
-		<node name="cbr" value="Comic Books" toBeTranslated="true">
-			<node name="summary" value="Read comic books (CBR, CBZ)" toBeTranslated="true"/>
+		<node name="cbr" value="Comic Books">
+			<node name="summary" value="Irakurri komikiak (CBR, CBZ)"/>
 		</node>
 	</node>
 	<node name="drm">
-		<node name="encryptedSection" value="Encrypted section" toBeTranslated="true"/>
+		<node name="encryptedSection" value="Enkriptatutako atala"/>
 	</node>
 	<node name="yota">
-		<node name="frontScreenMessage" value="Eman buelta gailuari liburua irakurtzeko. Testua pantailara itzul daiten, sakatu beheko botoia."/>
-		<node name="frontScreenButton" value="Pantaila honetara aldatu"/>
+		<node name="frontScreenMessage" value="Eman buelta gailuari liburua irakurtzeko. Testua berriro pantailaratzeko sakatu beheko botoia."/>
+		<node name="frontScreenButton" value="Aldatu pantaila honetara"/>
 	</node>
 	<node name="hint">
-		<node name="positiveLength" value="E.g.: 20px, 10pt, 0.8em, 1ex, 120%" toBeTranslated="true"/>
-		<node name="length" value="E.g.: -2px, 10pt, -0.8em, 1.1ex, -40%" toBeTranslated="true"/>
-		<node name="percent" value="E.g.: 125%" toBeTranslated="true"/>
+		<node name="positiveLength" value="Adib.: 20px, 10pt, 0.8em, 1ex, 120%"/>
+		<node name="length" value="Adib.: -2px, 10pt, -0.8em, 1.1ex, -40%"/>
+		<node name="percent" value="Adib.: 125%"/>
 	</node>
 	<node name="duration">
-		<node name="duration1" value="1 second" toBeTranslated="true"/>
-		<node name="duration3" value="3 seconds" toBeTranslated="true"/>
-		<node name="duration5" value="5 seconds" toBeTranslated="true"/>
-		<node name="duration10" value="10 seconds" toBeTranslated="true"/>
-		<node name="duration20" value="20 seconds" toBeTranslated="true"/>
-		<node name="duration40" value="40 seconds" toBeTranslated="true"/>
-		<node name="duration60" value="1 minute" toBeTranslated="true"/>
-		<node name="duration300" value="5 minutes" toBeTranslated="true"/>
+		<node name="duration1" value="segundu 1"/>
+		<node name="duration3" value="3 segundu"/>
+		<node name="duration5" value="5 segundu"/>
+		<node name="duration10" value="10 segundu"/>
+		<node name="duration20" value="20 segundu"/>
+		<node name="duration40" value="40 segundu"/>
+		<node name="duration60" value="minutu 1"/>
+		<node name="duration300" value="5 minutu"/>
 	</node>
 	<node name="textSearchPopup">
-		<node name="findPrevious" value="Previous occurence" toBeTranslated="true"/>
-		<node name="findNext" value="Next occurence" toBeTranslated="true"/>
-		<node name="close" value="Close" toBeTranslated="true"/>
+		<node name="findPrevious" value="Aurreko gertaldia"/>
+		<node name="findNext" value="Hurrengo gertaldia"/>
+		<node name="close" value="Itxi"/>
 	</node>
 	<node name="selectionPopup">
-		<node name="copyToClipboard" value="Kopiatu paperontzira"/>
-		<node name="share" value="Share text" toBeTranslated="true"/>
+		<node name="copyToClipboard" value="Kopiatu arbelera"/>
+		<node name="share" value="Partekatu testua"/>
 		<node name="openInDictionary" value="Ireki hiztegian"/>
-		<node name="translate" value="Translate" toBeTranslated="true"/>
-		<!-- this is a verb: make a bookmark -->
-		<node name="bookmark" value="Bookmark" toBeTranslated="true"/>
-		<node name="close" value="Close" toBeTranslated="true"/>
+		<node name="translate" value="Itzuli"/>
+		<!-- adi, aditza: make a bookmark -->
+		<node name="bookmark" value="Egin laster-marka"/>
+		<node name="close" value="Itxi"/>
 	</node>
 	<node name="dictanErrors">
-		<node name="unknown" value="Unknown error" toBeTranslated="true"/>
-		<node name="noArticle" value="No article found for “%s”" toBeTranslated="true"/>
-		<node name="cannotOpenDictionary" value="Cannot open dictionary" toBeTranslated="true"/>
-		<node name="noDictionarySelected" value="Dictionary not selected; please adjust Dictan settings" toBeTranslated="true"/>
+		<node name="unknown" value="Errore ezezaguna"/>
+		<node name="noArticle" value="Ez da artikulurik aurkitu “%s”(r)entzat"/>
+		<node name="cannotOpenDictionary" value="Ezin da ireki hiztegia"/>
+		<node name="noDictionarySelected" value="Ez da aukeratu hiztegia; doitu Dictan ezarpenak"/>
 	</node>
-	<node name="premium" value="FBReader Premium Edition" toBeTranslated="true">
-		<node name="shortTitle" value="FBReader Premium" toBeTranslated="true"/>
-		<node name="conflict" value="Both FBReader and FBReader Premium appear to be installed. Which one would you like to run?" toBeTranslated="true"/>
+	<node name="premium" value="FBReader Premium Edizioa">
+		<node name="shortTitle" value="FBReader Premium"/>
+		<node name="conflict" value="FBReader eta FBReader Premium bertsioak daude instalaturik. Zein nahi duzu exekutatu?"/>
 	</node>
 	<node name="widget">
 		<node name="simple">
-			<node name="selectIcon" value="Select widget icon" toBeTranslated="true"/>
-			<node name="selectAction" value="Select action" toBeTranslated="true"/>
-			<node name="book" value="Read book" toBeTranslated="true"/>
-			<node name="library" value="Open library" toBeTranslated="true"/>
+			<node name="selectIcon" value="Hautatu widget ikonoa"/>
+			<node name="selectAction" value="Hautatu ekintza"/>
+			<node name="book" value="Irakurri liburua"/>
+			<node name="library" value="Ireki liburutegia"/>
 		</node>
+	</node>
+	<node name="modifiedBook">
+		<node name="notification">
+			<node name="title" value="Modified book file" toBeTranslated="true"/>
+			<node name="message" value="File %s has been changed" toBeTranslated="true"/>
+		</node>
+		<node name="dialog">
+			<node name="title" value="%s modified" toBeTranslated="true"/>
+			<node name="message" value="File “%s” has been changed. Please choose an action from the list." toBeTranslated="true"/>
+			<node name="createNew" value="Create new book “%s” from the file" toBeTranslated="true"/>
+			<node name="linkExisting" value="Link the file to existing “%s”" toBeTranslated="true"/>
+			<node name="updateMetainfo" value="Link to the existing book, update metainfo from the file" toBeTranslated="true"/>
+			<node name="removeFromLibrary" value="Remove the file from the library" toBeTranslated="true"/>
+		</node>
+	</node>
+	<node name="twitter">
+		<node name="link" value="Tweet what you have read!" toBeTranslated="true"/>
+		<node name="tweet" value="I've read “%title%” in @fbreader" toBeTranslated="true"/>
+		<node name="missingApp" value="Twitter app is not installed" toBeTranslated="true"/>
+	</node>
+	<node name="goodreads">
+		<node name="link" value="Share your reading experience on Goodreads!" toBeTranslated="true"/>
+	</node>
+	<node name="networkError">
+		<node name="noNetworkConnection" value="Network is not available. Please check your connection and try again" toBeTranslated="true"/>
+		<node name="syncServerFailure" value="Server connection failure. Please try again later" toBeTranslated="true"/>
 	</node>
 </resources>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<node name="dialog">
+		<node name="button">
+			<node name="ok" value="ٹھيک ہے"/>
+			<node name="cancel" value="منسوخ کریں"/>
+			<node name="yes" value="جی ہاں"/>
+			<node name="no" value="نہيں"/>
+			<node name="apply" value="لاگو کریں"/>
+		</node>
+		<node name="networkError">
+			<node name="title" value="نیٹ ورک میں مسئلہ"/>
+			<node name="unknownErrorMessage" value="نامعلوم مسئلہ"/>
+			<node name="operationTimedOutMessage" value="Operation has timed out" toBeTranslated="true"/>
+			<node name="somethingWrongMessage" value="%s کے ساتھ کچھ مسئلہ ہو گیا"/>
+			<node name="couldntCreateDirectoryMessage" value="ڈائریکٹری %s بنانے میں ناکام"/>
+			<node name="couldntCreateFileMessage" value="فائل %s بنانے میں ناکام"/>
+			<node name="couldntConnectMessage" value="ہوسٹ %s سے جڑنے میں ناکام"/>
+			<node name="couldntResolveHostMessage" value="Failed to resolve host %s" toBeTranslated="true"/>
+			<node name="authenticationFailed" value="توثیق ناکام"/>
+			<node name="unsupportedProtocol" value="غیر معاون کردہ پروٹوکول"/>
+			<node name="invalidURL" value="Invalid URL" toBeTranslated="true"/>
+			<node name="hostCantBeReached" value="Host %s cannot be reached" toBeTranslated="true"/>
+			<node name="connectionRefused" value="کنکشن %s کی طرف سے رد کر دیا گیا"/>
+			<node name="networkNotAvailable" value="نیٹ ورک دستیاب نہیں ہے"/>
+		</node>
+	</node>
+	<node name="color">
+		<node name="red" value="سرخ"/>
+		<node name="green" value="سبز"/>
+		<node name="blue" value="نیلا"/>
+	</node>
+	<node name="language">
+		<node name="ar" value="عربی"/>
+		<node name="be" value="بيلارشين"/>
+		<node name="bg" value="بلغاری"/>
+		<node name="ca" value="کاتالان"/>
+		<node name="cs" value="زیک"/>
+		<node name="da" value="ڈينش"/>
+		<node name="de" value="جرمن"/>
+		<node name="de-traditional" value="German (traditional spelling)" toBeTranslated="true"/>
+		<node name="el" value="يونانی"/>
+		<node name="en" value="انگریزی (برطانیہ)"/>
+		<node name="en_US" value="انگريزی"/>
+		<node name="eo" value="ايسپرانٹو"/>
+		<node name="es" value="ہسپانوی"/>
+		<node name="eu" value="باسک"/>
+		<node name="fa" value="فارسی"/>
+		<node name="fi" value="فنش"/>
+		<node name="fr" value="فرانسیسی"/>
+		<node name="gl" value="گلیشیائی"/>
+		<node name="he" value="ابرانی"/>
+		<node name="hu" value="ہنگیرین"/>
+		<node name="hy" value="آرمینیائی"/>
+		<node name="id" value="انڈونيشين"/>
+		<node name="it" value="اطالوی"/>
+		<node name="ja" value="جاپانی"/>
+		<node name="ka" value="جورجين"/>
+		<node name="ko" value="کوريئن"/>
+		<node name="lt" value="لتھونيئن"/>
+		<node name="nb" value="نارويجين"/>
+		<node name="nl" value="ڈچ"/>
+		<node name="pl" value="پولش"/>
+		<node name="pt" value="پرتگالی"/>
+		<node name="ro" value="رومانيئن"/>
+		<node name="ru" value="روسی"/>
+		<node name="sr" value="سربيئن"/>
+		<node name="sv" value="سویڈیش"/>
+		<node name="ta" value="تامل"/>
+		<node name="th" value="تھائی"/>
+		<node name="tr" value="ترکی"/>
+		<node name="uk" value="یوکرینی"/>
+		<node name="vi" value="ویت نامی"/>
+		<node name="zh" value="چینی"/>
+		<node name="zh_TW" value="چینی (روایتی)"/>
+		<node name="any" value="کوئی بھی"/>
+		<node name="other" value="دیگر"/>
+		<node name="multi" value="Multilanguage" toBeTranslated="true"/>
+		<node name="system" value="سسٹم"/>
+	</node>
+	<node name="boolean3">
+		<node name="on" value="آن"/>
+		<node name="off" value="آف"/>
+		<node name="unchanged" value="Unchanged" toBeTranslated="true"/>
+	</node>
+	<node name="keyOptionView">
+		<node name="actionFor" value="Action for Key" toBeTranslated="true"/>
+	</node>
+</resources>

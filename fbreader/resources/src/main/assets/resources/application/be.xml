@@ -250,6 +250,11 @@
 		<node name="editBookmark" value="Рэдагаваць закладку"/>
 		<node name="deleteBookmark" value="Выдаліць закладку"/>
 		<node name="search" value="Пошук"/>
+		<node name="order">
+			<node name="byCreationTime" value="By creation time" toBeTranslated="true"/>
+			<node name="byAccessTime" value="By access time" toBeTranslated="true"/>
+			<node name="byPageNo" value="By page number" toBeTranslated="true"/>
+		</node>
 	</node>
 	<node name="editBookmark">
 		<node name="text" value="Тэкст"/>
@@ -332,6 +337,7 @@
 		<node name="help" value="Дапамога"/>
 		<node name="plugins" value="Усталяваць убудовы"/>
 		<node name="gotoPageNumber" value="Перайсьці да старонкі…"/>
+		<node name="readAloud" value="Read aloud…" toBeTranslated="true"/>
 	</node>
 	<node name="BookInfo">
 		<node name="fileName" value="Назва файла"/>
@@ -521,108 +527,42 @@
 			<node name="verticalAlignment" value="Вэртыкальнае раўнаваньне"/>
 			<node name="more" value="Больш стыляў">
 				<node name="summary" value="Падзяляць налады на назвы, эпіграфы і гэтак далей"/>
-				<node name="Regular Paragraph" value="Звычайны абзац">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Regular Paragraph" value="Звычайны абзац"/>
 				<node name="xhtml-tag-p" value="Абзац EPub">
 					<node name="summary" value="Зьмесьціва тэга &lt;p&gt; XHTML"/>
 				</node>
-				<node name="Title" value="Назва">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Section Title" value="Назва разьдзелу">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Poem Title" value="Назва вершу">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subtitle" value="Субтытры">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Annotation" value="Анатацыя">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Epigraph" value="Эпіграф">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Stanza" value="Страфа">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Verse" value="Верш">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Preformatted text" value="Адфарматаваны тэкст">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Image" value="Выява">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Cite" value="Цытата">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Author" value="Аўтар">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Date" value="Дата">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Internal Hyperlink" value="Унутраная спасылка">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Footnote" value="Зноска">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Emphasis" value="Вылучэньне">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Strong" value="Моцны">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Subscript" value="Падрадкоўе">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Superscript" value="Надрадкоўе">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Code" value="Код">
-					<node name="summary" value=""/>
-				</node>
-				<node name="StrikeThrough" value="Закрэсьлены">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Italic" value="Курсіўны">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Bold" value="Тоўсты">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition" value="Азначэньне">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Definition Description" value="Апісаньне азначэньня">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 1" value="Загаловак 1">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 2" value="Загаловак 2">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 3" value="Загаловак 3">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 4" value="Загаловак 4">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 5" value="Загаловак 5">
-					<node name="summary" value=""/>
-				</node>
-				<node name="Header 6" value="Загаловак 6">
-					<node name="summary" value=""/>
-				</node>
-				<node name="External Hyperlink" value="Зьнешняя спасылка">
-					<node name="summary" value=""/>
-				</node>
+				<node name="Title" value="Назва"/>
+				<node name="Section Title" value="Назва разьдзелу"/>
+				<node name="Poem Title" value="Назва вершу"/>
+				<node name="Subtitle" value="Субтытры"/>
+				<node name="Annotation" value="Анатацыя"/>
+				<node name="Epigraph" value="Эпіграф"/>
+				<node name="Stanza" value="Страфа"/>
+				<node name="Verse" value="Верш"/>
+				<node name="Preformatted text" value="Адфарматаваны тэкст"/>
+				<node name="Image" value="Выява"/>
+				<node name="Cite" value="Цытата"/>
+				<node name="Author" value="Аўтар"/>
+				<node name="Date" value="Дата"/>
+				<node name="Internal Hyperlink" value="Унутраная спасылка"/>
+				<node name="Footnote" value="Зноска"/>
+				<node name="Emphasis" value="Вылучэньне"/>
+				<node name="Strong" value="Моцны"/>
+				<node name="Subscript" value="Падрадкоўе"/>
+				<node name="Superscript" value="Надрадкоўе"/>
+				<node name="Code" value="Код"/>
+				<node name="StrikeThrough" value="Закрэсьлены"/>
+				<node name="Italic" value="Курсіўны"/>
+				<node name="Bold" value="Тоўсты"/>
+				<node name="Definition" value="Азначэньне"/>
+				<node name="Definition Description" value="Апісаньне азначэньня"/>
+				<node name="Header 1" value="Загаловак 1"/>
+				<node name="Header 2" value="Загаловак 2"/>
+				<node name="Header 3" value="Загаловак 3"/>
+				<node name="Header 4" value="Загаловак 4"/>
+				<node name="Header 5" value="Загаловак 5"/>
+				<node name="Header 6" value="Загаловак 6"/>
+				<node name="External Hyperlink" value="Зьнешняя спасылка"/>
 			</node>
 		</node>
 		<node name="toast" value="Выплыўныя вокны">
@@ -767,6 +707,12 @@
 				<node name="summaryOn" value="Гартаць старонкі гарызантальна"/>
 				<node name="summaryOff" value="Гартаць старонкі вэртыкальна"/>
 			</node>
+			<node name="tapToScrollForward" value="Tap to scroll forward" toBeTranslated="true">
+				<node name="right_to_left" value="Right third of the screen" toBeTranslated="true"/>
+				<node name="left_to_right" value="Left third of the screen" toBeTranslated="true"/>
+				<node name="up" value="Bottom third of the screen" toBeTranslated="true"/>
+				<node name="down" value="Top third of the screen" toBeTranslated="true"/>
+			</node>
 		</node>
 		<node name="tapZones" value="Зоны дотыкаў">
 			<node name="summary" value="Дзеяньня дотыкаў"/>
@@ -882,6 +828,20 @@
 				<node name="summaryOff" value="Не паказваць штодзённыя падказкі"/>
 			</node>
 		</node>
+		<node name="twitter" value="Twitter integration" toBeTranslated="true">
+			<node name="summary" value="How to tweet from FBReader" toBeTranslated="true"/>
+			<node name="enableTwitter" value="Enable tweets" toBeTranslated="true">
+				<node name="summaryOn" value="Show twitter link at end of book" toBeTranslated="true"/>
+				<node name="summaryOff" value="Do not show twitter link" toBeTranslated="true"/>
+			</node>
+			<node name="tweetText" value="Tweet text" toBeTranslated="true">
+				<node name="hint" value="Use %title% for the book title, %authors% for authors list" toBeTranslated="true"/>
+			</node>
+			<node name="coverInTweet" value="Add book cover to tweet" toBeTranslated="true">
+				<node name="summaryOn" value="Tweet text and book cover image" toBeTranslated="true"/>
+				<node name="summaryOff" value="Tweet text only" toBeTranslated="true"/>
+			</node>
+		</node>
 		<node name="about" value="Пра FBReader">
 			<node name="summary" value="Вэрсія й кантакты"/>
 			<node name="version" value="Вэрсія"/>
@@ -900,7 +860,40 @@
 			<node name="facebook" value="FBReader у Facebook">
 				<node name="url" value="https://facebook.com/fbreader"/>
 			</node>
+			<node name="telegram" value="Add Telegram channel" toBeTranslated="true">
+				<node name="url" value="https://telegram.me/fbreader" toBeTranslated="true"/>
+			</node>
 			<node name="thirdParty" value="Пабочныя бібліятэкі"/>
+			<node name="development" value="Developer options" toBeTranslated="true">
+				<node name="summary" value="Use carefully ;)" toBeTranslated="true"/>
+				<node name="forceWebAuth" value="Force web authentication" toBeTranslated="true">
+					<node name="summaryOn" value="Use web auth even if Google services are available" toBeTranslated="true"/>
+					<node name="summaryOff" value="Use Google auth if available" toBeTranslated="true"/>
+				</node>
+				<node name="showChangeNotifications" value="Notify about file modifications" toBeTranslated="true">
+					<node name="allFiles" value="Always" toBeTranslated="true"/>
+					<node name="bookFolders" value="For files in book folders only" toBeTranslated="true"/>
+					<node name="noFiles" value="Never" toBeTranslated="true"/>
+				</node>
+				<node name="showOpenPremiumSuggestion" value="“Open Premium” dialog" toBeTranslated="true">
+					<node name="summaryOn" value="Show each time you start FBReader from launcher" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not show" toBeTranslated="true"/>
+				</node>
+				<node name="logFileScanning" value="Log file scanning" toBeTranslated="true">
+					<node name="summaryOn" value="Create a log record each time the app scans a file for extracting book info" toBeTranslated="true"/>
+					<node name="summaryOff" value="Do not log" toBeTranslated="true"/>
+				</node>
+				<node name="copyLogs" value="Copy log files" toBeTranslated="true">
+					<node name="summary" value="Copies *.log files to %s" toBeTranslated="true"/>
+				</node>
+				<node name="deleteLogs" value="Clear logs" toBeTranslated="true"/>
+				<node name="copyDatabase" value="Copy books database" toBeTranslated="true">
+					<node name="summary" value="Copies books.db file to %s" toBeTranslated="true"/>
+				</node>
+				<node name="scanFailures" value="Scan failures list" toBeTranslated="true">
+					<node name="summary" value="List of files FBReader couldn't scan" toBeTranslated="true"/>
+				</node>
+			</node>
 		</node>
 		<node name="eink" value="Экран e-ink">
 			<node name="summary" value="Адмысловыя налады для экранаў e-ink"/>
@@ -910,6 +903,7 @@
 			</node>
 			<node name="interval" value="Колькасьць хуткіх абнаўленьняў паміж поўнымі абнаўленьнямі"/>
 		</node>
+		<node name="lockedOption" value="Install Premium Edition to unlock this option" toBeTranslated="true"/>
 	</node>
 	<node name="dialog">
 		<node name="button">
@@ -939,6 +933,7 @@
 			<node name="markAsUnread" value="Пазначыць як непрачытаную"/>
 			<node name="plugin" value="Plugin" toBeTranslated="true"/>
 			<node name="premium" value="Premium" toBeTranslated="true"/>
+			<node name="clear" value="Clear" toBeTranslated="true"/>
 		</node>
 		<node name="gotoPage" value="Перайсьці да старонкі"/>
 		<node name="plugin">
@@ -1171,9 +1166,6 @@
 	</node>
 	<node name="plugins" value="Усталяваць убудовы">
 		<node name="noMorePlugins" value="Зараз няма новых убудоваў, прабачце"/>
-		<node name="litres" value="LitRes">
-			<node name="summary" value="Расейская кніжная крама"/>
-		</node>
 		<node name="tts_plus" value="TTS+">
 			<node name="summary" value="Чытайце ўголас"/>
 		</node>
@@ -1188,9 +1180,6 @@
 		</node>
 		<node name="opds_server" value="Сэрвэр OPDS">
 			<node name="summary" value="Дазваляць прыладзе дзейнічаць як сэрвэру"/>
-		</node>
-		<node name="widgets" value="Віджэты">
-			<node name="summary" value="Кнігі на галоўны экран"/>
 		</node>
 		<node name="pdf" value="PDF">
 			<node name="summary" value="Чытаньне кніг фармату PDF"/>
@@ -1255,5 +1244,31 @@
 			<node name="book" value="Чытаць кнігу"/>
 			<node name="library" value="Адчыніць бібліятэку"/>
 		</node>
+	</node>
+	<node name="modifiedBook">
+		<node name="notification">
+			<node name="title" value="Modified book file" toBeTranslated="true"/>
+			<node name="message" value="File %s has been changed" toBeTranslated="true"/>
+		</node>
+		<node name="dialog">
+			<node name="title" value="%s modified" toBeTranslated="true"/>
+			<node name="message" value="File “%s” has been changed. Please choose an action from the list." toBeTranslated="true"/>
+			<node name="createNew" value="Create new book “%s” from the file" toBeTranslated="true"/>
+			<node name="linkExisting" value="Link the file to existing “%s”" toBeTranslated="true"/>
+			<node name="updateMetainfo" value="Link to the existing book, update metainfo from the file" toBeTranslated="true"/>
+			<node name="removeFromLibrary" value="Remove the file from the library" toBeTranslated="true"/>
+		</node>
+	</node>
+	<node name="twitter">
+		<node name="link" value="Tweet what you have read!" toBeTranslated="true"/>
+		<node name="tweet" value="I've read “%title%” in @fbreader" toBeTranslated="true"/>
+		<node name="missingApp" value="Twitter app is not installed" toBeTranslated="true"/>
+	</node>
+	<node name="goodreads">
+		<node name="link" value="Share your reading experience on Goodreads!" toBeTranslated="true"/>
+	</node>
+	<node name="networkError">
+		<node name="noNetworkConnection" value="Network is not available. Please check your connection and try again" toBeTranslated="true"/>
+		<node name="syncServerFailure" value="Server connection failure. Please try again later" toBeTranslated="true"/>
 	</node>
 </resources>
