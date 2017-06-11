@@ -53,7 +53,6 @@ public enum DeviceType {
 			} else if ("PD_Novel".equals(Build.MODEL)) {
 				ourInstance = PAN_DIGITAL;
 			} else if ("BarnesAndNoble".equals(Build.MANUFACTURER) &&
-					   "zoom2".equals(Build.DEVICE) &&
 					   Build.MODEL != null &&
 					   ("NOOK".equals(Build.MODEL) ||
 						"unknown".equals(Build.MODEL) ||
