@@ -10,7 +10,7 @@
 	android:focusable="false"
 	android:paddingLeft="24dip"
 	android:paddingRight="24dip"
-	android:background="@color/primary"
+	android:background="@color/primary_light"
 	android:orientation="vertical"
 >
 	<TextView
