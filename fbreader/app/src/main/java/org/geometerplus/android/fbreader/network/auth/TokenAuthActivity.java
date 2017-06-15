@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2016 FBReader.ORG Limited <contact@fbreader.org>
+ * Copyright (C) 2010-2017 FBReader.ORG Limited <contact@fbreader.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
