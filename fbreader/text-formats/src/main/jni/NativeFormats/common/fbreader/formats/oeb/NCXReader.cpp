@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2015 FBReader.ORG Limited <contact@fbreader.org>
+ * Copyright (C) 2004-2017 FBReader.ORG Limited <contact@fbreader.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,15 +46,13 @@ void NCXReader::startElementHandler(const char *fullTag, const char **attributes
 			break;
 		case READ_MAP:
 			if (TAG_NAVPOINT == tag) {
-				const char *order = attributeValue(attributes, "playOrder");
-				myPointStack.push_back(NavPoint(order != 0 ? std::atoi(order) : myPlayIndex++, myPointStack.size()));
+				myPointStack.push_back(NavPoint(myPlayIndex++, myPointStack.size()));
 				myReadState = READ_POINT;
 			}
 			break;
 		case READ_POINT:
 			if (TAG_NAVPOINT == tag) {
-				const char *order = attributeValue(attributes, "playOrder");
-				myPointStack.push_back(NavPoint(order != 0 ? std::atoi(order) : myPlayIndex++, myPointStack.size()));
+				myPointStack.push_back(NavPoint(myPlayIndex++, myPointStack.size()));
 			} else if (TAG_NAVLABEL == tag) {
 				myReadState = READ_LABEL;
 			} else if (TAG_CONTENT == tag) {
