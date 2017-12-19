@@ -4,19 +4,19 @@ buildscript {
 	}
 
 	dependencies {
-		classpath 'com.android.tools.build:gradle:1.3.0'
+		classpath 'com.android.tools.build:gradle:3.0.1'
 	}
 }
 
 apply plugin: 'com.android.library'
 
 dependencies {
-	compile project(':fbreader/api')
+	compile project(':api')
 }
 
 android {
-	compileSdkVersion 10
-	buildToolsVersion '20'
+	compileSdkVersion 26
+	buildToolsVersion '26.0.3'
 
 	lintOptions {
 		abortOnError false
@@ -34,15 +34,15 @@ android {
 	}
 
 	defaultConfig {
-		minSdkVersion 5
-		maxSdkVersion 10
-		targetSdkVersion 9
+		minSdkVersion 16
+		maxSdkVersion 26
+		targetSdkVersion 26
 		versionCode 1
 		versionName "1.0"
 	}
 
 	task ndkBuild(type: Exec) {
-		def ndkDir = plugins.getPlugin('com.android.library').sdkHandler.getNdkFolder()
+		def ndkDir = project.android.ndkDirectory.absolutePath
 		commandLine "$ndkDir/ndk-build", '-C', file('src/main/jni').absolutePath
 	}
 
