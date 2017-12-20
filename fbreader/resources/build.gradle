@@ -1,11 +1,3 @@
-buildscript {
-	repositories {
-		mavenCentral()
-		google()
-		jcenter()
-	}
-}
-
 apply plugin: 'com.android.library'
 
 dependencies {

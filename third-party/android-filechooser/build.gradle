@@ -1,13 +1,5 @@
 apply plugin: 'com.android.library'
 
-buildscript {
-	repositories {
-		jcenter()
-		mavenCentral()
-		google()
-	}
-}
-
 dependencies {
 	compile project(':util')
 }
