@@ -19,35 +19,41 @@
 
 package org.geometerplus.android.fbreader.bookmark;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.*;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.*;
-import android.widget.*;
-
-import yuku.ambilwarna.widget.AmbilWarnaPrefWidgetView;
-
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.TabHost;
+import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.List;
 import org.fbreader.util.android.ViewUtil;
-
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.util.ZLColor;
-import org.geometerplus.zlibrary.ui.android.R;
-import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
-
-import org.geometerplus.fbreader.book.*;
-
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.android.util.OrientationUtil;
+import org.geometerplus.fbreader.book.Book;
+import org.geometerplus.fbreader.book.BookEvent;
+import org.geometerplus.fbreader.book.Bookmark;
+import org.geometerplus.fbreader.book.BookmarkUtil;
+import org.geometerplus.fbreader.book.HighlightingStyle;
+import org.geometerplus.fbreader.book.IBookCollection;
+import org.geometerplus.zlibrary.core.options.ZLStringOption;
+import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.ui.android.R;
+import yuku.ambilwarna.widget.AmbilWarnaPrefWidgetView;
 
 public class EditBookmarkActivity extends Activity implements IBookCollection.Listener<Book> {
 	private final ZLResource myResource = ZLResource.resource("editBookmark");

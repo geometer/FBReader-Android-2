@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-	compile project(':util')
+	api project(':util')
 }
 
 android {

@@ -32,7 +32,7 @@ android {
 
 	task ndkBuild(type: Exec) {
 		def ndkDir = project.android.ndkDirectory.absolutePath
-		commandLine "$ndkDir/ndk-build", '-C', file('src/main/jni').absolutePath
+		commandLine "$ndkDir\\ndk-build.cmd", '-C', file('src/main/jni').absolutePath
 	}
 
 	tasks.withType(JavaCompile) {
