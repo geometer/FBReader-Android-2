@@ -1,14 +1,12 @@
+apply plugin: 'com.android.library'
+
 buildscript {
 	repositories {
+		jcenter()
 		mavenCentral()
-	}
-
-	dependencies {
-		classpath 'com.android.tools.build:gradle:3.0.1'
+		google()
 	}
 }
-
-apply plugin: 'com.android.library'
 
 dependencies {
 	compile project(':util')

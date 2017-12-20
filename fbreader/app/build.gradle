@@ -1,26 +1,24 @@
 buildscript {
 	repositories {
+		jcenter()
 		mavenCentral()
-	}
-
-	dependencies {
-		classpath 'com.android.tools.build:gradle:3.0.1'
+		google()
 	}
 }
 
 apply plugin: 'com.android.application'
 
 dependencies {
-	compile project(':api')
-	compile project(':util')
-	compile project(':common')
-	compile project(':resources')
-	compile project(':text-formats')
-	compile project(':zip-amse')
-	compile project(':drag-sort-listview')
-	compile project(':android-filechooser')
-	compile project(':SuperToasts')
-	compile project(':AmbilWarna')
+	api project(':api')
+	api project(':util')
+	api project(':common')
+	api project(':resources')
+	api project(':text-formats')
+	api project(':zip-amse')
+	api project(':drag-sort-listview')
+	api project(':android-filechooser')
+	api project(':SuperToasts')
+	api project(':AmbilWarna')
 	compile files('libs/nanohttpd-2.0.5.jar')
 	compile files('libs/httpmime-4.2.5.jar')
 	compile files('libs/pdfparse.jar')

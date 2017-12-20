@@ -1,10 +1,8 @@
 buildscript {
 	repositories {
 		mavenCentral()
-	}
-
-	dependencies {
-		classpath 'com.android.tools.build:gradle:3.0.1'
+		google()
+		jcenter()
 	}
 }
 
@@ -36,9 +34,9 @@ android {
 	}
 
 	defaultConfig {
-		minSdkVersion 5
-		maxSdkVersion 10
-		targetSdkVersion 9
+		minSdkVersion 16
+		maxSdkVersion 26
+		targetSdkVersion 26
 	}
 
 	buildTypes {

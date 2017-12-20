@@ -16,11 +16,13 @@
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="10dp"
 		/>
+
 		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
 		>
+
 			<ImageButton
 				android:id="@+id/books_directory_fix_select_button"
 				android:src="@drawable/afc_folder"
@@ -28,6 +30,7 @@
 				android:layout_height="fill_parent"
 				android:gravity="center_vertical|left"
 			/>
+
 			<TextView
 				android:layout_marginLeft="10dp"
 				android:id="@+id/books_directory_fix_directory"
