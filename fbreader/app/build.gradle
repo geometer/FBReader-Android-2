@@ -60,21 +60,6 @@ android {
 		main.jni.srcDirs = []
 	}
 
-	signingConfigs {
-		debug {
-			storeFile file("debug.keystore")
-			storePassword "android"
-			keyAlias "androiddebugkey"
-			keyPassword "android"
-		}
-		release {
-			storeFile file("cormant.keystore")
-			storePassword "c0rmant!"
-			keyAlias "cormant"
-			keyPassword "c0rmant!"
-		}
-	}
-
 	buildTypes {
 		debug {
 			minifyEnabled false
@@ -85,7 +70,6 @@ android {
 		release {
 			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
-			signingConfig signingConfigs.release
 		}
 	}
 }
