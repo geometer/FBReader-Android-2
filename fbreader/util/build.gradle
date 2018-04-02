@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
-	compileSdkVersion 26
-	buildToolsVersion '26.0.3'
+	compileSdkVersion project.ext.globalCompileSdkVersion
+	buildToolsVersion project.ext.globalBuildToolsVersion
 
 	lintOptions {
 		abortOnError false
@@ -15,8 +15,9 @@ android {
 	}
 
 	defaultConfig {
-		minSdkVersion 16
-		maxSdkVersion 26
+		minSdkVersion project.ext.globalMinSdkVersion
+		maxSdkVersion project.ext.globalMaxSdkVersion
+		targetSdkVersion project.ext.globalTargetSdkVersion
 		versionName "1.0"
 	}
 }
