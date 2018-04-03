@@ -5,12 +5,17 @@ dependencies {
 }
 
 android {
-	compileSdkVersion 26
-	buildToolsVersion '26.0.3'
+	compileSdkVersion project.ext.globalCompileSdkVersion
+	buildToolsVersion project.ext.globalBuildToolsVersion
 
 	lintOptions {
 		abortOnError false
 	}
+
+	// compileOptions { // see: https://github.com/geometer/fbreader-module-resources/blob/master/build.gradle
+	// 	sourceCompatibility JavaVersion.VERSION_1_7
+	// 	targetCompatibility JavaVersion.VERSION_1_7
+	// }
 
 	sourceSets {
 		main.java.srcDirs = ['src/main/java']
@@ -21,9 +26,9 @@ android {
 	}
 
 	defaultConfig {
-		minSdkVersion 16
-		maxSdkVersion 26
-		targetSdkVersion 26
+		minSdkVersion project.ext.globalMinSdkVersion
+		maxSdkVersion project.ext.globalMaxSdkVersion
+		targetSdkVersion project.ext.globalTargetSdkVersion
 	}
 
 	buildTypes {
