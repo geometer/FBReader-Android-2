@@ -16,7 +16,7 @@ android {
 
 	defaultConfig {
 		minSdkVersion project.ext.globalMinSdkVersion
-		maxSdkVersion project.ext.globalMaxSdkVersion
+		//maxSdkVersion project.ext.globalMaxSdkVersion
 		targetSdkVersion project.ext.globalTargetSdkVersion
 		versionName "1.0"
 	}
