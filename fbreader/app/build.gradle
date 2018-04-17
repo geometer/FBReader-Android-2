@@ -93,48 +93,48 @@ android {
 				versionCode 0
 			}
 		}
-		// arm { //obsolete
+		// // arm { //obsolete
+		// // 	dimension 'abi'
+		// // 	ndk {
+		// // 		abiFilter 'armeabi'
+		// // 		versionCode 1
+		// // 	}
+		// // }
+		// armv7a {
 		// 	dimension 'abi'
 		// 	ndk {
-		// 		abiFilter 'armeabi'
+		// 		abiFilter 'armeabi-v7a'
 		// 		versionCode 1
 		// 	}
 		// }
-		armv7a {
-			dimension 'abi'
-			ndk {
-				abiFilter 'armeabi-v7a'
-				versionCode 1
-			}
-		}
-		arm64v8a {
-			dimension 'abi'
-			ndk {
-				abiFilter 'arm64-v8a'
-				versionCode 2
-			}
-		}
-		x86 {
-			dimension 'abi'
-			ndk {
-				abiFilter 'x86'
-				versionCode 3
-			}
-		}
-		x8664 {
-			dimension 'abi'
-			ndk {
-				abiFilter 'x86_64'
-				versionCode 4
-			}
-		}
-		// mips { //obsolete
+		// arm64v8a {
 		// 	dimension 'abi'
 		// 	ndk {
-		// 		abiFilter 'mips'
+		// 		abiFilter 'arm64-v8a'
+		// 		versionCode 2
+		// 	}
+		// }
+		// x86 {
+		// 	dimension 'abi'
+		// 	ndk {
+		// 		abiFilter 'x86'
+		// 		versionCode 3
+		// 	}
+		// }
+		// x8664 {
+		// 	dimension 'abi'
+		// 	ndk {
+		// 		abiFilter 'x86_64'
 		// 		versionCode 4
 		// 	}
 		// }
+		// // mips { //obsolete
+		// // 	dimension 'abi'
+		// // 	ndk {
+		// // 		abiFilter 'mips'
+		// // 		versionCode 4
+		// // 	}
+		// // }
 	}
 
 	task ndkBuild(type: Exec) {
