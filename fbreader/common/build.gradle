@@ -7,7 +7,7 @@ dependencies {
 	implementation files('libs/LingvoIntegration_2.5.2.12.jar')
 	implementation files('libs/open-dictionary-api-1.2.1.jar')
 
-	implementation 'com.android.support:multidex:1.0.1'
+	implementation 'com.android.support:multidex:1.0.2'
 	implementation ('com.googlecode.json-simple:json-simple:1.1.1') {
 		exclude group: 'junit', module: 'junit'
 	}
