@@ -1,0 +1,31 @@
+buildscript {
+    repositories {
+        jcenter()
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.2'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+    //added to remove compilation warnings:
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+    project.ext {
+        globalBuildToolsVersion="27.0.3" //"28.0.0-rc1" // '28.0.0 rc1'
+        globalMinSdkVersion=16
+        globalMaxSdkVersion=27
+        globalTargetSdkVersion=18 //27 //'P' //27 //MAX 18 for SDCARD READ/WRITE Permissions without adding more code
+        globalCompileSdkVersion=27 //'android-P' //27 
+    }
+}

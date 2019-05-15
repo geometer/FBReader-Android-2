@@ -21,11 +21,12 @@ package org.geometerplus.zlibrary.ui.android.library;
 
 import android.app.Application;
 
+import android.support.multidex.MultiDexApplication;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
 
 import org.geometerplus.android.fbreader.config.ConfigShadow;
 
-public abstract class ZLAndroidApplication extends Application {
+public abstract class ZLAndroidApplication extends MultiDexApplication {
 	private ZLAndroidLibrary myLibrary;
 	private ConfigShadow myConfig;
 

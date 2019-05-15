@@ -145,7 +145,7 @@ public abstract class AnimationProvider {
 				final DrawInfo info1 = myDrawInfos.get(i);
 				final float dX = info0.X - info1.X;
 				final float dY = info0.Y - info1.Y;
-				velocity += FloatMath.sqrt(dX * dX + dY * dY) / Math.max(1, info1.Start - info0.Start);
+				velocity += Math.sqrt(dX * dX + dY * dY) / Math.max(1, info1.Start - info0.Start);
 			}
 			velocity /= myDrawInfos.size() - 1;
 			velocity *= duration;

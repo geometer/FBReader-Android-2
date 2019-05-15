@@ -26,8 +26,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import group.pals.android.lib.ui.filechooser.utils.Ui;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.util.MimeType;
@@ -77,11 +79,14 @@ public class AddCustomCatalogActivity extends Activity {
 		setupButton(
 			R.id.ok_button, "ok", new View.OnClickListener() {
 				public void onClick(View view) {
-					final InputMethodManager imm =
-						(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(findViewById(R.id.add_custom_catalog_url).getWindowToken(), 0);
-					imm.hideSoftInputFromWindow(findViewById(R.id.add_custom_catalog_title).getWindowToken(), 0);
-					imm.hideSoftInputFromWindow(findViewById(R.id.add_custom_catalog_summary).getWindowToken(), 0);
+					EditText url = findViewById(R.id.add_custom_catalog_url);
+					Ui.hideSoftKeyboard(AddCustomCatalogActivity.this, url.getWindowToken());
+
+					EditText title = findViewById(R.id.add_custom_catalog_title);
+					Ui.hideSoftKeyboard(AddCustomCatalogActivity.this, title.getWindowToken());
+
+					EditText summary = findViewById(R.id.add_custom_catalog_summary);
+					Ui.hideSoftKeyboard(AddCustomCatalogActivity.this, summary.getWindowToken());
 					onOkButton();
 				}
 			}

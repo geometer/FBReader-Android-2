@@ -226,7 +226,7 @@ public class BookDownloaderService extends Service {
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		final Intent intent = success ? getFBReaderIntent(file) : new Intent();
 		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
-		notification.setLatestEventInfo(getApplicationContext(), title, contentText, contentIntent);
+		//notification.setLatestEventInfo(getApplicationContext(), title, contentText, contentIntent);
 		return notification;
 	}
 

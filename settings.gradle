@@ -1,11 +1,13 @@
-include 'fbreader/app'
-include 'fbreader/api'
-include 'fbreader/util'
-include 'fbreader/common'
-include 'fbreader/resources'
-include 'fbreader/text-formats'
-include 'fbreader/zip-amse'
-include 'third-party/drag-sort-listview'
-include 'third-party/android-filechooser'
-include 'third-party/SuperToasts'
-include 'third-party/AmbilWarna'
+include ':app', ':api', ':util', ':common', ':resources', ':text-formats', ':zip-amse',':drag-sort-listview', ':SuperToasts', ':AmbilWarna', ':android-filechooser'
+
+project(':app').projectDir = new File('fbreader/app')
+project(':api').projectDir = new File('fbreader/api')
+project(':util').projectDir = new File('fbreader/util')
+project(':common').projectDir = new File('fbreader/common')
+project(':resources').projectDir = new File('fbreader/resources')
+project(':text-formats').projectDir = new File('fbreader/text-formats')
+project(':zip-amse').projectDir = new File('fbreader/zip-amse')
+project(':drag-sort-listview').projectDir = new File('third-party/drag-sort-listview')
+project(':android-filechooser').projectDir = new File('third-party/android-filechooser')
+project(':SuperToasts').projectDir = new File('third-party/SuperToasts')
+project(':AmbilWarna').projectDir = new File('third-party/AmbilWarna')

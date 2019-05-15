@@ -1,45 +1,54 @@
 buildscript {
 	repositories {
+		jcenter()
 		mavenCentral()
-	}
-
-	dependencies {
-		classpath 'com.android.tools.build:gradle:1.3.0'
+		google()
 	}
 }
 
 apply plugin: 'com.android.application'
 
 dependencies {
-	compile project(':fbreader/api')
-	compile project(':fbreader/util')
-	compile project(':fbreader/common')
-	compile project(':fbreader/resources')
-	compile project(':fbreader/text-formats')
-	compile project(':fbreader/zip-amse')
-	compile project(':third-party/drag-sort-listview')
-	compile project(':third-party/android-filechooser')
-	compile project(':third-party/SuperToasts')
-	compile project(':third-party/AmbilWarna')
-	compile files('libs/nanohttpd-2.0.5.jar')
-	compile files('libs/httpmime-4.2.5.jar')
-	compile files('libs/pdfparse.jar')
+	implementation project(':api')
+	api project(':util')
+	api project(':common')
+	api project(':resources')
+	api project(':text-formats')
+	api project(':drag-sort-listview')
+	api project(':android-filechooser')
+	api project(':SuperToasts')
+	api project(':AmbilWarna')
+	api project(':zip-amse')
+
+	implementation 'com.android.support:support-v4:27.1.1'
+	implementation ('com.googlecode.json-simple:json-simple:1.1.1') {
+		exclude group: 'junit', module: 'junit'
+	}
+
+	implementation files('libs/nanohttpd-2.0.5.jar')
+	implementation files('libs/httpmime-4.2.5.jar')
+	implementation files('libs/pdfparse.jar')
 }
 
 android {
-	compileSdkVersion 19
-	buildToolsVersion '20'
+	compileSdkVersion project.ext.globalCompileSdkVersion
+	buildToolsVersion project.ext.globalBuildToolsVersion
+	useLibrary 'org.apache.http.legacy'
 
 	lintOptions {
 		abortOnError false
 	}
 
 	defaultConfig {
-		minSdkVersion 5
-		maxSdkVersion 10
-		targetSdkVersion 9
+		minSdkVersion project.ext.globalMinSdkVersion
+		maxSdkVersion project.ext.globalMaxSdkVersion
+		targetSdkVersion project.ext.globalTargetSdkVersion
 		versionCode 0
 		versionName new File("$projectDir/VERSION").text.trim()
+		multiDexEnabled true
+
+		buildConfigField "String", "FBNETWORK_KEY", "${FBREADER_ORG_FBNETWORK_KEY}"
+		buildConfigField "String", "FBNETWORK_SECRET", "${FBREADER_ORG_FBNETWORK_SECRET}"
 	}
 
 	sourceSets {
@@ -52,29 +61,23 @@ android {
 	}
 
 	signingConfigs {
+		debug {
+		}
 		release {
-			storeFile file(RELEASE_STORE_FILE)
-			storePassword RELEASE_STORE_PASSWORD
-			keyAlias RELEASE_KEY_ALIAS
-			keyPassword RELEASE_KEY_PASSWORD
 		}
 	}
-
 	buildTypes {
+		debug {
+			minifyEnabled false
+			debuggable true
+			versionNameSuffix '-DEBUG'
+		}
+
 		release {
 			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
-			signingConfig signingConfigs.release
-
-			buildConfigField "String", "FBNETWORK_KEY", "${FBREADER_ORG_FBNETWORK_KEY}"
-			buildConfigField "String", "FBNETWORK_SECRET", "${FBREADER_ORG_FBNETWORK_SECRET}"
+//			signingConfig signingConfigs.release
 		}
-	}
-
-	applicationVariants.all { variant ->
-		def generateHelpTask = project.tasks.create "generateHelp${variant.name.capitalize()}", Exec
-		generateHelpTask.commandLine('src/main/help/generate.py', 'src/main/help/proto', 'src/main/help/html', variant.outputs[0].processResources.assetsDir.path + '/data/intro')
-		variant.mergeResources.dependsOn(generateHelpTask)
 	}
 }
 
@@ -85,43 +88,62 @@ android {
 		fat {
 			dimension 'abi'
 			ndk {
-				abiFilters 'x86', 'armeabi-v7a', 'armeabi', 'mips'
+				abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+				// , 'armeabi', 'mips' //obsolete
 				versionCode 0
 			}
 		}
-		arm {
-			dimension 'abi'
-			ndk {
-				abiFilter 'armeabi'
-				versionCode 1
-			}
-		}
-		armv7a {
-			dimension 'abi'
-			ndk {
-				abiFilter 'armeabi-v7a'
-				versionCode 2
-			}
-		}
-		x86 {
-			dimension 'abi'
-			ndk {
-				abiFilter 'x86'
-				versionCode 3
-			}
-		}
-		mips {
-			dimension 'abi'
-			ndk {
-				abiFilter 'mips'
-				versionCode 4
-			}
-		}
+		// // arm { //obsolete
+		// // 	dimension 'abi'
+		// // 	ndk {
+		// // 		abiFilter 'armeabi'
+		// // 		versionCode 1
+		// // 	}
+		// // }
+		// armv7a {
+		// 	dimension 'abi'
+		// 	ndk {
+		// 		abiFilter 'armeabi-v7a'
+		// 		versionCode 1
+		// 	}
+		// }
+		// arm64v8a {
+		// 	dimension 'abi'
+		// 	ndk {
+		// 		abiFilter 'arm64-v8a'
+		// 		versionCode 2
+		// 	}
+		// }
+		// x86 {
+		// 	dimension 'abi'
+		// 	ndk {
+		// 		abiFilter 'x86'
+		// 		versionCode 3
+		// 	}
+		// }
+		// x8664 {
+		// 	dimension 'abi'
+		// 	ndk {
+		// 		abiFilter 'x86_64'
+		// 		versionCode 4
+		// 	}
+		// }
+		// // mips { //obsolete
+		// // 	dimension 'abi'
+		// // 	ndk {
+		// // 		abiFilter 'mips'
+		// // 		versionCode 4
+		// // 	}
+		// // }
 	}
 
 	task ndkBuild(type: Exec) {
-		def ndkDir = plugins.getPlugin('com.android.application').sdkHandler.getNdkFolder()
-		commandLine "$ndkDir/ndk-build", '-C', file('src/main/jni').absolutePath
+		def ndkDir = project.android.ndkDirectory.absolutePath
+		if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+			commandLine "$ndkDir\\ndk-build.cmd", '-C', file('src/main/jni').absolutePath
+		} else {
+			commandLine "$ndkDir/ndk-build", '-C', file('src/main/jni').absolutePath
+		}
 	}
 
 	tasks.withType(JavaCompile) {
@@ -154,6 +176,7 @@ android.applicationVariants.all { variant ->
 	} else {
 		throw new IllegalArgumentException('Unsupported version format: ' + version)
 	}
-
-	variant.mergedFlavor.versionCode = baseCode + 10 + abiVersion
+    variant.outputs.all { output ->
+        output.setVersionCodeOverride(baseCode + 10 + abiVersion)
+    }
 }

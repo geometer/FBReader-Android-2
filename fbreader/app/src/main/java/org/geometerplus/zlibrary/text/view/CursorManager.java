@@ -19,8 +19,7 @@
 
 package org.geometerplus.zlibrary.text.view;
 
-import android.support.v4.util.LruCache;
-
+import android.util.LruCache;
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 
 final class CursorManager extends LruCache<Integer,ZLTextParagraphCursor> {
