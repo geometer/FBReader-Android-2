@@ -30,11 +30,12 @@
 #include "StringInputStream.h"
 #include "CSSInputStream.h"
 #include "../util/MiscUtil.h"
+#include "ZLUnicodeUtil.h"
+#include "CSS.h"
 
 static const std::string TAG = "CSS-SELECTOR";
 
 StyleSheetParser::StyleSheetParser(const std::string &pathPrefix) : myPathPrefix(pathPrefix) {
-    //ZLLogger::Instance().registerClass("CSS-IMPORT");
     ZLLogger::Instance().registerClass(TAG);
     reset();
 }
@@ -164,7 +165,7 @@ void StyleSheetParser::processControl(const char control) {
                 if (!myImportVector.empty()) {
                     if (myFirstRuleProcessed) {
                         ZLLogger::Instance().println(
-                                "CSS-IMPORT", "Ignore import after style rule " + myImportVector[0]
+                                TAG, "Ignore import after style rule " + myImportVector[0]
                         );
                     } else {
                         importCSS(url2FullPath(myImportVector[0]));
@@ -232,6 +233,13 @@ void StyleSheetParser::processWord(const std::string &word) {
             ZLStringUtil::stripWhiteSpaces(stripped);
             // save attribute and value.
             std::string &current = myMap[myAttributeName];
+            if (!ZLUnicodeUtil::isUtf8String(stripped)) {
+                myMap.erase(myAttributeName);
+                ZLLogger::Instance().println(TAG,
+                                             "StyleSheetParser解析非法attribute: %s,  value: %s ",
+                                             myAttributeName.c_str(), current.c_str());
+                break;
+            }
             if (current.size() == 0) {
                 current = stripped;
             } else {
@@ -298,7 +306,7 @@ void StyleSheetMultiStyleParser::processAtRule(const std::string &name,
                                                const StyleSheetTable::AttributeMap &attributes) {
     //ZLLogger::Instance().registerClass("FONT");
     if (name == "@font-face") {
-        std::string family = value(attributes, "font-family");
+        std::string family = value(attributes, CSS::Properties::FONT_FAMILY);
         if (family.empty()) {
             ZLLogger::Instance().println("FONT", "Font family not specified in @font-face entry");
             return;
@@ -323,9 +331,9 @@ void StyleSheetMultiStyleParser::processAtRule(const std::string &name,
             return;
         }
 
-        const std::string weight = value(attributes, "font-weight");
+        const std::string weight = value(attributes,CSS::Properties::FONT_WEIGHT);
         const int weightNum = ZLStringUtil::parseDecimal(weight, -1);
-        const std::string style = value(attributes, "font-style");
+        const std::string style = value(attributes, CSS::Properties::FONT_STYLE);
 
         myFontMap->append(
                 family,
@@ -365,13 +373,11 @@ void StyleSheetParserWithCache::store(shared_ptr<CSSSelector> selector,
 void StyleSheetParserWithCache::importCSS(const std::string &path) {
     const ZLFile fileToImport(path);
     if (myProcessedFiles.find(fileToImport.path()) != myProcessedFiles.end()) {
-        ZLLogger::Instance().println(
-                "CSS-IMPORT", "File " + fileToImport.path() + " is already processed, do skip"
-        );
+        ZLLogger::Instance().println(TAG, "File " + fileToImport.path() +
+                                          " is already processed, do skip");
         return;
     }
-    ZLLogger::Instance().println("CSS-IMPORT",
-                                 "Go to process imported file " + fileToImport.path());
+    ZLLogger::Instance().println(TAG, "Go to process imported file " + fileToImport.path());
     shared_ptr<ZLInputStream> stream = fileToImport.inputStream(myEncryptionMap);
     if (!stream.isNull()) {
         StyleSheetParserWithCache importParser(fileToImport, myPathPrefix, myFontMap,
