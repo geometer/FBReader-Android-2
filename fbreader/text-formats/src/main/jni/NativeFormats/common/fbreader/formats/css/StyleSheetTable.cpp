@@ -363,32 +363,3 @@ void StyleSheetTable::clear() {
     myPageBreakBeforeMap.clear();
     myPageBreakAfterMap.clear();
 }
-
-
-/**
- * Define support css attribute name.
- */
-std::string CSS_PAGE_BREAK_BEFORE = "page-break-before";
-std::string CSS_PAGE_BREAK_AFTER = "page-break-after";
-std::string CSS_TEXT_ALIGN = "text-align";
-std::string CSS_TEXT_DECORATION = "text-decoration";
-std::string CSS_TEXT_INDENT = "text-indent";
-std::string CSS_FONT_WEIGHT = "font-weight";
-std::string CSS_FONT_STYLE = "font-style";
-std::string CSS_FONT_VARIANT = "font-variant";
-std::string CSS_FONT_FAMILY = "font-family";
-std::string CSS_FONT_SIZE = "font-size";
-std::string CSS_COLOR = "color";
-std::string CSS_BG_COLOR = "background-color";
-std::string CSS_MARGIN = "margin";
-std::string CSS_MARGIN_TOP = "margin-top";
-std::string CSS_MARGIN_BOTTOM = "margin-bottom";
-std::string CSS_MARGIN_LEFT = "margin-left";
-std::string CSS_MARGIN_RIGHT = "margin-right";
-std::string CSS_PADDING = "padding";
-std::string CSS_PADDING_TOP = "padding-top";
-std::string CSS_PADDING_BOTTOM = "padding-bottom";
-std::string CSS_PADDING_LEFT = "padding-left";
-std::string CSS_PADDING_RIGHT = "padding-right";
-std::string CSS_VERTICAL_ALIGN = "vertical-align";
-std::string CSS_DISPLAY = "display";
