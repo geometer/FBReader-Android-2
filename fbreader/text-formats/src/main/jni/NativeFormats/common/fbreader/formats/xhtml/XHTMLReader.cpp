@@ -487,8 +487,23 @@ XHTMLTagImageAction::XHTMLTagImageAction(const std::string &attributeName) {
 }
 
 void XHTMLTagImageAction::doAtStart(XHTMLReader &reader, const char **xmlattributes) {
-    const char *fileName = reader.attributeValue(xmlattributes, *myPredicate);
-    if (fileName == 0) {
+//	const char *fileName = reader.attributeValue(xmlattributes, *myPredicate);
+    const char *fileName = nullptr;
+    std::map<std::string, std::string> data = reader.attributeMap(xmlattributes);
+    for (auto it = data.begin(); it != data.end(); ) {
+        if (myPredicate->accepts(reader, it->first)) {
+            fileName = it->second.c_str();
+            it = data.erase(it);
+        } else {
+            const char *value = it->second.c_str();
+            if (value == nullptr || value[0] == '\0') {
+                it = data.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+    if (fileName == nullptr) {
         return;
     }
 
