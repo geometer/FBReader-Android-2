@@ -29,6 +29,7 @@
 
 #include "OPFReader.h"
 #include "../../bookmodel/BookReader.h"
+#include "NCXReader.h"
 
 class XHTMLReader;
 
@@ -44,7 +45,11 @@ private:
 
     void endElementHandler(const char *tag);
 
-    void generateTOC(const XHTMLReader &xhtmlReader);
+    void generateTOC(const XHTMLReader &xhtmlReader,
+                     const std::map<int, NCXReader::NavPoint> &navigationMap);
+
+    void getTocFileNames(std::vector<std::string> &result,
+                         const std::map<int, NCXReader::NavPoint> &navigationMap);
 
     bool coverIsSingleImage() const;
 
