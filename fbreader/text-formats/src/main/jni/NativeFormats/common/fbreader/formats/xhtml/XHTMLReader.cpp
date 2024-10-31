@@ -490,7 +490,7 @@ void XHTMLTagImageAction::doAtStart(XHTMLReader &reader, const char **xmlattribu
 //	const char *fileName = reader.attributeValue(xmlattributes, *myPredicate);
     const char *fileName = nullptr;
     std::map<std::string, std::string> data = reader.attributeMap(xmlattributes);
-    for (auto it = data.begin(); it != data.end(); ) {
+    for (auto it = data.begin(); it != data.end();) {
         if (myPredicate->accepts(reader, it->first)) {
             fileName = it->second.c_str();
             it = data.erase(it);
@@ -1129,7 +1129,9 @@ void XHTMLReader::characterDataHandler(const char *text, std::size_t len) {
             }
             break;
         case XHTML_READ_BODY:
-            if (myPreformatted) {
+            if (len == 3 && MiscUtil::isUtf8Bom(text)) {
+                len = 0;
+            } else if (myPreformatted) {
                 if (*text == '\r' || *text == '\n') {
                     restartParagraph(true);
                     text += 1;

@@ -18,6 +18,7 @@
  */
 
 #include <cstdlib>
+#include <regex>
 
 #include <ZLFile.h>
 #include <ZLStringUtil.h>
@@ -93,4 +94,23 @@ std::string MiscUtil::decodeHtmlURL(const std::string &encoded) {
         }
     }
     return decoded;
+}
+
+std::string MiscUtil::extractHtmlFileName(const std::string &input) {
+    std::regex pattern(R"(([^/\\]+\.x?html))");
+    std::smatch match;
+
+    if (std::regex_search(input, match, pattern)) {
+        return match.str(1);
+    }
+
+    return ""; // Return empty string if no match is found
+}
+
+bool MiscUtil::contains(std::vector<std::string> &result, const std::string &input) {
+    return std::find(result.begin(), result.end(), input) != result.end();
+}
+
+bool MiscUtil::isUtf8Bom(const char *data) {
+    return (*data == '\xEF') && (*(data + 1) == '\xBB') && (*(data + 2) == '\xBF');
 }
