@@ -32,6 +32,10 @@
 
 #include "CSSSelector.h"
 
+/**
+ * Declare support css attribute name.
+ */
+
 class StyleSheetTable {
 
 public:
@@ -62,31 +66,4 @@ friend class StyleSheetTableParser;
 friend class StyleSheetParserWithCache;
 };
 
-/**
- * Declare support css attribute name.
- */
-extern std::string CSS_PAGE_BREAK_BEFORE;
-extern std::string CSS_PAGE_BREAK_AFTER;
-extern std::string CSS_TEXT_ALIGN;
-extern std::string CSS_TEXT_DECORATION;
-extern std::string CSS_TEXT_INDENT;
-extern std::string CSS_FONT_WEIGHT;
-extern std::string CSS_FONT_STYLE;
-extern std::string CSS_FONT_VARIANT;
-extern std::string CSS_FONT_FAMILY;
-extern std::string CSS_FONT_SIZE;
-extern std::string CSS_COLOR;
-extern std::string CSS_BG_COLOR;
-extern std::string CSS_MARGIN;
-extern std::string CSS_MARGIN_TOP;
-extern std::string CSS_MARGIN_BOTTOM;
-extern std::string CSS_MARGIN_LEFT;
-extern std::string CSS_MARGIN_RIGHT;
-extern std::string CSS_PADDING;
-extern std::string CSS_PADDING_TOP;
-extern std::string CSS_PADDING_BOTTOM;
-extern std::string CSS_PADDING_LEFT;
-extern std::string CSS_PADDING_RIGHT;
-extern std::string CSS_VERTICAL_ALIGN;
-extern std::string CSS_DISPLAY;
 #endif /* __STYLESHEETTABLE_H__ */
