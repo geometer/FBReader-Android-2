@@ -256,7 +256,7 @@ void ZLTextModel::addStyleEntry(const ZLTextStyleEntry &entry, unsigned char dep
 void ZLTextModel::addStyleEntry(const ZLTextStyleEntry &entry,
                                 const std::vector<std::string> &fontFamilies, unsigned char depth) {
     // +++ calculating entry size
-    std::size_t len = 2 + 4; // entry type + feature mask
+    std::size_t len = 6; // entry type + feature mask
     for (int i = 0; i < ZLTextStyleEntry::NUMBER_OF_LENGTHS; ++i) {
         if (entry.isFeatureSupported((ZLTextStyleEntry::Feature) i)) {
             len += 4; // each supported length
@@ -278,14 +278,14 @@ void ZLTextModel::addStyleEntry(const ZLTextStyleEntry &entry,
         ZLUnicodeUtil::Ucs2String ucs2str;
         ZLUnicodeUtil::utf8ToUcs2(ucs2str, entry.myColor);
         const std::size_t colorlen = ucs2str.size();
-        len = len + 2 * colorlen + 4;
+        len += 2 + 2 * colorlen;
     }
 
     if (entry.isFeatureSupported(ZLTextStyleEntry::BACKGROUND_COLOR)) {
         ZLUnicodeUtil::Ucs2String ucs2str;
         ZLUnicodeUtil::utf8ToUcs2(ucs2str, entry.myBgColor);
         const std::size_t colorlen = ucs2str.size();
-        len = len + 2 * colorlen + 4;
+        len += 2 + 2 * colorlen;
     }
     // --- calculating entry size
 
@@ -337,7 +337,7 @@ void ZLTextModel::addStyleEntry(const ZLTextStyleEntry &entry,
         // write the color str length.
         ZLCachedMemoryAllocator::writeUInt32(address, colorlen);
         // write the color str info.
-        std::memcpy(address + 4, &ucs2str.front(), 2 * colorlen);
+        std::memcpy(address + 2, &ucs2str.front(), 2 * colorlen);
     }
 
     if (entry.isFeatureSupported(ZLTextStyleEntry::BACKGROUND_COLOR)) {
@@ -347,7 +347,7 @@ void ZLTextModel::addStyleEntry(const ZLTextStyleEntry &entry,
         // write the color str length.
         ZLCachedMemoryAllocator::writeUInt32(address, colorlen);
         // write the color str info.
-        std::memcpy(address + 4, &ucs2str.front(), 2 * colorlen);
+        std::memcpy(address + 2, &ucs2str.front(), 2 * colorlen);
     }
     // --- writing entry
 
