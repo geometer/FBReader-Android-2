@@ -20,9 +20,9 @@
 #include "EntityFilesCollector.h"
 
 const std::vector<std::string> &EntityFilesCollector::xhtmlDTDs() {
-	static std::vector<std::string> DTDs;
-	if (DTDs.empty()) {
-		DTDs.push_back("formats/xhtml/xhtml-merged.ent");
-	}
-	return DTDs;
+    static std::vector<std::string> DTDs;
+    if (DTDs.empty()) {
+        DTDs.push_back("formats/xhtml/xhtml-merged.ent");
+    }
+    return DTDs;
 }

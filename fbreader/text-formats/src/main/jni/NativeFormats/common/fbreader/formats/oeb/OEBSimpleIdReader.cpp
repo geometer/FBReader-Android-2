@@ -25,63 +25,63 @@
 #include "OEBSimpleIdReader.h"
 
 void OEBSimpleIdReader::characterDataHandler(const char *text, std::size_t len) {
-	switch (myReadState) {
-		default:
-			break;
-		case READ_IDENTIFIER:
-			myBuffer.append(text, len);
-			break;
-	}
+    switch (myReadState) {
+        default:
+            break;
+        case READ_IDENTIFIER:
+            myBuffer.append(text, len);
+            break;
+    }
 }
 
-void OEBSimpleIdReader::startElementHandler(const char *tag, const char**) {
-	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
-	switch (myReadState) {
-		default:
-			break;
-		case READ_NONE:
-			if (isMetadataTag(tagString)) {
-				myReadState = READ_METADATA;
-			}
-			break;
-		case READ_METADATA:
-			if (testDCTag("identifier", tagString)) {
-				myReadState = READ_IDENTIFIER;
-			}
-			break;
-	}
+void OEBSimpleIdReader::startElementHandler(const char *tag, const char **) {
+    const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
+    switch (myReadState) {
+        default:
+            break;
+        case READ_NONE:
+            if (isMetadataTag(tagString)) {
+                myReadState = READ_METADATA;
+            }
+            break;
+        case READ_METADATA:
+            if (testDCTag("identifier", tagString)) {
+                myReadState = READ_IDENTIFIER;
+            }
+            break;
+    }
 }
 
 void OEBSimpleIdReader::endElementHandler(const char *tag) {
-	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
-	switch (myReadState) {
-		case READ_NONE:
-			break;
-		case READ_METADATA:
-			if (isMetadataTag(tagString)) {
-				myReadState = READ_NONE;
-				interrupt();
-				return;
-			}
-			break;
-		case READ_IDENTIFIER:
-			ZLUnicodeUtil::utf8Trim(myBuffer);
-			if (!myBuffer.empty()) {
-				if (!myPublicationId.empty()) {
-					myPublicationId += " ";
-				}
-				myPublicationId += myBuffer;
-				myBuffer.erase();
-			}
-			myReadState = READ_METADATA;
-			break;
-	}
+    const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
+    switch (myReadState) {
+        case READ_NONE:
+            break;
+        case READ_METADATA:
+            if (isMetadataTag(tagString)) {
+                myReadState = READ_NONE;
+                interrupt();
+                return;
+            }
+            break;
+        case READ_IDENTIFIER:
+            ZLUnicodeUtil::utf8Trim(myBuffer);
+            if (!myBuffer.empty()) {
+                if (!myPublicationId.empty()) {
+                    myPublicationId += " ";
+                }
+                myPublicationId += myBuffer;
+                myBuffer.erase();
+            }
+            myReadState = READ_METADATA;
+            break;
+    }
 }
 
 std::string OEBSimpleIdReader::readId(const ZLFile &file) {
-	myPublicationId.erase();
-	myBuffer.erase();
-	myReadState = READ_NONE;
-	readDocument(file);
-	return myPublicationId;
+    myPublicationId.erase();
+    myBuffer.erase();
+    myReadState = READ_NONE;
+    readDocument(file);
+    return myPublicationId;
 }

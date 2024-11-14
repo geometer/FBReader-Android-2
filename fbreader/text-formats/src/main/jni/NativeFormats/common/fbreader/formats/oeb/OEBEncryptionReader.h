@@ -31,7 +31,8 @@ class FileEncryptionInfo;
 class OEBEncryptionReader {
 
 public:
-	std::vector<shared_ptr<FileEncryptionInfo> > readEncryptionInfos(const ZLFile &epubFile, const ZLFile &opfFile);
+    std::vector<shared_ptr<FileEncryptionInfo> >
+    readEncryptionInfos(const ZLFile &epubFile, const ZLFile &opfFile);
 };
 
 #endif /* __OEBENCRYPTIONREADER_H__ */

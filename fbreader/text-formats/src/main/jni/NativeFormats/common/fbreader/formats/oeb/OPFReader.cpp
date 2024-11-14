@@ -27,43 +27,44 @@ OPFReader::OPFReader() {
 }
 
 bool OPFReader::testOPFTag(const std::string &expected, const std::string &tag) const {
-	return
-		expected == tag ||
-		testTag(ZLXMLNamespace::OpenPackagingFormat, expected, tag);
+    return
+            expected == tag ||
+            testTag(ZLXMLNamespace::OpenPackagingFormat, expected, tag);
 }
 
 bool OPFReader::testDCTag(const std::string &expected, const std::string &tag) const {
-	return
-		testTag(ZLXMLNamespace::DublinCore, expected, tag) ||
-		testTag(ZLXMLNamespace::DublinCoreLegacy, expected, tag);
+    return
+            testTag(ZLXMLNamespace::DublinCore, expected, tag) ||
+            testTag(ZLXMLNamespace::DublinCoreLegacy, expected, tag);
 }
 
-bool OPFReader::isNSName(const std::string &fullName, const std::string &shortName, const std::string &fullNSId) const {
-	const int prefixLength = fullName.length() - shortName.length() - 1;
-	if (prefixLength <= 0 ||
-			fullName[prefixLength] != ':' ||
-			!ZLStringUtil::stringEndsWith(fullName, shortName)) {
-		return false;
-	}
-	const std::map<std::string,std::string> &namespaceMap = namespaces();
-	std::map<std::string,std::string>::const_iterator iter =
-		namespaceMap.find(fullName.substr(0, prefixLength));
-	return iter != namespaceMap.end() && iter->second == fullNSId;
+bool OPFReader::isNSName(const std::string &fullName, const std::string &shortName,
+                         const std::string &fullNSId) const {
+    const int prefixLength = fullName.length() - shortName.length() - 1;
+    if (prefixLength <= 0 ||
+        fullName[prefixLength] != ':' ||
+        !ZLStringUtil::stringEndsWith(fullName, shortName)) {
+        return false;
+    }
+    const std::map<std::string, std::string> &namespaceMap = namespaces();
+    std::map<std::string, std::string>::const_iterator iter =
+            namespaceMap.find(fullName.substr(0, prefixLength));
+    return iter != namespaceMap.end() && iter->second == fullNSId;
 }
 
 bool OPFReader::isMetadataTag(const std::string &tagName) {
-	static const std::string METADATA = "metadata";
-	static const std::string DC_METADATA = "dc-metadata";
+    static const std::string METADATA = "metadata";
+    static const std::string DC_METADATA = "dc-metadata";
 
-	return
-		testTag(ZLXMLNamespace::OpenPackagingFormat, METADATA, tagName) ||
-		DC_METADATA == tagName;
+    return
+            testTag(ZLXMLNamespace::OpenPackagingFormat, METADATA, tagName) ||
+            DC_METADATA == tagName;
 }
 
 bool OPFReader::processNamespaces() const {
-	return true;
+    return true;
 }
 
 const std::vector<std::string> &OPFReader::externalDTDs() const {
-	return EntityFilesCollector::xhtmlDTDs();
+    return EntityFilesCollector::xhtmlDTDs();
 }

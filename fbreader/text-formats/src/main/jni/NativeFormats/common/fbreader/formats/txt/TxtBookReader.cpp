@@ -24,113 +24,119 @@
 #include "../../bookmodel/BookModel.h"
 
 static const std::string TAG = "TxtBookReader";
-TxtBookReader::TxtBookReader(BookModel &model, const PlainTextFormat &format, const std::string &encoding) : TxtReader(encoding), BookReader(model), myFormat(format) {
-	ZLLogger::Instance().registerClass(TAG);
+
+TxtBookReader::TxtBookReader(BookModel &model, const PlainTextFormat &format,
+                             const std::string &encoding) : TxtReader(encoding), BookReader(model),
+                                                            myFormat(format) {
+    ZLLogger::Instance().registerClass(TAG);
 }
 
 TxtBookReader::~TxtBookReader() {
-	ZLLogger::Instance().unregisterClass(TAG);
+    ZLLogger::Instance().unregisterClass(TAG);
 }
 
 void TxtBookReader::internalEndParagraph() {
-	if (!myLastLineIsEmpty) {
-		//myLineFeedCounter = 0;
-		myLineFeedCounter = -1; /* Fixed by Hatred: zero value was break LINE INDENT formater -
+    if (!myLastLineIsEmpty) {
+        //myLineFeedCounter = 0;
+        myLineFeedCounter = -1; /* Fixed by Hatred: zero value was break LINE INDENT formater -
 		                           second line print with indent like new paragraf */
-	}
-	myLastLineIsEmpty = true;
-	endParagraph();
+    }
+    myLastLineIsEmpty = true;
+    endParagraph();
 }
 
 bool TxtBookReader::characterDataHandler(std::string &str) {
-	const char *ptr = str.data();
-	const char *end = ptr + str.length();
-	for (; ptr != end; ++ptr) {
-		if (std::isspace((unsigned char)*ptr)) {
-			if (*ptr != '\t') {
-				++mySpaceCounter;
-			} else {
-				mySpaceCounter += myFormat.ignoredIndent() + 1; // TODO: implement single option in PlainTextFormat
-			}
-		} else {
-			myLastLineIsEmpty = false;
-			break;
-		}
-	}
-	if (ptr != end) {
-		if ((myFormat.breakType() & PlainTextFormat::BREAK_PARAGRAPH_AT_LINE_WITH_INDENT) &&
-				myNewLine && (mySpaceCounter > myFormat.ignoredIndent())) {
-			internalEndParagraph();
-			beginParagraph();
-		}
-		addData(str);
-		if (myInsideContentsParagraph) {
-			addContentsData(str);
-		}
-		myNewLine = false;
-	}
-	return true;
+    const char *ptr = str.data();
+    const char *end = ptr + str.length();
+    for (; ptr != end; ++ptr) {
+        if (std::isspace((unsigned char) *ptr)) {
+            if (*ptr != '\t') {
+                ++mySpaceCounter;
+            } else {
+                mySpaceCounter += myFormat.ignoredIndent() +
+                                  1; // TODO: implement single option in PlainTextFormat
+            }
+        } else {
+            myLastLineIsEmpty = false;
+            break;
+        }
+    }
+    if (ptr != end) {
+        if ((myFormat.breakType() & PlainTextFormat::BREAK_PARAGRAPH_AT_LINE_WITH_INDENT) &&
+            myNewLine && (mySpaceCounter > myFormat.ignoredIndent())) {
+            internalEndParagraph();
+            beginParagraph();
+        }
+        addData(str);
+        if (myInsideContentsParagraph) {
+            addContentsData(str);
+        }
+        myNewLine = false;
+    }
+    return true;
 }
 
 bool TxtBookReader::newLineHandler() {
-	if (!myLastLineIsEmpty) {
-		myLineFeedCounter = -1;
-	}
-	myLastLineIsEmpty = true;
-	++myLineFeedCounter;
-	myNewLine = true;
-	mySpaceCounter = 0;
-	bool paragraphBreak =
-		(myFormat.breakType() & PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE) ||
-		((myFormat.breakType() & PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE) && (myLineFeedCounter > 0));
+    if (!myLastLineIsEmpty) {
+        myLineFeedCounter = -1;
+    }
+    myLastLineIsEmpty = true;
+    ++myLineFeedCounter;
+    myNewLine = true;
+    mySpaceCounter = 0;
+    bool paragraphBreak =
+            (myFormat.breakType() & PlainTextFormat::BREAK_PARAGRAPH_AT_NEW_LINE) ||
+            ((myFormat.breakType() & PlainTextFormat::BREAK_PARAGRAPH_AT_EMPTY_LINE) &&
+             (myLineFeedCounter > 0));
 
-	if (myFormat.createContentsTable()) {
+    if (myFormat.createContentsTable()) {
 //		if (!myInsideContentsParagraph && (myLineFeedCounter == myFormat.emptyLinesBeforeNewSection() + 1)) {
-			/* Fixed by Hatred: remove '+ 1' for emptyLinesBeforeNewSection, it looks like very strange
-				 when we should point count of empty string decrised by 1 in settings dialog */
-		if (!myInsideContentsParagraph && (myLineFeedCounter == myFormat.emptyLinesBeforeNewSection())) {
-			ZLLogger::Instance().println(TAG, " myLineFeedCounter: %d", myLineFeedCounter);
+        /* Fixed by Hatred: remove '+ 1' for emptyLinesBeforeNewSection, it looks like very strange
+             when we should point count of empty string decrised by 1 in settings dialog */
+        if (!myInsideContentsParagraph &&
+            (myLineFeedCounter == myFormat.emptyLinesBeforeNewSection())) {
+            ZLLogger::Instance().println(TAG, " myLineFeedCounter: %d", myLineFeedCounter);
 
-			myInsideContentsParagraph = true;
-			internalEndParagraph();
-			insertEndOfSectionParagraph();
-			beginContentsParagraph();
-			enterTitle();
-			pushKind(SECTION_TITLE);
-			beginParagraph();
-			paragraphBreak = false;
-		}
-		if (myInsideContentsParagraph && (myLineFeedCounter == 1)) {
-			ZLLogger::Instance().println(TAG, " myLineFeedCounter = 1");
+            myInsideContentsParagraph = true;
+            internalEndParagraph();
+            insertEndOfSectionParagraph();
+            beginContentsParagraph();
+            enterTitle();
+            pushKind(SECTION_TITLE);
+            beginParagraph();
+            paragraphBreak = false;
+        }
+        if (myInsideContentsParagraph && (myLineFeedCounter == 1)) {
+            ZLLogger::Instance().println(TAG, " myLineFeedCounter = 1");
 
-			exitTitle();
-			endContentsParagraph();
-			popKind();
-			myInsideContentsParagraph = false;
-			paragraphBreak = true;
-		}
-	}
+            exitTitle();
+            endContentsParagraph();
+            popKind();
+            myInsideContentsParagraph = false;
+            paragraphBreak = true;
+        }
+    }
 
-	if (paragraphBreak) {
-		internalEndParagraph();
-		beginParagraph();
-	}
-	return true;
+    if (paragraphBreak) {
+        internalEndParagraph();
+        beginParagraph();
+    }
+    return true;
 }
 
 void TxtBookReader::startDocumentHandler() {
-	setMainTextModel();
-	// add inner title.
-	addInnerTitleName();
+    setMainTextModel();
+    // add inner title.
+    addInnerTitleName();
 
-	pushKind(REGULAR);
-	beginParagraph();
-	myLineFeedCounter = 0;
-	myInsideContentsParagraph = false;
-	enterTitle();
-	myLastLineIsEmpty = true;
-	myNewLine = true;
-	mySpaceCounter = 0;
+    pushKind(REGULAR);
+    beginParagraph();
+    myLineFeedCounter = 0;
+    myInsideContentsParagraph = false;
+    enterTitle();
+    myLastLineIsEmpty = true;
+    myNewLine = true;
+    mySpaceCounter = 0;
 }
 
 /**
@@ -138,16 +144,16 @@ void TxtBookReader::startDocumentHandler() {
  */
 void TxtBookReader::addInnerTitleName() {
     const bool isLocal = model().isLocal();
-	if (!isLocal) {
+    if (!isLocal) {
         std::string innerTitle = model().addedInnerTitle();
-		pushKind(KT);
-		beginParagraph();
-		addData(innerTitle);
-		endParagraph();
-		popKind();
+        pushKind(KT);
+        beginParagraph();
+        addData(innerTitle);
+        endParagraph();
+        popKind();
     }
 }
 
 void TxtBookReader::endDocumentHandler() {
-	internalEndParagraph();
+    internalEndParagraph();
 }

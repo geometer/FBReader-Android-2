@@ -30,23 +30,25 @@
 class XHTMLFilesCollector : public ZLXMLReader {
 
 public:
-	XHTMLFilesCollector(std::vector<std::string> &xhtmlFileNames);
+    XHTMLFilesCollector(std::vector<std::string> &xhtmlFileNames);
 
 private:
-	void startElementHandler(const char *tag, const char **attributes);
-	void endElementHandler(const char *tag);
+    void startElementHandler(const char *tag, const char **attributes);
+
+    void endElementHandler(const char *tag);
 
 private:
-	std::vector<std::string> &myXHTMLFileNames;
-	std::map<std::string,std::string> myIdToHref;
-	enum {
-		READ_NONE,
-		READ_MANIFEST,
-		READ_SPINE
-	} myState;
+    std::vector<std::string> &myXHTMLFileNames;
+    std::map<std::string, std::string> myIdToHref;
+    enum {
+        READ_NONE,
+        READ_MANIFEST,
+        READ_SPINE
+    } myState;
 };
 
-XHTMLFilesCollector::XHTMLFilesCollector(std::vector<std::string> &xhtmlFileNames) : myXHTMLFileNames(xhtmlFileNames), myState(READ_NONE) {
+XHTMLFilesCollector::XHTMLFilesCollector(std::vector<std::string> &xhtmlFileNames)
+        : myXHTMLFileNames(xhtmlFileNames), myState(READ_NONE) {
 }
 
 static const std::string MANIFEST = "manifest";
@@ -55,47 +57,47 @@ static const std::string ITEM = "item";
 static const std::string ITEMREF = "itemref";
 
 void XHTMLFilesCollector::startElementHandler(const char *tag, const char **xmlattributes) {
-	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
-	if (MANIFEST == tagString) {
-		myState = READ_MANIFEST;
-	} else if (SPINE == tagString) {
-		myState = READ_SPINE;
-	} else if ((myState == READ_MANIFEST) && (ITEM == tagString)) {
-		const char *id = attributeValue(xmlattributes, "id");
-		const char *href = attributeValue(xmlattributes, "href");
-		if ((id != 0) && (href != 0)) {
-			myIdToHref[id] = href;
-		}
-	} else if ((myState == READ_SPINE) && (ITEMREF == tagString)) {
-		const char *id = attributeValue(xmlattributes, "idref");
-		if (id != 0) {
-			const std::string &fileName = myIdToHref[id];
-			if (!fileName.empty()) {
-				myXHTMLFileNames.push_back(fileName);
-			}
-		}
-	}
+    const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
+    if (MANIFEST == tagString) {
+        myState = READ_MANIFEST;
+    } else if (SPINE == tagString) {
+        myState = READ_SPINE;
+    } else if ((myState == READ_MANIFEST) && (ITEM == tagString)) {
+        const char *id = attributeValue(xmlattributes, "id");
+        const char *href = attributeValue(xmlattributes, "href");
+        if ((id != 0) && (href != 0)) {
+            myIdToHref[id] = href;
+        }
+    } else if ((myState == READ_SPINE) && (ITEMREF == tagString)) {
+        const char *id = attributeValue(xmlattributes, "idref");
+        if (id != 0) {
+            const std::string &fileName = myIdToHref[id];
+            if (!fileName.empty()) {
+                myXHTMLFileNames.push_back(fileName);
+            }
+        }
+    }
 }
 
 void XHTMLFilesCollector::endElementHandler(const char *tag) {
-	if (ZLUnicodeUtil::equalsIgnoreCaseAscii(SPINE, tag)) {
-		interrupt();
-	}
+    if (ZLUnicodeUtil::equalsIgnoreCaseAscii(SPINE, tag)) {
+        interrupt();
+    }
 }
 
 OEBTextStream::OEBTextStream(const ZLFile &opfFile) {
-	myFilePrefix = MiscUtil::htmlDirectoryPrefix(opfFile.path());
-	XHTMLFilesCollector(myXHTMLFileNames).readDocument(opfFile);
+    myFilePrefix = MiscUtil::htmlDirectoryPrefix(opfFile.path());
+    XHTMLFilesCollector(myXHTMLFileNames).readDocument(opfFile);
 }
 
 void OEBTextStream::resetToStart() {
-	myIndex = 0;
+    myIndex = 0;
 }
 
 shared_ptr<ZLInputStream> OEBTextStream::nextStream() {
-	if (myIndex >= myXHTMLFileNames.size()) {
-		return 0;
-	}
-	ZLFile xhtmlFile(myFilePrefix + myXHTMLFileNames[myIndex++]);
-	return new XMLTextStream(xhtmlFile.inputStream(), "body");
+    if (myIndex >= myXHTMLFileNames.size()) {
+        return 0;
+    }
+    ZLFile xhtmlFile(myFilePrefix + myXHTMLFileNames[myIndex++]);
+    return new XMLTextStream(xhtmlFile.inputStream(), "body");
 }

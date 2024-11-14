@@ -35,41 +35,45 @@ class XHTMLReader;
 class OEBBookReader : public OPFReader {
 
 public:
-	OEBBookReader(BookModel &model);
-	bool readBook(const ZLFile &file);
+    OEBBookReader(BookModel &model);
+
+    bool readBook(const ZLFile &file);
 
 private:
-	void startElementHandler(const char *tag, const char **attributes);
-	void endElementHandler(const char *tag);
+    void startElementHandler(const char *tag, const char **attributes);
 
-	void generateTOC(const XHTMLReader &xhtmlReader);
-	bool coverIsSingleImage() const;
-	void addCoverImage();
+    void endElementHandler(const char *tag);
+
+    void generateTOC(const XHTMLReader &xhtmlReader);
+
+    bool coverIsSingleImage() const;
+
+    void addCoverImage();
 
 private:
-	enum ReaderState {
-		READ_NONE,
-		READ_MANIFEST,
-		READ_SPINE,
-		READ_GUIDE,
-		READ_TOUR
-	};
+    enum ReaderState {
+        READ_NONE,
+        READ_MANIFEST,
+        READ_SPINE,
+        READ_GUIDE,
+        READ_TOUR
+    };
 
-	BookReader myModelReader;
-	ReaderState myState;
+    BookReader myModelReader;
+    ReaderState myState;
 
-	shared_ptr<EncryptionMap> myEncryptionMap;
-	std::string myFilePrefix;
-	std::map<std::string,std::string> myIdToHref;
-	std::map<std::string,std::string> myHrefToMediatype;
-	// xhtml file collection pointed by itemref in spine tag.
-	std::vector<std::string> myHtmlFileNames;
-	std::string myNCXTOCFileName;
-	std::string myCoverFileName;
-	std::string myCoverFileType;
-	std::string myCoverMimeType;
-	std::vector<std::pair<std::string,std::string> > myTourTOC;
-	std::vector<std::pair<std::string,std::string> > myGuideTOC;
+    shared_ptr<EncryptionMap> myEncryptionMap;
+    std::string myFilePrefix;
+    std::map<std::string, std::string> myIdToHref;
+    std::map<std::string, std::string> myHrefToMediatype;
+    // xhtml file collection pointed by itemref in spine tag.
+    std::vector<std::string> myHtmlFileNames;
+    std::string myNCXTOCFileName;
+    std::string myCoverFileName;
+    std::string myCoverFileType;
+    std::string myCoverMimeType;
+    std::vector<std::pair<std::string, std::string> > myTourTOC;
+    std::vector<std::pair<std::string, std::string> > myGuideTOC;
 };
 
 #endif /* __OEBBOOKREADER_H__ */

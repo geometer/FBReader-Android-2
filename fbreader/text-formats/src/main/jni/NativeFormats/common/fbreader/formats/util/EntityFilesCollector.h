@@ -26,7 +26,7 @@
 class EntityFilesCollector {
 
 public:
-	static const std::vector<std::string> &xhtmlDTDs();
+    static const std::vector<std::string> &xhtmlDTDs();
 };
 
 #endif /* __ENTITYFILESCOLLECTOR_H__ */

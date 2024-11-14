@@ -29,24 +29,30 @@ class XMLTextReader;
 class XMLTextStream : public ZLInputStream {
 
 public:
-	XMLTextStream(shared_ptr<ZLInputStream> base, const std::string &startTag);
-	~XMLTextStream();
+    XMLTextStream(shared_ptr<ZLInputStream> base, const std::string &startTag);
+
+    ~XMLTextStream();
 
 private:
-	bool open();
-	std::size_t read(char *buffer, std::size_t maxSize);
-	void close();
-	void seek(int offset, bool absoluteOffset);
-	std::size_t offset() const;
-	std::size_t sizeOfOpened();
+    bool open();
+
+    std::size_t read(char *buffer, std::size_t maxSize);
+
+    void close();
+
+    void seek(int offset, bool absoluteOffset);
+
+    std::size_t offset() const;
+
+    std::size_t sizeOfOpened();
 
 private:
-	shared_ptr<ZLInputStream> myBase;
-	shared_ptr<XMLTextReader> myReader;
-	shared_ptr<ZLAsynchronousInputStream> myStream;
-	std::string myStreamBuffer;
-	std::string myDataBuffer;
-	std::size_t myOffset;
+    shared_ptr<ZLInputStream> myBase;
+    shared_ptr<XMLTextReader> myReader;
+    shared_ptr<ZLAsynchronousInputStream> myStream;
+    std::string myStreamBuffer;
+    std::string myDataBuffer;
+    std::size_t myOffset;
 };
 
 #endif /* __XMLTEXTSTREAM_H__ */

@@ -22,37 +22,38 @@
 #include "XHTMLTagInfo.h"
 #include "../css/CSSSelector.h"
 
-XHTMLTagInfo::XHTMLTagInfo(const std::string &tag, const std::vector<std::string> &classes) : Tag(tag), Classes(classes) {
+XHTMLTagInfo::XHTMLTagInfo(const std::string &tag, const std::vector<std::string> &classes) : Tag(
+        tag), Classes(classes) {
 }
 
 bool XHTMLTagInfo::matches(const CSSSelector &selector) const {
-	if (selector.Tag == "*") {
-		return selector.Class.empty();
-	}
-	if (!selector.Tag.empty() && selector.Tag != Tag) {
-		return false;
-	}
-	if (selector.Class.empty()) {
-		return true;
-	}
-	return std::find(Classes.begin(), Classes.end(), selector.Class) != Classes.end();
+    if (selector.Tag == "*") {
+        return selector.Class.empty();
+    }
+    if (!selector.Tag.empty() && selector.Tag != Tag) {
+        return false;
+    }
+    if (selector.Class.empty()) {
+        return true;
+    }
+    return std::find(Classes.begin(), Classes.end(), selector.Class) != Classes.end();
 }
 
 int XHTMLTagInfoList::find(const CSSSelector &selector, int from, int to) const {
-	if (from < 0) {
-		from = std::max(from + (int)size(), 0);
-	}
-	if (to <= 0) {
-		to += size();
-	}
-	for (int i = std::min(to, (int)size()) - 1; i >= from; --i) {
-		if (at(i).matches(selector)) {
-			return i;
-		}
-	}
-	return -1;
+    if (from < 0) {
+        from = std::max(from + (int) size(), 0);
+    }
+    if (to <= 0) {
+        to += size();
+    }
+    for (int i = std::min(to, (int) size()) - 1; i >= from; --i) {
+        if (at(i).matches(selector)) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 bool XHTMLTagInfoList::matches(const CSSSelector &selector, int index) const {
-	return find(selector, index, index + 1) != -1;
+    return find(selector, index, index + 1) != -1;
 }

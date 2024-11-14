@@ -32,97 +32,131 @@
 #include "FBTextKind.h"
 
 class BookModel;
+
 class ContentsTree;
+
 class ZLTextModel;
+
 class ZLInputStream;
+
 class ZLCachedMemoryAllocator;
+
 class ZLTextStyleEntry;
+
 class ZLVideoEntry;
+
 class FontEntry;
 
 class BookReader {
 
 public:
-	BookReader(BookModel &model);
-	virtual ~BookReader();
+    BookReader(BookModel &model);
 
-	void setMainTextModel();
-	void setFootnoteTextModel(const std::string &id);
-	void unsetTextModel();
+    virtual ~BookReader();
 
-	void insertEndOfSectionParagraph();
-	void insertPseudoEndOfSectionParagraph();
-	void insertEndOfTextParagraph();
-	void insertEncryptedSectionParagraph();
+    void setMainTextModel();
 
-	void pushKind(FBTextKind kind);
-	bool popKind();
-	bool isKindStackEmpty() const;
+    void setFootnoteTextModel(const std::string &id);
 
-	void beginParagraph(ZLTextParagraph::Kind kind = ZLTextParagraph::TEXT_PARAGRAPH);
-	void endParagraph();
-	bool paragraphIsOpen() const;
-	void addControl(FBTextKind kind, bool start);
-	void addStyleEntry(const ZLTextStyleEntry &entry, unsigned char depth);
-	void addStyleEntry(const ZLTextStyleEntry &entry, const std::vector<std::string> &fontFamilies, unsigned char depth);
-	void addStyleCloseEntry();
-	void addHyperlinkControl(FBTextKind kind, const std::string &label);
-	void addHyperlinkLabel(const std::string &label);
-	void addHyperlinkLabel(const std::string &label, int paragraphNumber);
-	void addFixedHSpace(unsigned char length);
+    void unsetTextModel();
 
-	void addImageReference(const std::string &id, short vOffset, bool isCover);
-	void addImage(const std::string &id, shared_ptr<const ZLImage> image);
+    void insertEndOfSectionParagraph();
 
-	void addVideoEntry(const ZLVideoEntry &entry);
-	void addExtensionEntry(const std::string &action, const std::map<std::string,std::string> &data);
+    void insertPseudoEndOfSectionParagraph();
 
-	void beginContentsParagraph(int referenceNumber = -1);
-	void endContentsParagraph();
-	bool contentsParagraphIsOpen() const;
-	//void setReference(std::size_t contentsParagraphNumber, int referenceNumber);
+    void insertEndOfTextParagraph();
 
-	void addData(const std::string &data);
-	void addContentsData(const std::string &data);
+    void insertEncryptedSectionParagraph();
 
-	void enterTitle() { myInsideTitle = true; }
-	void exitTitle() { myInsideTitle = false; }
+    void pushKind(FBTextKind kind);
 
-	std::string putFontEntry(const std::string &family, shared_ptr<FontEntry> fontEntry);
+    bool popKind();
 
-	const BookModel &model() const { return myModel; }
+    bool isKindStackEmpty() const;
 
-	void reset();
+    void beginParagraph(ZLTextParagraph::Kind kind = ZLTextParagraph::TEXT_PARAGRAPH);
+
+    void endParagraph();
+
+    bool paragraphIsOpen() const;
+
+    void addControl(FBTextKind kind, bool start);
+
+    void addStyleEntry(const ZLTextStyleEntry &entry, unsigned char depth);
+
+    void addStyleEntry(const ZLTextStyleEntry &entry, const std::vector<std::string> &fontFamilies,
+                       unsigned char depth);
+
+    void addStyleCloseEntry();
+
+    void addHyperlinkControl(FBTextKind kind, const std::string &label);
+
+    void addHyperlinkLabel(const std::string &label);
+
+    void addHyperlinkLabel(const std::string &label, int paragraphNumber);
+
+    void addFixedHSpace(unsigned char length);
+
+    void addImageReference(const std::string &id, short vOffset, bool isCover);
+
+    void addImage(const std::string &id, shared_ptr<const ZLImage> image);
+
+    void addVideoEntry(const ZLVideoEntry &entry);
+
+    void
+    addExtensionEntry(const std::string &action, const std::map<std::string, std::string> &data);
+
+    void beginContentsParagraph(int referenceNumber = -1);
+
+    void endContentsParagraph();
+
+    bool contentsParagraphIsOpen() const;
+    //void setReference(std::size_t contentsParagraphNumber, int referenceNumber);
+
+    void addData(const std::string &data);
+
+    void addContentsData(const std::string &data);
+
+    void enterTitle() { myInsideTitle = true; }
+
+    void exitTitle() { myInsideTitle = false; }
+
+    std::string putFontEntry(const std::string &family, shared_ptr<FontEntry> fontEntry);
+
+    const BookModel &model() const { return myModel; }
+
+    void reset();
 
 private:
-	void insertEndParagraph(ZLTextParagraph::Kind kind);
-	void flushTextBufferToParagraph();
+    void insertEndParagraph(ZLTextParagraph::Kind kind);
+
+    void flushTextBufferToParagraph();
 
 private:
-	BookModel &myModel;
-	shared_ptr<ZLTextModel> myCurrentTextModel;
-	std::list<shared_ptr<ZLTextModel> > myModelsWithOpenParagraphs;
+    BookModel &myModel;
+    shared_ptr<ZLTextModel> myCurrentTextModel;
+    std::list<shared_ptr<ZLTextModel> > myModelsWithOpenParagraphs;
 
-	std::vector<FBTextKind> myKindStack;
+    std::vector<FBTextKind> myKindStack;
 
-	bool myContentsParagraphExists;
-	// 构建目录时，记录当前正在解析的目录栈（如该级目录被添加完毕，栈顶弹出该级目录节点）
-	std::stack<shared_ptr<ContentsTree> > myContentsTreeStack;
+    bool myContentsParagraphExists;
+    // 构建目录时，记录当前正在解析的目录栈（如该级目录被添加完毕，栈顶弹出该级目录节点）
+    std::stack<shared_ptr<ContentsTree> > myContentsTreeStack;
 
-	bool mySectionContainsRegularContents;
-	bool myInsideTitle;
+    bool mySectionContainsRegularContents;
+    bool myInsideTitle;
 
-	std::vector<std::string> myBuffer;
+    std::vector<std::string> myBuffer;
 
-	std::string myHyperlinkReference;
-	FBHyperlinkType myHyperlinkType;
-	FBTextKind myHyperlinkKind;
+    std::string myHyperlinkReference;
+    FBHyperlinkType myHyperlinkType;
+    FBTextKind myHyperlinkKind;
 
-	shared_ptr<ZLCachedMemoryAllocator> myFootnotesAllocator;
+    shared_ptr<ZLCachedMemoryAllocator> myFootnotesAllocator;
 };
 
 inline bool BookReader::contentsParagraphIsOpen() const {
-	return myContentsParagraphExists;
+    return myContentsParagraphExists;
 }
 
 #endif /* __BOOKREADER_H__ */

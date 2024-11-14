@@ -20,9 +20,9 @@
 #include "ZLVideoEntry.h"
 
 void ZLVideoEntry::addSource(const std::string &type, const std::string &path) {
-	mySources.insert(std::make_pair(type, path));
+    mySources.insert(std::make_pair(type, path));
 }
 
-const std::map<std::string,std::string> &ZLVideoEntry::sources() const {
-	return mySources;
+const std::map<std::string, std::string> &ZLVideoEntry::sources() const {
+    return mySources;
 }

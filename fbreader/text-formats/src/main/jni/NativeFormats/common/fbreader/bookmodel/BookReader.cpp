@@ -33,156 +33,162 @@
 #include "../library/Book.h"
 
 BookReader::BookReader(BookModel &model) : myModel(model) {
-	myCurrentTextModel = 0;
+    myCurrentTextModel = 0;
 
-	myInsideTitle = false;
-	mySectionContainsRegularContents = false;
+    myInsideTitle = false;
+    mySectionContainsRegularContents = false;
 }
 
 BookReader::~BookReader() {
 }
 
 void BookReader::setMainTextModel() {
-	myCurrentTextModel = myModel.myBookTextModel;
+    myCurrentTextModel = myModel.myBookTextModel;
 }
 
 void BookReader::setFootnoteTextModel(const std::string &id) {
-	std::map<std::string,shared_ptr<ZLTextModel> >::iterator it = myModel.myFootnotes.find(id);
-	if (it != myModel.myFootnotes.end()) {
-		myCurrentTextModel = (*it).second;
-	} else {
-		if (myFootnotesAllocator.isNull()) {
-			myFootnotesAllocator = new ZLCachedMemoryAllocator(8192, myModel.CacheDir, myModel.Name, "footnotes");
-		}
-		myCurrentTextModel = new ZLTextPlainModel(id, myModel.myBookTextModel->language(), myFootnotesAllocator, myModel.myFontManager);
-		myModel.myFootnotes.insert(std::make_pair(id, myCurrentTextModel));
-	}
+    std::map<std::string, shared_ptr<ZLTextModel> >::iterator it = myModel.myFootnotes.find(id);
+    if (it != myModel.myFootnotes.end()) {
+        myCurrentTextModel = (*it).second;
+    } else {
+        if (myFootnotesAllocator.isNull()) {
+            myFootnotesAllocator = new ZLCachedMemoryAllocator(8192, myModel.CacheDir, myModel.Name,
+                                                               "footnotes");
+        }
+        myCurrentTextModel = new ZLTextPlainModel(id, myModel.myBookTextModel->language(),
+                                                  myFootnotesAllocator, myModel.myFontManager);
+        myModel.myFootnotes.insert(std::make_pair(id, myCurrentTextModel));
+    }
 }
 
 bool BookReader::paragraphIsOpen() const {
-	if (myCurrentTextModel.isNull()) {
-		return false;
-	}
-	for (std::list<shared_ptr<ZLTextModel> >::const_iterator it = myModelsWithOpenParagraphs.begin(); it != myModelsWithOpenParagraphs.end(); ++it) {
-		if (*it == myCurrentTextModel) {
-			return true;
-		}
-	}
-	return false;
+    if (myCurrentTextModel.isNull()) {
+        return false;
+    }
+    for (std::list<shared_ptr<ZLTextModel> >::const_iterator it = myModelsWithOpenParagraphs.begin();
+         it != myModelsWithOpenParagraphs.end(); ++it) {
+        if (*it == myCurrentTextModel) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void BookReader::unsetTextModel() {
-	myCurrentTextModel = 0;
+    myCurrentTextModel = 0;
 }
 
 void BookReader::pushKind(FBTextKind kind) {
-	myKindStack.push_back(kind);
+    myKindStack.push_back(kind);
 }
 
 bool BookReader::popKind() {
-	if (!myKindStack.empty()) {
-		myKindStack.pop_back();
-		return true;
-	}
-	return false;
+    if (!myKindStack.empty()) {
+        myKindStack.pop_back();
+        return true;
+    }
+    return false;
 }
 
 bool BookReader::isKindStackEmpty() const {
-	return myKindStack.empty();
+    return myKindStack.empty();
 }
 
 void BookReader::beginParagraph(ZLTextParagraph::Kind kind) {
-	endParagraph();
-	if (myCurrentTextModel != 0) {
-		((ZLTextPlainModel&)*myCurrentTextModel).createParagraph(kind);
-		for (std::vector<FBTextKind>::const_iterator it = myKindStack.begin(); it != myKindStack.end(); ++it) {
-			myCurrentTextModel->addControl(*it, true);
-		}
-		if (!myHyperlinkReference.empty()) {
-			myCurrentTextModel->addHyperlinkControl(myHyperlinkKind, myHyperlinkType, myHyperlinkReference);
-		}
-		myModelsWithOpenParagraphs.push_back(myCurrentTextModel);
-	}
+    endParagraph();
+    if (myCurrentTextModel != 0) {
+        ((ZLTextPlainModel &) *myCurrentTextModel).createParagraph(kind);
+        for (std::vector<FBTextKind>::const_iterator it = myKindStack.begin();
+             it != myKindStack.end(); ++it) {
+            myCurrentTextModel->addControl(*it, true);
+        }
+        if (!myHyperlinkReference.empty()) {
+            myCurrentTextModel->addHyperlinkControl(myHyperlinkKind, myHyperlinkType,
+                                                    myHyperlinkReference);
+        }
+        myModelsWithOpenParagraphs.push_back(myCurrentTextModel);
+    }
 }
 
 void BookReader::endParagraph() {
-	if (paragraphIsOpen()) {
-		flushTextBufferToParagraph();
-		myModelsWithOpenParagraphs.remove(myCurrentTextModel);
-	}
+    if (paragraphIsOpen()) {
+        flushTextBufferToParagraph();
+        myModelsWithOpenParagraphs.remove(myCurrentTextModel);
+    }
 }
 
 void BookReader::addControl(FBTextKind kind, bool start) {
-	if (paragraphIsOpen()) {
-		flushTextBufferToParagraph();
-		myCurrentTextModel->addControl(kind, start);
-	}
-	if (!start && !myHyperlinkReference.empty() && (kind == myHyperlinkKind)) {
-		myHyperlinkReference.erase();
-	}
+    if (paragraphIsOpen()) {
+        flushTextBufferToParagraph();
+        myCurrentTextModel->addControl(kind, start);
+    }
+    if (!start && !myHyperlinkReference.empty() && (kind == myHyperlinkKind)) {
+        myHyperlinkReference.erase();
+    }
 }
 
-void BookReader::addStyleEntry(const ZLTextStyleEntry &entry, const std::vector<std::string> &fontFamilies, unsigned char depth) {
-	if (paragraphIsOpen()) {
-		flushTextBufferToParagraph();
-		myCurrentTextModel->addStyleEntry(entry, fontFamilies, depth);
-	}
+void BookReader::addStyleEntry(const ZLTextStyleEntry &entry,
+                               const std::vector<std::string> &fontFamilies, unsigned char depth) {
+    if (paragraphIsOpen()) {
+        flushTextBufferToParagraph();
+        myCurrentTextModel->addStyleEntry(entry, fontFamilies, depth);
+    }
 }
 
 void BookReader::addStyleEntry(const ZLTextStyleEntry &entry, unsigned char depth) {
-	if (paragraphIsOpen()) {
-		flushTextBufferToParagraph();
-		myCurrentTextModel->addStyleEntry(entry, depth);
-	}
+    if (paragraphIsOpen()) {
+        flushTextBufferToParagraph();
+        myCurrentTextModel->addStyleEntry(entry, depth);
+    }
 }
 
 void BookReader::addStyleCloseEntry() {
-	if (paragraphIsOpen()) {
-		flushTextBufferToParagraph();
-		myCurrentTextModel->addStyleCloseEntry();
-	}
+    if (paragraphIsOpen()) {
+        flushTextBufferToParagraph();
+        myCurrentTextModel->addStyleCloseEntry();
+    }
 }
 
 void BookReader::addFixedHSpace(unsigned char length) {
-	if (paragraphIsOpen()) {
-		flushTextBufferToParagraph();
-		myCurrentTextModel->addFixedHSpace(length);
-	}
+    if (paragraphIsOpen()) {
+        flushTextBufferToParagraph();
+        myCurrentTextModel->addFixedHSpace(length);
+    }
 }
 
 void BookReader::addHyperlinkControl(FBTextKind kind, const std::string &label) {
-	myHyperlinkKind = kind;
-	std::string type;
-	switch (myHyperlinkKind) {
-		case INTERNAL_HYPERLINK:
-			myHyperlinkType = HYPERLINK_INTERNAL;
-			type = "internal";
-			break;
-		case FOOTNOTE:
-			myHyperlinkType = HYPERLINK_FOOTNOTE;
-			type = "footnote";
-			break;
-		case EXTERNAL_HYPERLINK:
-			myHyperlinkType = HYPERLINK_EXTERNAL;
-			type = "external";
-			break;
-		/*case BOOK_HYPERLINK:
-			myHyperlinkType = HYPERLINK_BOOK;
-			type = "book";
-			break;*/
-		default:
-			myHyperlinkType = HYPERLINK_NONE;
-			break;
-	}
+    myHyperlinkKind = kind;
+    std::string type;
+    switch (myHyperlinkKind) {
+        case INTERNAL_HYPERLINK:
+            myHyperlinkType = HYPERLINK_INTERNAL;
+            type = "internal";
+            break;
+        case FOOTNOTE:
+            myHyperlinkType = HYPERLINK_FOOTNOTE;
+            type = "footnote";
+            break;
+        case EXTERNAL_HYPERLINK:
+            myHyperlinkType = HYPERLINK_EXTERNAL;
+            type = "external";
+            break;
+            /*case BOOK_HYPERLINK:
+                myHyperlinkType = HYPERLINK_BOOK;
+                type = "book";
+                break;*/
+        default:
+            myHyperlinkType = HYPERLINK_NONE;
+            break;
+    }
 //	ZLLogger::Instance().println(
 //		"hyperlink",
 //		" + control (" + type + "): " + label
 //	);
-	if (paragraphIsOpen()) {
-		flushTextBufferToParagraph();
-		myCurrentTextModel->addHyperlinkControl(kind, myHyperlinkType, label);
-	}
-	myHyperlinkReference = label;
+    if (paragraphIsOpen()) {
+        flushTextBufferToParagraph();
+        myCurrentTextModel->addHyperlinkControl(kind, myHyperlinkType, label);
+    }
+    myHyperlinkReference = label;
 }
 
 /**
@@ -191,13 +197,13 @@ void BookReader::addHyperlinkControl(FBTextKind kind, const std::string &label) 
  * @param label Maybe a starting chapter, cover image, new section in chapter, or a hyperlink.
  */
 void BookReader::addHyperlinkLabel(const std::string &label) {
-	if (!myCurrentTextModel.isNull()) {
-		int paragraphNumber = myCurrentTextModel->paragraphsNumber();
-		if (paragraphIsOpen()) {
-			--paragraphNumber;
-		}
-		addHyperlinkLabel(label, paragraphNumber);
-	}
+    if (!myCurrentTextModel.isNull()) {
+        int paragraphNumber = myCurrentTextModel->paragraphsNumber();
+        if (paragraphIsOpen()) {
+            --paragraphNumber;
+        }
+        addHyperlinkLabel(label, paragraphNumber);
+    }
 }
 
 /**
@@ -211,152 +217,153 @@ void BookReader::addHyperlinkLabel(const std::string &label, int paragraphNumber
 //		"hyperlink",
 //		" + label: " + label
 //	);
-	myModel.myInternalHyperlinks.insert(std::make_pair(
-		label, BookModel::Label(myCurrentTextModel, paragraphNumber)
-	));
+    myModel.myInternalHyperlinks.insert(std::make_pair(
+            label, BookModel::Label(myCurrentTextModel, paragraphNumber)
+    ));
 }
 
 void BookReader::addData(const std::string &data) {
-	if (!data.empty() && paragraphIsOpen()) {
-		if (!myInsideTitle) {
-			mySectionContainsRegularContents = true;
-		}
-		myBuffer.push_back(data);
-	}
+    if (!data.empty() && paragraphIsOpen()) {
+        if (!myInsideTitle) {
+            mySectionContainsRegularContents = true;
+        }
+        myBuffer.push_back(data);
+    }
 }
 
 void BookReader::addContentsData(const std::string &data) {
-	if (!data.empty() && !myContentsTreeStack.empty()) {
-		myContentsTreeStack.top()->addText(data);
-	}
+    if (!data.empty() && !myContentsTreeStack.empty()) {
+        myContentsTreeStack.top()->addText(data);
+    }
 }
 
 void BookReader::flushTextBufferToParagraph() {
-	myCurrentTextModel->addText(myBuffer);
-	myBuffer.clear();
+    myCurrentTextModel->addText(myBuffer);
+    myBuffer.clear();
 }
 
 void BookReader::addImage(const std::string &id, shared_ptr<const ZLImage> image) {
-	if (image.isNull()) {
-		return;
-	}
+    if (image.isNull()) {
+        return;
+    }
 
-	JNIEnv *env = AndroidUtil::getEnv();
+    JNIEnv *env = AndroidUtil::getEnv();
 
-	jobject javaImage = AndroidUtil::createJavaImage(env, (const ZLFileImage&)*image);
-	JString javaId(env, id);
-	AndroidUtil::Method_BookModel_addImage->call(myModel.myJavaModel, javaId.j(), javaImage);
+    jobject javaImage = AndroidUtil::createJavaImage(env, (const ZLFileImage &) *image);
+    JString javaId(env, id);
+    AndroidUtil::Method_BookModel_addImage->call(myModel.myJavaModel, javaId.j(), javaImage);
 
-	env->DeleteLocalRef(javaImage);
+    env->DeleteLocalRef(javaImage);
 }
 
 void BookReader::addVideoEntry(const ZLVideoEntry &entry) {
-	if (myCurrentTextModel != 0) {
-		mySectionContainsRegularContents = true;
-		endParagraph();
-		beginParagraph();
-		myCurrentTextModel->addVideoEntry(entry);
-		endParagraph();
-	}
+    if (myCurrentTextModel != 0) {
+        mySectionContainsRegularContents = true;
+        endParagraph();
+        beginParagraph();
+        myCurrentTextModel->addVideoEntry(entry);
+        endParagraph();
+    }
 }
 
-void BookReader::addExtensionEntry(const std::string &action, const std::map<std::string,std::string> &data) {
-	if (myCurrentTextModel != 0) {
-		myCurrentTextModel->addExtensionEntry(action, data);
-	}
+void BookReader::addExtensionEntry(const std::string &action,
+                                   const std::map<std::string, std::string> &data) {
+    if (myCurrentTextModel != 0) {
+        myCurrentTextModel->addExtensionEntry(action, data);
+    }
 }
 
 void BookReader::insertEndParagraph(ZLTextParagraph::Kind kind) {
-	if (myCurrentTextModel != 0 && mySectionContainsRegularContents) {
-		std::size_t size = myCurrentTextModel->paragraphsNumber();
-		if (size > 0 && ((*myCurrentTextModel)[(std::size_t)-1])->kind() != kind) {
-			endParagraph();
-			((ZLTextPlainModel&)*myCurrentTextModel).createParagraph(kind);
-			mySectionContainsRegularContents = false;
-		}
-	}
+    if (myCurrentTextModel != 0 && mySectionContainsRegularContents) {
+        std::size_t size = myCurrentTextModel->paragraphsNumber();
+        if (size > 0 && ((*myCurrentTextModel)[(std::size_t) -1])->kind() != kind) {
+            endParagraph();
+            ((ZLTextPlainModel &) *myCurrentTextModel).createParagraph(kind);
+            mySectionContainsRegularContents = false;
+        }
+    }
 }
 
 void BookReader::insertEndOfSectionParagraph() {
-	insertEndParagraph(ZLTextParagraph::END_OF_SECTION_PARAGRAPH);
+    insertEndParagraph(ZLTextParagraph::END_OF_SECTION_PARAGRAPH);
 }
 
 void BookReader::insertPseudoEndOfSectionParagraph() {
-	insertEndParagraph(ZLTextParagraph::PSEUDO_END_OF_SECTION_PARAGRAPH);
+    insertEndParagraph(ZLTextParagraph::PSEUDO_END_OF_SECTION_PARAGRAPH);
 }
 
 void BookReader::insertEndOfTextParagraph() {
-	insertEndParagraph(ZLTextParagraph::END_OF_TEXT_PARAGRAPH);
+    insertEndParagraph(ZLTextParagraph::END_OF_TEXT_PARAGRAPH);
 }
 
 void BookReader::insertEncryptedSectionParagraph() {
-	beginParagraph(ZLTextParagraph::ENCRYPTED_SECTION_PARAGRAPH);
-	endParagraph();
-	beginParagraph(ZLTextParagraph::END_OF_SECTION_PARAGRAPH);
-	endParagraph();
+    beginParagraph(ZLTextParagraph::ENCRYPTED_SECTION_PARAGRAPH);
+    endParagraph();
+    beginParagraph(ZLTextParagraph::END_OF_SECTION_PARAGRAPH);
+    endParagraph();
 }
 
 void BookReader::addImageReference(const std::string &id, short vOffset, bool isCover) {
-	if (myCurrentTextModel != 0) {
-		mySectionContainsRegularContents = true;
-		if (paragraphIsOpen()) {
-			flushTextBufferToParagraph();
-			myCurrentTextModel->addImage(id, vOffset, isCover);
-		} else {
-			beginParagraph();
-			myCurrentTextModel->addControl(IMAGE, true);
-			myCurrentTextModel->addImage(id, vOffset, isCover);
-			myCurrentTextModel->addControl(IMAGE, false);
-			endParagraph();
-		}
-	}
+    if (myCurrentTextModel != 0) {
+        mySectionContainsRegularContents = true;
+        if (paragraphIsOpen()) {
+            flushTextBufferToParagraph();
+            myCurrentTextModel->addImage(id, vOffset, isCover);
+        } else {
+            beginParagraph();
+            myCurrentTextModel->addControl(IMAGE, true);
+            myCurrentTextModel->addImage(id, vOffset, isCover);
+            myCurrentTextModel->addControl(IMAGE, false);
+            endParagraph();
+        }
+    }
 }
 
 /**
  * Add a new chapter navigation to ContentsTree and stack.
  */
 void BookReader::beginContentsParagraph(int referenceNumber) {
-	if (myCurrentTextModel == myModel.myBookTextModel) {
-		// special treatment when invalid referenceNumber.
-		if (referenceNumber == -1) {
-			referenceNumber = myCurrentTextModel->paragraphsNumber();
-		}
+    if (myCurrentTextModel == myModel.myBookTextModel) {
+        // special treatment when invalid referenceNumber.
+        if (referenceNumber == -1) {
+            referenceNumber = myCurrentTextModel->paragraphsNumber();
+        }
 
-		// get the current chapter's parent, root tree provided by contentsTree().
-		shared_ptr<ContentsTree> parent =
-			myContentsTreeStack.empty() ? myModel.contentsTree() : myContentsTreeStack.top();
-		if (parent->text().empty()) {
-			parent->addText("...");
-		}
+        // get the current chapter's parent, root tree provided by contentsTree().
+        shared_ptr<ContentsTree> parent =
+                myContentsTreeStack.empty() ? myModel.contentsTree() : myContentsTreeStack.top();
+        if (parent->text().empty()) {
+            parent->addText("...");
+        }
 
-		// add this chapter to parent's children.
-		new ContentsTree(*parent, referenceNumber);
+        // add this chapter to parent's children.
+        new ContentsTree(*parent, referenceNumber);
 
-		// push this chapter ContentsTree to stack.
-		const std::vector<shared_ptr<ContentsTree> > &children = parent->children();
-		myContentsTreeStack.push(children[children.size() - 1]);
+        // push this chapter ContentsTree to stack.
+        const std::vector<shared_ptr<ContentsTree> > &children = parent->children();
+        myContentsTreeStack.push(children[children.size() - 1]);
 
-		// mark toc stack valid data.
-		myContentsParagraphExists = true;
-	}
+        // mark toc stack valid data.
+        myContentsParagraphExists = true;
+    }
 }
 
 /**
  * Pop up the chapter point from stack top.
  */
 void BookReader::endContentsParagraph() {
-	if (!myContentsTreeStack.empty()) {
-		shared_ptr<ContentsTree> tree = myContentsTreeStack.top();
-		if (tree->text().empty()) {
-			tree->addText("...");
-		}
-		myContentsTreeStack.pop();
-	}
-	myContentsParagraphExists = false;
+    if (!myContentsTreeStack.empty()) {
+        shared_ptr<ContentsTree> tree = myContentsTreeStack.top();
+        if (tree->text().empty()) {
+            tree->addText("...");
+        }
+        myContentsTreeStack.pop();
+    }
+    myContentsParagraphExists = false;
 }
 
 std::string BookReader::putFontEntry(const std::string &family, shared_ptr<FontEntry> fontEntry) {
-	return myModel.myFontManager.put(family, fontEntry);
+    return myModel.myFontManager.put(family, fontEntry);
 }
 
 /*
@@ -370,5 +377,5 @@ void BookReader::setReference(std::size_t contentsParagraphNumber, int reference
 */
 
 void BookReader::reset() {
-	myKindStack.clear();
+    myKindStack.clear();
 }

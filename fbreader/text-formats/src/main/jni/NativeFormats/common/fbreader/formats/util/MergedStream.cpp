@@ -20,53 +20,53 @@
 #include "MergedStream.h"
 
 bool MergedStream::open() {
-	close();
-	resetToStart();
-	myOffset = 0;
-	myCurrentStream = nextStream();
-	return !myCurrentStream.isNull() && myCurrentStream->open();
+    close();
+    resetToStart();
+    myOffset = 0;
+    myCurrentStream = nextStream();
+    return !myCurrentStream.isNull() && myCurrentStream->open();
 }
 
 std::size_t MergedStream::read(char *buffer, std::size_t maxSize) {
-	std::size_t bytesToRead = maxSize;
-	while ((bytesToRead > 0) && !myCurrentStream.isNull()) {
-		std::size_t len = myCurrentStream->read(buffer, bytesToRead);
-		bytesToRead -= len;
-		if (buffer != 0) {
-			buffer += len;
-		}
-		if (bytesToRead != 0) {
-			if (buffer != 0) {
-				*buffer++ = '\n';
-			}
-			bytesToRead--;
-			myCurrentStream = nextStream();
-			if (myCurrentStream.isNull() || !myCurrentStream->open()) {
-				break;
-			}
-		}
-	}
-	myOffset += maxSize - bytesToRead;
-	return maxSize - bytesToRead;
+    std::size_t bytesToRead = maxSize;
+    while ((bytesToRead > 0) && !myCurrentStream.isNull()) {
+        std::size_t len = myCurrentStream->read(buffer, bytesToRead);
+        bytesToRead -= len;
+        if (buffer != 0) {
+            buffer += len;
+        }
+        if (bytesToRead != 0) {
+            if (buffer != 0) {
+                *buffer++ = '\n';
+            }
+            bytesToRead--;
+            myCurrentStream = nextStream();
+            if (myCurrentStream.isNull() || !myCurrentStream->open()) {
+                break;
+            }
+        }
+    }
+    myOffset += maxSize - bytesToRead;
+    return maxSize - bytesToRead;
 }
 
 void MergedStream::close() {
-	myCurrentStream.reset();
+    myCurrentStream.reset();
 }
 
 void MergedStream::seek(int offset, bool absoluteOffset) {
-	// works for nonnegative offsets only
-	if (absoluteOffset) {
-		offset -= myOffset;
-	}
-	read(0, offset);
+    // works for nonnegative offsets only
+    if (absoluteOffset) {
+        offset -= myOffset;
+    }
+    read(0, offset);
 }
 
 std::size_t MergedStream::offset() const {
-	return myOffset;
+    return myOffset;
 }
 
 std::size_t MergedStream::sizeOfOpened() {
-	// coudn't be implemented
-	return 0;
+    // coudn't be implemented
+    return 0;
 }

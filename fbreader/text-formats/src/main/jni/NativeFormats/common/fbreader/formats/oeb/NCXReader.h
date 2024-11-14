@@ -28,47 +28,52 @@
 class NCXReader : public ZLXMLReader {
 
 public:
-	struct NavPoint {
-		NavPoint();
-		NavPoint(int order, std::size_t level);
+    struct NavPoint {
+        NavPoint();
 
-		// Define the reading order which is initialized by
-		// myPlayIndex's incrementing from -65535.
-		int Order;
-		// The depth of chapter points (Level 1 directory: 0,
-		// level 2 directory: 1,...)is determined by myPointStack.
-		std::size_t Level;
-		// The chapter name.
-		std::string Text;
-		// The chapter file name.
-		std::string ContentHRef;
-	};
+        NavPoint(int order, std::size_t level);
+
+        // Define the reading order which is initialized by
+        // myPlayIndex's incrementing from -65535.
+        int Order;
+        // The depth of chapter points (Level 1 directory: 0,
+        // level 2 directory: 1,...)is determined by myPointStack.
+        std::size_t Level;
+        // The chapter name.
+        std::string Text;
+        // The chapter file name.
+        std::string ContentHRef;
+    };
 
 public:
-	NCXReader();
-	const std::map<int,NavPoint> &navigationMap() const;
+    NCXReader();
+
+    const std::map<int, NavPoint> &navigationMap() const;
 
 private:
-	void startElementHandler(const char *tag, const char **attributes);
-	void endElementHandler(const char *tag);
-	void characterDataHandler(const char *text, std::size_t len);
-	const std::vector<std::string> &externalDTDs() const;
+    void startElementHandler(const char *tag, const char **attributes);
+
+    void endElementHandler(const char *tag);
+
+    void characterDataHandler(const char *text, std::size_t len);
+
+    const std::vector<std::string> &externalDTDs() const;
 
 private:
-	// Save the chapter point corresponding to order (- 65535 increment)
-	std::map<int,NavPoint> myNavigationMap;
-	// Temporary stack for parsing chapter points.
-	std::vector<NavPoint> myPointStack;
+    // Save the chapter point corresponding to order (- 65535 increment)
+    std::map<int, NavPoint> myNavigationMap;
+    // Temporary stack for parsing chapter points.
+    std::vector<NavPoint> myPointStack;
 
-	enum {
-		READ_NONE,
-		READ_MAP,
-		READ_POINT,
-		READ_LABEL,
-		READ_TEXT
-	} myReadState;
+    enum {
+        READ_NONE,
+        READ_MAP,
+        READ_POINT,
+        READ_LABEL,
+        READ_TEXT
+    } myReadState;
 
-	int myPlayIndex;
+    int myPlayIndex;
 };
 
 #endif /* __NCXREADER_H__ */

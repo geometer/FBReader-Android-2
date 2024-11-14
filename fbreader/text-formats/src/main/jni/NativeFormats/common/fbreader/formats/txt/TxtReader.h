@@ -27,30 +27,36 @@
 #include "../EncodedTextReader.h"
 
 class ZLInputStream;
+
 class TxtReaderCore;
 
 class TxtReader : public EncodedTextReader {
 
 public:
-	void readDocument(ZLInputStream &stream);
+    void readDocument(ZLInputStream &stream);
 
 protected:
-	TxtReader(const std::string &encoding);
-	virtual ~TxtReader();
+    TxtReader(const std::string &encoding);
+
+    virtual ~TxtReader();
 
 protected:
-	virtual void startDocumentHandler() = 0;
-	virtual void endDocumentHandler() = 0;
+    virtual void startDocumentHandler() = 0;
 
-	virtual bool characterDataHandler(std::string &str) = 0;
-	virtual bool newLineHandler() = 0;
+    virtual void endDocumentHandler() = 0;
+
+    virtual bool characterDataHandler(std::string &str) = 0;
+
+    virtual bool newLineHandler() = 0;
 
 private:
-	shared_ptr<TxtReaderCore> myCore;
+    shared_ptr<TxtReaderCore> myCore;
 
-friend class TxtReaderCore;
-friend class TxtReaderCoreUtf16;
-friend class TxtReaderCoreUtf16BE;
+    friend class TxtReaderCore;
+
+    friend class TxtReaderCoreUtf16;
+
+    friend class TxtReaderCoreUtf16BE;
 };
 
 #endif /* __TXTREADER_H__ */

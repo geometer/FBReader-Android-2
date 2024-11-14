@@ -27,24 +27,27 @@ class Book;
 class OEBUidReader : public OPFReader {
 
 public:
-	OEBUidReader(Book &book);
-	bool readUids(const ZLFile &file);
+    OEBUidReader(Book &book);
 
-	void startElementHandler(const char *tag, const char **attributes);
-	void endElementHandler(const char *tag);
-	void characterDataHandler(const char *text, std::size_t len);
+    bool readUids(const ZLFile &file);
+
+    void startElementHandler(const char *tag, const char **attributes);
+
+    void endElementHandler(const char *tag);
+
+    void characterDataHandler(const char *text, std::size_t len);
 
 private:
-	Book &myBook;
+    Book &myBook;
 
-	enum {
-		READ_NONE,
-		READ_METADATA,
-		READ_IDENTIFIER,
-	} myReadState;
+    enum {
+        READ_NONE,
+        READ_METADATA,
+        READ_IDENTIFIER,
+    } myReadState;
 
-	std::string myIdentifierScheme;
-	std::string myBuffer;
+    std::string myIdentifierScheme;
+    std::string myBuffer;
 };
 
 #endif /* __OEBUIDREADER_H__ */
