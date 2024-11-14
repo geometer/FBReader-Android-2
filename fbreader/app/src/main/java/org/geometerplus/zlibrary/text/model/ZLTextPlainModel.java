@@ -39,7 +39,7 @@ public final class ZLTextPlainModel implements ZLTextModel, ZLTextStyleEntry.Fea
      */
     private final CachedCharStorage myStorage;
     /**
-     *        key                                                 value
+     * key                                                 value
      * "media/cover.png" - ZFileImage{ ZLZipEntryFile { ZLFile [/storage/emulated/0/GGG.epub:media/cover.png]} }
      */
     private final Map<String, ZLImage> myImageMap;
@@ -110,12 +110,10 @@ public final class ZLTextPlainModel implements ZLTextModel, ZLTextStyleEntry.Fea
     /**
      * Binary search the index of array which the input text size value locates array element range.
      *
-     * @param array the total text size before the corresponding paragraph which is array.
+     * @param array  the total text size before the corresponding paragraph which is array.
      * @param length the number of paragraphs.
-     * @param value the input text size.
-     *
-     * @return
-     * if the value isn't equal to the array element(such as: value = 10850, array = [...,9805,11000,15300,...]),
+     * @param value  the input text size.
+     * @return if the value isn't equal to the array element(such as: value = 10850, array = [...,9805,11000,15300,...]),
      * this will return (-lowIndex - 1), namely 15300's index, this because the caller will
      * use the negative return result minus one to get the correct index.
      */
@@ -491,18 +489,14 @@ public final class ZLTextPlainModel implements ZLTextModel, ZLTextStyleEntry.Fea
 
                     // add text color.
                     if (ZLTextStyleEntry.isFeatureSupported(mask, COLOR)) {
-                        int colorLen = (int) data[dataOffset++];
-                        colorLen += (((int) data[dataOffset++]) << 16);
-                        colorLen = Math.min(colorLen, data.length - dataOffset);
+                        final short colorLen = (short) data[dataOffset++];
                         String color = new String(data, dataOffset, colorLen);
                         entry.setColor(CSSUtil.transferColor(color));
                         dataOffset += colorLen;
                     }
 
                     if (ZLTextStyleEntry.isFeatureSupported(mask, BACKGROUND_COLOR)) {
-                        int colorLen = (int) data[dataOffset++];
-                        colorLen += (((int) data[dataOffset++]) << 16);
-                        colorLen = Math.min(colorLen, data.length - dataOffset);
+                        final short colorLen = (short) data[dataOffset++];
                         String color = new String(data, dataOffset, colorLen);
                         entry.setBgColor(CSSUtil.transferColor(color));
                         dataOffset += colorLen;
