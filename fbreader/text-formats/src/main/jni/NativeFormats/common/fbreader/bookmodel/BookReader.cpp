@@ -205,6 +205,19 @@ void BookReader::addHyperlinkLabel(const std::string &label) {
  *
  * @param label Maybe a alias[0, 1, 2, ...] or alias splicing '#' and linkId. eg: "0#cover-image".
  * @param paragraphNumber The current total paragraph number till this link.
+ *
+ * 1. Hyper link:(example)
+ *    <!-- Anchor link -->
+ *    <a href="#toc-title">Jump to Title</a>
+ *
+ *    <!-- Jump to this title -->
+ *    <h1 id="toc-title">GROWTH - Everything You Need to Know Before You Can Grow Your Business</h1>
+ *
+ *  2. Attention:（Besides id can also be seen as a "id" selector.）
+ *     #toc-title {
+ *         margin-top: 10px;
+ *         font-size:1.0em
+ *     }
  */
 void BookReader::addHyperlinkLabel(const std::string &label, int paragraphNumber) {
 //	ZLLogger::Instance().println(
