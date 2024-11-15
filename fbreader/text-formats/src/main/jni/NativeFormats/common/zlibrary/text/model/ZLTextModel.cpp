@@ -329,25 +329,22 @@ void ZLTextModel::addStyleEntry(const ZLTextStyleEntry &entry,
         *address++ = entry.myFontModifier;
     }
 
-    // add color at last location.
+    // add color.
     if (entry.isFeatureSupported(ZLTextStyleEntry::COLOR)) {
         ZLUnicodeUtil::Ucs2String ucs2str;
         ZLUnicodeUtil::utf8ToUcs2(ucs2str, entry.myColor);
-        const std::size_t colorlen = ucs2str.size();
-        // write the color str length.
-        ZLCachedMemoryAllocator::writeUInt32(address, colorlen);
-        // write the color str info.
-        std::memcpy(address + 2, &ucs2str.front(), 2 * colorlen);
+        const std::size_t colorLen = ucs2str.size();
+        ZLCachedMemoryAllocator::writeUInt16(address, colorLen);
+        std::memcpy(address + 2, &ucs2str.front(), 2 * colorLen);
+        address += 2 + 2 * colorLen; // move address.
     }
 
     if (entry.isFeatureSupported(ZLTextStyleEntry::BACKGROUND_COLOR)) {
-        ZLUnicodeUtil::Ucs2String ucs2str;
-        ZLUnicodeUtil::utf8ToUcs2(ucs2str, entry.myBgColor);
-        const std::size_t colorlen = ucs2str.size();
-        // write the color str length.
-        ZLCachedMemoryAllocator::writeUInt32(address, colorlen);
-        // write the color str info.
-        std::memcpy(address + 2, &ucs2str.front(), 2 * colorlen);
+        ZLUnicodeUtil::Ucs2String ucs2strBg;
+        ZLUnicodeUtil::utf8ToUcs2(ucs2strBg, entry.myBgColor);
+        const std::size_t colorLen = ucs2strBg.size();
+        ZLCachedMemoryAllocator::writeUInt16(address, colorLen);
+        std::memcpy(address + 2, &ucs2strBg.front(), 2 * colorLen);
     }
     // --- writing entry
 
