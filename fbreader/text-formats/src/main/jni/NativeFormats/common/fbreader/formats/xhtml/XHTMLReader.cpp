@@ -1004,6 +1004,11 @@ void XHTMLReader::startElementHandler(const char *tag, const char **attributes) 
         applyTagStyles(EMPTY, *it);
         applyTagStyles(sTag, *it);
     }
+    // apply id selector.
+    if (id != 0) {
+        applyTagStyles(HASH + id, EMPTY);
+    }
+    // apply inline style.
     const char *style = attributeValue(attributes, "style");
     if (style != 0) {
         //ZLLogger::Instance().println("CSS", std::string("parsing style attribute: ") + style);
