@@ -1,3 +1,6 @@
+15 Nov 2024
+TODO： Mark not support(https/http/ftps、data:image/.+;base64,.+) kind image for tag (img src="xx").
+
 16 Jun 2017
 
 2.6.15. Nook Glowlight Plus support, some fixes backported from FBReader 2.7.X series.
