@@ -180,8 +180,7 @@ final class ZLTextPage {
             if (info.isVisible()) {
                 visibleLineOccured = true;
             }
-//            height -= info.getHeight() + info.getDescent() + info.getVSpaceAfter();
-            height -= info.getHeight() + info.getVSpaceAfter();
+            height -= info.getHeight() + info.getDescent() + info.getVSpaceAfter();
             if (visibleLineOccured && (height <= 0)) {
                 break;
             }

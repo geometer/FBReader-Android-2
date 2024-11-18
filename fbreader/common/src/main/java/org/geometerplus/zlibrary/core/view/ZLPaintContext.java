@@ -187,9 +187,9 @@ abstract public class ZLPaintContext {
 
     abstract public void drawLine(int x0, int y0, int x1, int y1);
 
-    abstract public void fillRectangle(int x0, int y0, int x1, int y1);
-
     abstract public void drawRect(Rect rect);
+
+    abstract public void fillRectangle(int x0, int y0, int x1, int y1);
 
     abstract public void drawPolygonalLine(int[] xs, int[] ys);
 
