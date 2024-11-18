@@ -481,8 +481,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
         for (ZLTextLineInfo info : lineInfos) {
             info.adjust(previousInfo);
             prepareTextLine(page, info, x, y, columnIndex);
-//            y += info.getHeight() + info.getDescent() + info.getVSpaceAfter();
-            y += info.getHeight() + info.getVSpaceAfter();
+            y += info.getHeight() + info.getDescent() + info.getVSpaceAfter();
             labels[++index] = page.TextElementMap.size();
             if (index == page.Column0Height) {
                 y = getTopMargin();
@@ -840,8 +839,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 }
 
                 final int areaX = area.XStart;
-//                final int areaY = area.YEnd - getElementDescent(element) - getTextStyle().getVerticalAlign(metrics());
-                final int areaY = area.YEnd - area.Descent;
+                final int areaY = area.YEnd - getElementDescent(element) - getTextStyle().getVerticalAlign(metrics());
                 if (element instanceof ZLTextWord) {
                     final ZLTextPosition pos =
                             new ZLTextFixedPosition(info.ParagraphCursor.Index, wordIndex, 0);
@@ -965,8 +963,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 // compute the current new text-line detail info.
                 info = processTextLine(page, paragraphCursor, info.EndElementIndex, info.EndCharIndex, endIndex, previousInfo);
                 // adjust the available height.
-//                textAreaHeight -= info.getHeight() + info.getDescent();
-                textAreaHeight -= info.getHeight();
+                textAreaHeight -= info.getHeight() + info.getDescent();
 
                 // if no height to draw, and the numbers of the page's text-line are greater
                 // than the first column line counts.
@@ -975,8 +972,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                     if (page.Column0Height == 0 && page.twoColumnView()) {
                         // re-init the available text height.
                         textAreaHeight = page.getTextHeight();
-//                        textAreaHeight -= info.getHeight() + info.getDescent();
-                        textAreaHeight -= info.getHeight();
+                        textAreaHeight -= info.getHeight() + info.getDescent();
                         // save the first column view text-line counts to Column0Height.
                         // we will show the second column view according to the Column0Height value.
                         page.Column0Height = page.LineInfos.size();
@@ -1149,7 +1145,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
         // init the computing used width and height, etc.
         int newWidth = info.getWidth();
         int newHeight = info.getHeight();
-//        int newDescent = info.getDescent();
+        int newDescent = info.getDescent();
         boolean wordOccurred = false;
         boolean isVisible = false;
         int lastSpaceWidth = 0;
@@ -1191,7 +1187,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
             newWidth += getElementWidth(element, currentCharIndex);
             // adjust the appropriate height and descent.
             newHeight = Math.max(newHeight, getElementHeight(element));
-//            newDescent = Math.max(newDescent, getElementDescent(element));
+            newDescent = Math.max(newDescent, getElementDescent(element));
 
             // HSpace: {@link Character.isWhitespace(ch)} means you can begin a newline
             // NBSpace: if not the HSpace,but {@link Character.isSpaceChar(ch}. means Non Breaking Space.
@@ -1263,9 +1259,9 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 if (info.getHeight() < newHeight) {
                     info.setHeight(newHeight);
                 }
-//                if (info.getDescent() < newDescent) {
-//                    info.setDescent(newDescent);
-//                }
+                if (info.getDescent() < newDescent) {
+                    info.setDescent(newDescent);
+                }
 
                 // For Chinese, the end of the line doesn't contain the end value;
                 // for English, it may contain the first half of a word.
@@ -1281,7 +1277,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 words.add(new WordInfo(
                         (ZLTextWord) previousElement,
                         currentElementIndex - 1, previousStartCharIndex,
-                        newWidth, newHeight, /*newDescent*/0,
+                        newWidth, newHeight, newDescent,
                         internalSpaceCounter, getTextStyle()
                 ));
             }
@@ -1387,9 +1383,9 @@ public abstract class ZLTextView extends ZLTextViewBase {
                         if (info.getHeight() < newHeight) {
                             info.setHeight(newHeight);
                         }
-//                        if (info.getDescent() < newDescent) {
-//                            info.setDescent(newDescent);
-//                        }
+                        if (info.getDescent() < newDescent) {
+                            info.setDescent(newDescent);
+                        }
                         info.EndElementIndex = currentElementIndex;
                         // this hyphenation position is contained.
                         info.EndCharIndex = hyphenationPosition;
@@ -1433,9 +1429,9 @@ public abstract class ZLTextView extends ZLTextViewBase {
                         if (info.getHeight() < wi.Height) {
                             info.setHeight(wi.Height);
                         }
-//                        if (info.getDescent() < wi.Descent) {
-//                            info.setDescent(wi.Descent);
-//                        }
+                        if (info.getDescent() < wi.Descent) {
+                            info.setDescent(wi.Descent);
+                        }
                         info.EndElementIndex = wi.ElementIndex;
                         info.EndCharIndex = pos;
                         info.SpaceCounter = wi.SpaceCounter;
@@ -1535,7 +1531,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                                 true, // is last in element
                                 false, // add hyphenation sign
                                 false, // changed style
-                                getTextStyle(), element, x, x + spaceLength, y, y, columnIndex, 0
+                                getTextStyle(), element, x, x + spaceLength, y, y, columnIndex
                         );
                     } else {
                         spaceElement = null;
@@ -1547,23 +1543,19 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 }
             } else if (element instanceof ZLTextWord || element instanceof ZLTextImageElement || element instanceof ZLTextVideoElement || element instanceof ExtensionElement) {
                 final int height = getElementHeight(element);
-//                final int descent = getElementDescent(element);
+                final int descent = getElementDescent(element);
                 final int length = element instanceof ZLTextWord ? ((ZLTextWord) element).Length : 0;
                 if (spaceElement != null) {
                     page.TextElementMap.add(spaceElement);
                     spaceElement = null;
                 }
-
-                int yTop = y - height + 1 + getContext().getStringHeight() * getTextStyle().getLineSpacePercent() / 100 - getContext().getStringHeight();
-                int yEnd = y - getTextStyle().getVerticalAlign(metrics());
                 page.TextElementMap.add(new ZLTextElementArea(
                         paragraphIndex, wordIndex, charIndex,
                         length - charIndex,
                         true, // is last in element
                         false, // add hyphenation sign
                         changeStyle, getTextStyle(), element,
-//                        x, x + width - 1, y - height + 1, y + descent, columnIndex
-                        x, x + width - 1, yTop, yEnd, columnIndex, getElementDescent(element)
+                        x, x + width - 1, y - height + 1, y + descent, columnIndex
                 ));
                 changeStyle = false;
                 wordOccurred = true;
@@ -1582,9 +1574,6 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 final int width = getWordWidth(word, 0, len, addHyphenationSign);
                 final int height = getElementHeight(word);
                 final int descent = context.getDescent();
-
-                int yTop = y - height + 1 + getContext().getStringHeight() * getTextStyle().getLineSpacePercent() / 100 - getContext().getStringHeight();
-                int yEnd = y - getTextStyle().getVerticalAlign(metrics());
                 page.TextElementMap.add(
                         new ZLTextElementArea(
                                 paragraphIndex, wordIndex, 0,
@@ -1592,8 +1581,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                                 false, // is last in element
                                 addHyphenationSign,
                                 changeStyle, getTextStyle(), word,
-//                                x, x + width - 1, y - height + 1, y + descent, columnIndex
-                                x, x + width - 1, yTop, yEnd, columnIndex, getElementDescent(word)
+                                x, x + width - 1, y - height + 1, y + descent, columnIndex
                         )
                 );
             }
@@ -1806,8 +1794,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
     }
 
     private int infoSize(ZLTextLineInfo info, int unit) {
-//        return (unit == SizeUnit.PIXEL_UNIT) ? (info.getHeight() + info.getDescent() + info.getVSpaceAfter()) : (info.isVisible() ? 1 : 0);
-        return (unit == SizeUnit.PIXEL_UNIT) ? (info.getHeight() + info.getVSpaceAfter()) : (info.isVisible() ? 1 : 0);
+        return (unit == SizeUnit.PIXEL_UNIT) ? (info.getHeight() + info.getDescent() + info.getVSpaceAfter()) : (info.isVisible() ? 1 : 0);
     }
 
     /**

@@ -20,27 +20,11 @@
 package org.geometerplus.zlibrary.text.view;
 
 public final class ZLTextElementArea extends ZLTextFixedPosition {
-    /**
-     * X start coordinate
-     */
     public final int XStart;
-    /**
-     * X end coordinate
-     */
     public final int XEnd;
-    /**
-     * Y start coordinate, now represent the text ascent
-     */
     public final int YStart;
-    /**
-     * Y end coordinate, now represent the text descent
-     */
     public final int YEnd;
     public final int ColumnIndex;
-    /**
-     * used to compute the baseline when draw text
-     */
-    public final int Descent;
 
     final int Length;
     final boolean AddHyphenationSign;
@@ -50,7 +34,7 @@ public final class ZLTextElementArea extends ZLTextFixedPosition {
 
     private final boolean myIsLastInElement;
 
-    ZLTextElementArea(int paragraphIndex, int elementIndex, int charIndex, int length, boolean lastInElement, boolean addHyphenationSign, boolean changeStyle, ZLTextStyle style, ZLTextElement element, int xStart, int xEnd, int yStart, int yEnd, int columnIndex, int descent) {
+    ZLTextElementArea(int paragraphIndex, int elementIndex, int charIndex, int length, boolean lastInElement, boolean addHyphenationSign, boolean changeStyle, ZLTextStyle style, ZLTextElement element, int xStart, int xEnd, int yStart, int yEnd, int columnIndex) {
         super(paragraphIndex, elementIndex, charIndex);
 
         XStart = xStart;
@@ -58,7 +42,6 @@ public final class ZLTextElementArea extends ZLTextFixedPosition {
         YStart = yStart;
         YEnd = yEnd;
         ColumnIndex = columnIndex;
-        Descent = descent;
 
         Length = length;
         myIsLastInElement = lastInElement;

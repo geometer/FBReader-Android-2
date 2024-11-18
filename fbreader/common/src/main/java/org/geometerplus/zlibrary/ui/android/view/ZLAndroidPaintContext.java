@@ -45,7 +45,6 @@ import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 public final class ZLAndroidPaintContext extends ZLPaintContext {
     public static ZLBooleanOption AntiAliasOption = new ZLBooleanOption("Fonts", "AntiAlias", true);
@@ -369,8 +368,7 @@ public final class ZLAndroidPaintContext extends ZLPaintContext {
 
     @Override
     protected int getStringHeightInternal() {
-//        return (int) (myTextPaint.getTextSize() + 0.5f);
-        return (int)(-myTextPaint.ascent() + myTextPaint.descent());
+        return (int) (myTextPaint.getTextSize() + 0.5f);
     }
 
     @Override
@@ -458,6 +456,7 @@ public final class ZLAndroidPaintContext extends ZLPaintContext {
     public void drawRect(Rect rect) {
         myCanvas.drawRect(rect, myLinePaint);
     }
+
 
     @Override
     public void fillCircle(int x, int y, int radius) {

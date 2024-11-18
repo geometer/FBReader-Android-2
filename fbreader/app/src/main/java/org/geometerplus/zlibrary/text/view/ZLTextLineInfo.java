@@ -45,7 +45,6 @@ final class ZLTextLineInfo {
      * The height of this text line.
      */
     private int mHeight;
-    @Deprecated
     private int mDescent;
     private int mVSpaceBefore;
     private int mVSpaceAfter;
@@ -78,12 +77,10 @@ final class ZLTextLineInfo {
         }
     }
 
-    @Deprecated
     public int getDescent() {
         return mDescent;
     }
 
-    @Deprecated
     public void setDescent(int descent) {
         this.mDescent = descent;
     }

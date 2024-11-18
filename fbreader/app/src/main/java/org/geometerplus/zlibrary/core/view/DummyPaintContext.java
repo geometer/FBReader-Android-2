@@ -129,12 +129,12 @@ final class DummyPaintContext extends ZLPaintContext {
     }
 
     @Override
-    public void fillRectangle(int x0, int y0, int x1, int y1) {
+    public void drawRect(Rect rect) {
+
     }
 
     @Override
-    public void drawRect(Rect rect) {
-
+    public void fillRectangle(int x0, int y0, int x1, int y1) {
     }
 
     @Override
