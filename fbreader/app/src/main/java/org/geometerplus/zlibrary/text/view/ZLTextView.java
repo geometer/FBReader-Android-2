@@ -1545,7 +1545,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 final int descent = getElementDescent(element);
                 final int ascent = getElementAscent(element);
                 boolean isWord = element instanceof ZLTextWord;
-                int yEnd = isWord ? (y + descent - getTextStyle().getVerticalAlign(metrics())) : (y + descent);
+                int yEnd = y + descent - getTextStyle().getVerticalAlign(metrics());
                 int yStart = isWord ? (yEnd - (descent - ascent) - 1) : (y - height + 1);
                 final int length = element instanceof ZLTextWord ? ((ZLTextWord) element).Length : 0;
                 if (spaceElement != null) {
