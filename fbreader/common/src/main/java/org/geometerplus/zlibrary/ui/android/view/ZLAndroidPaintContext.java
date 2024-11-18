@@ -377,6 +377,11 @@ public final class ZLAndroidPaintContext extends ZLPaintContext {
     }
 
     @Override
+    protected int getAscentInternal() {
+        return (int) (myTextPaint.ascent() + 0.5f);
+    }
+
+    @Override
     public void drawString(int x, int y, char[] string, int offset, int length) {
         boolean containsSoftHyphen = false;
         for (int i = offset; i < offset + length; ++i) {

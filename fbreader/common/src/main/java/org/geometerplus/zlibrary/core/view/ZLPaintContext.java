@@ -50,6 +50,7 @@ abstract public class ZLPaintContext {
 
     private Map<Character, Integer> myCharHeights = new TreeMap<Character, Integer>();
     private int myDescent = -1;
+    protected int myAscent = Integer.MIN_VALUE;
 
     protected ZLPaintContext(SystemInfo systemInfo) {
         mySystemInfo = systemInfo;
@@ -101,6 +102,7 @@ abstract public class ZLPaintContext {
             mySpaceWidth = -1;
             myStringHeight = -1;
             myDescent = -1;
+            myAscent = Integer.MIN_VALUE;
             myCharHeights.clear();
         }
     }
@@ -174,6 +176,17 @@ abstract public class ZLPaintContext {
     }
 
     abstract protected int getDescentInternal();
+
+    public final int getAscent() {
+        int ascent = myAscent;
+        if (ascent == Integer.MIN_VALUE) {
+            ascent = getAscentInternal();
+            myAscent = ascent;
+        }
+        return ascent;
+    }
+
+    abstract protected int getAscentInternal();
 
     public final void drawString(int x, int y, String string) {
         drawString(x, y, string.toCharArray(), 0, string.length());

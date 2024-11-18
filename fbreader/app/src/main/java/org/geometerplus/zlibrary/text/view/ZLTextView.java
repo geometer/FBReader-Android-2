@@ -839,7 +839,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 }
 
                 final int areaX = area.XStart;
-                final int areaY = area.YEnd - getElementDescent(element) - getTextStyle().getVerticalAlign(metrics());
+                final int areaY = area.YEnd - getElementDescent(element);
                 if (element instanceof ZLTextWord) {
                     final ZLTextPosition pos =
                             new ZLTextFixedPosition(info.ParagraphCursor.Index, wordIndex, 0);
@@ -932,8 +932,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
      * Build the specific page info base on the start cursor.
      * This will output the end cursor result.
      *
-     * @param page The page which to build.
-     * @param start The known page start cursor.
+     * @param page   The page which to build.
+     * @param start  The known page start cursor.
      * @param result To output the end cursor.
      */
     private void buildInfos(ZLTextPage page, ZLTextWordCursor start, ZLTextWordCursor result) {
@@ -1038,17 +1038,16 @@ public abstract class ZLTextView extends ZLTextViewBase {
     }
 
     /**
-     *  Compute the text-line info based on the input params.
+     * Compute the text-line info based on the input params.
      *
      * @param page
      * @param paragraphCursor The input paragraph cursor.
-     * @param startIndex The element start index in the paragraph elements list
-     *                   {@link ZLTextParagraphCursor#getElement(int)}.
-     * @param startCharIndex The start char index in the ZLTextElement.
-     *                       Such as: "good" is divided into "go-" and "od"
-     * @param endIndex The end index limitation which can't be arrived.
-     * @param previousInfo The last text-line info, maybe null.
-     *
+     * @param startIndex      The element start index in the paragraph elements list
+     *                        {@link ZLTextParagraphCursor#getElement(int)}.
+     * @param startCharIndex  The start char index in the ZLTextElement.
+     *                        Such as: "good" is divided into "go-" and "od"
+     * @param endIndex        The end index limitation which can't be arrived.
+     * @param previousInfo    The last text-line info, maybe null.
      * @return {@link #processTextLineInternal }
      */
     private ZLTextLineInfo processTextLine(
@@ -1544,6 +1543,10 @@ public abstract class ZLTextView extends ZLTextViewBase {
             } else if (element instanceof ZLTextWord || element instanceof ZLTextImageElement || element instanceof ZLTextVideoElement || element instanceof ExtensionElement) {
                 final int height = getElementHeight(element);
                 final int descent = getElementDescent(element);
+                final int ascent = getElementAscent(element);
+                boolean isWord = element instanceof ZLTextWord;
+                int yEnd = isWord ? (y + descent - getTextStyle().getVerticalAlign(metrics())) : (y + descent);
+                int yStart = isWord ? (yEnd - (descent - ascent) - 1) : (y - height + 1);
                 final int length = element instanceof ZLTextWord ? ((ZLTextWord) element).Length : 0;
                 if (spaceElement != null) {
                     page.TextElementMap.add(spaceElement);
@@ -1555,7 +1558,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
                         true, // is last in element
                         false, // add hyphenation sign
                         changeStyle, getTextStyle(), element,
-                        x, x + width - 1, y - height + 1, y + descent, columnIndex
+//                        x, x + width - 1, y - height + 1, y + descent, columnIndex
+                        x, x + width - 1, yStart, yEnd, columnIndex
                 ));
                 changeStyle = false;
                 wordOccurred = true;
@@ -1574,6 +1578,9 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 final int width = getWordWidth(word, 0, len, addHyphenationSign);
                 final int height = getElementHeight(word);
                 final int descent = context.getDescent();
+                final int ascent = getElementAscent(word);
+                int yEnd = y + descent - getTextStyle().getVerticalAlign(metrics());
+                int yStart = yEnd - (descent - ascent) - 1;
                 page.TextElementMap.add(
                         new ZLTextElementArea(
                                 paragraphIndex, wordIndex, 0,
@@ -1581,7 +1588,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
                                 false, // is last in element
                                 addHyphenationSign,
                                 changeStyle, getTextStyle(), word,
-                                x, x + width - 1, y - height + 1, y + descent, columnIndex
+//                                x, x + width - 1, y - height + 1, y + descent, columnIndex
+                                x, x + width - 1, yStart, yEnd, columnIndex
                         )
                 );
             }
@@ -1593,9 +1601,9 @@ public abstract class ZLTextView extends ZLTextViewBase {
      * Besides, it maybe used to {@link #gotoMark} {@link #gotoHighlighting}
      * {@link #gotoPosition} {@link #gotoPositionByEnd} with {@link ScrollingMode#NO_OVERLAPPING}.
      *
-     * @param forward page down if true, or page up.
+     * @param forward       page down if true, or page up.
      * @param scrollingMode
-     * @param value This value maybe 0( when NO_OVERLAPPING) or 1(when SCROLL_LINES).
+     * @param value         This value maybe 0( when NO_OVERLAPPING) or 1(when SCROLL_LINES).
      */
     public synchronized final void turnPage(boolean forward, int scrollingMode, int value) {
         preparePaintInfo(myCurrentPage);
@@ -1801,9 +1809,9 @@ public abstract class ZLTextView extends ZLTextViewBase {
      * Calculate the paragraph's height and margin.
      *
      * @param page
-     * @param cursor The input cursor position, maybe start or end which is decided by "beforeCurrentPosition".
+     * @param cursor                The input cursor position, maybe start or end which is decided by "beforeCurrentPosition".
      * @param beforeCurrentPosition
-     * @param unit The unit is defined by {@link SizeUnit} PIXEL_UNIT or LINE_UNIT, usually equal to PIXEL_UNIT.
+     * @param unit                  The unit is defined by {@link SizeUnit} PIXEL_UNIT or LINE_UNIT, usually equal to PIXEL_UNIT.
      */
     private ParagraphSize paragraphSize(ZLTextPage page, ZLTextWordCursor cursor, boolean beforeCurrentPosition, int unit) {
         final ParagraphSize size = new ParagraphSize();
@@ -1842,7 +1850,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
      * @param page
      * @param cursor The current line's start cursor.
      * @param unit
-     * @param size The height of Jumping back.
+     * @param size   The height of Jumping back.
      */
     private void skip(ZLTextPage page, ZLTextWordCursor cursor, int unit, int size) {
         final ZLTextParagraphCursor paragraphCursor = cursor.getParagraphCursor();
