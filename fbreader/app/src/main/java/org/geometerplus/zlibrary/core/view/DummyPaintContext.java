@@ -112,6 +112,11 @@ final class DummyPaintContext extends ZLPaintContext {
     }
 
     @Override
+    protected int getAscentInternal() {
+        return -1;
+    }
+
+    @Override
     public void drawString(int x, int y, char[] string, int offset, int length) {
     }
 

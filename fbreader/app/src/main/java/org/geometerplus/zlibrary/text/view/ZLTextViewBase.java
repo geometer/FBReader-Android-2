@@ -277,6 +277,10 @@ abstract class ZLTextViewBase extends ZLView {
         return element instanceof ZLTextWord ? getContext().getDescent() : 0;
     }
 
+    final int getElementAscent(ZLTextElement element) {
+        return element instanceof ZLTextWord ? getContext().getAscent() : 0;
+    }
+
     final int getWordWidth(ZLTextWord word, int start) {
         return
                 start == 0 ?
