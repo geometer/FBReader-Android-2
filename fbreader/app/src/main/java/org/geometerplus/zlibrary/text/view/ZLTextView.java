@@ -1461,6 +1461,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 info.setHeight(info.getHeight() + Math.max(0, info.getVSpaceBefore() - previousInfo.getVSpaceAfter()));
             } else {
                 info.PreviousInfoUsed = false;
+                info.setVSpaceBefore(Math.max(0, info.getVSpaceBefore()));
                 info.setHeight(info.getHeight() + info.getVSpaceBefore());
             }
         }
