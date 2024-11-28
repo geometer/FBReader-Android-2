@@ -42,4 +42,12 @@ public class ZLTextControlElement extends ZLTextElement {
         }
         return element;
     }
+
+    @Override
+    public String toString() {
+        return "ZLTextControlElement{" +
+                "Kind=" + Kind +
+                ", IsStart=" + IsStart +
+                '}';
+    }
 }
