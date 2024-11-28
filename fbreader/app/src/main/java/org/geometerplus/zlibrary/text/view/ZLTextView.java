@@ -1214,15 +1214,24 @@ public abstract class ZLTextView extends ZLTextViewBase {
             if (!allowBreak) {
                 element = paragraphCursor.getElement(currentElementIndex);
                 // if not reach the end index, again fix the allow-break status.
+                // 0> If the previous element is a text word and the next is a control element, mark it as allowed to be broken.
                 // 1> previous and current element are neither not NBSpace element
                 // 2> and {current is not ZLTextWord, or previous is ZLTextWord}
                 // 3> and current element is neither ZLTextImageElement or ZLTextControlElement.
-                allowBreak =
-                        previousElement != ZLTextElement.NBSpace &&
-                                element != ZLTextElement.NBSpace &&
-                                (!(element instanceof ZLTextWord) || previousElement instanceof ZLTextWord) &&
-                                !(element instanceof ZLTextImageElement) &&
-                                !(element instanceof ZLTextControlElement);
+                if (previousElement instanceof ZLTextWord && element instanceof ZLTextControlElement) {
+                    if (!((ZLTextControlElement) element).IsStart) { // control end flag.
+                        applyStyleChangeElement(element);
+                        ++currentElementIndex;
+                    }
+                    allowBreak = true;
+                } else {
+                    allowBreak =
+                            previousElement != ZLTextElement.NBSpace &&
+                                    element != ZLTextElement.NBSpace &&
+                                    (!(element instanceof ZLTextWord) || previousElement instanceof ZLTextWord) &&
+                                    !(element instanceof ZLTextImageElement) &&
+                                    !(element instanceof ZLTextControlElement);
+                }
             }
 
             // allow to break.(1. reach the end index 2. every word in the line.)
@@ -1246,8 +1255,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 storedStyle = getTextStyle();
                 removeLastSpace = !wordOccurred && internalSpaceCounter > 0;
             } else if (previousElement instanceof ZLTextWord) {
-                LogUtils.i(TAG, "processTextLineInternal: 4. do ... while, end = "
-                        + (currentElementIndex != endIndex) + ", add WordInfo =" + (ZLTextWord) previousElement);
+                LogUtils.i(TAG, "processTextLineInternal: 4. do ... while, add WordInfo ="
+                        + previousElement + ", peekNext: " + element);
                 // save this loop index element.
                 words.add(new WordInfo(
                         (ZLTextWord) previousElement,
@@ -1256,7 +1265,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                         internalSpaceCounter, getTextStyle()
                 ));
             }
-        } while (currentElementIndex != endIndex);
+        } while (currentElementIndex < endIndex);
 
         // if not reach the endIndex, and {can hyphenate or the EndElementIndex is equal to startIndex}.
         if (currentElementIndex != endIndex &&
