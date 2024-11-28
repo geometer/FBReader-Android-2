@@ -186,6 +186,8 @@ void OEBBookReader::endElementHandler(const char *tag) {
     }
 }
 
+static bool noInTocSupportSection = true;
+
 /**
  * The core function is used to analyze the whold book.
  *
@@ -245,7 +247,7 @@ bool OEBBookReader::readBook(const ZLFile &opfFile) {
     }
     const std::map<int, NCXReader::NavPoint> navigationMap = ncxReader.navigationMap();
     std::vector<std::string> tocFileNames;
-    OEBBookReader::getTocFileNames(tocFileNames,navigationMap );
+    OEBBookReader::getTocFileNames(tocFileNames, navigationMap);
 
     for (std::vector<std::string>::const_iterator it = myHtmlFileNames.begin();
          it != myHtmlFileNames.end(); ++it) {
@@ -261,7 +263,9 @@ bool OEBBookReader::readBook(const ZLFile &opfFile) {
                 addCoverImage();
             }
         } else {
-            if (MiscUtil::contains(tocFileNames, *it)) {
+            if (noInTocSupportSection) {
+                myModelReader.insertEndOfSectionParagraph();
+            } else if (MiscUtil::contains(tocFileNames, *it)) {
                 myModelReader.insertEndOfSectionParagraph();
             } else {
                 // nothing to do.
@@ -288,8 +292,8 @@ bool OEBBookReader::readBook(const ZLFile &opfFile) {
     return true;
 }
 
- void OEBBookReader::getTocFileNames(std::vector<std::string> &result,
-                            const std::map<int, NCXReader::NavPoint> &navigationMap) {
+void OEBBookReader::getTocFileNames(std::vector<std::string> &result,
+                                    const std::map<int, NCXReader::NavPoint> &navigationMap) {
     if (!navigationMap.empty()) {
         for (std::map<int, NCXReader::NavPoint>::const_iterator it = navigationMap.begin();
              it != navigationMap.end(); ++it) {
