@@ -29,31 +29,34 @@ class Book;
 class OEBMetaInfoReader : public OPFReader {
 
 public:
-	OEBMetaInfoReader(Book &book);
-	bool readMetainfo(const ZLFile &file);
+    OEBMetaInfoReader(Book &book);
 
-	void startElementHandler(const char *tag, const char **attributes);
-	void endElementHandler(const char *tag);
-	void characterDataHandler(const char *text, std::size_t len);
+    bool readMetainfo(const ZLFile &file);
+
+    void startElementHandler(const char *tag, const char **attributes);
+
+    void endElementHandler(const char *tag);
+
+    void characterDataHandler(const char *text, std::size_t len);
 
 private:
-	Book &myBook;
+    Book &myBook;
 
-	enum {
-		READ_NONE,
-		READ_METADATA,
-		READ_AUTHOR,
-		READ_AUTHOR2,
-		READ_TITLE,
-		READ_SUBJECT,
-		READ_LANGUAGE,
-		READ_IDENTIFIER,
-	} myReadState;
+    enum {
+        READ_NONE,
+        READ_METADATA,
+        READ_AUTHOR,
+        READ_AUTHOR2,
+        READ_TITLE,
+        READ_SUBJECT,
+        READ_LANGUAGE,
+        READ_IDENTIFIER,
+    } myReadState;
 
-	std::string myIdentifierScheme;
-	std::string myBuffer;
-	std::vector<std::string> myAuthorList;
-	std::vector<std::string> myAuthorList2;
+    std::string myIdentifierScheme;
+    std::string myBuffer;
+    std::vector<std::string> myAuthorList;
+    std::vector<std::string> myAuthorList2;
 };
 
 #endif /* __OEBMETAINFOREADER_H__ */

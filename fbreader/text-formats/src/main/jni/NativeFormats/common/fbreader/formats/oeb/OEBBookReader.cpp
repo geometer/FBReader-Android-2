@@ -194,7 +194,6 @@ void OEBBookReader::endElementHandler(const char *tag) {
  */
 bool OEBBookReader::readBook(const ZLFile &opfFile) {
 //    ZLLogger::Instance().registerClass(TAG);
-
     const ZLFile epubFile = opfFile.getContainerArchive();
     epubFile.forceArchiveType(ZLFile::ZIP);
     shared_ptr<ZLDir> epubDir = epubFile.directory();

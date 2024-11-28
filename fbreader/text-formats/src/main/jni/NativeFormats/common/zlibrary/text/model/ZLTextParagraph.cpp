@@ -98,15 +98,17 @@ ZLTextStyleEntry::ZLTextStyleEntry(char *address) {
 
 ZLTextControlEntryPool ZLTextControlEntryPool::Pool;
 
-shared_ptr<ZLTextParagraphEntry> ZLTextControlEntryPool::controlEntry(ZLTextKind kind, bool isStart) {
-	std::map<ZLTextKind, shared_ptr<ZLTextParagraphEntry> > &entries = isStart ? myStartEntries : myEndEntries;
-	std::map<ZLTextKind, shared_ptr<ZLTextParagraphEntry> >::iterator it = entries.find(kind);
-	if (it != entries.end()) {
-		return it->second;
-	}
-	shared_ptr<ZLTextParagraphEntry> entry = new ZLTextControlEntry(kind, isStart);
-	entries[kind] = entry;
-	return entry;
+shared_ptr<ZLTextParagraphEntry>
+ZLTextControlEntryPool::controlEntry(ZLTextKind kind, bool isStart) {
+    std::map<ZLTextKind, shared_ptr<ZLTextParagraphEntry> > &entries = isStart ? myStartEntries
+                                                                               : myEndEntries;
+    std::map<ZLTextKind, shared_ptr<ZLTextParagraphEntry> >::iterator it = entries.find(kind);
+    if (it != entries.end()) {
+        return it->second;
+    }
+    shared_ptr<ZLTextParagraphEntry> entry = new ZLTextControlEntry(kind, isStart);
+    entries[kind] = entry;
+    return entry;
 }
 
 /*

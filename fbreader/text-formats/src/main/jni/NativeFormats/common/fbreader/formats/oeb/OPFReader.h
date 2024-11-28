@@ -27,18 +27,22 @@
 class OPFReader : public ZLXMLReader {
 
 protected:
-	OPFReader();
+    OPFReader();
 
 public:
-	bool processNamespaces() const;
-	const std::vector<std::string> &externalDTDs() const;
+    bool processNamespaces() const;
+
+    const std::vector<std::string> &externalDTDs() const;
 
 protected:
-	bool testOPFTag(const std::string &expected, const std::string &tag) const;
-	bool testDCTag(const std::string &expected, const std::string &tag) const;
+    bool testOPFTag(const std::string &expected, const std::string &tag) const;
 
-	bool isNSName(const std::string &fullName, const std::string &shortName, const std::string &fullNSId) const;
-	bool isMetadataTag(const std::string &tagName);
+    bool testDCTag(const std::string &expected, const std::string &tag) const;
+
+    bool isNSName(const std::string &fullName, const std::string &shortName,
+                  const std::string &fullNSId) const;
+
+    bool isMetadataTag(const std::string &tagName);
 };
 
 #endif /* __OPFREADER_H__ */

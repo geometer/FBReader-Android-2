@@ -21,12 +21,12 @@
 #define __ZLTEXTALIGNMENTTYPE_H__
 
 enum ZLTextAlignmentType {
-	ALIGN_UNDEFINED = 0,
-	ALIGN_LEFT = 1,
-	ALIGN_RIGHT = 2,
-	ALIGN_CENTER = 3,
-	ALIGN_JUSTIFY = 4,
-	ALIGN_LINESTART = 5 // left for LTR languages and right for RTL
+    ALIGN_UNDEFINED = 0,
+    ALIGN_LEFT = 1,
+    ALIGN_RIGHT = 2,
+    ALIGN_CENTER = 3,
+    ALIGN_JUSTIFY = 4,
+    ALIGN_LINESTART = 5 // left for LTR languages and right for RTL
 };
 
 #endif /* __ZLTEXTALIGNMENTTYPE_H__ */

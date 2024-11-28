@@ -22,96 +22,98 @@
 #include "CSSSelector.h"
 
 CSSSelector::CSSSelector(const std::string &tag, const std::string &clazz) {
-	Tag = tag;
-	Class = clazz;
+    Tag = tag;
+    Class = clazz;
 }
 
 CSSSelector::CSSSelector(const std::string &simple) {
-	const std::size_t index = simple.find('.');
-	if (index == std::string::npos) {
-		Tag = simple;
-	} else {
-		Tag = simple.substr(0, index);
-		Class = simple.substr(index + 1);
-	}
+    const std::size_t index = simple.find('.');
+    if (index == std::string::npos) {
+        Tag = simple;
+    } else {
+        Tag = simple.substr(0, index);
+        Class = simple.substr(index + 1);
+    }
 }
 
-CSSSelector::Component::Component(Relation delimiter, shared_ptr<CSSSelector> selector) : Delimiter(delimiter), Selector(selector) {
+CSSSelector::Component::Component(Relation delimiter, shared_ptr<CSSSelector> selector) : Delimiter(
+        delimiter), Selector(selector) {
 }
 
-void CSSSelector::update(shared_ptr<CSSSelector> &selector, const char *&start, const char *end, char delimiter) {
-	shared_ptr<CSSSelector> newSelector = new CSSSelector(std::string(start, end - start));
-	if (!selector.isNull()) {
-		Relation rel = Ancestor;
-		switch (delimiter) {
-			case '+':
-				rel = Previous;
-				break;
-			case '~':
-				rel = Predecessor;
-				break;
-			case '>':
-				rel = Parent;
-				break;
-		}
-		newSelector->Next = new CSSSelector::Component(rel, selector);
-	}
-	selector = newSelector;
-	start = 0;
+void CSSSelector::update(shared_ptr<CSSSelector> &selector, const char *&start, const char *end,
+                         char delimiter) {
+    shared_ptr<CSSSelector> newSelector = new CSSSelector(std::string(start, end - start));
+    if (!selector.isNull()) {
+        Relation rel = Ancestor;
+        switch (delimiter) {
+            case '+':
+                rel = Previous;
+                break;
+            case '~':
+                rel = Predecessor;
+                break;
+            case '>':
+                rel = Parent;
+                break;
+        }
+        newSelector->Next = new CSSSelector::Component(rel, selector);
+    }
+    selector = newSelector;
+    start = 0;
 }
 
 shared_ptr<CSSSelector> CSSSelector::parse(const std::string &data) {
-	shared_ptr<CSSSelector> selector;
+    shared_ptr<CSSSelector> selector;
 
-	const char *start = data.data();
-	const char *end = start + data.size();
-	const char *wordStart = 0;
-	char delimiter = '?';
+    const char *start = data.data();
+    const char *end = start + data.size();
+    const char *wordStart = 0;
+    char delimiter = '?';
 
-	for (const char *ptr = start; ptr < end; ++ptr) {
-		if (*ptr == '+' || *ptr == '>' || *ptr == '~') {
-			if (wordStart != 0) {
-				update(selector, wordStart, ptr, delimiter);
-			}
-			delimiter = *ptr;
-		} else if (std::isspace(*ptr)) {
-			if (wordStart != 0) {
-				update(selector, wordStart, ptr, delimiter);
-				delimiter = ' ';
-			}
-		} else if (wordStart == 0) {
-			wordStart = ptr;
-		}
-	}
-	if (wordStart != 0) {
-		update(selector, wordStart, end, delimiter);
-	}
+    for (const char *ptr = start; ptr < end; ++ptr) {
+        if (*ptr == '+' || *ptr == '>' || *ptr == '~') {
+            if (wordStart != 0) {
+                update(selector, wordStart, ptr, delimiter);
+            }
+            delimiter = *ptr;
+        } else if (std::isspace(*ptr)) {
+            if (wordStart != 0) {
+                update(selector, wordStart, ptr, delimiter);
+                delimiter = ' ';
+            }
+        } else if (wordStart == 0) {
+            wordStart = ptr;
+        }
+    }
+    if (wordStart != 0) {
+        update(selector, wordStart, end, delimiter);
+    }
 
-	return selector;
+    return selector;
 }
 
 bool CSSSelector::weakEquals(const CSSSelector &selector) const {
-	return Tag == selector.Tag && Class == selector.Class;
+    return Tag == selector.Tag && Class == selector.Class;
 }
 
-bool CSSSelector::operator < (const CSSSelector &selector) const {
-	int diff = Tag.compare(selector.Tag);
-	if (diff != 0) {
-		return diff < 0;
-	}
-	diff = Class.compare(selector.Class);
-	if (diff != 0) {
-		return diff < 0;
-	}
-	if (selector.Next.isNull()) {
-		return false;
-	}
-	if (Next.isNull()) {
-		return true;
-	}
-	diff = Next->Delimiter - selector.Next->Delimiter;
-	if (diff != 0) {
-		return diff < 0;
-	}
-	return *(Next->Selector) < *(selector.Next->Selector);
+bool CSSSelector::operator<(const CSSSelector &selector) const {
+    int diff = Tag.compare(selector.Tag);
+    if (diff != 0) {
+        return diff < 0;
+    }
+    diff = Class.compare(selector.Class);
+    if (diff != 0) {
+        return diff < 0;
+    }
+    if (selector.Next.isNull()) {
+        return false;
+    }
+    if (Next.isNull()) {
+        return true;
+    }
+    diff = Next->Delimiter - selector.Next->Delimiter;
+    if (diff != 0) {
+        return diff < 0;
+    }
+    return *(Next->Selector) < *(selector.Next->Selector);
 }

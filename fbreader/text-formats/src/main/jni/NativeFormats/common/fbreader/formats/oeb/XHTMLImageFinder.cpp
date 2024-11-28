@@ -28,27 +28,27 @@ static const std::string TAG_IMG = "img";
 static const std::string TAG_IMAGE = "image";
 
 shared_ptr<const ZLImage> XHTMLImageFinder::readImage(const ZLFile &file) {
-	myImage.reset();
-	myPathPrefix = MiscUtil::htmlDirectoryPrefix(file.path());
-	readDocument(file);
-	return myImage;
+    myImage.reset();
+    myPathPrefix = MiscUtil::htmlDirectoryPrefix(file.path());
+    readDocument(file);
+    return myImage;
 }
 
 bool XHTMLImageFinder::processNamespaces() const {
-	return true;
+    return true;
 }
 
 void XHTMLImageFinder::startElementHandler(const char *tag, const char **attributes) {
-	const char *reference = 0;
-	if (TAG_IMG == tag) {
-		reference = attributeValue(attributes, "src");
-	} else if (TAG_IMAGE == tag) {
-		reference = attributeValue(
-			attributes, FullNamePredicate(ZLXMLNamespace::XLink, "href")
-		);
-	}
-	if (reference != 0) {
-		myImage = new ZLFileImage(ZLFile(myPathPrefix + reference), "", 0);
-		interrupt();
-	}
+    const char *reference = 0;
+    if (TAG_IMG == tag) {
+        reference = attributeValue(attributes, "src");
+    } else if (TAG_IMAGE == tag) {
+        reference = attributeValue(
+                attributes, FullNamePredicate(ZLXMLNamespace::XLink, "href")
+        );
+    }
+    if (reference != 0) {
+        myImage = new ZLFileImage(ZLFile(myPathPrefix + reference), "", 0);
+        interrupt();
+    }
 }

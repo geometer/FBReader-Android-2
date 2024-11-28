@@ -30,27 +30,32 @@
 class PlainTextFormat {
 
 public:
-	enum ParagraphBreakType {
-		BREAK_PARAGRAPH_AT_NEW_LINE = 1,
-		BREAK_PARAGRAPH_AT_EMPTY_LINE = 2,
-		BREAK_PARAGRAPH_AT_LINE_WITH_INDENT = 4,
-	};
+    enum ParagraphBreakType {
+        BREAK_PARAGRAPH_AT_NEW_LINE = 1,
+        BREAK_PARAGRAPH_AT_EMPTY_LINE = 2,
+        BREAK_PARAGRAPH_AT_LINE_WITH_INDENT = 4,
+    };
 
-	PlainTextFormat(const ZLFile &file);
-	~PlainTextFormat() {}
+    PlainTextFormat(const ZLFile &file);
 
-	bool initialized() const { return myInitialized; }
-	int breakType() const { return myBreakType; }
-	int ignoredIndent() const { return myIgnoredIndent; }
-	int emptyLinesBeforeNewSection() const { return myEmptyLinesBeforeNewSection; }
-	bool createContentsTable() const { return myCreateContentsTable; }
+    ~PlainTextFormat() {}
+
+    bool initialized() const { return myInitialized; }
+
+    int breakType() const { return myBreakType; }
+
+    int ignoredIndent() const { return myIgnoredIndent; }
+
+    int emptyLinesBeforeNewSection() const { return myEmptyLinesBeforeNewSection; }
+
+    bool createContentsTable() const { return myCreateContentsTable; }
 
 private:
-	bool myInitialized;
-	int myBreakType;
-	int myIgnoredIndent;
-	int myEmptyLinesBeforeNewSection;
-	bool myCreateContentsTable;
+    bool myInitialized;
+    int myBreakType;
+    int myIgnoredIndent;
+    int myEmptyLinesBeforeNewSection;
+    bool myCreateContentsTable;
 
 //	ZLBooleanOption InitializedOption;
 //	ZLIntegerOption BreakTypeOption;
@@ -58,8 +63,9 @@ private:
 //	ZLIntegerRangeOption EmptyLinesBeforeNewSectionOption;
 //	ZLBooleanOption CreateContentsTableOption;
 
-friend class PlainTextInfoPage;
-friend class PlainTextFormatDetector;
+    friend class PlainTextInfoPage;
+
+    friend class PlainTextFormatDetector;
 };
 
 /*class PlainTextInfoPage : public FormatInfoPage {
@@ -81,10 +87,11 @@ friend class CreateContentsTableOptionEntry;
 class PlainTextFormatDetector {
 
 public:
-	PlainTextFormatDetector();
-	~PlainTextFormatDetector();
+    PlainTextFormatDetector();
 
-	void detect(ZLInputStream &stream, PlainTextFormat &format);
+    ~PlainTextFormatDetector();
+
+    void detect(ZLInputStream &stream, PlainTextFormat &format);
 };
 
 /*class BreakTypeOptionEntry : public ZLComboOptionEntry {

@@ -43,115 +43,117 @@ static const std::string EPUB = "epub";
 class ContainerFileReader : public ZLXMLReader {
 
 public:
-	const std::string &rootPath() const;
+    const std::string &rootPath() const;
 
 private:
-	void startElementHandler(const char *tag, const char **attributes);
+    void startElementHandler(const char *tag, const char **attributes);
 
 private:
-	std::string myRootPath;
+    std::string myRootPath;
 };
 
 const std::string &ContainerFileReader::rootPath() const {
-	return myRootPath;
+    return myRootPath;
 }
 
 void ContainerFileReader::startElementHandler(const char *tag, const char **attributes) {
-	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
-	if (tagString == "rootfile") {
-		const char *path = attributeValue(attributes, "full-path");
-		if (path != 0) {
-			myRootPath = path;
-			interrupt();
-		}
-	}
+    const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
+    if (tagString == "rootfile") {
+        const char *path = attributeValue(attributes, "full-path");
+        if (path != 0) {
+            myRootPath = path;
+            interrupt();
+        }
+    }
 }
 
 OEBPlugin::~OEBPlugin() {
 }
 
 bool OEBPlugin::providesMetainfo() const {
-	return true;
+    return true;
 }
 
 const std::string OEBPlugin::supportedFileType() const {
-	return "ePub";
+    return "ePub";
 }
 
 ZLFile OEBPlugin::epubFile(const ZLFile &oebFile) {
-	const ZLFile epub = oebFile.extension() == OPF ? oebFile.getContainerArchive() : oebFile;
-	epub.forceArchiveType(ZLFile::ZIP);
-	return epub;
+    const ZLFile epub = oebFile.extension() == OPF ? oebFile.getContainerArchive() : oebFile;
+    epub.forceArchiveType(ZLFile::ZIP);
+    return epub;
 }
 
 ZLFile OEBPlugin::opfFile(const ZLFile &oebFile) {
-	//ZLLogger::Instance().registerClass("epub");
+    //ZLLogger::Instance().registerClass("epub");
 
-	if (oebFile.extension() == OPF) {
-		return oebFile;
-	}
+    if (oebFile.extension() == OPF) {
+        return oebFile;
+    }
 
-	ZLLogger::Instance().println("epub", "Looking for opf file in " + oebFile.path());
+    ZLLogger::Instance().println("epub", "Looking for opf file in " + oebFile.path());
 
-	oebFile.forceArchiveType(ZLFile::ZIP);
-	shared_ptr<ZLDir> zipDir = oebFile.directory(false);
-	if (zipDir.isNull()) {
-		ZLLogger::Instance().println("epub", "Couldn't open zip archive");
-		return ZLFile::NO_FILE;
-	}
+    oebFile.forceArchiveType(ZLFile::ZIP);
+    shared_ptr<ZLDir> zipDir = oebFile.directory(false);
+    if (zipDir.isNull()) {
+        ZLLogger::Instance().println("epub", "Couldn't open zip archive");
+        return ZLFile::NO_FILE;
+    }
 
-	const ZLFile containerInfoFile(zipDir->itemPath("META-INF/container.xml"));
-	if (containerInfoFile.exists()) {
-		ZLLogger::Instance().println("epub", "Found container file " + containerInfoFile.path());
-		ContainerFileReader reader;
-		reader.readDocument(containerInfoFile);
-		const std::string &opfPath = reader.rootPath();
-		ZLLogger::Instance().println("epub", "opf path = " + opfPath);
-		if (!opfPath.empty()) {
-			return ZLFile(zipDir->itemPath(opfPath));
-		}
-	}
+    const ZLFile containerInfoFile(zipDir->itemPath("META-INF/container.xml"));
+    if (containerInfoFile.exists()) {
+        ZLLogger::Instance().println("epub", "Found container file " + containerInfoFile.path());
+        ContainerFileReader reader;
+        reader.readDocument(containerInfoFile);
+        const std::string &opfPath = reader.rootPath();
+        ZLLogger::Instance().println("epub", "opf path = " + opfPath);
+        if (!opfPath.empty()) {
+            return ZLFile(zipDir->itemPath(opfPath));
+        }
+    }
 
-	std::vector<std::string> fileNames;
-	zipDir->collectFiles(fileNames, false);
-	for (std::vector<std::string>::const_iterator it = fileNames.begin(); it != fileNames.end(); ++it) {
-		ZLLogger::Instance().println("epub", "Item: " + *it);
-		if (ZLStringUtil::stringEndsWith(*it, ".opf")) {
-			return ZLFile(zipDir->itemPath(*it));
-		}
-	}
-	ZLLogger::Instance().println("epub", "Opf file not found");
-	return ZLFile::NO_FILE;
+    std::vector<std::string> fileNames;
+    zipDir->collectFiles(fileNames, false);
+    for (std::vector<std::string>::const_iterator it = fileNames.begin();
+         it != fileNames.end(); ++it) {
+        ZLLogger::Instance().println("epub", "Item: " + *it);
+        if (ZLStringUtil::stringEndsWith(*it, ".opf")) {
+            return ZLFile(zipDir->itemPath(*it));
+        }
+    }
+    ZLLogger::Instance().println("epub", "Opf file not found");
+    return ZLFile::NO_FILE;
 }
 
 bool OEBPlugin::readMetainfo(Book &book) const {
-	const ZLFile &file = book.file();
-	return OEBMetaInfoReader(book).readMetainfo(opfFile(file));
+    const ZLFile &file = book.file();
+    return OEBMetaInfoReader(book).readMetainfo(opfFile(file));
 }
 
-std::vector<shared_ptr<FileEncryptionInfo> > OEBPlugin::readEncryptionInfos(const Book &book) const {
-	const ZLFile &opf = opfFile(book.file());
-	return OEBEncryptionReader().readEncryptionInfos(epubFile(opf), opf);
+std::vector<shared_ptr<FileEncryptionInfo> >
+OEBPlugin::readEncryptionInfos(const Book &book) const {
+    const ZLFile &opf = opfFile(book.file());
+    return OEBEncryptionReader().readEncryptionInfos(epubFile(opf), opf);
 }
 
 bool OEBPlugin::readUids(Book &book) const {
-	const ZLFile &file = book.file();
-	return OEBUidReader(book).readUids(opfFile(file));
+    const ZLFile &file = book.file();
+    return OEBUidReader(book).readUids(opfFile(file));
 }
 
 bool OEBPlugin::readModel(BookModel &model) const {
-	const ZLFile &file = model.book()->file();
-	return OEBBookReader(model).readBook(opfFile(file));
+    const ZLFile &file = model.book()->file();
+    return OEBBookReader(model).readBook(opfFile(file));
 }
 
 shared_ptr<const ZLImage> OEBPlugin::coverImage(const ZLFile &file) const {
-	return OEBCoverReader().readCover(opfFile(file));
+    return OEBCoverReader().readCover(opfFile(file));
 }
 
 bool OEBPlugin::readLanguageAndEncoding(Book &book) const {
-	if (book.language().empty()) {
-		shared_ptr<ZLInputStream> oebStream = new OEBTextStream(opfFile(book.file()));
-		detectLanguage(book, *oebStream, book.encoding());
-	}
-	return true;
+    if (book.language().empty()) {
+        shared_ptr<ZLInputStream> oebStream = new OEBTextStream(opfFile(book.file()));
+        detectLanguage(book, *oebStream, book.encoding());
+    }
+    return true;
 }

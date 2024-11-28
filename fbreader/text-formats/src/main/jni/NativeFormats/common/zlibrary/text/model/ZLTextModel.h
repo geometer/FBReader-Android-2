@@ -34,27 +34,35 @@
 #include <ZLCachedMemoryAllocator.h>
 
 class ZLTextStyleEntry;
+
 class ZLVideoEntry;
+
 class FontManager;
 
 class ZLTextModel {
 
 protected:
-	ZLTextModel(const std::string &id, const std::string &language, const std::size_t rowSize,
-		const std::string &directoryName, const std::string &name, const std::string &fileExtension, FontManager &fontManager);
-	ZLTextModel(const std::string &id, const std::string &language,
-		shared_ptr<ZLCachedMemoryAllocator> allocator, FontManager &fontManager);
+    ZLTextModel(const std::string &id, const std::string &language, const std::size_t rowSize,
+                const std::string &directoryName, const std::string &name,
+                const std::string &fileExtension, FontManager &fontManager);
+
+    ZLTextModel(const std::string &id, const std::string &language,
+                shared_ptr<ZLCachedMemoryAllocator> allocator, FontManager &fontManager);
 
 public:
-	virtual ~ZLTextModel();
+    virtual ~ZLTextModel();
 
-	const std::string &id() const;
-	const std::string &language() const;
-	//bool isRtl() const;
+    const std::string &id() const;
 
-	std::size_t paragraphsNumber() const;
-	ZLTextParagraph *operator [] (std::size_t index);
-	const ZLTextParagraph *operator [] (std::size_t index) const;
+    const std::string &language() const;
+    //bool isRtl() const;
+
+    std::size_t paragraphsNumber() const;
+
+    ZLTextParagraph *operator[](std::size_t index);
+
+    const ZLTextParagraph *operator[](std::size_t index) const;
+
 /*
 	const std::vector<ZLTextMark> &marks() const;
 
@@ -67,82 +75,115 @@ public:
 	ZLTextMark nextMark(ZLTextMark position) const;
 	ZLTextMark previousMark(ZLTextMark position) const;
 */
-	void addControl(ZLTextKind textKind, bool isStart);
-	void addStyleEntry(const ZLTextStyleEntry &entry, unsigned char depth);
-	void addStyleEntry(const ZLTextStyleEntry &entry, const std::vector<std::string> &fontFamilies, unsigned char depth);
-	void addStyleCloseEntry();
-	void addHyperlinkControl(ZLTextKind textKind, ZLHyperlinkType hyperlinkType, const std::string &label);
-	void addText(const std::string &text);
-	void addText(const std::vector<std::string> &text);
-	void addImage(const std::string &id, short vOffset, bool isCover);
-	void addFixedHSpace(unsigned char length);
-	void addBidiReset();
-	void addVideoEntry(const ZLVideoEntry &entry);
-	void addExtensionEntry(const std::string &action, const std::map<std::string,std::string> &data);
+    void addControl(ZLTextKind textKind, bool isStart);
 
-	void flush();
+    void addStyleEntry(const ZLTextStyleEntry &entry, unsigned char depth);
 
-	const ZLCachedMemoryAllocator &allocator() const;
+    void addStyleEntry(const ZLTextStyleEntry &entry, const std::vector<std::string> &fontFamilies,
+                       unsigned char depth);
 
-	const std::vector<jint> &startEntryIndices() const;
-	const std::vector<jint> &startEntryOffsets() const;
-	const std::vector<jint> &paragraphLengths() const;
-	const std::vector<jint> &textSizes() const;
-	const std::vector<jbyte> &paragraphKinds() const;
+    void addStyleCloseEntry();
+
+    void addHyperlinkControl(ZLTextKind textKind, ZLHyperlinkType hyperlinkType,
+                             const std::string &label);
+
+    void addText(const std::string &text);
+
+    void addText(const std::vector<std::string> &text);
+
+    void addImage(const std::string &id, short vOffset, bool isCover);
+
+    void addFixedHSpace(unsigned char length);
+
+    void addBidiReset();
+
+    void addVideoEntry(const ZLVideoEntry &entry);
+
+    void
+    addExtensionEntry(const std::string &action, const std::map<std::string, std::string> &data);
+
+    void flush();
+
+    const ZLCachedMemoryAllocator &allocator() const;
+
+    const std::vector<jint> &startEntryIndices() const;
+
+    const std::vector<jint> &startEntryOffsets() const;
+
+    const std::vector<jint> &paragraphLengths() const;
+
+    const std::vector<jint> &textSizes() const;
+
+    const std::vector<jbyte> &paragraphKinds() const;
 
 protected:
-	void addParagraphInternal(ZLTextParagraph *paragraph);
+    void addParagraphInternal(ZLTextParagraph *paragraph);
 
 private:
-	const std::string myId;
-	const std::string myLanguage;
-	std::vector<ZLTextParagraph*> myParagraphs;
-	//mutable std::vector<ZLTextMark> myMarks;
-	mutable shared_ptr<ZLCachedMemoryAllocator> myAllocator;
+    const std::string myId;
+    const std::string myLanguage;
+    std::vector<ZLTextParagraph *> myParagraphs;
+    //mutable std::vector<ZLTextMark> myMarks;
+    mutable shared_ptr<ZLCachedMemoryAllocator> myAllocator;
 
-	char *myLastEntryStart;
+    char *myLastEntryStart;
 
-	std::vector<jint> myStartEntryIndices;
-	std::vector<jint> myStartEntryOffsets;
-	std::vector<jint> myParagraphLengths;
-	std::vector<jint> myTextSizes;
-	std::vector<jbyte> myParagraphKinds;
+    std::vector<jint> myStartEntryIndices;
+    std::vector<jint> myStartEntryOffsets;
+    std::vector<jint> myParagraphLengths;
+    std::vector<jint> myTextSizes;
+    std::vector<jbyte> myParagraphKinds;
 
-	FontManager &myFontManager;
+    FontManager &myFontManager;
 
 private:
-	ZLTextModel(const ZLTextModel&);
-	const ZLTextModel &operator = (const ZLTextModel&);
+    ZLTextModel(const ZLTextModel &);
+
+    const ZLTextModel &operator=(const ZLTextModel &);
 };
 
 class ZLTextPlainModel : public ZLTextModel {
 
 public:
-	ZLTextPlainModel(const std::string &id, const std::string &language, const std::size_t rowSize,
-			const std::string &directoryName, const std::string &name, const std::string &fileExtension, FontManager &fontManager);
-	ZLTextPlainModel(const std::string &id, const std::string &language,
-		shared_ptr<ZLCachedMemoryAllocator> allocator, FontManager &fontManager);
-	void createParagraph(ZLTextParagraph::Kind kind);
+    ZLTextPlainModel(const std::string &id, const std::string &language, const std::size_t rowSize,
+                     const std::string &directoryName, const std::string &name,
+                     const std::string &fileExtension, FontManager &fontManager);
+
+    ZLTextPlainModel(const std::string &id, const std::string &language,
+                     shared_ptr<ZLCachedMemoryAllocator> allocator, FontManager &fontManager);
+
+    void createParagraph(ZLTextParagraph::Kind kind);
 };
 
 inline const std::string &ZLTextModel::id() const { return myId; }
+
 inline const std::string &ZLTextModel::language() const { return myLanguage; }
+
 inline std::size_t ZLTextModel::paragraphsNumber() const { return myParagraphs.size(); }
+
 //inline const std::vector<ZLTextMark> &ZLTextModel::marks() const { return myMarks; }
 //inline void ZLTextModel::removeAllMarks() { myMarks.clear(); }
 inline const ZLCachedMemoryAllocator &ZLTextModel::allocator() const { return *myAllocator; }
-inline const std::vector<jint> &ZLTextModel::startEntryIndices() const { return myStartEntryIndices; }
-inline const std::vector<jint> &ZLTextModel::startEntryOffsets() const { return myStartEntryOffsets; }
-inline const std::vector<jint> &ZLTextModel::paragraphLengths() const { return myParagraphLengths; };
+
+inline const std::vector<jint> &
+ZLTextModel::startEntryIndices() const { return myStartEntryIndices; }
+
+inline const std::vector<jint> &
+ZLTextModel::startEntryOffsets() const { return myStartEntryOffsets; }
+
+inline const std::vector<jint> &
+ZLTextModel::paragraphLengths() const { return myParagraphLengths; };
+
 inline const std::vector<jint> &ZLTextModel::textSizes() const { return myTextSizes; };
+
 inline const std::vector<jbyte> &ZLTextModel::paragraphKinds() const { return myParagraphKinds; };
 
-inline ZLTextParagraph *ZLTextModel::operator [] (std::size_t index) {
-	return myParagraphs[std::min(myParagraphs.size() - 1, index)];
+inline ZLTextParagraph *ZLTextModel::operator[](std::size_t index) {
+    return myParagraphs[std::min(myParagraphs.size() - 1, index)];
 }
 
-inline const ZLTextParagraph *ZLTextModel::operator [] (std::size_t index) const {
-	return myParagraphs[std::min(myParagraphs.size() - 1, index)];
+inline const ZLTextParagraph *ZLTextModel::operator[](std::size_t index) const {
+    return myParagraphs[std::min(myParagraphs.size() - 1, index)];
 }
 
 #endif /* __ZLTEXTMODEL_H__ */

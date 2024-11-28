@@ -25,13 +25,19 @@
 class TxtPlugin : public FormatPlugin {
 
 public:
-	~TxtPlugin();
-	bool providesMetainfo() const;
-	const std::string supportedFileType() const;
-	bool readMetainfo(Book &book) const;
-	bool readUids(Book &book) const;
-	bool readLanguageAndEncoding(Book &book) const;
-	bool readModel(BookModel &model) const;
+    ~TxtPlugin();
+
+    bool providesMetainfo() const;
+
+    const std::string supportedFileType() const;
+
+    bool readMetainfo(Book &book) const;
+
+    bool readUids(Book &book) const;
+
+    bool readLanguageAndEncoding(Book &book) const;
+
+    bool readModel(BookModel &model) const;
 //	FormatInfoPage *createInfoPage(ZLOptionsDialog &dialog, const ZLFile &file);
 };
 

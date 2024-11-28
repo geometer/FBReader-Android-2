@@ -28,11 +28,12 @@
 class ZLVideoEntry : public ZLTextParagraphEntry {
 
 public:
-	void addSource(const std::string &type, const std::string &path);
-	const std::map<std::string,std::string> &sources() const;
+    void addSource(const std::string &type, const std::string &path);
+
+    const std::map<std::string, std::string> &sources() const;
 
 private:
-	std::map<std::string,std::string> mySources;
+    std::map<std::string, std::string> mySources;
 };
 
 #endif /* __ZLVIDEOENTRY_H__ */

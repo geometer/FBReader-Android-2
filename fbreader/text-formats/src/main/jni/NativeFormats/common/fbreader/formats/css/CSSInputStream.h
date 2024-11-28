@@ -26,56 +26,63 @@
 class CSSInputStream : public ZLInputStream {
 
 public:
-	CSSInputStream(shared_ptr<ZLInputStream> base);
-	~CSSInputStream();
+    CSSInputStream(shared_ptr<ZLInputStream> base);
+
+    ~CSSInputStream();
 
 private:
-	bool open();
-	std::size_t read(char *buffer, std::size_t maxSize);
-	void close();
+    bool open();
 
-	void seek(int offset, bool absoluteOffset);
-	std::size_t offset() const;
-	std::size_t sizeOfOpened();
+    std::size_t read(char *buffer, std::size_t maxSize);
+
+    void close();
+
+    void seek(int offset, bool absoluteOffset);
+
+    std::size_t offset() const;
+
+    std::size_t sizeOfOpened();
 
 private:
-	void fillBufferNoComments();
+    void fillBufferNoComments();
 
 private:
-	shared_ptr<ZLInputStream> myBaseStream;
+    shared_ptr<ZLInputStream> myBaseStream;
 
-	struct Buffer {
-		Buffer(std::size_t capacity);
-		~Buffer();
+    struct Buffer {
+        Buffer(std::size_t capacity);
 
-		bool isEmpty() const;
-		bool isFull() const;
+        ~Buffer();
 
-		const std::size_t Capacity;
-		std::size_t Offset;
-		std::size_t Length;
-		char *Content;
-	};
+        bool isEmpty() const;
 
-	Buffer myBuffer;
-	Buffer myBufferNoComments;
+        bool isFull() const;
 
-	enum {
-		PLAIN_TEXT,
-		S_QUOTED_TEXT,
-		D_QUOTED_TEXT,
-		COMMENT_START_SLASH,
-		COMMENT,
-		COMMENT_END_ASTERISK
-	} myState;
+        const std::size_t Capacity;
+        std::size_t Offset;
+        std::size_t Length;
+        char *Content;
+    };
+
+    Buffer myBuffer;
+    Buffer myBufferNoComments;
+
+    enum {
+        PLAIN_TEXT,
+        S_QUOTED_TEXT,
+        D_QUOTED_TEXT,
+        COMMENT_START_SLASH,
+        COMMENT,
+        COMMENT_END_ASTERISK
+    } myState;
 };
 
 inline bool CSSInputStream::Buffer::isEmpty() const {
-	return Offset == Length;
+    return Offset == Length;
 }
 
 inline bool CSSInputStream::Buffer::isFull() const {
-	return Length >= Capacity;
+    return Length >= Capacity;
 }
 
 #endif /* __CSSINPUTSTREAM_H__ */

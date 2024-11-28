@@ -25,10 +25,11 @@
 #include <ZLTextStyleEntry.h>
 
 struct StyleSheetUtil {
-	static std::string strip(const std::string &data);
-	static std::vector<std::string> splitCommaSeparatedList(const std::string &data);
+    static std::string strip(const std::string &data);
 
-	static ZLTextStyleEntry::DisplayCode displayCode(const std::string &data);
+    static std::vector<std::string> splitCommaSeparatedList(const std::string &data);
+
+    static ZLTextStyleEntry::DisplayCode displayCode(const std::string &data);
 };
 
 #endif /* __STYLESHEETUTIL_H__ */

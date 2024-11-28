@@ -25,21 +25,23 @@
 class OEBSimpleIdReader : public OPFReader {
 
 public:
-	std::string readId(const ZLFile &file);
+    std::string readId(const ZLFile &file);
 
-	void startElementHandler(const char *tag, const char **attributes);
-	void endElementHandler(const char *tag);
-	void characterDataHandler(const char *text, std::size_t len);
+    void startElementHandler(const char *tag, const char **attributes);
+
+    void endElementHandler(const char *tag);
+
+    void characterDataHandler(const char *text, std::size_t len);
 
 private:
-	enum {
-		READ_NONE,
-		READ_METADATA,
-		READ_IDENTIFIER,
-	} myReadState;
+    enum {
+        READ_NONE,
+        READ_METADATA,
+        READ_IDENTIFIER,
+    } myReadState;
 
-	std::string myBuffer;
-	std::string myPublicationId;
+    std::string myBuffer;
+    std::string myPublicationId;
 };
 
 #endif /* __OEBSIMPLEIDREADER_H__ */

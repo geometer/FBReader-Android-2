@@ -26,21 +26,25 @@
 class StringInputStream : public ZLInputStream {
 
 public:
-	StringInputStream(const char *cstring, std::size_t len);
+    StringInputStream(const char *cstring, std::size_t len);
 
 private:
-	bool open();
-	std::size_t read(char *buffer, std::size_t maxSize);
-	void close();
+    bool open();
 
-	void seek(int offset, bool absoluteOffset);
-	std::size_t offset() const;
-	std::size_t sizeOfOpened();
+    std::size_t read(char *buffer, std::size_t maxSize);
+
+    void close();
+
+    void seek(int offset, bool absoluteOffset);
+
+    std::size_t offset() const;
+
+    std::size_t sizeOfOpened();
 
 private:
-	const char *myCString;
-	const std::size_t myLength;
-	std::size_t myOffset;
+    const char *myCString;
+    const std::size_t myLength;
+    std::size_t myOffset;
 };
 
 #endif /* __STRINGINPUTSTREAM_H__ */

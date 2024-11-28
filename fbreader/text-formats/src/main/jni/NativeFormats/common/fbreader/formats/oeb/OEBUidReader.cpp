@@ -27,65 +27,66 @@
 #include "../../library/Book.h"
 
 OEBUidReader::OEBUidReader(Book &book) : myBook(book) {
-	myBook.removeAllUids();
+    myBook.removeAllUids();
 }
 
 void OEBUidReader::characterDataHandler(const char *text, std::size_t len) {
-	switch (myReadState) {
-		default:
-			break;
-		case READ_IDENTIFIER:
-			myBuffer.append(text, len);
-			break;
-	}
+    switch (myReadState) {
+        default:
+            break;
+        case READ_IDENTIFIER:
+            myBuffer.append(text, len);
+            break;
+    }
 }
 
 void OEBUidReader::startElementHandler(const char *tag, const char **attributes) {
-	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
-	switch (myReadState) {
-		default:
-			break;
-		case READ_NONE:
-			if (isMetadataTag(tagString)) {
-				myReadState = READ_METADATA;
-			}
-			break;
-		case READ_METADATA:
-			if (testDCTag("identifier", tagString)) {
-				myReadState = READ_IDENTIFIER;
-				static const FullNamePredicate schemePredicate(ZLXMLNamespace::OpenPackagingFormat, "scheme");
-				const char *scheme = attributeValue(attributes, schemePredicate);
-				myIdentifierScheme = scheme != 0 ? scheme : "EPUB-NOSCHEME";
-			}
-			break;
-	}
+    const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
+    switch (myReadState) {
+        default:
+            break;
+        case READ_NONE:
+            if (isMetadataTag(tagString)) {
+                myReadState = READ_METADATA;
+            }
+            break;
+        case READ_METADATA:
+            if (testDCTag("identifier", tagString)) {
+                myReadState = READ_IDENTIFIER;
+                static const FullNamePredicate schemePredicate(ZLXMLNamespace::OpenPackagingFormat,
+                                                               "scheme");
+                const char *scheme = attributeValue(attributes, schemePredicate);
+                myIdentifierScheme = scheme != 0 ? scheme : "EPUB-NOSCHEME";
+            }
+            break;
+    }
 }
 
 void OEBUidReader::endElementHandler(const char *tag) {
-	const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
-	ZLUnicodeUtil::utf8Trim(myBuffer);
-	switch (myReadState) {
-		case READ_NONE:
-			break;
-		case READ_METADATA:
-			if (isMetadataTag(tagString)) {
-				myReadState = READ_NONE;
-				interrupt();
-				return;
-			}
-			break;
-		case READ_IDENTIFIER:
-			if (!myBuffer.empty()) {
-				myBook.addUid(myIdentifierScheme, myBuffer);
-			}
-			myReadState = READ_METADATA;
-			break;
-	}
-	myBuffer.erase();
+    const std::string tagString = ZLUnicodeUtil::toLowerAscii(tag);
+    ZLUnicodeUtil::utf8Trim(myBuffer);
+    switch (myReadState) {
+        case READ_NONE:
+            break;
+        case READ_METADATA:
+            if (isMetadataTag(tagString)) {
+                myReadState = READ_NONE;
+                interrupt();
+                return;
+            }
+            break;
+        case READ_IDENTIFIER:
+            if (!myBuffer.empty()) {
+                myBook.addUid(myIdentifierScheme, myBuffer);
+            }
+            myReadState = READ_METADATA;
+            break;
+    }
+    myBuffer.erase();
 }
 
 bool OEBUidReader::readUids(const ZLFile &file) {
-	myReadState = READ_NONE;
-	myBuffer.erase();
-	return readDocument(file);
+    myReadState = READ_NONE;
+    myBuffer.erase();
+    return readDocument(file);
 }

@@ -28,16 +28,17 @@
 class OEBTextStream : public MergedStream {
 
 public:
-	OEBTextStream(const ZLFile &opfFile);
+    OEBTextStream(const ZLFile &opfFile);
 
 private:
-	void resetToStart();
-	shared_ptr<ZLInputStream> nextStream();
+    void resetToStart();
+
+    shared_ptr<ZLInputStream> nextStream();
 
 private:
-	std::string myFilePrefix;
-	std::vector<std::string> myXHTMLFileNames;
-	std::size_t myIndex;
+    std::string myFilePrefix;
+    std::vector<std::string> myXHTMLFileNames;
+    std::size_t myIndex;
 };
 
 #endif /* __OEBTEXTSTREAM_H__ */

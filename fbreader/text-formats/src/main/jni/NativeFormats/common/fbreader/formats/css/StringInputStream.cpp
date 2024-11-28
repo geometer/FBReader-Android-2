@@ -23,36 +23,38 @@
 
 #include "StringInputStream.h"
 
-StringInputStream::StringInputStream(const char *cString, std::size_t len) : myCString(cString), myLength(len), myOffset(0) {
-	//ZLLogger::Instance().registerClass("StringInputStream");
+StringInputStream::StringInputStream(const char *cString, std::size_t len) : myCString(cString),
+                                                                             myLength(len),
+                                                                             myOffset(0) {
+    //ZLLogger::Instance().registerClass("StringInputStream");
 }
 
 bool StringInputStream::open() {
-	return true;
+    return true;
 }
 
 std::size_t StringInputStream::read(char *buffer, std::size_t maxSize) {
-	const std::size_t len = std::min(maxSize, myLength - myOffset);
-	std::memcpy(buffer, myCString + myOffset, len);
-	myOffset += len;
-	//ZLLogger::Instance().println("StringInputStream", std::string(buffer, len));
-	return len;
+    const std::size_t len = std::min(maxSize, myLength - myOffset);
+    std::memcpy(buffer, myCString + myOffset, len);
+    myOffset += len;
+    //ZLLogger::Instance().println("StringInputStream", std::string(buffer, len));
+    return len;
 }
 
 void StringInputStream::close() {
 }
 
 void StringInputStream::seek(int offset, bool absoluteOffset) {
-	if (!absoluteOffset) {
-		offset += myOffset;
-	}
-	myOffset = std::max(0, std::min(offset, (int)myLength));
+    if (!absoluteOffset) {
+        offset += myOffset;
+    }
+    myOffset = std::max(0, std::min(offset, (int) myLength));
 }
 
 std::size_t StringInputStream::offset() const {
-	return myOffset;
+    return myOffset;
 }
 
 std::size_t StringInputStream::sizeOfOpened() {
-	return myLength;
+    return myLength;
 }

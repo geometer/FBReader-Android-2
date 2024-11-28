@@ -31,6 +31,7 @@
 #include "CSSInputStream.h"
 #include "../util/MiscUtil.h"
 #include "ZLUnicodeUtil.h"
+#include "CSS.h"
 
 static const std::string TAG = "CSS-SELECTOR";
 
@@ -305,7 +306,7 @@ void StyleSheetMultiStyleParser::processAtRule(const std::string &name,
                                                const StyleSheetTable::AttributeMap &attributes) {
     //ZLLogger::Instance().registerClass("FONT");
     if (name == "@font-face") {
-        std::string family = value(attributes, CSS_FONT_FAMILY);
+        std::string family = value(attributes, CSS::Properties::FONT_FAMILY);
         if (family.empty()) {
             ZLLogger::Instance().println("FONT", "Font family not specified in @font-face entry");
             return;
@@ -330,9 +331,9 @@ void StyleSheetMultiStyleParser::processAtRule(const std::string &name,
             return;
         }
 
-        const std::string weight = value(attributes, CSS_FONT_WEIGHT);
+        const std::string weight = value(attributes,CSS::Properties::FONT_WEIGHT);
         const int weightNum = ZLStringUtil::parseDecimal(weight, -1);
-        const std::string style = value(attributes, CSS_FONT_STYLE);
+        const std::string style = value(attributes, CSS::Properties::FONT_STYLE);
 
         myFontMap->append(
                 family,

@@ -30,27 +30,30 @@ class ZLImage;
 class OEBCoverReader : public ZLXMLReader {
 
 public:
-	OEBCoverReader();
-	shared_ptr<const ZLImage> readCover(const ZLFile &file);
+    OEBCoverReader();
+
+    shared_ptr<const ZLImage> readCover(const ZLFile &file);
 
 private:
-	void startElementHandler(const char *tag, const char **attributes);
-	void endElementHandler(const char *tag);
-	bool processNamespaces() const;
+    void startElementHandler(const char *tag, const char **attributes);
 
-	void createImage(const char *href);
+    void endElementHandler(const char *tag);
+
+    bool processNamespaces() const;
+
+    void createImage(const char *href);
 
 private:
-	shared_ptr<const ZLImage> myImage;
-	std::string myPathPrefix;
-	std::string myCoverXHTML;
-	std::string myCoverId;
-	enum {
-		READ_NOTHING,
-		READ_METADATA,
-		READ_MANIFEST,
-		READ_GUIDE
-	} myReadState;
+    shared_ptr<const ZLImage> myImage;
+    std::string myPathPrefix;
+    std::string myCoverXHTML;
+    std::string myCoverId;
+    enum {
+        READ_NOTHING,
+        READ_METADATA,
+        READ_MANIFEST,
+        READ_GUIDE
+    } myReadState;
 };
 
 #endif /* __OEBCOVERREADER_H__ */

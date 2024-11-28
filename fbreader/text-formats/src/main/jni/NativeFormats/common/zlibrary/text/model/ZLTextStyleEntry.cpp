@@ -20,50 +20,50 @@
 #include "ZLTextStyleEntry.h"
 
 shared_ptr<ZLTextStyleEntry> ZLTextStyleEntry::start() const {
-	ZLTextStyleEntry *clone = new ZLTextStyleEntry(myEntryKind);
-	clone->myFeatureMask = myFeatureMask & ~(1 << LENGTH_SPACE_AFTER);
-	for (int i = 0; i < NUMBER_OF_LENGTHS; ++i) {
-		clone->myLengths[i] = myLengths[i];
-	}
-	clone->myAlignmentType = myAlignmentType;
-	clone->mySupportedFontModifier = mySupportedFontModifier;
-	clone->myFontModifier = myFontModifier;
-	clone->myFontFamilies = myFontFamilies;
-	clone->myVerticalAlignCode = myVerticalAlignCode;
-	clone->myColor = myColor;
-	clone->myBgColor = myBgColor;
-	return clone;
+    ZLTextStyleEntry *clone = new ZLTextStyleEntry(myEntryKind);
+    clone->myFeatureMask = myFeatureMask & ~(1 << LENGTH_SPACE_AFTER);
+    for (int i = 0; i < NUMBER_OF_LENGTHS; ++i) {
+        clone->myLengths[i] = myLengths[i];
+    }
+    clone->myAlignmentType = myAlignmentType;
+    clone->mySupportedFontModifier = mySupportedFontModifier;
+    clone->myFontModifier = myFontModifier;
+    clone->myFontFamilies = myFontFamilies;
+    clone->myVerticalAlignCode = myVerticalAlignCode;
+    clone->myColor = myColor;
+    clone->myBgColor = myBgColor;
+    return clone;
 }
 
 shared_ptr<ZLTextStyleEntry> ZLTextStyleEntry::end() const {
-	if ((myFeatureMask & (1 << LENGTH_SPACE_AFTER)) == 0) {
-		return 0;
-	}
-	ZLTextStyleEntry *clone = new ZLTextStyleEntry(myEntryKind);
-	clone->myFeatureMask = 1 << LENGTH_SPACE_AFTER;
-	clone->myLengths[LENGTH_SPACE_AFTER] = myLengths[LENGTH_SPACE_AFTER];
-	return clone;
+    if ((myFeatureMask & (1 << LENGTH_SPACE_AFTER)) == 0) {
+        return 0;
+    }
+    ZLTextStyleEntry *clone = new ZLTextStyleEntry(myEntryKind);
+    clone->myFeatureMask = 1 << LENGTH_SPACE_AFTER;
+    clone->myLengths[LENGTH_SPACE_AFTER] = myLengths[LENGTH_SPACE_AFTER];
+    return clone;
 }
 
 shared_ptr<ZLTextStyleEntry> ZLTextStyleEntry::inherited() const {
-	ZLTextStyleEntry *clone = new ZLTextStyleEntry(myEntryKind);
-	static const unsigned short skip =
-		//(1 << LENGTH_MARGIN_LEFT) |
-		//(1 << LENGTH_MARGIN_RIGHT) |
-		//(1 << LENGTH_PADDING_LEFT) |
-		//(1 << LENGTH_PADDING_RIGHT) |
-		(1 << LENGTH_SPACE_BEFORE) |
-		(1 << LENGTH_SPACE_AFTER);
-	clone->myFeatureMask = myFeatureMask & ~skip;
-	for (int i = 0; i < NUMBER_OF_LENGTHS; ++i) {
-		clone->myLengths[i] = myLengths[i];
-	}
-	clone->myAlignmentType = myAlignmentType;
-	clone->mySupportedFontModifier = mySupportedFontModifier;
-	clone->myFontModifier = myFontModifier;
-	clone->myFontFamilies = myFontFamilies;
-	clone->myVerticalAlignCode = myVerticalAlignCode;
-	clone->myColor = myColor;
-	clone->myBgColor = myBgColor;
-	return clone;
+    ZLTextStyleEntry *clone = new ZLTextStyleEntry(myEntryKind);
+    static const unsigned short skip =
+            //(1 << LENGTH_MARGIN_LEFT) |
+            //(1 << LENGTH_MARGIN_RIGHT) |
+            //(1 << LENGTH_PADDING_LEFT) |
+            //(1 << LENGTH_PADDING_RIGHT) |
+            (1 << LENGTH_SPACE_BEFORE) |
+            (1 << LENGTH_SPACE_AFTER);
+    clone->myFeatureMask = myFeatureMask & ~skip;
+    for (int i = 0; i < NUMBER_OF_LENGTHS; ++i) {
+        clone->myLengths[i] = myLengths[i];
+    }
+    clone->myAlignmentType = myAlignmentType;
+    clone->mySupportedFontModifier = mySupportedFontModifier;
+    clone->myFontModifier = myFontModifier;
+    clone->myFontFamilies = myFontFamilies;
+    clone->myVerticalAlignCode = myVerticalAlignCode;
+    clone->myColor = myColor;
+    clone->myBgColor = myBgColor;
+    return clone;
 }
