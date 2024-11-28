@@ -1214,11 +1214,13 @@ public abstract class ZLTextView extends ZLTextViewBase {
             if (!allowBreak) {
                 element = paragraphCursor.getElement(currentElementIndex);
                 // if not reach the end index, again fix the allow-break status.
-                // 0> If the previous element is a text word and the next is a control element, mark it as allowed to be broken.
+                // 0> If the previous element is a [word or image] and the next is a control element, mark it as allowed to be broken.
                 // 1> previous and current element are neither not NBSpace element
                 // 2> and {current is not ZLTextWord, or previous is ZLTextWord}
                 // 3> and current element is neither ZLTextImageElement or ZLTextControlElement.
-                if (previousElement instanceof ZLTextWord && element instanceof ZLTextControlElement) {
+                if ((previousElement instanceof ZLTextWord
+                        || previousElement instanceof ZLTextImageElement)
+                        && element instanceof ZLTextControlElement) {
                     if (!((ZLTextControlElement) element).IsStart) { // control end flag.
                         applyStyleChangeElement(element);
                         ++currentElementIndex;
