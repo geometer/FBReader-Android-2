@@ -841,6 +841,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                 final int areaX = area.XStart;
                 final int areaY = area.YEnd - getElementDescent(element);
                 if (element instanceof ZLTextWord) {
+                    final ZLTextWord word = (ZLTextWord) element;
                     final ZLTextPosition pos =
                             new ZLTextFixedPosition(info.ParagraphCursor.Index, wordIndex, 0);
                     final ZLTextHighlighting hl = getWordHilite(pos, hilites);
@@ -852,7 +853,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                     }
 
                     drawWord(
-                            areaX, areaY, (ZLTextWord) element, charIndex, -1, false,
+                            areaX, areaY, word, charIndex, word.Length - charIndex, area.isAddHyphenationSign(),
                             hlColor != null ? hlColor : getTextColor(getTextStyle())
                     );
                 } else if (element instanceof ZLTextImageElement) {
@@ -912,7 +913,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
             final ZLColor hlColor = hl != null ? hl.getForegroundColor() : null;
             drawWord(
                     area.XStart, area.YEnd - context.getDescent() - getTextStyle().getVerticalAlign(metrics()),
-                    word, start, len, area.AddHyphenationSign,
+                    word, start, len, area.isAddHyphenationSign(),
                     hlColor != null ? hlColor : getTextColor(getTextStyle())
             );
         }
@@ -959,7 +960,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
             final int endIndex = info.ParagraphCursorLength;
 
             // loop to deal with the current paragraph to obtain these new text-line info.
-            while (info.EndElementIndex != endIndex) {
+            while (info.EndElementIndex < endIndex) {
                 // compute the current new text-line detail info.
                 info = processTextLine(page, paragraphCursor, info.EndElementIndex, info.EndCharIndex, endIndex, previousInfo);
                 // adjust the available height.
@@ -1151,18 +1152,22 @@ public abstract class ZLTextView extends ZLTextViewBase {
         int internalSpaceCounter = 0;
         boolean removeLastSpace = false;
 
-        // define a inner class WordInfo.
         // define a wordInfo list.
         final ArrayList<WordInfo> words = new ArrayList<WordInfo>();
+        // define a breakInfo object for feature[Breakable.WORD or Breakable.CHARACTER].
+        BreakInfo breakInfo = BreakPlugin.createBreakInfo();
 
         // begin [do ... while] loop to compute a line wordInfo.
         do {
             ZLTextElement element = paragraphCursor.getElement(currentElementIndex);
             // obtain the width of element and add to newWidth.
-            newWidth += getElementWidth(element, currentCharIndex);
+            int elementWidth = getElementWidth(element, currentCharIndex);
+            newWidth += elementWidth;
             // adjust the appropriate height and descent.
             newHeight = Math.max(newHeight, getElementHeight(element));
             newDescent = Math.max(newDescent, getElementDescent(element));
+
+            BreakPlugin.checkNoBreakElements(paragraphCursor, element, elementWidth, currentElementIndex, breakInfo, this);
 
             // HSpace: {@link Character.isWhitespace(ch)} means you can begin a newline
             // NBSpace: if not the HSpace,but {@link Character.isSpaceChar(ch}. means Non Breaking Space.
@@ -1194,9 +1199,10 @@ public abstract class ZLTextView extends ZLTextViewBase {
             }
 
             // if reach the max width and jump loop.
-            if (newWidth > maxWidth) {
+            if (newWidth + breakInfo.getAdjustedLineBreakWidth() > maxWidth) {
                 if (info.EndElementIndex != startIndex || element instanceof ZLTextWord) {
-                    LogUtils.d(TAG, "processTextLineInternal: 3. It reachs the max width of line, break do ... while");
+                    newWidth += breakInfo.getAdjustedLineBreakWidth();
+                    LogUtils.d(TAG, "processTextLineInternal: 3. It reachs the max width of line, break do ... while， element: " + element);
                     break;
                 }
             }
@@ -1272,10 +1278,13 @@ public abstract class ZLTextView extends ZLTextViewBase {
         // if not reach the endIndex, and {can hyphenate or the EndElementIndex is equal to startIndex}.
         if (currentElementIndex != endIndex &&
                 (isHyphenationPossible() || info.EndElementIndex == startIndex)) {
-            final ZLTextElement element = paragraphCursor.getElement(currentElementIndex);
+            ZLTextElement element = paragraphCursor.getElement(currentElementIndex);
             boolean hyphenated = false;
             LogUtils.d(TAG, "processTextLineInternal: 5.  handle hyphenation info of needing newline. startIndex == "
                     + (info.EndElementIndex == startIndex));
+
+            element = BreakPlugin.getTextElement(element, breakInfo);
+            final boolean characterBreakable = breakInfo.getBreakFeature() == BreakPlugin.Breakable.CHARACTER;
 
             // make a hyphenation to ZLTextWord if no sapce to show the whole word.
             // such as: "suddenly" can be separated into "sud-denly".
@@ -1372,10 +1381,11 @@ public abstract class ZLTextView extends ZLTextViewBase {
                         if (info.getDescent() < newDescent) {
                             info.setDescent(newDescent);
                         }
-                        info.EndElementIndex = currentElementIndex;
+                        info.EndElementIndex = currentElementIndex + (!characterBreakable ? 0 : hyphenationPosition);
                         // this hyphenation position is contained.
-                        info.EndCharIndex = hyphenationPosition;
+                        info.EndCharIndex = !characterBreakable ? hyphenationPosition : 0;
                         info.SpaceCounter = internalSpaceCounter;
+                        info.setHyphenationSign(characterBreakable);
                         storedStyle = getTextStyle();
                         removeLastSpace = false;
                     }
@@ -1421,6 +1431,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
                         info.EndElementIndex = wi.ElementIndex;
                         info.EndCharIndex = pos;
                         info.SpaceCounter = wi.SpaceCounter;
+                        info.setHyphenationSign(characterBreakable);
                         storedStyle = wi.Style;
                         removeLastSpace = false;
                         break;
@@ -1540,14 +1551,15 @@ public abstract class ZLTextView extends ZLTextViewBase {
                     page.TextElementMap.add(spaceElement);
                     spaceElement = null;
                 }
+                int hyphenationSignWidth = BreakPlugin.getHyphenationSignWidth(this, info, element, wordIndex, charIndex, BreakPlugin.getBreakFeatureType());
                 page.TextElementMap.add(new ZLTextElementArea(
                         paragraphIndex, wordIndex, charIndex,
                         length - charIndex,
                         true, // is last in element
-                        false, // add hyphenation sign
+                        hyphenationSignWidth > 0, // add hyphenation sign
                         changeStyle, getTextStyle(), element,
 //                        x, x + width - 1, y - height + 1, y + descent, columnIndex
-                        x, x + width - 1, yStart, yEnd, columnIndex
+                        x, x + (hyphenationSignWidth > 0 ? hyphenationSignWidth : width) - 1, yStart, yEnd, columnIndex
                 ));
                 changeStyle = false;
                 wordOccurred = true;

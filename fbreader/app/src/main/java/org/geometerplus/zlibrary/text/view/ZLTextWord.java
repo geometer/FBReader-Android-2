@@ -49,6 +49,11 @@ public final class ZLTextWord extends ZLTextElement {
      * The start offset in its' paragraph.
      */
     private int myParagraphOffset;
+    /**
+     * Indicate whether this word can be broken or not.
+     * Only can be used when in FeaturePlugin.Breakable.CHARACTER or FeaturePlugin.Breakable.WORD.
+     */
+    private boolean breakable = true;
 
     ZLTextWord(String word, int paragraphOffset) {
         this(word.toCharArray(), 0, word.length(), paragraphOffset);
@@ -68,6 +73,14 @@ public final class ZLTextWord extends ZLTextElement {
             }
         }
         return true;
+    }
+
+    public boolean isBreakable() {
+        return breakable;
+    }
+
+    public void setBreakable(boolean breakable) {
+        this.breakable = breakable;
     }
 
     public Mark getMark() {

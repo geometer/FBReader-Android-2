@@ -396,6 +396,12 @@ public class PreferenceActivity extends ZLPreferenceActivity {
                 baseStyle.AlignmentOption, alignments
         ));
         textScreen.addOption(baseStyle.AutoHyphenationOption, "autoHyphenations");
+        // add breakable word type.
+        final String[] breakableTypes = {"native", "word", "character"};
+        textScreen.addPreference(new ZLChoicePreference(
+                this, textScreen.Resource.getResource("breakableType"),
+                baseStyle.BreakableWordsOption, breakableTypes
+        ));
 
         final Screen moreStylesScreen = textScreen.createPreferenceScreen("more");
         for (ZLTextNGStyleDescription description : collection.getDescriptionList()) {

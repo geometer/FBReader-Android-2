@@ -268,9 +268,9 @@ public final class ZLTextParagraphCursor {
         /**
          * Handle the text data, if the hyperlink exists, apply it to text.
          *
-         * @param data All text data.
-         * @param offset The start offset of current text in data.
-         * @param length The length of current text.
+         * @param data      All text data.
+         * @param offset    The start offset of current text in data.
+         * @param length    The length of current text.
          * @param hyperlink The hyperlink data, maybe null.
          */
         private void processTextEntry(final char[] data, final int offset, final int length, ZLTextHyperlink hyperlink) {
@@ -281,6 +281,7 @@ public final class ZLTextParagraphCursor {
                 final byte[] breaks = ourBreaks;
                 // Step one: make a line-break to the input length char array.
                 myLineBreaker.setLineBreaks(data, offset, length, breaks);
+                @BreakPlugin.Breakable int bfType = BreakPlugin.getBreakFeatureType();
 
                 final ZLTextElement hSpace = ZLTextElement.HSpace;
                 final ZLTextElement nbSpace = ZLTextElement.NBSpace;
@@ -295,12 +296,12 @@ public final class ZLTextParagraphCursor {
                     ch = data[offset + index];
                     if (Character.isWhitespace(ch)) {
                         if (index > 0 && spaceState == NO_SPACE) {
-                            addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink);
+                            addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink, bfType);
                         }
                         spaceState = SPACE;
                     } else if (Character.isSpaceChar(ch)) {
                         if (index > 0 && spaceState == NO_SPACE) {
-                            addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink);
+                            addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink, bfType);
                         }
                         elements.add(nbSpace);
                         if (spaceState != SPACE) {
@@ -318,12 +319,17 @@ public final class ZLTextParagraphCursor {
                                 wordStart = index;
                                 break;
                             case NO_SPACE:
-                                if (index > 0 &&
-                                        breaks[index - 1] != LineBreaker.NOBREAK &&
-                                        previousChar != '-' &&
-                                        index != wordStart) {
-                                    addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink);
-                                    wordStart = index;
+                                final boolean validIndex = index > 0 && index != wordStart;
+                                if (validIndex) {
+                                    final boolean breakable = breaks[index - 1] != LineBreaker.NOBREAK && previousChar != '-';
+                                    if (bfType == BreakPlugin.Breakable.CHARACTER) {
+                                        addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink)
+                                                .setBreakable(breakable);
+                                        wordStart = index;
+                                    } else if (breakable) {
+                                        addWord(data, offset + wordStart, index - wordStart, myOffset + wordStart, hyperlink, bfType);
+                                        wordStart = index;
+                                    }
                                 }
                                 break;
                             default:
@@ -342,7 +348,7 @@ public final class ZLTextParagraphCursor {
                         elements.add(nbSpace);
                         break;
                     case NO_SPACE:
-                        addWord(data, offset + wordStart, length - wordStart, myOffset + wordStart, hyperlink);
+                        addWord(data, offset + wordStart, length - wordStart, myOffset + wordStart, hyperlink, bfType);
                         break;
                     default:
                         break;
@@ -358,13 +364,47 @@ public final class ZLTextParagraphCursor {
          * If a hyperlink contains this word, add this word index to the hyperlink.
          * Besides, if the search marks contains this word, create a new mark.
          *
-         * @param data The ncache files' char array source.
-         * @param offset The start offset in the array of data.
-         * @param len The words' length.
+         * @param data            The ncache files' char array source.
+         * @param offset          The start offset in the array of data.
+         * @param len             The words' length.
          * @param paragraphOffset The start offset in this paragraph.
-         * @param hyperlink The hyperlink value, maybe {@link ZLTextHyperlink#NO_LINK}.
+         * @param hyperlink       The hyperlink value, maybe {@link ZLTextHyperlink#NO_LINK}.
+         * @param bfType          The breakable feature type.(This represents WORD type.)
          */
-        private final void addWord(char[] data, int offset, int len, int paragraphOffset, ZLTextHyperlink hyperlink) {
+        private void addWord(char[] data, int offset, int len, int paragraphOffset, ZLTextHyperlink hyperlink, @BreakPlugin.Breakable int bfType) {
+            if (bfType == BreakPlugin.Breakable.NATIVE || bfType == BreakPlugin.Breakable.CHARACTER) {
+                addWord(data, offset, len, paragraphOffset, hyperlink);
+            } else if (bfType == BreakPlugin.Breakable.WORD) {
+                // Separate word from punctuation.
+                ZLTextWord word = new ZLTextWord(data, offset, len, paragraphOffset);
+                String text = word.getString();
+                int index = text.length() - 1;
+                while (index > 0 && BreakPlugin.isPunctuation(text.charAt(index))) {
+                    index--;
+                }
+                int preLength = index + 1;
+                if (preLength < len) {
+                    // Cut into 2 parts.
+                    addWord(data, offset, preLength, paragraphOffset, hyperlink).setBreakable(false);
+                    addWord(data, offset + preLength, len - preLength, paragraphOffset + preLength, hyperlink);
+                } else {   // original.
+                    addWord(data, offset, len, paragraphOffset, hyperlink);
+                }
+            }
+        }
+
+        /**
+         * Add a new ZLTextWord to list.
+         * If a hyperlink contains this word, add this word index to the hyperlink.
+         * Besides, if the search marks contains this word, create a new mark.
+         *
+         * @param data            The ncache files' char array source.
+         * @param offset          The start offset in the array of data.
+         * @param len             The words' length.
+         * @param paragraphOffset The start offset in this paragraph.
+         * @param hyperlink       The hyperlink value, maybe {@link ZLTextHyperlink#NO_LINK}.
+         */
+        private ZLTextWord addWord(char[] data, int offset, int len, int paragraphOffset, ZLTextHyperlink hyperlink) {
             ZLTextWord word = new ZLTextWord(data, offset, len, paragraphOffset);
             for (int i = myFirstMark; i < myLastMark; ++i) {
                 final ZLTextMark mark = (ZLTextMark) myMarks.get(i);
@@ -376,6 +416,7 @@ public final class ZLTextParagraphCursor {
                 hyperlink.addElementIndex(myElements.size());
             }
             myElements.add(word);
+            return word;
         }
     }
 }

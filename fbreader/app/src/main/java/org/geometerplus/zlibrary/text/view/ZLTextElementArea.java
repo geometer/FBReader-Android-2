@@ -27,7 +27,7 @@ public final class ZLTextElementArea extends ZLTextFixedPosition {
     public final int ColumnIndex;
 
     final int Length;
-    final boolean AddHyphenationSign;
+    private final boolean AddHyphenationSign;
     final boolean ChangeStyle;
     final ZLTextStyle Style;
     final ZLTextElement Element;
@@ -62,5 +62,9 @@ public final class ZLTextElementArea extends ZLTextFixedPosition {
 
     boolean isLastInElement() {
         return myIsLastInElement;
+    }
+
+    public boolean isAddHyphenationSign() {
+        return AddHyphenationSign;
     }
 }
