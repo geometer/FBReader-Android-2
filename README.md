@@ -1,9 +1,8 @@
 3 Dec 2024
 
 Support features such as font color, long press selection of words, punctuation, characters, and centering of selected backgrounds.
-<img src="https://github.com/snailGoing/Resources/blob/main/images/reader/img_1.png" alt="Font color support" width="50%" height="50%"/>
-<img src="https://github.com/snailGoing/Resources/blob/main/images/reader/img_2.png" alt="Word segmentation: Show" width="50%" height="50%"/>
-<img src="https://github.com/snailGoing/Resources/blob/main/images/reader/img_3.png" alt="Word segmentation: Settings" width="50%" height="50%"/>
+
+<img src="https://github.com/snailGoing/Resources/blob/main/images/reader/img_1.png" alt="Font color support" width="30%" height="30%"/><img src="https://github.com/snailGoing/Resources/blob/main/images/reader/img_2.png" alt="Word segmentation: Show" width="30%" height="30%"/><img src="https://github.com/snailGoing/Resources/blob/main/images/reader/img_3.png" alt="Word segmentation: Settings" width="30%" height="30%"/>
 
 15 Nov 2024
 TODO： Mark not support(https/http/ftps、data:image/.+;base64,.+) kind image for tag (img src="xx").
