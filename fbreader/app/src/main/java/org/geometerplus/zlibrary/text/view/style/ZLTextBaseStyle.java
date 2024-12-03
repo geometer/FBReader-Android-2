@@ -55,6 +55,7 @@ public class ZLTextBaseStyle extends ZLTextCommStyle {
     public final ZLBooleanOption StrikeThroughOption;
     public final ZLIntegerRangeOption AlignmentOption;
     public final ZLIntegerRangeOption LineSpaceOption;
+    public final ZLIntegerRangeOption BreakableWordsOption;
 
     public final ZLStringOption FontFamilyOption;
     public final ZLIntegerRangeOption FontSizeOption;
@@ -72,6 +73,7 @@ public class ZLTextBaseStyle extends ZLTextCommStyle {
         StrikeThroughOption = new ZLBooleanOption(GROUP, prefix + ":strikeThrough", false);
         AlignmentOption = new ZLIntegerRangeOption(GROUP, prefix + ":alignment", 1, 4, ZLTextAlignmentType.ALIGN_JUSTIFY);
         LineSpaceOption = new ZLIntegerRangeOption(GROUP, prefix + ":lineSpacing", 5, 20, 12);
+        BreakableWordsOption = new ZLIntegerRangeOption(GROUP, prefix + ":breakableWords", 0, 2, 0);
     }
 
     @Override

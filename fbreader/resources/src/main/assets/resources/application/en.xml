@@ -534,6 +534,11 @@
                 <node name="none" value="Don't hyphenate words" />
                 <node name="inherit" value="&lt;unchanged&gt;" />
             </node>
+            <node name="breakableType" value="Word segmentation">
+                <node name="native" value="Native" />
+                <node name="word" value="Word" />
+                <node name="character" value="Character" />
+            </node>
             <node name="firstLineIndent" value="First line indent" />
             <node name="spaceBefore" value="Space before paragraph" />
             <node name="spaceAfter" value="Space after paragraph" />

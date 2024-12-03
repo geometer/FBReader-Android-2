@@ -323,7 +323,7 @@ abstract class ZLTextViewBase extends ZLView {
         int length = toCharIndex - area.CharIndex;
         boolean selectHyphenationSign = false;
         if (length >= area.Length) {
-            selectHyphenationSign = area.AddHyphenationSign;
+            selectHyphenationSign = area.isAddHyphenationSign();
             length = area.Length;
         }
         if (length > 0) {

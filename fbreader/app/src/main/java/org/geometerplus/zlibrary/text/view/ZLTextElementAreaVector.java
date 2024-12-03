@@ -24,14 +24,24 @@ import java.util.Collections;
 import java.util.List;
 
 final class ZLTextElementAreaVector {
-    private final List<ZLTextElementArea> myAreas =
-            Collections.synchronizedList(new ArrayList<ZLTextElementArea>());
-    private final List<ZLTextRegion> myElementRegions = new ArrayList<ZLTextRegion>();
+    private final List<ZLTextElementArea> myAreas;
+    private final List<ZLTextRegion> myElementRegions;
     private ZLTextRegion myCurrentElementRegion;
+    /**
+     * a element corresponding to a region.
+     */
+    private List<ZLTextRegion> elementRegions;
+
+    public ZLTextElementAreaVector() {
+        myAreas = Collections.synchronizedList(new ArrayList<>());
+        myElementRegions = new ArrayList<>();
+        elementRegions = new ArrayList<>();
+    }
 
     void clear() {
         synchronized (myAreas) {
             myElementRegions.clear();
+            elementRegions.clear();
             myCurrentElementRegion = null;
             myAreas.clear();
         }
@@ -61,33 +71,50 @@ final class ZLTextElementAreaVector {
 
     public boolean add(ZLTextElementArea area) {
         synchronized (myAreas) {
-            // if already exist valid region which can accept input area, only extend.
-            if (myCurrentElementRegion != null
-                    && myCurrentElementRegion.getSoul().accepts(area)) {
-                myCurrentElementRegion.extend();
-            } else {
-                ZLTextRegion.Soul soul = null;
-                final ZLTextHyperlink hyperlink = area.Style.Hyperlink;
-                if (hyperlink.Id != null) {
-                    soul = new ZLTextHyperlinkRegionSoul(area, hyperlink);
-                } else if (area.Element instanceof ZLTextImageElement) {
-                    soul = new ZLTextImageRegionSoul(area, (ZLTextImageElement) area.Element);
-                } else if (area.Element instanceof ZLTextVideoElement) {
-                    soul = new ZLTextVideoRegionSoul(area, (ZLTextVideoElement) area.Element);
-                } else if (area.Element instanceof ZLTextWord && !((ZLTextWord) area.Element).isASpace()) {
-                    soul = new ZLTextWordRegionSoul(area, (ZLTextWord) area.Element);
-                } else if (area.Element instanceof ExtensionElement) {
-                    soul = new ExtensionRegionSoul(area, (ExtensionElement) area.Element);
-                }
-                // create a new ZLTextRegion based on the new soul.
-                if (soul != null) {
-                    myCurrentElementRegion = new ZLTextRegion(soul, myAreas, myAreas.size());
-                    myElementRegions.add(myCurrentElementRegion);
-                } else {
-                    myCurrentElementRegion = null;
-                }
-            }
+            addExpandElementRegion(area);
+            addElementRegion(area);
             return myAreas.add(area);
+        }
+    }
+
+    private void addExpandElementRegion(ZLTextElementArea area) {
+        // if already exist valid region which can accept input area, only extend.
+        if (myCurrentElementRegion != null
+                && myCurrentElementRegion.getSoul().accepts(area)) {
+            myCurrentElementRegion.extend();
+        } else {
+            ZLTextRegion.Soul soul = getSoul(area, false);
+            // create a new ZLTextRegion based on the new soul.
+            if (soul != null) {
+                myCurrentElementRegion = new ZLTextRegion(soul, myAreas, myAreas.size());
+                myElementRegions.add(myCurrentElementRegion);
+            } else {
+                myCurrentElementRegion = null;
+            }
+        }
+    }
+
+    private static ZLTextRegion.Soul getSoul(ZLTextElementArea area, boolean ignoreHyperlink) {
+        ZLTextRegion.Soul soul = null;
+        final ZLTextHyperlink hyperlink = area.Style.Hyperlink;
+        if (!ignoreHyperlink && hyperlink.Id != null) {
+            soul = new ZLTextHyperlinkRegionSoul(area, hyperlink);
+        } else if (area.Element instanceof ZLTextImageElement) {
+            soul = new ZLTextImageRegionSoul(area, (ZLTextImageElement) area.Element);
+        } else if (area.Element instanceof ZLTextVideoElement) {
+            soul = new ZLTextVideoRegionSoul(area, (ZLTextVideoElement) area.Element);
+        } else if (area.Element instanceof ZLTextWord && !((ZLTextWord) area.Element).isASpace()) {
+            soul = new ZLTextWordRegionSoul(area, (ZLTextWord) area.Element);
+        } else if (area.Element instanceof ExtensionElement) {
+            soul = new ExtensionRegionSoul(area, (ExtensionElement) area.Element);
+        }
+        return soul;
+    }
+
+    private void addElementRegion(ZLTextElementArea area) {
+        ZLTextRegion.Soul soul = getSoul(area, true);
+        if (soul != null) {
+            elementRegions.add(new ZLTextRegion(soul, myAreas, myAreas.size()));
         }
     }
 
@@ -174,10 +201,44 @@ final class ZLTextElementAreaVector {
         return bestRegion;
     }
 
+    ZLTextRegion findRegionV2(int x, int y, int maxDistance, ZLTextRegion.Filter filter) {
+        ZLTextRegion bestRegion = null;
+        int distance = maxDistance + 1;
+        synchronized (myAreas) {
+            for (ZLTextRegion region : elementRegions) {
+                if (filter.accepts(region)) {
+                    final int d = region.distanceTo(x, y);
+                    if (d < distance) {
+                        bestRegion = region;
+                        distance = d;
+                    }
+                }
+            }
+        }
+        return bestRegion;
+    }
+
     RegionPair findRegionsPair(int x, int y, int columnIndex, ZLTextRegion.Filter filter) {
         RegionPair pair = new RegionPair();
         synchronized (myAreas) {
             for (ZLTextRegion region : myElementRegions) {
+                if (filter.accepts(region)) {
+                    if (region.isBefore(x, y, columnIndex)) {
+                        pair.Before = region;
+                    } else {
+                        pair.After = region;
+                        break;
+                    }
+                }
+            }
+        }
+        return pair;
+    }
+
+    RegionPair findRegionsPairV2(int x, int y, int columnIndex, ZLTextRegion.Filter filter) {
+        RegionPair pair = new RegionPair();
+        synchronized (myAreas) {
+            for (ZLTextRegion region : elementRegions) {
                 if (filter.accepts(region)) {
                     if (region.isBefore(x, y, columnIndex)) {
                         pair.Before = region;

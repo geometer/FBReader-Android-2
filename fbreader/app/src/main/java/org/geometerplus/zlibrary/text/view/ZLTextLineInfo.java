@@ -33,6 +33,10 @@ final class ZLTextLineInfo {
 
     int EndElementIndex;
     int EndCharIndex;
+    /**
+     * This flag is used only when breakable feature is {@link BreakPlugin.Breakable} CHARACTER.
+     */
+    private boolean hyphenationSign;
 
     private boolean mIsVisible;
 
@@ -64,6 +68,18 @@ final class ZLTextLineInfo {
         EndCharIndex = charIndex;
 
         StartStyle = style;
+    }
+
+    public boolean isHyphenationSign() {
+        return hyphenationSign;
+    }
+
+    public void setHyphenationSign(boolean hyphenationSign) {
+        this.hyphenationSign = hyphenationSign;
+    }
+
+    public boolean isLineEndElement(int elementIndex, int charIndex) {
+        return elementIndex == EndElementIndex - 1;
     }
 
     boolean isEndOfParagraph() {

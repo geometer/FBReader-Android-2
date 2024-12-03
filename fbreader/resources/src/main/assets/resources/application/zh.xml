@@ -512,6 +512,11 @@
                 <node name="none" value="禁止断字" />
                 <node name="inherit" value="&lt;不变&gt;" />
             </node>
+            <node name="breakableType" value="断字分词">
+                <node name="native" value="原生" />
+                <node name="word" value="单词" />
+                <node name="character" value="字符" />
+            </node>
             <node name="firstLineIndent" value="首行缩进" />
             <node name="spaceBefore" value="段前距" />
             <node name="spaceAfter" value="段后距" />
